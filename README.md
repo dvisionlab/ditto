@@ -1,29 +1,22 @@
-# D/Vision Lab UI library
+# DITTO
+
+**D**\Vision [user] **i**nterfaces (for **t**ime and **t**echniques **o**ptimization)
+
+![image info](./src/assets/logo.png)
 
 ## Project setup
 
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
+To add **ditto** to another git repository, run the following from the desired repo:
 
 ```
-yarn serve
+git submodule add git@github.com:dvisionlab/ditto.git
+git submodule init
 ```
 
-### Compiles and minifies for production
+## Project update
+
+To update **ditto** in another repository, run the following from the desired repo:
 
 ```
-yarn build
+git submodule update
 ```
-
-### Lints and fixes files
-
-```
-yarn lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
