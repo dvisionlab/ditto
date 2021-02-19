@@ -1,6 +1,6 @@
 # DITTO
 
-**D**\Vision [user] **i**nterfaces (for **t**ime and **t**echniques **o**ptimization)
+**D**\Vision [user] **I**nterfaces (for **T**ime and **T**echniques **O**ptimization)
 
 ![image info](./src/assets/logo.png)
 
