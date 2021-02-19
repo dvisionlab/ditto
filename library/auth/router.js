@@ -1,7 +1,9 @@
+import LoginForm from "./components/LoginForm";
+
 // Auth plugin routes
 export const routes = [
   {
-    component: null, // TODO
+    component: LoginForm,
     path: "/login",
     meta: {
       guest: true

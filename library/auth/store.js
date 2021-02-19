@@ -2,7 +2,7 @@
 import * as api from "./api";
 
 // Initial state object
-const initialState = options => {
+const initialState = () => {
   return {
     accessToken: null,
     refreshToken: null,
@@ -18,7 +18,9 @@ export default {
   },
   actions: {
     autoLogin({ state }) {
-      return api.verifyAndRefresh(state.accessToken);
+      return state.accessToken
+        ? api.verifyAndRefresh(state.accessToken)
+        : new Promise((resolve, reject) => reject("Access token not found."));
     },
     login({ commit }, { email, password }) {
       return new Promise((resolve, reject) => {
@@ -55,10 +57,10 @@ export default {
   },
   mutations: {
     reset(state) {
-      Object.keys(initialState()).forEach(key => (state[key] = value));
+      Object.keys(initialState()).forEach(key => (state[key] = null));
     },
     update(state, { key, value }) {
-      if (!initialState().hasOwnProperty(key)) {
+      if (!Object.prototype.hasOwnProperty.call(initialState(), key)) {
         console.warn(`Can not update key "${key}" of the auth store.`);
         return;
       }

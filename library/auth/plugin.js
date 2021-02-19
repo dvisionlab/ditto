@@ -1,9 +1,11 @@
 // Dependencies
-import { beforeEachGuard, routes } from "../router";
-import store from "../store";
+import { beforeEachGuard, routes } from "./router";
+import store from "./store";
 
 // Local variables
-const defaultOptions = {}; // TODO
+const defaultOptions = {
+  automaticLogin: true
+};
 
 // Plugin
 export default {
@@ -16,26 +18,29 @@ export default {
       throw new Error("Please initialise the auth plugin with a Vuex store.");
     }
 
+    // Options override
+    options = { ...defaultOptions, ...options };
+
     // Register auth routes
     routes.forEach(route => options.router.addRoute(route));
     // Register navigation guard
-    options.router.beforeEach = beforeEachGuard;
+    options.router.beforeEach((to, from, next) =>
+      beforeEachGuard(to, from, next)
+    );
 
     // Register auth vuex module
     options.store.registerModule("auth", store);
 
     // Automatic login on start application
-    Vue.mixin({
-      created() {
-        options.store
-          .dispatch("auth/login")
-          // TODO match with router navigation guard
-          .then(resp => console.log("Automatic login", resp))
-          .catch(error => {
-            options.store.dispatch("auth/logout");
-            console.error(error);
-          });
-      }
-    });
+    if (options.automaticLogin) {
+      options.store
+        .dispatch("auth/autoLogin")
+        // TODO match with router navigation guard
+        .then(resp => console.log("Automatically logged in:", resp))
+        .catch(error => {
+          options.store.dispatch("auth/logout");
+          console.warn("Automatic login failed:", error);
+        });
+    }
   }
 };
