@@ -33,6 +33,7 @@ export const routes = [
 
 // Before each navigation guard
 export const beforeEachGuard = (to, from, next) => {
+  console.log("BEFORE EACH");
   // auth not needed
   if (to.matched.some(record => record.meta.guest)) {
     if (persist.getAccessToken() == null) {
