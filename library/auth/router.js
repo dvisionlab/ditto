@@ -1,3 +1,4 @@
+import persist from "./persist";
 import LoginForm from "./components/LoginForm";
 
 // Auth plugin routes
@@ -8,7 +9,8 @@ export const routes = [
     meta: {
       guest: true
     },
-    name: "login"
+    name: "login",
+    props: route => ({ autoLoggedOut: route.query.autoLoggedOut })
   },
   {
     component: null, // TODO
@@ -31,10 +33,10 @@ export const routes = [
 
 // Before each navigation guard
 export const beforeEachGuard = (to, from, next) => {
+  console.log("BEFORE EACH");
   // auth not needed
   if (to.matched.some(record => record.meta.guest)) {
-    // TODO localStorage or sessionStorage
-    if (localStorage.getItem("accessToken") == null) {
+    if (persist.getAccessToken() == null) {
       next();
     } else {
       // but user is logged in
@@ -44,8 +46,8 @@ export const beforeEachGuard = (to, from, next) => {
   // auth needed
   else {
     // but user not logged in
-    if (localStorage.getItem("accessToken") == null) {
-      next({ name: "login" });
+    if (persist.getAccessToken() == null) {
+      next({ name: "login", query: { autoLoggedOut: "unauthorized" } });
     } else {
       next();
     }
