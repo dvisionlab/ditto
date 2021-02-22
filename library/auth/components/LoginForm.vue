@@ -35,8 +35,8 @@
           </v-col>
         </v-row>
       </v-card-actions>
-      <v-alert v-if="error" normal :icon="false" type="error">
-        {{ error }}
+      <v-alert v-if="autoLoggedOut || error" normal :icon="false" type="error">
+        {{ autoLoggedOut || error }}
       </v-alert>
     </v-card-text>
   </v-card>
@@ -47,6 +47,12 @@ import { emailRules, passwordRules } from "../utils";
 
 export default {
   name: "LoginForm",
+  props: {
+    autoLoggedOut: {
+      required: false,
+      type: String
+    }
+  },
   data() {
     return {
       loading: false,
@@ -54,7 +60,8 @@ export default {
       emailRules,
       error: null,
       password: null,
-      passwordRules,
+      passwordRules:
+        process.env.NODE_ENV === "production" ? passwordRules : [() => true],
       validForm: false
     };
   },
@@ -65,7 +72,7 @@ export default {
 
       this.$store
         .dispatch("auth/login", { email: this.email, password: this.password })
-        .then(() => this.$router.redirect({ name: "home" }))
+        .then(() => this.$router.replace("/"))
         .catch(error => (this.error = error))
         .finally(() => (this.loading = false)); // TODO show loader
     },
