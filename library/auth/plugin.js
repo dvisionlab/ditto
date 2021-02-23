@@ -70,6 +70,8 @@ export default {
           console.log("Automatically logged in:", user);
         })
         .catch(error => {
+          // Token found but refresh failed
+          options.forceLogout(error);
           console.warn("Automatic login failed:", error);
         });
     }

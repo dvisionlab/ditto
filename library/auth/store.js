@@ -28,16 +28,22 @@ export default {
 
       return new Promise((resolve, reject) => {
         if (token) {
-          Vue.$http.auth.verifyToken(token).then(() => {
-            persist.setAccessToken(token);
-            commit("update", { key: "accessToken", value: token });
-            commit("update", {
-              key: "refreshToken",
-              value: persist.getRefreshToken()
+          Vue.$http.auth
+            .verifyToken(token)
+            .then(() => {
+              persist.setAccessToken(token);
+              commit("update", { key: "accessToken", value: token });
+              commit("update", {
+                key: "refreshToken",
+                value: persist.getRefreshToken()
+              });
+              commit("update", { key: "user", value: persist.getUser() });
+              resolve(persist.getUser());
+            })
+            .catch(error => {
+              dispatch("logout");
+              reject(error.body.detail);
             });
-            commit("update", { key: "user", value: persist.getUser() });
-            resolve(persist.getUser());
-          });
         } else {
           dispatch("logout");
           reject("Access token not found.");
