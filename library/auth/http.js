@@ -40,7 +40,7 @@ const refreshToken = refresh => {
   return new Promise((resolve, reject) => {
     Vue.$http
       .post("auth/jwt/refresh", null, { refresh })
-      .then(({ body }) => resolve(body.token))
+      .then(({ body }) => resolve(body.access))
       .catch(error => reject(error));
   });
 };
