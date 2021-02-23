@@ -15,6 +15,20 @@ const UNAUTHORIZED_STATUS = 401;
 
 // Utilities
 
+const getQueryStringParams = query => {
+  return query
+    ? (/^[?#]/.test(query) ? query.slice(1) : query)
+        .split("&")
+        .reduce((params, param) => {
+          let [key, value] = param.split("=");
+          params[key] = value
+            ? decodeURIComponent(value.replace(/\+/g, " "))
+            : "";
+          return params;
+        }, {})
+    : {};
+};
+
 // Get current logged user info
 const getUser = () => {
   return new Promise((resolve, reject) => {
@@ -99,22 +113,34 @@ const addAuthorizationInterceptor = ({
         writeAccessToken(token);
       }
 
-      // Check for expired token response and if expired refresh token and resubmit original request
+      // Check for expired token response and if expired refresh token and resubmit original request,
+      // but allow refresh only once
+      const [requestUrl, requestParamsString] = request.url.split("?");
+      const requestParams = getQueryStringParams(requestParamsString);
+
       if (
         !response.url.startsWith("/auth/jwt") &&
         response.status === UNAUTHORIZED_STATUS
       ) {
-        refreshToken(readRefreshToken())
-          .then(token => {
-            // Store refreshed token
-            writeAccessToken(token);
+        if (requestParams.alreadyRefreshed) {
+          forceLogout(response.statusText);
+        } else {
+          refreshToken(readRefreshToken())
+            .then(token => {
+              // Store refreshed token
+              writeAccessToken(token);
 
-            // Resubmit original request
-            Vue.http(request).then(data => data); // TODO test loop
-          })
-          .catch(error => {
-            forceLogout(error.statusText);
-          });
+              // Resubmit original request
+              request.url = Vue.$http.getUrl(requestUrl, {
+                ...requestParams,
+                alreadyRefreshed: true
+              });
+              Vue.http(request).then(data => data);
+            })
+            .catch(error => {
+              forceLogout(error.statusText);
+            });
+        }
       }
     });
   });

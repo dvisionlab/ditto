@@ -102,6 +102,7 @@ export default {
     Vue.$http = {
       addHeader,
       get,
+      getUrl,
       patch,
       post,
       remove,
