@@ -24,15 +24,15 @@ export default {
   },
   actions: {
     autoLogin({ commit, dispatch }) {
-      const token = persist.getAccessToken();
+      const accessToken = persist.getAccessToken();
 
       return new Promise((resolve, reject) => {
-        if (token) {
+        if (accessToken) {
           Vue.$http.auth
-            .verifyToken(token)
-            .then(() => {
-              persist.setAccessToken(token);
-              commit("update", { key: "accessToken", value: token });
+            .verifyToken(accessToken, persist.getRefreshToken())
+            .then(newAccessToken => {
+              persist.setAccessToken(newAccessToken);
+              commit("update", { key: "accessToken", value: newAccessToken });
               commit("update", {
                 key: "refreshToken",
                 value: persist.getRefreshToken()

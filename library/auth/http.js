@@ -36,15 +36,31 @@ const login = (email, password) => {
 };
 
 // Refresh access token using the refresh one
-const refreshToken = refreshToken => {
-  return Vue.$http.post("auth/jwt/refresh", null, {
-    refresh: refreshToken
+const refreshToken = refresh => {
+  return new Promise((resolve, reject) => {
+    Vue.$http
+      .post("auth/jwt/refresh", null, { refresh })
+      .then(({ body }) => resolve(body.token))
+      .catch(error => reject(error));
   });
 };
 
 // Verify access token
-const verifyToken = accessToken => {
-  return Vue.$http.post("auth/jwt/verify", null, { token: accessToken });
+const verifyToken = (access, refresh) => {
+  return new Promise((resolve, reject) => {
+    Vue.$http
+      .post("auth/jwt/verify", null, { token: access })
+      .then(() => resolve(access))
+      .catch(error => {
+        if (refresh) {
+          refreshToken(refresh)
+            .then(token => resolve(token))
+            .catch(error => reject(error));
+        } else {
+          reject(error);
+        }
+      });
+  });
 };
 
 // Create a user and send activation email
@@ -89,9 +105,9 @@ const addAuthorizationInterceptor = ({
         response.status === UNAUTHORIZED_STATUS
       ) {
         refreshToken(readRefreshToken())
-          .then(response => {
+          .then(token => {
             // Store refreshed token
-            writeAccessToken(response.data.token);
+            writeAccessToken(token);
 
             // Resubmit original request
             Vue.http(request).then(data => data); // TODO test loop
