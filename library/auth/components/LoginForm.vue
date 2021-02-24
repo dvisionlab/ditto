@@ -1,5 +1,5 @@
 <template>
-  <v-card flat>
+  <v-card class="mx-auto" flat max-width="500px" width="80%">
     <v-card-text>
       <span>{{ $t("login-email") }}</span>
       <v-form v-model="validForm">
