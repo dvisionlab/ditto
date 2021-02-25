@@ -20,3 +20,18 @@ To update **ditto** in another repository, run the following from the desired re
 ```
 git submodule update
 ```
+
+## Import single module
+
+To import a _ditto_ module in your repository:
+
+```
+import MODULE_NAME from "@/../ditto/MODULE_NAME";
+```
+
+## Available modules
+
+| Module name | Type       |
+| ----------- | ---------- |
+| **auth**    | Vue plugin |
+| **http**    | Vue plugin |
