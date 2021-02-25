@@ -1,7 +1,8 @@
 // Import/export DynamicLayout component
 
 import DynamicLayout from "./library/dynamic-layout/Component";
-import { layouts } from "./library/dynamic-layout/utils";
+import * as utils from "./library/dynamic-layout/utils";
 
 export const component = DynamicLayout;
-export const baseLayouts = layouts;
+export const baseLayouts = utils.layouts;
+export const complexLayouts = utils.complexLayouts;

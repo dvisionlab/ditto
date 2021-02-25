@@ -54,6 +54,7 @@ export const layouts = [
   defaultLayout,
   ...twoPanesLayouts,
   ...threePanesLayouts,
-  ...fourPanesLayouts,
-  veryComplexLayout
+  ...fourPanesLayouts
 ];
+
+export const complexLayouts = [veryComplexLayout];
