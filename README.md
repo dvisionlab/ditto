@@ -2,7 +2,7 @@
 
 **D**\Vision [user] **I**nterfaces (for **T**ime and **T**echniques **O**ptimization)
 
-![image info](./src/assets/logo.png)
+![image info](./app/src/assets/logo.png)
 
 ## Project setup
 
