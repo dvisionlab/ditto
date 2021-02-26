@@ -76,9 +76,12 @@ export default {
         .catch(error => (this.error = error))
         .finally(() => (this.loading = false)); // TODO show loader
     },
-    resetForm() {
-      this.email = null;
-      this.password = null;
+    resetPassword() {
+      console.log(this.email);
+      this.$router.replace({
+        name: "forgot-password",
+        query: { email: this.email }
+      });
     }
   }
 };

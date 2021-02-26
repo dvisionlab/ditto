@@ -7,7 +7,7 @@ import persist from "./persist";
 
 // Local variables
 const defaultOptions = {
-  automaticLogin: true
+  automaticLogin: false
 };
 
 // Plugin

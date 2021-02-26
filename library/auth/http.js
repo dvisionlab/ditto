@@ -91,7 +91,7 @@ const createUser = (firstname, lastname, email, password) => {
 
 // Reset password and send reset password email
 const resetPasswordWithEmail = email => {
-  return Vue.$http.post("auth/users/reset_password", null, { email });
+  return Vue.$http.post("auth/users/reset_password/", null, { email });
 };
 
 // Authorization interceptor

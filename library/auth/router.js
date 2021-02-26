@@ -1,3 +1,4 @@
+// Dependencies
 import persist from "./persist";
 import LoginForm from "./components/LoginForm";
 
@@ -12,17 +13,25 @@ export const routes = [
     name: "login",
     props: route => ({ autoLoggedOut: route.query.autoLoggedOut })
   },
+  // TODO optionals
   {
-    component: null, // TODO
+    component: () => import("./components/ForgotPassword"),
+    path: "/forgot-password",
+    meta: {
+      guest: true
+    },
+    name: "forgot-password"
+  },
+  {
+    component: () => import("./components/ResetPassword"),
     path: "/reset-password",
     meta: {
       guest: true
     },
     name: "reset-password"
   },
-  // TODO optional
   {
-    component: null, // TODO
+    component: null,
     path: "/register",
     meta: {
       guest: true
@@ -32,6 +41,7 @@ export const routes = [
 ];
 
 // Before each navigation guard
+// TODO verify token?
 export const beforeEachGuard = (to, from, next) => {
   // auth not needed
   if (to.matched.some(record => record.meta.guest)) {
