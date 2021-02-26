@@ -1,5 +1,5 @@
 // Dependencies
-import { beforeEachGuard, routes } from "./router";
+import { beforeEachGuard, getRoutes } from "./router";
 import store from "./store";
 import http from "../http/plugin";
 import authHttp from "./http";
@@ -7,7 +7,9 @@ import persist from "./persist";
 
 // Local variables
 const defaultOptions = {
-  automaticLogin: false
+  allowPasswordReset: true,
+  allowUserRegistration: true,
+  automaticLogin: false // TODO set true
 };
 
 // Plugin
@@ -53,7 +55,7 @@ export default {
     });
 
     // Register auth routes
-    routes.forEach(route => options.router.addRoute(route));
+    getRoutes(options).forEach(route => options.router.addRoute(route));
     // Register navigation guard
     options.router.beforeEach((to, from, next) =>
       beforeEachGuard(to, from, next)
@@ -71,7 +73,7 @@ export default {
         })
         .catch(error => {
           // Token found but refresh failed
-          options.forceLogout(error);
+          options.forceLogout();
           console.warn("Automatic login failed:", error);
         });
     }

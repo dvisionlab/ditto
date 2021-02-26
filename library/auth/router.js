@@ -3,45 +3,55 @@ import persist from "./persist";
 import LoginForm from "./components/LoginForm";
 
 // Auth plugin routes
-export const routes = [
-  {
-    component: LoginForm,
-    path: "/login",
-    meta: {
-      guest: true
+export const getRoutes = options => {
+  return [
+    {
+      component: LoginForm,
+      path: "/login",
+      meta: {
+        guest: true
+      },
+      name: "login",
+      props: {
+        allowPasswordReset: options.allowPasswordReset,
+        allowUserRegistration: options.allowUserRegistration
+      }
     },
-    name: "login",
-    props: route => ({ autoLoggedOut: route.query.autoLoggedOut })
-  },
-  // TODO optionals
-  {
-    component: () => import("./components/ForgotPassword"),
-    path: "/forgot-password",
-    meta: {
-      guest: true
-    },
-    name: "forgot-password"
-  },
-  {
-    component: () => import("./components/ResetPassword"),
-    path: "/reset-password",
-    meta: {
-      guest: true
-    },
-    name: "reset-password"
-  },
-  {
-    component: null,
-    path: "/register",
-    meta: {
-      guest: true
-    },
-    name: "register"
-  }
-];
+    options.allowPasswordReset
+      ? {
+          component: () => import("./components/ForgotPassword"),
+          path: "/forgot-password",
+          meta: {
+            guest: true
+          },
+          name: "forgot-password"
+        }
+      : null,
+    options.allowPasswordReset
+      ? {
+          component: () => import("./components/ResetPassword"),
+          path: "/reset-password",
+          meta: {
+            guest: true
+          },
+          name: "reset-password"
+        }
+      : null,
+    options.allowUserRegistration
+      ? {
+          component: () => import("./components/SignUp"),
+          path: "/register",
+          meta: {
+            guest: true
+          },
+          name: "register"
+        }
+      : null
+  ].filter(Boolean); // equal to _.compact
+};
 
 // Before each navigation guard
-// TODO verify token?
+// TODO verify token? but manage auto login sync before entering root route
 export const beforeEachGuard = (to, from, next) => {
   // auth not needed
   if (to.matched.some(record => record.meta.guest)) {

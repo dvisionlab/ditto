@@ -1,5 +1,6 @@
 // Dependencies
 import Vue from "vue";
+import { skipAuthorizationInterceptorUrls } from "./utils";
 
 // Local variables
 
@@ -28,6 +29,9 @@ const getQueryStringParams = query => {
         }, {})
     : {};
 };
+
+const skipAuthorizationInterceptor = url =>
+  skipAuthorizationInterceptorUrls.some(skipUrl => url.startsWith(skipUrl));
 
 // Get current logged user info
 const getUser = () => {
@@ -103,6 +107,10 @@ const addAuthorizationInterceptor = ({
 }) => {
   // Register the refresh token interceptor (https://laracasts.com/discuss/channels/vue/jwt-auth-with-vue-resource-interceptor)
   Vue.http.interceptors.push((request, next) => {
+    if (skipAuthorizationInterceptor(request.url)) {
+      return;
+    }
+
     // Add jwt to all requests
     request.headers.set("Authorization", "Bearer " + readAccessToken());
 
@@ -118,10 +126,7 @@ const addAuthorizationInterceptor = ({
       const [requestUrl, requestParamsString] = request.url.split("?");
       const requestParams = getQueryStringParams(requestParamsString);
 
-      if (
-        !response.url.startsWith("/auth/jwt") &&
-        response.status === UNAUTHORIZED_STATUS
-      ) {
+      if (response.status === UNAUTHORIZED_STATUS) {
         if (requestParams.alreadyRefreshed) {
           forceLogout(response.statusText);
         } else {
