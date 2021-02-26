@@ -1,5 +1,4 @@
 // Dependencies
-import path from "path";
 import Vue from "vue";
 import VueResource from "vue-resource";
 
@@ -38,8 +37,7 @@ const getUrl = (endpoint, params, useRandomString = true) => {
 // -----------------------
 const addHeader = (key, value) => (Vue.http.headers.common[key] = value);
 
-const setRoot = url =>
-  (Vue.http.options.root = path.join(window.location.pathname, url));
+const setRoot = url => (Vue.http.options.root = url);
 
 // Interceptors
 // ------------
@@ -84,15 +82,13 @@ const remove = (endpoint, params) => {
 
 // Plugin
 export default {
-  async install(Vue, options) {
+  async install(Vue, { extensions, options }) {
     // Register vue-resource
     Vue.use(VueResource);
 
     // Setup
     if (options.root) {
       setRoot(options.root);
-    } else {
-      Vue.http.options.root = path.join(window.location.pathname);
     }
 
     // Register interceptors
@@ -110,8 +106,8 @@ export default {
     };
 
     // Finally, install http plugin extension
-    if (options.extensions) {
-      options.extensions.map(({ plugin, options }) => Vue.use(plugin, options));
+    if (extensions) {
+      extensions.map(({ plugin, options }) => Vue.use(plugin, options));
     }
   }
 };

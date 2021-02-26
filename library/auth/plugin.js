@@ -51,7 +51,8 @@ export default {
           plugin: authHttp,
           options
         }
-      ]
+      ],
+      options
     });
 
     // Register auth routes

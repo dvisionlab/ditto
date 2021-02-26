@@ -47,7 +47,7 @@ const getUser = () => {
 const login = (email, password) => {
   return new Promise((resolve, reject) => {
     Vue.$http
-      .post("auth/jwt/create", null, { email, password })
+      .post("auth/jwt/create/", null, { email, password })
       .then(({ body: tokens }) => resolve(tokens))
       .catch(error => reject(error.body.detail));
   });
@@ -57,7 +57,7 @@ const login = (email, password) => {
 const refreshToken = refresh => {
   return new Promise((resolve, reject) => {
     Vue.$http
-      .post("auth/jwt/refresh", null, { refresh })
+      .post("auth/jwt/refresh/", null, { refresh })
       .then(({ body }) => resolve(body.access))
       .catch(error => reject(error));
   });
@@ -67,7 +67,7 @@ const refreshToken = refresh => {
 const verifyToken = (access, refresh) => {
   return new Promise((resolve, reject) => {
     Vue.$http
-      .post("auth/jwt/verify", null, { token: access })
+      .post("auth/jwt/verify/", null, { token: access })
       .then(() => resolve(access))
       .catch(error => {
         if (refresh) {
@@ -90,7 +90,7 @@ const createUser = (firstname, lastname, email, password) => {
     password
   };
 
-  return Vue.$http.post("auth/users", null, data);
+  return Vue.$http.post("auth/users/", null, data);
 };
 
 // Reset password and send reset password email
