@@ -2,6 +2,9 @@
 import persist from "./persist";
 import LoginForm from "./components/LoginForm";
 
+// Local variables
+let alreadyAutoLoggedIn = false;
+
 // Auth plugin routes
 export const getRoutes = options => {
   return [
@@ -9,6 +12,7 @@ export const getRoutes = options => {
       component: LoginForm,
       path: "/login",
       meta: {
+        autoLogin: options.automaticLogin,
         guest: true
       },
       name: "login",
@@ -53,24 +57,33 @@ export const getRoutes = options => {
 };
 
 // Before each navigation guard
-export const beforeEachGuard = (to, from, next) => {
-  // Verify authentication
-  // auth not needed
-  if (to.matched.some(record => record.meta.guest)) {
-    if (persist.getAccessToken() == null) {
-      next();
-    } else {
-      // but user is logged in
-      next("/");
+export const getBeforeEachGuard = options => {
+  return async function(to, from, next) {
+    if (
+      alreadyAutoLoggedIn == false &&
+      to.matched.some(record => record.meta.autoLogin)
+    ) {
+      alreadyAutoLoggedIn = true;
+      await options.forceLogin();
     }
-  }
-  // auth needed
-  else {
-    // but user not logged in
-    if (persist.getAccessToken() == null) {
-      next({ name: "login" });
-    } else {
-      next();
+
+    // auth not needed
+    if (to.matched.some(record => record.meta.guest)) {
+      if (persist.getAccessToken() == null) {
+        next();
+      } else {
+        // but user is logged in
+        next("/");
+      }
     }
-  }
+    // auth needed
+    else {
+      // but user not logged in
+      if (persist.getAccessToken() == null) {
+        next({ name: "login" });
+      } else {
+        next();
+      }
+    }
+  };
 };

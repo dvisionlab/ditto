@@ -1,5 +1,5 @@
 // Dependencies
-import { beforeEachGuard, getRoutes } from "./router";
+import { getBeforeEachGuard, getRoutes } from "./router";
 import store from "./store";
 import http from "../http/plugin";
 import authHttp from "./http";
@@ -27,12 +27,23 @@ export default {
     options = {
       ...defaultOptions,
       ...options,
+      forceLogin: () => {
+        return options.store
+          .dispatch("auth/autoLogin")
+          .then(user => console.log("Automatically logged in:", user))
+          .catch(error => {
+            options.store.dispatch("auth/logout");
+            console.warn("Automatic login failed:", error);
+          });
+      },
       forceLogout: message => {
         options.store.dispatch("auth/logout");
         if (options.router.currentRoute.name !== "login") {
           options.router.replace({
             name: "login",
-            query: { alertType: "warning", alertMessage: message }
+            query: message
+              ? { alertType: "warning", alertMessage: message }
+              : null
           });
         }
       },
@@ -58,9 +69,7 @@ export default {
     // Register auth routes
     getRoutes(options).forEach(route => options.router.addRoute(route));
     // Register navigation guard
-    options.router.beforeEach((to, from, next) =>
-      beforeEachGuard(to, from, next)
-    );
+    options.router.beforeEach(getBeforeEachGuard(options));
 
     // Register auth vuex module
     options.store.registerModule("auth", store);
