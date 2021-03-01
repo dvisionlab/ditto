@@ -121,8 +121,9 @@ export default {
             query: { resetPasswordEmailSent: true } // TODO customize message
           });
         })
-        .catch(({ body }) => {
-          this.error = body.detail || body.toString();
+        .catch(error => {
+          this.error = `ERROR ${error.status} - ${error.body.detail ||
+            error.statusText}`;
         })
         .finally(() => (this.loading = false));
     }

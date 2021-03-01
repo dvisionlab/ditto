@@ -113,7 +113,10 @@ export default {
       this.$store
         .dispatch("auth/login", { email: this.email, password: this.password })
         .then(() => this.$router.replace("/"))
-        .catch(error => (this.error = error))
+        .catch(error => {
+          this.error = `ERROR ${error.status} - ${error.body.detail ||
+            error.statusText}`;
+        })
         .finally(() => (this.loading = false));
     },
     resetPassword() {

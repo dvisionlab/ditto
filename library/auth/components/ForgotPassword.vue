@@ -90,8 +90,9 @@ export default {
             query: { resetPasswordEmailSent: true }
           });
         })
-        .catch(({ body }) => {
-          this.error = body.detail || body.toString();
+        .catch(error => {
+          this.error = `ERROR ${error.status} - ${error.body.detail ||
+            error.statusText}`;
         })
         .finally(() => (this.loading = false));
     }
