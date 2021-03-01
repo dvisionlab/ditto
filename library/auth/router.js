@@ -12,10 +12,11 @@ export const getRoutes = options => {
         guest: true
       },
       name: "login",
-      props: {
+      props: route => ({
+        ...route.query,
         allowPasswordReset: options.allowPasswordReset,
         allowUserRegistration: options.allowUserRegistration
-      }
+      })
     },
     options.allowPasswordReset
       ? {
@@ -52,7 +53,7 @@ export const getRoutes = options => {
 };
 
 // Before each navigation guard
-// TODO verify token? but manage auto login sync before entering root route
+// TODO verify token? no, but manage auto login sync before entering root route
 export const beforeEachGuard = (to, from, next) => {
   // auth not needed
   if (to.matched.some(record => record.meta.guest)) {
@@ -67,7 +68,7 @@ export const beforeEachGuard = (to, from, next) => {
   else {
     // but user not logged in
     if (persist.getAccessToken() == null) {
-      next({ name: "login", query: { autoLoggedOut: "unauthorized" } });
+      next({ name: "login" });
     } else {
       next();
     }

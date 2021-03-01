@@ -42,7 +42,7 @@
           prominent
           border="left"
         >
-          <b class="pl-1">{{ error }}</b>
+          <b class="pl-1" v-html="error" />
         </v-alert>
       </div>
 
@@ -66,12 +66,6 @@
         </v-btn>
       </div>
     </div>
-
-    <!-- TODO @simone -->
-    <!-- <p>
-        The password reset link was invalid, possibly because it has already
-        been used. Please request a new password reset.
-      </p> -->
   </v-main>
 </template>
 
@@ -104,7 +98,6 @@ export default {
     }
   },
   methods: {
-    // TODO test
     submit() {
       this.loading = true;
 
@@ -118,12 +111,27 @@ export default {
         .then(() => {
           this.$router.replace({
             name: "login",
-            query: { resetPasswordEmailSent: true } // TODO customize message
+            query: { alertMessage: "change-password-success" }
           });
         })
         .catch(error => {
-          this.error = `ERROR ${error.status} - ${error.body.detail ||
-            error.statusText}`;
+          let details = "";
+          if (error.body.new_password || error.body.re_new_password) {
+            if (error.body.new_password) {
+              details += `${this.$t("new_password")}:<br />`;
+              details += error.body.new_password.join("<br />");
+            }
+
+            if (error.body.re_new_password) {
+              error.body.new_password ? (details += "<br /><br />") : null;
+              details += `${this.$t("re_new_password")}:<br />`;
+              details += error.body.re_new_password.join("<br />");
+            }
+          } else {
+            details = `ERROR ${error.status} - ${error.body.detail ||
+              error.statusText}`;
+          }
+          this.error = details;
         })
         .finally(() => (this.loading = false));
     }

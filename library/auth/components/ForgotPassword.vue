@@ -87,7 +87,10 @@ export default {
         .then(() => {
           this.$router.replace({
             name: "login",
-            query: { resetPasswordEmailSent: true }
+            query: {
+              // TODO translation: An email with password reset instructions has been sent to your email address.
+              alertMessage: "send-forgot-password-email-success"
+            }
           });
         })
         .catch(error => {

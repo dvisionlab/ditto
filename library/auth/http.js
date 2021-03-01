@@ -31,7 +31,9 @@ const getQueryStringParams = query => {
 };
 
 const skipAuthorizationInterceptor = url =>
-  skipAuthorizationInterceptorUrls.some(skipUrl => url.startsWith(skipUrl));
+  skipAuthorizationInterceptorUrls.some(skipUrl =>
+    url.replace(/^\/|\/$/g, "").startsWith(skipUrl)
+  );
 
 // Get current logged user info
 const getUser = () => {

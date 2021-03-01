@@ -5,13 +5,12 @@
 
       <div class="pb-4">
         <v-alert
-          v-if="showResetPasswordAlert"
+          v-if="alertMessage"
           dismissible
           :icon="false"
-          type="success"
+          :type="alertType"
         >
-          An email with password reset instructions has been sent to your email
-          address.
+          {{ $t(alertMessage) }}
         </v-alert>
       </div>
 
@@ -49,18 +48,6 @@
         >{{ $t("login") }}</v-btn
       >
 
-      <div v-if="error || $route.query.autoLoggedOut" class=" mt-4 pa-2">
-        <v-alert
-          icon="mdi-alert-circle"
-          outlined
-          type="warning"
-          prominent
-          border="left"
-        >
-          <b class="pl-1">{{ error || $route.query.autoLoggedOut }}</b>
-        </v-alert>
-      </div>
-
       <div class="mt-4 text-right">
         <div v-if="allowPasswordReset">
           <a @click="resetPassword">Forgot Password?</a>
@@ -80,6 +67,14 @@ import { emailRules, passwordRules } from "../utils";
 export default {
   name: "LoginForm",
   props: {
+    alertMessage: {
+      required: false,
+      type: String
+    },
+    alertType: {
+      default: "success",
+      type: String
+    },
     allowPasswordReset: {
       default: true,
       type: Boolean
@@ -97,14 +92,8 @@ export default {
     password: null,
     passwordRules:
       process.env.NODE_ENV === "production" ? passwordRules : [() => true],
-    showResetPasswordAlert: false,
     validForm: false
   }),
-  created() {
-    if (this.$route.query.resetPasswordEmailSent) {
-      this.showResetPasswordAlert = true;
-    }
-  },
   methods: {
     submit() {
       this.error = null;

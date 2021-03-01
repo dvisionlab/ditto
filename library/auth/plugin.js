@@ -9,7 +9,7 @@ import persist from "./persist";
 const defaultOptions = {
   allowPasswordReset: true,
   allowUserRegistration: true,
-  automaticLogin: false // TODO set true
+  automaticLogin: true
 };
 
 // Plugin
@@ -32,7 +32,7 @@ export default {
         if (options.router.currentRoute.name !== "login") {
           options.router.replace({
             name: "login",
-            query: { autoLoggedOut: message }
+            query: { alertType: "warning", alertMessage: message }
           });
         }
       },
