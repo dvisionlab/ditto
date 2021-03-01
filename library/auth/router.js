@@ -41,7 +41,7 @@ export const getRoutes = options => {
       : null,
     options.allowUserRegistration
       ? {
-          component: () => import("./components/SignUp"),
+          component: () => import("./components/SignUp"), // TODO
           path: "/register",
           meta: {
             guest: true
@@ -54,6 +54,7 @@ export const getRoutes = options => {
 
 // Before each navigation guard
 export const beforeEachGuard = (to, from, next) => {
+  // Verify authentication
   // auth not needed
   if (to.matched.some(record => record.meta.guest)) {
     if (persist.getAccessToken() == null) {
