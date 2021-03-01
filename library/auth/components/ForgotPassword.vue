@@ -83,7 +83,7 @@ export default {
       this.loading = true;
 
       Vue.$http.auth
-        .resetPasswordWithEmail(this.email)
+        .requestPasswordReset(this.email)
         .then(() => {
           this.$router.replace({
             name: "login",

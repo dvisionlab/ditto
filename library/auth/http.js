@@ -93,10 +93,18 @@ const createUser = (firstname, lastname, email, password) => {
   return Vue.$http.post("auth/users/", null, data);
 };
 
-// Reset password and send reset password email
-const resetPasswordWithEmail = email => {
-  return Vue.$http.post("auth/users/reset_password/", null, { email });
-};
+// Request password reset and send a reset password email
+const requestPasswordReset = email =>
+  Vue.$http.post("auth/users/reset_password/", null, { email });
+
+// Send new password
+const resetPassword = (uid, token, new_password, re_new_password) =>
+  Vue.$http.post("/auth/users/reset_password_confirm/", null, {
+    uid,
+    token,
+    new_password,
+    re_new_password
+  });
 
 // Authorization interceptor
 const addAuthorizationInterceptor = ({
@@ -162,7 +170,8 @@ export default {
       createUser,
       getUser,
       login,
-      resetPasswordWithEmail,
+      requestPasswordReset,
+      resetPassword,
       verifyToken
     };
   }

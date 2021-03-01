@@ -29,12 +29,13 @@ export const getRoutes = options => {
       : null,
     options.allowPasswordReset
       ? {
-          component: () => import("./components/ResetPassword"),
-          path: "/reset-password",
+          component: () => import("./components/ChangePassword"),
+          path: "/reset-password/:uid/:token",
           meta: {
             guest: true
           },
-          name: "reset-password"
+          name: "reset-password",
+          props: true
         }
       : null,
     options.allowUserRegistration
