@@ -1,5 +1,5 @@
 // Dependencies
-import { beforeEachGuard, routes } from "./router";
+import { beforeEachGuard, getRoutes } from "./router";
 import store from "./store";
 import http from "../http/plugin";
 import authHttp from "./http";
@@ -7,6 +7,8 @@ import persist from "./persist";
 
 // Local variables
 const defaultOptions = {
+  allowPasswordReset: true,
+  allowUserRegistration: true,
   automaticLogin: true
 };
 
@@ -30,7 +32,7 @@ export default {
         if (options.router.currentRoute.name !== "login") {
           options.router.replace({
             name: "login",
-            query: { autoLoggedOut: message }
+            query: { alertType: "warning", alertMessage: message }
           });
         }
       },
@@ -49,11 +51,12 @@ export default {
           plugin: authHttp,
           options
         }
-      ]
+      ],
+      options
     });
 
     // Register auth routes
-    routes.forEach(route => options.router.addRoute(route));
+    getRoutes(options).forEach(route => options.router.addRoute(route));
     // Register navigation guard
     options.router.beforeEach((to, from, next) =>
       beforeEachGuard(to, from, next)
@@ -63,17 +66,19 @@ export default {
     options.store.registerModule("auth", store);
 
     // Automatic login on start application (router guards will redirect accordingly)
-    if (options.automaticLogin) {
-      options.store
-        .dispatch("auth/autoLogin")
-        .then(user => {
-          console.log("Automatically logged in:", user);
-        })
-        .catch(error => {
-          // Token found but refresh failed
-          options.forceLogout(error);
-          console.warn("Automatic login failed:", error);
-        });
-    }
+    // TODO test with forgot password and do sync before entering root route (add a meta field and run on beforeCreate?)
+
+    // if (options.automaticLogin) {
+    //   options.store
+    //     .dispatch("auth/autoLogin")
+    //     .then(user => {
+    //       console.log("Automatically logged in:", user);
+    //     })
+    //     .catch(error => {
+    //       // Token found but refresh failed
+    //       options.forceLogout();
+    //       console.warn("Automatic login failed:", error);
+    //     });
+    // }
   }
 };

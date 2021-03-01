@@ -1,38 +1,60 @@
+// Dependencies
 import persist from "./persist";
 import LoginForm from "./components/LoginForm";
 
 // Auth plugin routes
-export const routes = [
-  {
-    component: LoginForm,
-    path: "/login",
-    meta: {
-      guest: true
+export const getRoutes = options => {
+  return [
+    {
+      component: LoginForm,
+      path: "/login",
+      meta: {
+        guest: true
+      },
+      name: "login",
+      props: route => ({
+        ...route.query,
+        allowPasswordReset: options.allowPasswordReset,
+        allowUserRegistration: options.allowUserRegistration
+      })
     },
-    name: "login",
-    props: route => ({ autoLoggedOut: route.query.autoLoggedOut })
-  },
-  {
-    component: null, // TODO
-    path: "/reset-password",
-    meta: {
-      guest: true
-    },
-    name: "reset-password"
-  },
-  // TODO optional
-  {
-    component: null, // TODO
-    path: "/register",
-    meta: {
-      guest: true
-    },
-    name: "register"
-  }
-];
+    options.allowPasswordReset
+      ? {
+          component: () => import("./components/ForgotPassword"),
+          path: "/forgot-password",
+          meta: {
+            guest: true
+          },
+          name: "forgot-password"
+        }
+      : null,
+    options.allowPasswordReset
+      ? {
+          component: () => import("./components/ChangePassword"),
+          path: "/reset-password/:uid/:token",
+          meta: {
+            guest: true
+          },
+          name: "reset-password",
+          props: true
+        }
+      : null,
+    options.allowUserRegistration
+      ? {
+          component: () => import("./components/SignUp"), // TODO
+          path: "/register",
+          meta: {
+            guest: true
+          },
+          name: "register"
+        }
+      : null
+  ].filter(Boolean); // equal to _.compact
+};
 
 // Before each navigation guard
 export const beforeEachGuard = (to, from, next) => {
+  // Verify authentication
   // auth not needed
   if (to.matched.some(record => record.meta.guest)) {
     if (persist.getAccessToken() == null) {
@@ -46,7 +68,7 @@ export const beforeEachGuard = (to, from, next) => {
   else {
     // but user not logged in
     if (persist.getAccessToken() == null) {
-      next({ name: "login", query: { autoLoggedOut: "unauthorized" } });
+      next({ name: "login" });
     } else {
       next();
     }
