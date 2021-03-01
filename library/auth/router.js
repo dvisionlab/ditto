@@ -53,7 +53,6 @@ export const getRoutes = options => {
 };
 
 // Before each navigation guard
-// TODO verify token? no, but manage auto login sync before entering root route
 export const beforeEachGuard = (to, from, next) => {
   // auth not needed
   if (to.matched.some(record => record.meta.guest)) {

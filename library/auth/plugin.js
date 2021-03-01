@@ -66,17 +66,19 @@ export default {
     options.store.registerModule("auth", store);
 
     // Automatic login on start application (router guards will redirect accordingly)
-    if (options.automaticLogin) {
-      options.store
-        .dispatch("auth/autoLogin")
-        .then(user => {
-          console.log("Automatically logged in:", user);
-        })
-        .catch(error => {
-          // Token found but refresh failed
-          options.forceLogout();
-          console.warn("Automatic login failed:", error);
-        });
-    }
+    // TODO test with forgot password and do sync before entering root route (add a meta field and run on beforeCreate?)
+
+    // if (options.automaticLogin) {
+    //   options.store
+    //     .dispatch("auth/autoLogin")
+    //     .then(user => {
+    //       console.log("Automatically logged in:", user);
+    //     })
+    //     .catch(error => {
+    //       // Token found but refresh failed
+    //       options.forceLogout();
+    //       console.warn("Automatic login failed:", error);
+    //     });
+    // }
   }
 };
