@@ -12,7 +12,7 @@ export const getRoutes = options => {
       component: LoginForm,
       path: "/login",
       meta: {
-        autoLogin: options.automaticLogin,
+        autoLogin: options.autoLogin,
         guest: true
       },
       name: "login",
