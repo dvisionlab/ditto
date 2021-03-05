@@ -37,6 +37,18 @@
         ></v-text-field>
       </v-form>
 
+      <div v-if="error">
+        <v-alert
+          icon="mdi-alert-circle"
+          outlined
+          type="warning"
+          prominent
+          border="left"
+        >
+          <b class="pl-1" v-html="error" />
+        </v-alert>
+      </div>
+
       <v-btn
         block
         :disabled="loading || !validForm"
@@ -103,8 +115,24 @@ export default {
         .dispatch("auth/login", { email: this.email, password: this.password })
         .then(() => this.$router.replace("/"))
         .catch(error => {
-          this.error = `ERROR ${error.status} - ${error.body.detail ||
-            error.statusText}`;
+          let details = "";
+          if (error.body.email || error.body.password) {
+            if (error.body.email) {
+              details += `${this.$t("email")}:<br />`;
+              details += error.body.email.join("<br />");
+            }
+
+            if (error.body.password) {
+              error.body.email ? (details += "<br /><br />") : null;
+              details += `${this.$t("password")}:<br />`;
+              details += error.body.password.join("<br />");
+            }
+          } else {
+            details =
+              error.body.detail ||
+              `ERROR ${error.status} - ${error.statusText}`;
+          }
+          this.error = details;
         })
         .finally(() => (this.loading = false));
     },

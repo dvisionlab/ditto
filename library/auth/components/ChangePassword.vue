@@ -128,8 +128,9 @@ export default {
               details += error.body.re_new_password.join("<br />");
             }
           } else {
-            details = `ERROR ${error.status} - ${error.body.detail ||
-              error.statusText}`;
+            details =
+              error.body.detail ||
+              `ERROR ${error.status} - ${error.statusText}`;
           }
           this.error = details;
         })

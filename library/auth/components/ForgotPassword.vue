@@ -94,8 +94,8 @@ export default {
           });
         })
         .catch(error => {
-          this.error = `ERROR ${error.status} - ${error.body.detail ||
-            error.statusText}`;
+          this.error =
+            error.body.detail || `ERROR ${error.status} - ${error.statusText}`;
         })
         .finally(() => (this.loading = false));
     }

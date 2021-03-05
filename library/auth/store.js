@@ -42,7 +42,9 @@ export default {
             })
             .catch(error => {
               dispatch("logout");
-              reject(error.body.detail);
+              reject(
+                error.body && error.body.detail ? error.body.detail : error.body
+              );
             });
         } else {
           dispatch("logout");

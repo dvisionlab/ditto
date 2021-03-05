@@ -37,21 +37,16 @@ const skipAuthorizationInterceptor = url =>
 
 // Get current logged user info
 const getUser = () => {
-  return new Promise((resolve, reject) => {
-    Vue.$http.get("auth/users/me").then(
-      body => resolve(body),
-      error => reject(error.body.detail)
-    );
-  });
+  return Vue.$http.get("auth/users/me");
 };
 
 // Login and get json web tokens
 const login = (email, password) => {
   return new Promise((resolve, reject) => {
     Vue.$http
-      .post("auth/jwt/create/", null, { email, password })
+      .post("auth/jwt/create", null, { email, password })
       .then(({ body: tokens }) => resolve(tokens))
-      .catch(error => reject(error.body.detail));
+      .catch(error => reject(error));
   });
 };
 
@@ -59,7 +54,7 @@ const login = (email, password) => {
 const refreshToken = refresh => {
   return new Promise((resolve, reject) => {
     Vue.$http
-      .post("auth/jwt/refresh/", null, { refresh })
+      .post("auth/jwt/refresh", null, { refresh })
       .then(({ body }) => resolve(body.access))
       .catch(error => reject(error));
   });
@@ -69,7 +64,7 @@ const refreshToken = refresh => {
 const verifyToken = (access, refresh) => {
   return new Promise((resolve, reject) => {
     Vue.$http
-      .post("auth/jwt/verify/", null, { token: access })
+      .post("auth/jwt/verify", null, { token: access })
       .then(() => resolve(access))
       .catch(error => {
         if (refresh) {
@@ -92,16 +87,16 @@ const createUser = (firstname, lastname, email, password) => {
     password
   };
 
-  return Vue.$http.post("auth/users/", null, data);
+  return Vue.$http.post("auth/users", null, data);
 };
 
 // Request password reset and send a reset password email
 const requestPasswordReset = email =>
-  Vue.$http.post("auth/users/reset_password/", null, { email });
+  Vue.$http.post("auth/users/reset_password", null, { email });
 
 // Send new password
 const resetPassword = (uid, token, new_password, re_new_password) =>
-  Vue.$http.post("/auth/users/reset_password_confirm/", null, {
+  Vue.$http.post("/auth/users/reset_password_confirm", null, {
     uid,
     token,
     new_password,
