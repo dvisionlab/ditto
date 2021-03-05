@@ -1,6 +1,5 @@
 // TODO
-// - multi tab state
-//- localStorage or sessionStorage
+// - localStorage or sessionStorage
 
 // Dependencies
 import Vue from "vue";

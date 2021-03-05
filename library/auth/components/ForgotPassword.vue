@@ -9,7 +9,7 @@
         password via email.
       </p>
 
-      <v-form lazy-validation v-model="validForm">
+      <v-form v-model="validForm">
         <v-text-field
           append-icon="mdi-email"
           :disabled="loading"

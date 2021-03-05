@@ -14,9 +14,10 @@
         </v-alert>
       </div>
 
-      <v-form lazy-validation v-model="validForm">
+      <v-form v-model="validForm">
         <v-text-field
           append-icon="mdi-email"
+          :disabled="loading"
           label="Email"
           name="email"
           outlined
@@ -27,6 +28,7 @@
         ></v-text-field>
         <v-text-field
           append-icon="mdi-lock"
+          :disabled="loading"
           label="Password"
           name="password"
           outlined

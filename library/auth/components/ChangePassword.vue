@@ -5,10 +5,11 @@
         {{ $t("change-password") }}
       </h2>
       <p>
-        Please enter a new password. You will receive a confirmation via email.
+        Please enter a new password with the following rules:
+        {{ passwordRulesMessage }}
       </p>
 
-      <v-form lazy-validation v-model="validForm">
+      <v-form v-model="validForm">
         <v-text-field
           :append-icon="passwordHidden ? 'mdi-eye-off' : 'mdi-eye'"
           :disabled="loading"
@@ -71,7 +72,7 @@
 
 <script>
 import Vue from "vue";
-import { passwordRules } from "../utils";
+import { passwordRules, passwordRulesMessage } from "../utils";
 
 export default {
   name: "ChangePassword",
@@ -85,8 +86,8 @@ export default {
     error: null,
     password: null,
     passwordConfirmation: null,
-    passwordRules:
-      process.env.NODE_ENV === "production" ? passwordRules : [() => true],
+    passwordRules,
+    passwordRulesMessage,
     validForm: false
   }),
   computed: {
