@@ -14,7 +14,7 @@
         </v-alert>
       </div>
 
-      <v-form v-model="validForm">
+      <v-form v-model="validForm" @submit.prevent="submit">
         <v-text-field
           append-icon="mdi-email"
           :disabled="loading"
@@ -37,30 +37,30 @@
           type="password"
           v-model="password"
         ></v-text-field>
-      </v-form>
 
-      <div v-if="error">
-        <v-alert
-          icon="mdi-alert-circle"
-          outlined
-          type="warning"
-          prominent
-          border="left"
+        <div v-if="error">
+          <v-alert
+            icon="mdi-alert-circle"
+            outlined
+            type="warning"
+            prominent
+            border="left"
+          >
+            <b class="pl-1" v-html="error" />
+          </v-alert>
+        </div>
+
+        <v-btn
+          block
+          :disabled="loading || !validForm"
+          :elevation="0"
+          :loading="loading"
+          primary
+          x-large
+          type="submit"
+          >{{ $t("login") }}</v-btn
         >
-          <b class="pl-1" v-html="error" />
-        </v-alert>
-      </div>
-
-      <v-btn
-        block
-        :disabled="loading || !validForm"
-        :elevation="0"
-        :loading="loading"
-        primary
-        x-large
-        @click="submit"
-        >{{ $t("login") }}</v-btn
-      >
+      </v-form>
 
       <div class="mt-4 text-right">
         <div v-if="allowPasswordReset">
