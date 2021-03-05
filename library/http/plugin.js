@@ -57,12 +57,10 @@ const addTimeoutInterceptor = () => {
 
 const addTrailingSlashInterceptor = () => {
   Vue.http.interceptors.push(request => {
-    if (request.method == "GET") {
-      const [url, params] = request.url.split("?");
-      request.url = url.replace(/\/?$/, "/");
-      if (params) {
-        request.url += `?${params}`;
-      }
+    const [url, params] = request.url.split("?");
+    request.url = url.replace(/\/?$/, "/");
+    if (params) {
+      request.url += `?${params}`;
     }
   });
 };
