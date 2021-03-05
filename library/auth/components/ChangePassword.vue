@@ -5,10 +5,11 @@
         {{ $t("change-password") }}
       </h2>
       <p>
-        Please enter a new password. You will receive a confirmation via email.
+        Please enter a new password with the following rules:
+        {{ passwordRulesMessage }}
       </p>
 
-      <v-form lazy-validation v-model="validForm">
+      <v-form v-model="validForm" @submit.prevent="submit">
         <v-text-field
           :append-icon="passwordHidden ? 'mdi-eye-off' : 'mdi-eye'"
           :disabled="loading"
@@ -32,46 +33,46 @@
           type="password"
           v-model="passwordConfirmation"
         ></v-text-field>
+
+        <div v-if="error">
+          <v-alert
+            icon="mdi-alert-circle"
+            outlined
+            type="warning"
+            prominent
+            border="left"
+          >
+            <b class="pl-1" v-html="error" />
+          </v-alert>
+        </div>
+
+        <div class="d-flex align-center justify-space-between">
+          <b>
+            <a :disabled="loading" is="router-link" :to="{ name: 'login' }">
+              Back to login
+            </a>
+          </b>
+
+          <v-btn
+            class="ml-4"
+            :loading="loading"
+            :disabled="loading || !validForm"
+            :elevation="0"
+            primary
+            x-large
+            type="submit"
+          >
+            {{ $t("reset-password") }}
+          </v-btn>
+        </div>
       </v-form>
-
-      <div v-if="error">
-        <v-alert
-          icon="mdi-alert-circle"
-          outlined
-          type="warning"
-          prominent
-          border="left"
-        >
-          <b class="pl-1" v-html="error" />
-        </v-alert>
-      </div>
-
-      <div class="d-flex align-center justify-space-between">
-        <b>
-          <a :disabled="loading" is="router-link" :to="{ name: 'login' }">
-            Back to login
-          </a>
-        </b>
-
-        <v-btn
-          class="ml-4"
-          :loading="loading"
-          :disabled="loading || !validForm"
-          :elevation="0"
-          primary
-          x-large
-          @click="submit"
-        >
-          {{ $t("reset-password") }}
-        </v-btn>
-      </div>
     </div>
   </v-main>
 </template>
 
 <script>
 import Vue from "vue";
-import { passwordRules } from "../utils";
+import { passwordRules, passwordRulesMessage } from "../utils";
 
 export default {
   name: "ChangePassword",
@@ -85,8 +86,8 @@ export default {
     error: null,
     password: null,
     passwordConfirmation: null,
-    passwordRules:
-      process.env.NODE_ENV === "production" ? passwordRules : [() => true],
+    passwordRules,
+    passwordRulesMessage,
     validForm: false
   }),
   computed: {
