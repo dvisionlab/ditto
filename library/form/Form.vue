@@ -1,0 +1,123 @@
+<template>
+  <v-form
+    :lazy-validation="lazyValidation"
+    ref="form"
+    v-model="valid"
+    @submit.prevent="submit"
+  >
+    <component
+      v-for="(field, i) in fields"
+      :key="i"
+      :is="getComponentName(field)"
+      :disabled="
+        loading || field.disabled ? field.disabled(field, form) : false
+      "
+      :label="field.label"
+      :required="field.required"
+      :rules="getRules(field)"
+      :type="field.type"
+      v-model="value[field.key]"
+    />
+
+    <v-btn
+      :disabled="loading || !valid"
+      :elevation="0"
+      :loading="loading"
+      primary
+      x-large
+      type="submit"
+    >
+      submit
+    </v-btn>
+  </v-form>
+</template>
+
+<script>
+import { VTextField } from "vuetify/lib";
+import rules from "./rules";
+
+// Example field structure
+// let fields = [
+//   {
+//     component: null, // custom input component
+//     disabled: () => false,
+//     label: "",
+//     required: false,
+//     rules: [],
+//     slot: null, // custom slot
+//     type: "text" // set default components per type
+//   }
+// ];
+
+export default {
+  name: "Form",
+  props: {
+    fields: { required: true, type: Array },
+    lazyValidation: { default: true, type: Boolean },
+    value: { default: () => ({}), type: Object }
+  },
+  components: { VTextField },
+  data: () => ({
+    loading: false,
+    valid: true
+  }),
+  methods: {
+    getComponentName(field) {
+      if (field.slot) {
+        return "slot";
+      }
+
+      if (field.component) {
+        return field.component;
+      }
+
+      let name;
+      switch (field.type) {
+        case "boolean": {
+          name = "v-checkbox";
+          break;
+        }
+
+        case "text": {
+          name = "v-text-field";
+          break;
+        }
+
+        default:
+          name = "v-text-field";
+          break;
+      }
+
+      return name;
+    },
+    getRules(field) {
+      // Default rules
+      let result = [];
+      if (field.required) {
+        result.push(...rules.required);
+      }
+
+      if (rules[field.type]) {
+        result.push(...rules[field.type]);
+      }
+
+      // Add custom rules
+      return [...result, ...(field.rules || [])];
+    },
+    submit() {
+      const isValid = this.validate();
+      if (isValid) {
+        this.$emit("submit");
+      }
+    },
+    // validate will validate all inputs and return if they are all valid or not
+    validate() {
+      this.$refs.form.validate();
+    },
+    // resetValidation will only reset input validation and not alter their state
+    resetValidation() {
+      this.$refs.form.resetValidation();
+    }
+  }
+};
+</script>
