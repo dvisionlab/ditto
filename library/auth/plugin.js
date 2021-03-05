@@ -7,6 +7,7 @@ import persist from "./persist";
 
 // Local variables
 const defaultOptions = {
+  addTrailingSlashInterceptor: false,
   allowPasswordReset: true,
   allowUserRegistration: true,
   automaticLogin: true

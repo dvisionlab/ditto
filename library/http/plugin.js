@@ -55,6 +55,18 @@ const addTimeoutInterceptor = () => {
   });
 };
 
+const addTrailingSlashInterceptor = () => {
+  Vue.http.interceptors.push(request => {
+    if (request.method == "GET") {
+      const [url, params] = request.url.split("?");
+      request.url = url.replace(/\/?$/, "/");
+      if (params) {
+        request.url += `?${params}`;
+      }
+    }
+  });
+};
+
 // Requests
 // --------
 
@@ -93,6 +105,10 @@ export default {
 
     // Register interceptors
     addTimeoutInterceptor();
+
+    if (options.addTrailingSlashInterceptor) {
+      addTrailingSlashInterceptor();
+    }
 
     // Expose global methods
     Vue.$http = {
