@@ -18,9 +18,13 @@
         :layout="pane"
         :parent-id="`${parentId}${i}`"
         :push-other-panes="pushOtherPanes"
-      />
+      >
+        <!-- Recursively pass down scoped slot -->
+        <template v-slot="{ pane }">
+          <slot v-bind:pane="pane" />
+        </template>
+      </dynamic-layout>
       <slot v-else v-bind:pane="{ ...pane, id: getPaneId(pane, i) }">
-        <!-- default slot content -->
         <div class="text-center" :id="getPaneId(pane, i)">
           This is the default slot content for pane
           <b>{{ parentId }}{{ i }}</b
