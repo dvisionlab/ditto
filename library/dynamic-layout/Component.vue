@@ -26,9 +26,11 @@
       </dynamic-layout>
       <slot v-else v-bind:pane="{ ...pane, id: getPaneId(pane, i) }">
         <div class="text-center" :id="getPaneId(pane, i)">
-          This is the default slot content for pane
-          <b>{{ parentId }}{{ i }}</b
-          >.<br />You can customize this pane using the default Vue slot.
+          <div class="ma-auto">
+            This is the default slot content for pane
+            <b>{{ parentId }}{{ i }}</b
+            >.<br />You can customize this pane using the default Vue slot.
+          </div>
         </div>
       </slot>
     </pane>
