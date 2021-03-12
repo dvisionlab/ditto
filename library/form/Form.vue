@@ -5,30 +5,38 @@
     v-model="valid"
     @submit.prevent="submit"
   >
-    <component
-      v-for="(field, i) in fields"
-      :key="i"
-      :is="getComponentName(field)"
-      :disabled="
-        loading || field.disabled ? field.disabled(field, form) : false
-      "
-      :label="field.label"
-      :required="field.required"
-      :rules="getRules(field)"
-      :type="field.type"
-      v-model="value[field.key]"
-    />
+    <slot name="header" v-bind:value="value" />
 
-    <v-btn
-      :disabled="loading || !valid"
-      :elevation="0"
-      :loading="loading"
-      primary
-      x-large
-      type="submit"
-    >
-      submit
-    </v-btn>
+    <div v-for="(field, i) in fields" :key="i">
+      <component
+        :is="getComponentName(field)"
+        :disabled="
+          loading || field.disabled ? field.disabled(field, value) : false
+        "
+        :label="field.label"
+        :required="field.required ? field.required(field, value) : false"
+        :rules="getRules(field)"
+        :type="field.type"
+        v-model="value[field.key]"
+      />
+
+      <component v-if="field.slot" :is="field.slot" />
+    </div>
+
+    <div class="mt-4">
+      <v-btn
+        :disabled="loading || !valid"
+        :elevation="0"
+        :loading="loading"
+        primary
+        x-large
+        type="submit"
+      >
+        submit
+      </v-btn>
+
+      <slot name="footer" v-bind:value="value" />
+    </div>
   </v-form>
 </template>
 
@@ -42,7 +50,7 @@ import rules from "./rules";
 //     component: null, // custom input component
 //     disabled: () => false,
 //     label: "",
-//     required: false,
+//     required: () => false,
 //     rules: [],
 //     slot: null, // custom slot
 //     type: "text" // set default components per type
@@ -63,10 +71,6 @@ export default {
   }),
   methods: {
     getComponentName(field) {
-      if (field.slot) {
-        return "slot";
-      }
-
       if (field.component) {
         return field.component;
       }
@@ -112,7 +116,7 @@ export default {
     },
     // validate will validate all inputs and return if they are all valid or not
     validate() {
-      this.$refs.form.validate();
+      return this.$refs.form.validate();
     },
     // resetValidation will only reset input validation and not alter their state
     resetValidation() {
