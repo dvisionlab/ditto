@@ -9,13 +9,14 @@
 
     <div v-for="(field, i) in fields" :key="i">
       <component
+        :autofocus="i == firstEditableFieldIndex"
         :is="getComponentName(field)"
         :disabled="
           loading || field.disabled ? field.disabled(field, value) : false
         "
         :label="field.label"
-        :required="field.required ? field.required(field, value) : false"
-        :rules="getRules(field)"
+        :required="field.required ? field.required(field, value) : false" 
+        :rules="dirty ? getRules(field) : undefined"
         :type="field.type"
         v-model="value[field.key]"
       />
@@ -66,9 +67,15 @@ export default {
   },
   components: { VTextField },
   data: () => ({
+    dirty: false,
     loading: false,
     valid: true
   }),
+  computed: {
+    firstEditableFieldIndex() {
+      return this.fields.findIndex(f => !(f.disabled ? f.disabled() : false));
+    }
+  },
   methods: {
     getComponentName(field) {
       if (field.component) {
@@ -109,10 +116,15 @@ export default {
       return [...result, ...(field.rules || [])];
     },
     submit() {
-      const isValid = this.validate();
-      if (isValid) {
-        this.$emit("submit");
-      }
+      // activate rules
+      this.dirty = true;
+
+      this.$nextTick(() => {
+        const isValid = this.validate();
+        if (isValid) {
+          this.$emit("submit");
+        }
+      });
     },
     // validate will validate all inputs and return if they are all valid or not
     validate() {
