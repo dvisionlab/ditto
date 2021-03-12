@@ -1,6 +1,7 @@
 <template>
   <div>
     <component
+      :autofocus="field.autofocus"
       :is="getComponentName(field)"
       :disabled="
         loading || field.disabled ? field.disabled(field, value) : false

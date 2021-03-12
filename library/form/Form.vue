@@ -55,6 +55,7 @@ import FormField from "./Field";
 // Example field structure:
 // let fields = [
 //   {
+//     autofocus: true,
 //     component: null, // custom input component
 //     disabled: () => false,
 //     label: "",
