@@ -10,6 +10,9 @@
 <script>
 import form from "@/../ditto/form";
 
+// Customize rules
+form.customizeRules({ passwordMinLength: 4 });
+
 const CustomField = {
   props: form.fieldsProps,
   template: `<div class="pa-4 accent white--text">custom COMPONENT! {{ $props }}</div>`
@@ -32,16 +35,22 @@ export default {
         type: "text"
       },
       {
-        label: "email",
-        key: "email",
-        required: () => true,
-        type: "email"
-      },
-      {
-        label: "password",
-        key: "password",
-        required: () => true,
-        type: "password"
+        group: "login",
+        list: [
+          {
+            autofocus: true,
+            label: "email",
+            key: "email",
+            required: () => true,
+            type: "email"
+          },
+          {
+            label: "password",
+            key: "password",
+            required: () => true,
+            type: "password"
+          }
+        ]
       },
       {
         label: "number",
@@ -69,5 +78,3 @@ export default {
   }
 };
 </script>
-
-<style></style>
