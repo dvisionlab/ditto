@@ -42,7 +42,7 @@
 
 <script>
 import { VTextField } from "vuetify/lib";
-import rules from "./rules";
+import { rules } from "./rules";
 
 // Example field structure
 // let fields = [
