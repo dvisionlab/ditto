@@ -7,22 +7,30 @@
   >
     <slot name="header" v-bind:value="value" />
 
-    <div v-for="(field, i) in fields" :key="i">
-      <component
-        :autofocus="i == firstEditableFieldIndex"
-        :is="getComponentName(field)"
-        :disabled="
-          loading || field.disabled ? field.disabled(field, value) : false
-        "
-        :label="field.label"
-        :required="field.required ? field.required(field, value) : false" 
-        :rules="dirty ? getRules(field) : undefined"
-        :type="field.type"
-        v-model="value[field.key]"
-      />
+    <template v-for="(field, i) in fields">
+      <v-card v-if="field.group" :key="`group-${i}`" outlined>
+        <v-card-title>{{ field.group }}</v-card-title>
+        <v-card-text>
+          <form-field
+            v-for="(field, ii) in field.list"
+            :key="ii"
+            :dirty="dirty"
+            :field="field"
+            :loading="loading"
+            v-model="value"
+          ></form-field>
+        </v-card-text>
+      </v-card>
 
-      <component v-if="field.slot" :is="field.slot" />
-    </div>
+      <form-field
+        v-else
+        :key="i"
+        :dirty="dirty"
+        :field="field"
+        :loading="loading"
+        v-model="value"
+      ></form-field>
+    </template>
 
     <div class="mt-4">
       <v-btn
@@ -42,10 +50,9 @@
 </template>
 
 <script>
-import { VTextField } from "vuetify/lib";
-import { rules } from "./rules";
+import FormField from "./Field";
 
-// Example field structure
+// Example field structure:
 // let fields = [
 //   {
 //     component: null, // custom input component
@@ -58,63 +65,29 @@ import { rules } from "./rules";
 //   }
 // ];
 
+// split in groups:
+// let fields = [
+//   group: "groupName",
+//   list: [...]
+// ]
+
+// TODO support types: boolean, date
+
 export default {
   name: "Form",
+  components: { FormField },
   props: {
     fields: { required: true, type: Array },
     lazyValidation: { default: true, type: Boolean },
     value: { default: () => ({}), type: Object }
   },
-  components: { VTextField },
+
   data: () => ({
     dirty: false,
     loading: false,
     valid: true
   }),
-  computed: {
-    firstEditableFieldIndex() {
-      return this.fields.findIndex(f => !(f.disabled ? f.disabled() : false));
-    }
-  },
   methods: {
-    getComponentName(field) {
-      if (field.component) {
-        return field.component;
-      }
-
-      let name;
-      switch (field.type) {
-        case "boolean": {
-          name = "v-checkbox";
-          break;
-        }
-
-        case "text": {
-          name = "v-text-field";
-          break;
-        }
-
-        default:
-          name = "v-text-field";
-          break;
-      }
-
-      return name;
-    },
-    getRules(field) {
-      // Default rules
-      let result = [];
-      if (field.required) {
-        result.push(...rules.required);
-      }
-
-      if (rules[field.type]) {
-        result.push(...rules[field.type]);
-      }
-
-      // Add custom rules
-      return [...result, ...(field.rules || [])];
-    },
     submit() {
       // activate rules
       this.dirty = true;
