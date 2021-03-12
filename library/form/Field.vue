@@ -1,13 +1,16 @@
 <template>
   <div>
     <component
+      :append-icon="required ? 'mdi-asterisk' : null"
       :autofocus="field.autofocus"
+      :class="{ 'mt-1': field.component }"
       :is="getComponentName(field)"
       :disabled="
         loading || field.disabled ? field.disabled(field, value) : false
       "
+      :hint="field.hint"
       :label="field.label"
-      :required="field.required ? field.required(field, value) : false"
+      :required="required"
       :rules="dirty ? getRules(field) : undefined"
       :type="field.type"
       v-model="value[field.key]"
@@ -29,6 +32,13 @@ export default {
     field: { required: true, type: Object },
     loading: { default: false, type: Boolean },
     value: { default: () => ({}), type: Object }
+  },
+  computed: {
+    required() {
+      return this.field.required
+        ? this.field.required(this.field, this.value)
+        : false;
+    }
   },
   methods: {
     getComponentName(field) {
@@ -72,3 +82,11 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+::v-deep .v-input__icon {
+  .v-icon.v-icon {
+    font-size: 0.7em;
+  }
+}
+</style>

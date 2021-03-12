@@ -7,30 +7,37 @@
   >
     <slot name="header" v-bind:value="value" />
 
-    <template v-for="(field, i) in fields">
-      <v-card v-if="field.group" :key="`group-${i}`" outlined>
-        <v-card-title>{{ field.group }}</v-card-title>
-        <v-card-text>
-          <form-field
-            v-for="(field, ii) in field.list"
-            :key="ii"
-            :dirty="dirty"
-            :field="field"
-            :loading="loading"
-            v-model="value"
-          ></form-field>
-        </v-card-text>
-      </v-card>
+    <div class="d-flex flex-wrap" :style="{ margin: '0 -1em' }">
+      <template v-for="(field, i) in fields">
+        <div v-if="field.group" :key="`group-${i}`" class="flex-item">
+          <v-card class="mt-1" outlined>
+            <v-card-title class="text-uppercase">{{
+              field.group
+            }}</v-card-title>
+            <v-card-text>
+              <form-field
+                v-for="(field, ii) in field.list"
+                :key="ii"
+                :dirty="dirty"
+                :field="field"
+                :loading="loading"
+                v-model="value"
+              ></form-field>
+            </v-card-text>
+          </v-card>
+        </div>
 
-      <form-field
-        v-else
-        :key="i"
-        :dirty="dirty"
-        :field="field"
-        :loading="loading"
-        v-model="value"
-      ></form-field>
-    </template>
+        <form-field
+          v-else
+          :key="i"
+          class="flex-item"
+          :dirty="dirty"
+          :field="field"
+          :loading="loading"
+          v-model="value"
+        ></form-field>
+      </template>
+    </div>
 
     <div class="mt-4">
       <v-btn
@@ -58,6 +65,7 @@ import FormField from "./Field";
 //     autofocus: true,
 //     component: null, // custom input component
 //     disabled: () => false,
+//     hint: "",
 //     label: "",
 //     required: () => false,
 //     rules: [],
@@ -111,3 +119,12 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.flex-item {
+  flex-basis: 50%;
+  flex-grow: 1;
+  min-width: 200px;
+  padding: 0 1em;
+}
+</style>
