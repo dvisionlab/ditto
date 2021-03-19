@@ -5,7 +5,7 @@
       :class="{ 'mt-1': field.component }"
       :is="getComponentName(field)"
       :disabled="
-        loading || field.disabled ? field.disabled(field, value) : false
+        loading || (field.disabled ? field.disabled(field, value) : false)
       "
       :hint="field.hint"
       :label="field.label"
@@ -15,7 +15,7 @@
       v-model="value[field.key]"
     >
       <template slot="append">
-        <v-icon v-if="field.appendIcon">{{ field.appendIcon }}</v-icon>
+        <v-icon v-if="field.appendIcon" small>{{ field.appendIcon }}</v-icon>
       </template>
 
       <template v-slot:label>

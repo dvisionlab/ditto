@@ -47,11 +47,10 @@
         :disabled="loading || !valid"
         :elevation="0"
         :loading="loading"
-        primary
         x-large
         type="submit"
       >
-        {{ submitLabel }}
+        <span class="primary--text">{{ submitLabel }}</span>
       </v-btn>
 
       <slot name="footer" v-bind:value="value" />
@@ -92,13 +91,13 @@ export default {
     fields: { required: true, type: Array },
     fieldsStyle: { required: false, type: Object },
     lazyValidation: { default: true, type: Boolean },
+    loading: { default: true, type: Boolean },
     submitLabel: { default: "submit", type: String },
     value: { default: () => ({}), type: Object }
   },
 
   data: () => ({
     dirty: false,
-    loading: false,
     valid: true
   }),
   methods: {

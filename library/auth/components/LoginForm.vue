@@ -4,36 +4,41 @@
       <ditto-form
         :fields="fields"
         :fields-style="{ 'flex-basis': '100%' }"
+        :loading="loading"
         submit-label="login"
         v-model="form"
         @submit="submit"
       >
         <template v-slot:header>
-          <h2 class="text-uppercase text-center my-4">{{ $t("login") }}</h2>
-          <div class="pb-2">
-            <v-alert
-              v-if="alertMessage"
-              dismissible
-              :icon="false"
-              :type="alertType"
-            >
-              {{ $t(alertMessage) }}
-            </v-alert>
+          <h2 class="text-uppercase text-center primary--text my-4">
+            {{ $t("login") }}
+          </h2>
 
-            <v-alert
-              v-if="error"
-              dense
-              icon="mdi-alert-circle"
-              outlined
-              type="error"
-            >
-              <b v-html="error" />
-            </v-alert>
+          <div :style="{ minHeight: '4em' }">
+            <template v-if="alertMessage || error">
+              <v-alert
+                v-if="alertMessage"
+                close-icon="mdi-close"
+                dense
+                dismissible
+                outlined
+                :type="alertType"
+                @input="dismissAlert"
+              >
+                {{ $t(alertMessage) }}
+              </v-alert>
+
+              <v-alert v-if="error" dense outlined type="error">
+                <span v-html="error" />
+              </v-alert>
+            </template>
+
+            <div v-else class="error-placeholder" />
           </div>
         </template>
 
         <template v-slot:footer>
-          <div class="mt-4 text-right" :style="{ 'flex-basis': '100%' }">
+          <div class="mt-6 text-right" :style="{ 'flex-basis': '100%' }">
             <div v-if="allowPasswordReset">
               <a @click="resetPassword">Forgot Password?</a>
             </div>
@@ -98,6 +103,11 @@ export default {
     form: {}
   }),
   methods: {
+    dismissAlert() {
+      // eslint-disable-next-line no-unused-vars
+      var { alertMessage, alertType, ...query } = this.$route.query;
+      this.$router.replace({ query });
+    },
     submit() {
       this.error = null;
       this.loading = true;
@@ -141,3 +151,11 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.error-placeholder {
+  border-bottom: 2px solid var(--v-primary-base);
+  padding-top: 1em;
+  width: 100%;
+}
+</style>
