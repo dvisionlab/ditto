@@ -97,8 +97,8 @@ export default {
     Vue.use(VueResource);
 
     // Setup
-    if (options.root) {
-      setRoot(options.root);
+    if (options.httpRoot) {
+      setRoot(options.httpRoot);
     }
 
     // Register interceptors
