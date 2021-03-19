@@ -41,8 +41,9 @@
       </template>
     </div>
 
-    <div class="mt-4">
+    <div class="d-flex flex-wrap mt-4">
       <v-btn
+        class="flex-grow-1"
         :disabled="loading || !valid"
         :elevation="0"
         :loading="loading"

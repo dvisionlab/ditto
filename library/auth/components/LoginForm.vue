@@ -10,9 +10,30 @@
       >
         <template v-slot:header>
           <h2 class="text-uppercase text-center my-4">{{ $t("login") }}</h2>
+          <div class="pb-2">
+            <v-alert
+              v-if="alertMessage"
+              dismissible
+              :icon="false"
+              :type="alertType"
+            >
+              {{ $t(alertMessage) }}
+            </v-alert>
+
+            <v-alert
+              v-if="error"
+              dense
+              icon="mdi-alert-circle"
+              outlined
+              type="error"
+            >
+              <b v-html="error" />
+            </v-alert>
+          </div>
         </template>
+
         <template v-slot:footer>
-          <div class="mt-4 text-right">
+          <div class="mt-4 text-right" :style="{ 'flex-basis': '100%' }">
             <div v-if="allowPasswordReset">
               <a @click="resetPassword">Forgot Password?</a>
             </div>
@@ -23,89 +44,19 @@
           </div>
         </template>
       </ditto-form>
-
-      <h2 class="text-uppercase text-center my-4">{{ $t("login") }}</h2>
-
-      <div class="pb-4">
-        <v-alert
-          v-if="alertMessage"
-          dismissible
-          :icon="false"
-          :type="alertType"
-        >
-          {{ $t(alertMessage) }}
-        </v-alert>
-      </div>
-
-      <v-form v-model="validForm" @submit.prevent="submit">
-        <v-text-field
-          append-icon="mdi-email"
-          :disabled="loading"
-          label="Email"
-          name="email"
-          outlined
-          required
-          :rules="emailRules"
-          type="email"
-          v-model="email"
-        ></v-text-field>
-        <v-text-field
-          append-icon="mdi-lock"
-          :disabled="loading"
-          label="Password"
-          name="password"
-          outlined
-          required
-          :rules="passwordRules"
-          type="password"
-          v-model="password"
-        ></v-text-field>
-
-        <div v-if="error">
-          <v-alert
-            icon="mdi-alert-circle"
-            outlined
-            type="warning"
-            prominent
-            border="left"
-          >
-            <b class="pl-1" v-html="error" />
-          </v-alert>
-        </div>
-
-        <v-btn
-          block
-          :disabled="loading || !validForm"
-          :elevation="0"
-          :loading="loading"
-          primary
-          x-large
-          type="submit"
-          >{{ $t("login") }}</v-btn
-        >
-      </v-form>
-
-      <div class="mt-4 text-right">
-        <div v-if="allowPasswordReset">
-          <a @click="resetPassword">Forgot Password?</a>
-        </div>
-        <div v-if="allowUserRegistration">
-          New here?
-          <a is="router-link" :to="{ name: 'register' }">Sign up</a>.
-        </div>
-      </div>
     </div>
   </v-main>
 </template>
 
 <script>
-import { emailRules, passwordRules } from "../utils";
-import Form from "../../form/Form";
-console.log(Form);
+import form from "../../../form";
+if (process.env.NODE_ENV !== "production") {
+  form.customizeRules({ passwordValidationRegex: new RegExp(".*") });
+}
 
 export default {
   name: "LoginForm",
-  components: { DittoForm: Form },
+  components: { DittoForm: form.component },
   props: {
     alertMessage: {
       required: false,
@@ -126,11 +77,10 @@ export default {
   },
   data: () => ({
     loading: false,
-    email: null,
-    emailRules,
     error: null,
     fields: [
       {
+        appendIcon: "mdi-email",
         autofocus: true,
         label: "email",
         key: "email",
@@ -138,17 +88,14 @@ export default {
         type: "email"
       },
       {
+        appendIcon: "mdi-lock",
         label: "password",
         key: "password",
         required: () => true,
         type: "password"
       }
     ],
-    form: {},
-    password: null,
-    passwordRules:
-      process.env.NODE_ENV === "production" ? passwordRules : [() => true],
-    validForm: false
+    form: {}
   }),
   methods: {
     submit() {
@@ -156,7 +103,7 @@ export default {
       this.loading = true;
 
       this.$store
-        .dispatch("auth/login", { email: this.email, password: this.password })
+        .dispatch("auth/login", this.form)
         .then(() => this.$router.replace("/"))
         .catch(error => {
           let details = "";
