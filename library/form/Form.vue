@@ -41,7 +41,7 @@
       </template>
     </div>
 
-    <div class="d-flex flex-wrap mt-4">
+    <div class="d-flex flex-wrap align-center mt-4" :style="footerStyle">
       <v-btn
         class="flex-grow-1"
         :disabled="loading || !valid"
@@ -90,6 +90,7 @@ export default {
   props: {
     fields: { required: true, type: Array },
     fieldsStyle: { required: false, type: Object },
+    footerStyle: { required: false, type: Object },
     lazyValidation: { default: true, type: Boolean },
     loading: { default: true, type: Boolean },
     submitLabel: { default: "submit", type: String },

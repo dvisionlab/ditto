@@ -156,10 +156,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.error-placeholder {
-  border-bottom: 2px solid var(--v-primary-base);
-  padding-top: 1em;
-  width: 100%;
-}
-</style>
+<style scoped src="./style.css"></style>

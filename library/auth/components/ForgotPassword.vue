@@ -1,79 +1,72 @@
 <template>
   <v-main>
     <div class="w-50 mx-auto">
-      <h2 class="text-uppercase text-center my-4">
-        {{ $t("reset-password") }}
-      </h2>
-      <p>
-        Please enter your email address. You will receive a link to create a new
-        password via email.
-      </p>
-
-      <v-form v-model="validForm" @submit.prevent="submit">
-        <v-text-field
-          append-icon="mdi-email"
-          :disabled="loading"
-          label="Email"
-          name="email"
-          outlined
-          required
-          :rules="emailRules"
-          type="email"
-          v-model="email"
-        ></v-text-field>
-
-        <div v-if="error" class="mt-4">
-          <v-alert
-            icon="mdi-alert-circle"
-            outlined
-            type="warning"
-            prominent
-            border="left"
-          >
-            <b>{{ error }}</b>
-          </v-alert>
-        </div>
-
-        <div class="d-flex align-center justify-space-between">
-          <b>
-            <a
-              :disabled="loading"
-              is="router-link"
-              :to="{ name: 'login', query: { email } }"
-            >
-              Back to login
-            </a>
-          </b>
-
-          <v-btn
-            class="ml-4"
-            :loading="loading"
-            :disabled="loading || !validForm"
-            :elevation="0"
-            primary
-            x-large
-            type="submit"
-          >
+      <ditto-form
+        :fields="fields"
+        :fields-style="{ 'flex-basis': '100%' }"
+        :loading="loading"
+        submit-label="reset-password"
+        :footer-style="{ 'flex-direction': 'row-reverse' }"
+        v-model="form"
+        @submit="submit"
+      >
+        <template v-slot:header>
+          <h2 class="text-uppercase text-center primary--text my-4">
             {{ $t("reset-password") }}
-          </v-btn>
-        </div>
-      </v-form>
+          </h2>
+          <p class="text-center ma-0">
+            Please enter your email address. You will receive a link to create a
+            new password via email.
+          </p>
+
+          <div :style="{ minHeight: '4em' }">
+            <v-alert v-if="error" dense outlined type="error">
+              <span v-html="error" />
+            </v-alert>
+
+            <div v-else class="error-placeholder" />
+          </div>
+        </template>
+
+        <template v-slot:footer>
+          <div class="flex-grow-1">
+            <b>
+              <a
+                :disabled="loading"
+                @click="$router.replace({ name: 'login', query: { email } })"
+              >
+                <v-icon color="anchor">mdi-chevron-left</v-icon>
+                Back to login
+              </a>
+            </b>
+          </div>
+        </template>
+      </ditto-form>
     </div>
   </v-main>
 </template>
 
 <script>
 import Vue from "vue";
-import { emailRules } from "../utils";
+import form from "../../../form";
 
 export default {
   name: "ForgotPassword",
+  components: { DittoForm: form.component },
   data: () => ({
-    email: null,
-    emailRules,
-    error: null,
     loading: false,
-    validForm: false
+    error: null,
+    fields: [
+      {
+        appendIcon: "mdi-email",
+        autofocus: true,
+        label: "email",
+        key: "email",
+        required: () => true,
+        type: "email"
+      }
+    ],
+    form: {}
   }),
   created() {
     this.email = this.$route.query.email || null;
@@ -108,9 +101,4 @@ export default {
 };
 </script>
 
-<style>
-a[disabled] {
-  pointer-events: none;
-  opacity: 0.6;
-}
-</style>
+<style scoped src="./style.css"></style>
