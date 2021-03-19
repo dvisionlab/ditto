@@ -96,6 +96,10 @@ export default {
     allowUserRegistration: {
       default: true,
       type: Boolean
+    },
+    authRoot: {
+      required: true,
+      type: String
     }
   },
   data: () => ({
@@ -115,7 +119,7 @@ export default {
 
       this.$store
         .dispatch("auth/login", { email: this.email, password: this.password })
-        .then(() => this.$router.replace("/"))
+        .then(() => this.$router.replace(`${this.authRoot}/`))
         .catch(error => {
           let details = "";
           if (error.body.email || error.body.password) {

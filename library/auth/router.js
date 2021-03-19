@@ -19,7 +19,8 @@ export const getRoutes = options => {
       props: route => ({
         ...route.query,
         allowPasswordReset: options.allowPasswordReset,
-        allowUserRegistration: options.allowUserRegistration
+        allowUserRegistration: options.allowUserRegistration,
+        authRoot: options.authRoot
       })
     },
     options.allowPasswordReset
