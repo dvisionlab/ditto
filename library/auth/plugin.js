@@ -10,7 +10,8 @@ const defaultOptions = {
   addTrailingSlashInterceptor: false,
   allowPasswordReset: true,
   allowUserRegistration: true,
-  autoLogin: true
+  autoLogin: true,
+  httpRoot: "/"
 };
 
 // Plugin
