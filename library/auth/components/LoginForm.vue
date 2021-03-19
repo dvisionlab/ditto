@@ -1,56 +1,54 @@
 <template>
-  <v-main>
-    <div class="w-50 mx-auto">
-      <ditto-form
-        :fields="fields"
-        :fields-style="{ 'flex-basis': '100%' }"
-        :loading="loading"
-        submit-label="login"
-        v-model="form"
-        @submit="submit"
-      >
-        <template v-slot:header>
-          <h2 class="text-uppercase text-center primary--text my-4">
-            {{ $t("login") }}
-          </h2>
+  <div class="w-50 mx-auto">
+    <ditto-form
+      :fields="fields"
+      :fields-style="{ 'flex-basis': '100%' }"
+      :loading="loading"
+      submit-label="login"
+      v-model="form"
+      @submit="submit"
+    >
+      <template v-slot:header>
+        <h2 class="text-uppercase text-center primary--text my-4">
+          {{ $t("login") }}
+        </h2>
 
-          <div :style="{ minHeight: '4em' }">
-            <template v-if="alertMessage || error">
-              <v-alert
-                v-if="alertMessage"
-                close-icon="mdi-close"
-                dense
-                dismissible
-                outlined
-                :type="alertType"
-                @input="dismissAlert"
-              >
-                {{ $t(alertMessage) }}
-              </v-alert>
+        <div :style="{ minHeight: '4em' }">
+          <template v-if="alertMessage || error">
+            <v-alert
+              v-if="alertMessage"
+              close-icon="mdi-close"
+              dense
+              dismissible
+              outlined
+              :type="alertType"
+              @input="dismissAlert"
+            >
+              {{ $t(alertMessage) }}
+            </v-alert>
 
-              <v-alert v-if="error" dense outlined type="error">
-                <span v-html="error" />
-              </v-alert>
-            </template>
+            <v-alert v-if="error" dense outlined type="error">
+              <span v-html="error" />
+            </v-alert>
+          </template>
 
-            <div v-else class="error-placeholder" />
+          <div v-else class="error-placeholder" />
+        </div>
+      </template>
+
+      <template v-slot:footer>
+        <div class="mt-6 text-right" :style="{ 'flex-basis': '100%' }">
+          <div v-if="allowPasswordReset">
+            <a @click="resetPassword">Forgot Password?</a>
           </div>
-        </template>
-
-        <template v-slot:footer>
-          <div class="mt-6 text-right" :style="{ 'flex-basis': '100%' }">
-            <div v-if="allowPasswordReset">
-              <a @click="resetPassword">Forgot Password?</a>
-            </div>
-            <div v-if="allowUserRegistration">
-              New here?
-              <a @click="register">Sign up</a>.
-            </div>
+          <div v-if="allowUserRegistration">
+            New here?
+            <a @click="register">Sign up</a>.
           </div>
-        </template>
-      </ditto-form>
-    </div>
-  </v-main>
+        </div>
+      </template>
+    </ditto-form>
+  </div>
 </template>
 
 <script>

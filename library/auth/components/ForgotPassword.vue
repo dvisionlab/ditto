@@ -1,49 +1,47 @@
 <template>
-  <v-main>
-    <div class="w-50 mx-auto">
-      <ditto-form
-        :fields="fields"
-        :fields-style="{ 'flex-basis': '100%' }"
-        :loading="loading"
-        submit-label="reset-password"
-        :footer-style="{ 'flex-direction': 'row-reverse' }"
-        v-model="form"
-        @submit="submit"
-      >
-        <template v-slot:header>
-          <h2 class="text-uppercase text-center primary--text my-4">
-            {{ $t("reset-password") }}
-          </h2>
-          <p class="text-center ma-0">
-            Please enter your email address. You will receive a link to create a
-            new password via email.
-          </p>
+  <div class="w-50 mx-auto">
+    <ditto-form
+      :fields="fields"
+      :fields-style="{ 'flex-basis': '100%' }"
+      :loading="loading"
+      submit-label="reset-password"
+      :footer-style="{ 'flex-direction': 'row-reverse' }"
+      v-model="form"
+      @submit="submit"
+    >
+      <template v-slot:header>
+        <h2 class="text-uppercase text-center primary--text my-4">
+          {{ $t("reset-password") }}
+        </h2>
+        <p class="text-center ma-0">
+          Please enter your email address. You will receive a link to create a
+          new password via email.
+        </p>
 
-          <div :style="{ minHeight: '4em' }">
-            <v-alert v-if="error" dense outlined type="error">
-              <span v-html="error" />
-            </v-alert>
+        <div :style="{ minHeight: '4em' }">
+          <v-alert v-if="error" dense outlined type="error">
+            <span v-html="error" />
+          </v-alert>
 
-            <div v-else class="error-placeholder" />
-          </div>
-        </template>
+          <div v-else class="error-placeholder" />
+        </div>
+      </template>
 
-        <template v-slot:footer>
-          <div class="flex-grow-1">
-            <b>
-              <a
-                :disabled="loading"
-                @click="$router.replace({ name: 'login', query: { email } })"
-              >
-                <v-icon color="anchor">mdi-chevron-left</v-icon>
-                Back to login
-              </a>
-            </b>
-          </div>
-        </template>
-      </ditto-form>
-    </div>
-  </v-main>
+      <template v-slot:footer>
+        <div class="flex-grow-1">
+          <b>
+            <a
+              :disabled="loading"
+              @click="$router.replace({ name: 'login', query: { email } })"
+            >
+              <v-icon color="anchor">mdi-chevron-left</v-icon>
+              Back to login
+            </a>
+          </b>
+        </div>
+      </template>
+    </ditto-form>
+  </div>
 </template>
 
 <script>

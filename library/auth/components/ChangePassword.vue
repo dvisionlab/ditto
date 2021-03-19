@@ -1,73 +1,71 @@
 <template>
-  <v-main>
-    <div class="w-50 mx-auto">
-      <h2 class="text-uppercase text-center my-4">
-        {{ $t("change-password") }}
-      </h2>
-      <p>
-        Please enter a new password with the following rules:
-        {{ passwordRulesMessage }}
-      </p>
+  <div class="w-50 mx-auto">
+    <h2 class="text-uppercase text-center my-4">
+      {{ $t("change-password") }}
+    </h2>
+    <p>
+      Please enter a new password with the following rules:
+      {{ passwordRulesMessage }}
+    </p>
 
-      <v-form v-model="validForm" @submit.prevent="submit">
-        <v-text-field
-          :append-icon="passwordHidden ? 'mdi-eye-off' : 'mdi-eye'"
-          :disabled="loading"
-          label="Password"
-          name="password"
+    <v-form v-model="validForm" @submit.prevent="submit">
+      <v-text-field
+        :append-icon="passwordHidden ? 'mdi-eye-off' : 'mdi-eye'"
+        :disabled="loading"
+        label="Password"
+        name="password"
+        outlined
+        required
+        :rules="passwordRules"
+        :type="passwordHidden ? 'password' : 'text'"
+        v-model="password"
+        @click:append="() => (passwordHidden = !passwordHidden)"
+      ></v-text-field>
+
+      <v-text-field
+        :disabled="loading"
+        label="Password confirmation"
+        name="password_confirmation"
+        outlined
+        required
+        :rules="passwordConfirmationRules"
+        type="password"
+        v-model="passwordConfirmation"
+      ></v-text-field>
+
+      <div v-if="error">
+        <v-alert
+          icon="mdi-alert-circle"
           outlined
-          required
-          :rules="passwordRules"
-          :type="passwordHidden ? 'password' : 'text'"
-          v-model="password"
-          @click:append="() => (passwordHidden = !passwordHidden)"
-        ></v-text-field>
+          type="warning"
+          prominent
+          border="left"
+        >
+          <b class="pl-1" v-html="error" />
+        </v-alert>
+      </div>
 
-        <v-text-field
-          :disabled="loading"
-          label="Password confirmation"
-          name="password_confirmation"
-          outlined
-          required
-          :rules="passwordConfirmationRules"
-          type="password"
-          v-model="passwordConfirmation"
-        ></v-text-field>
+      <div class="d-flex align-center justify-space-between">
+        <b>
+          <a :disabled="loading" is="router-link" :to="{ name: 'login' }">
+            Back to login
+          </a>
+        </b>
 
-        <div v-if="error">
-          <v-alert
-            icon="mdi-alert-circle"
-            outlined
-            type="warning"
-            prominent
-            border="left"
-          >
-            <b class="pl-1" v-html="error" />
-          </v-alert>
-        </div>
-
-        <div class="d-flex align-center justify-space-between">
-          <b>
-            <a :disabled="loading" is="router-link" :to="{ name: 'login' }">
-              Back to login
-            </a>
-          </b>
-
-          <v-btn
-            class="ml-4"
-            :loading="loading"
-            :disabled="loading || !validForm"
-            :elevation="0"
-            primary
-            x-large
-            type="submit"
-          >
-            {{ $t("reset-password") }}
-          </v-btn>
-        </div>
-      </v-form>
-    </div>
-  </v-main>
+        <v-btn
+          class="ml-4"
+          :loading="loading"
+          :disabled="loading || !validForm"
+          :elevation="0"
+          primary
+          x-large
+          type="submit"
+        >
+          {{ $t("reset-password") }}
+        </v-btn>
+      </div>
+    </v-form>
+  </div>
 </template>
 
 <script>
