@@ -21,6 +21,7 @@
                 :dirty="dirty"
                 :field="field"
                 :loading="loading"
+                :style="fieldsStyle"
                 v-model="value"
               ></form-field>
             </v-card-text>
@@ -34,6 +35,7 @@
           :dirty="dirty"
           :field="field"
           :loading="loading"
+          :style="fieldsStyle"
           v-model="value"
         ></form-field>
       </template>
@@ -48,7 +50,7 @@
         x-large
         type="submit"
       >
-        submit
+        {{ submitLabel }}
       </v-btn>
 
       <slot name="footer" v-bind:value="value" />
@@ -87,7 +89,9 @@ export default {
   components: { FormField },
   props: {
     fields: { required: true, type: Array },
+    fieldsStyle: { required: false, type: Object },
     lazyValidation: { default: true, type: Boolean },
+    submitLabel: { default: "submit", type: String },
     value: { default: () => ({}), type: Object }
   },
 

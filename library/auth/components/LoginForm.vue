@@ -1,6 +1,29 @@
 <template>
   <v-main>
     <div class="w-50 mx-auto">
+      <ditto-form
+        :fields="fields"
+        :fields-style="{ 'flex-basis': '100%' }"
+        submit-label="login"
+        v-model="form"
+        @submit="submit"
+      >
+        <template v-slot:header>
+          <h2 class="text-uppercase text-center my-4">{{ $t("login") }}</h2>
+        </template>
+        <template v-slot:footer>
+          <div class="mt-4 text-right">
+            <div v-if="allowPasswordReset">
+              <a @click="resetPassword">Forgot Password?</a>
+            </div>
+            <div v-if="allowUserRegistration">
+              New here?
+              <a @click="register">Sign up</a>.
+            </div>
+          </div>
+        </template>
+      </ditto-form>
+
       <h2 class="text-uppercase text-center my-4">{{ $t("login") }}</h2>
 
       <div class="pb-4">
@@ -77,9 +100,12 @@
 
 <script>
 import { emailRules, passwordRules } from "../utils";
+import Form from "../../form/Form";
+console.log(Form);
 
 export default {
   name: "LoginForm",
+  components: { DittoForm: Form },
   props: {
     alertMessage: {
       required: false,
@@ -103,6 +129,22 @@ export default {
     email: null,
     emailRules,
     error: null,
+    fields: [
+      {
+        autofocus: true,
+        label: "email",
+        key: "email",
+        required: () => true,
+        type: "email"
+      },
+      {
+        label: "password",
+        key: "password",
+        required: () => true,
+        type: "password"
+      }
+    ],
+    form: {},
     password: null,
     passwordRules:
       process.env.NODE_ENV === "production" ? passwordRules : [() => true],
@@ -137,6 +179,11 @@ export default {
           this.error = details;
         })
         .finally(() => (this.loading = false));
+    },
+    register() {
+      this.$router.replace({
+        name: "register"
+      });
     },
     resetPassword() {
       this.$router.replace({
