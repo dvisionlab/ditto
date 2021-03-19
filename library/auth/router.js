@@ -10,7 +10,7 @@ export const getRoutes = options => {
   return [
     {
       component: LoginForm,
-      path: "/login",
+      path: `${options.authRoot}/login`,
       meta: {
         autoLogin: options.autoLogin,
         guest: true
@@ -19,13 +19,14 @@ export const getRoutes = options => {
       props: route => ({
         ...route.query,
         allowPasswordReset: options.allowPasswordReset,
-        allowUserRegistration: options.allowUserRegistration
+        allowUserRegistration: options.allowUserRegistration,
+        authRoot: options.authRoot
       })
     },
     options.allowPasswordReset
       ? {
           component: () => import("./components/ForgotPassword"),
-          path: "/forgot-password",
+          path: `${options.authRoot}/forgot-password`,
           meta: {
             guest: true
           },
@@ -35,7 +36,7 @@ export const getRoutes = options => {
     options.allowPasswordReset
       ? {
           component: () => import("./components/ChangePassword"),
-          path: "/reset-password/:uid/:token",
+          path: `${options.authRoot}/reset-password/:uid/:token`,
           meta: {
             guest: true
           },
@@ -46,7 +47,7 @@ export const getRoutes = options => {
     options.allowUserRegistration
       ? {
           component: () => import("./components/SignUp"), // TODO
-          path: "/register",
+          path: `${options.authRoot}/register`,
           meta: {
             guest: true
           },
@@ -58,6 +59,8 @@ export const getRoutes = options => {
 
 // Before each navigation guard
 export const getBeforeEachGuard = options => {
+  // meta.guest = true ==> solo utenti non autenticati
+  // meta.auth = true ==> solo utenti autenticati
   return async function(to, from, next) {
     if (
       alreadyAutoLoggedIn == false &&
@@ -70,20 +73,26 @@ export const getBeforeEachGuard = options => {
     // auth not needed
     if (to.matched.some(record => record.meta.guest)) {
       if (persist.getAccessToken() == null) {
+        // and user not logged in
         next();
       } else {
         // but user is logged in
-        next("/");
+        next(`${options.authRoot}/`);
       }
     }
     // auth needed
-    else {
-      // but user not logged in
+    else if (to.matched.some(record => record.meta.auth)) {
       if (persist.getAccessToken() == null) {
+        // but user not logged in
         next({ name: "login" });
       } else {
+        // and user logged in
         next();
       }
+    }
+    // free route
+    else {
+      next();
     }
   };
 };
