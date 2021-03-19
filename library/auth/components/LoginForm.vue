@@ -117,13 +117,8 @@ export default {
       this.loading = true;
 
       this.$store
-<<<<<<< HEAD
         .dispatch("auth/login", this.form)
-        .then(() => this.$router.replace("/"))
-=======
-        .dispatch("auth/login", { email: this.email, password: this.password })
         .then(() => this.$router.replace(`${this.authRoot}/`))
->>>>>>> master
         .catch(error => {
           let details = "";
           if (error.body.email || error.body.password) {
