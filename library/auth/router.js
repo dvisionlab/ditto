@@ -10,7 +10,7 @@ export const getRoutes = options => {
   return [
     {
       component: LoginForm,
-      path: "/login",
+      path: `${options.authRoot}/login`,
       meta: {
         autoLogin: options.autoLogin,
         guest: true
@@ -25,7 +25,7 @@ export const getRoutes = options => {
     options.allowPasswordReset
       ? {
           component: () => import("./components/ForgotPassword"),
-          path: "/forgot-password",
+          path: `${options.authRoot}/forgot-password`,
           meta: {
             guest: true
           },
@@ -35,7 +35,7 @@ export const getRoutes = options => {
     options.allowPasswordReset
       ? {
           component: () => import("./components/ChangePassword"),
-          path: "/reset-password/:uid/:token",
+          path: `${options.authRoot}/reset-password/:uid/:token`,
           meta: {
             guest: true
           },
@@ -46,7 +46,7 @@ export const getRoutes = options => {
     options.allowUserRegistration
       ? {
           component: () => import("./components/SignUp"), // TODO
-          path: "/register",
+          path: `${options.authRoot}/register`,
           meta: {
             guest: true
           },
@@ -73,7 +73,7 @@ export const getBeforeEachGuard = options => {
         next();
       } else {
         // but user is logged in
-        next("/");
+        next(`${options.authRoot}/`);
       }
     }
     // auth needed
