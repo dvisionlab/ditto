@@ -58,6 +58,8 @@ export const getRoutes = options => {
 
 // Before each navigation guard
 export const getBeforeEachGuard = options => {
+  // meta.guest = true ==> solo utenti non autenticati
+  // meta.auth = true ==> solo utenti autenticati
   return async function(to, from, next) {
     if (
       alreadyAutoLoggedIn == false &&
@@ -70,6 +72,7 @@ export const getBeforeEachGuard = options => {
     // auth not needed
     if (to.matched.some(record => record.meta.guest)) {
       if (persist.getAccessToken() == null) {
+        // and user not logged in
         next();
       } else {
         // but user is logged in
@@ -77,13 +80,18 @@ export const getBeforeEachGuard = options => {
       }
     }
     // auth needed
-    else {
-      // but user not logged in
+    else if (to.matched.some(record => record.meta.auth)) {
       if (persist.getAccessToken() == null) {
+        // but user not logged in
         next({ name: "login" });
       } else {
+        // and user logged in
         next();
       }
+    }
+    // free route
+    else {
+      next();
     }
   };
 };
