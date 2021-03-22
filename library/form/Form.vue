@@ -23,6 +23,7 @@
                 :loading="loading"
                 :style="fieldsStyle"
                 v-model="value"
+                @icon-click="field => $emit('icon-click', field)"
               ></form-field>
             </v-card-text>
           </v-card>
@@ -37,6 +38,7 @@
           :loading="loading"
           :style="fieldsStyle"
           v-model="value"
+          @icon-click="field => $emit('icon-click', field)"
         ></form-field>
       </template>
     </div>

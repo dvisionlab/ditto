@@ -1,6 +1,7 @@
 <template>
   <div>
     <component
+      :append-icon="field.appendIcon"
       :autofocus="field.autofocus"
       :class="{ 'mt-1': field.component }"
       :is="getComponentName(field)"
@@ -13,6 +14,7 @@
       :rules="dirty ? getRules(field) : undefined"
       :type="field.type"
       v-model="value[field.key]"
+      @icon-click="() => $emit('icon-click', field)"
     >
       <template slot="append">
         <v-icon v-if="field.appendIcon" small>{{ field.appendIcon }}</v-icon>

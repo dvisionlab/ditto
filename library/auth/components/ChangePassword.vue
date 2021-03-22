@@ -7,13 +7,14 @@
       submit-label="change-password"
       :footer-style="{ 'flex-direction': 'row-reverse' }"
       v-model="form"
+      @icon-click="onFieldClick"
       @submit="submit"
     >
       <template v-slot:header>
         <h2 class="text-uppercase text-center primary--text my-4">
           {{ $t("change-password") }}
         </h2>
-        <p>
+        <p class="text-center">
           Please enter a new password.
         </p>
 
@@ -37,66 +38,13 @@
         </div>
       </template>
     </ditto-form>
-
-    <v-form @submit.prevent="submit">
-      <v-text-field
-        :append-icon="passwordHidden ? 'mdi-eye-off' : 'mdi-eye'"
-        :disabled="loading"
-        label="Password"
-        name="password"
-        outlined
-        required
-        :rules="passwordRules"
-        :type="passwordHidden ? 'password' : 'text'"
-        v-model="password"
-        @click:append="() => (passwordHidden = !passwordHidden)"
-      ></v-text-field>
-
-      <v-text-field
-        :disabled="loading"
-        label="Password confirmation"
-        name="password_confirmation"
-        outlined
-        required
-        :rules="passwordConfirmationRules"
-        type="password"
-        v-model="passwordConfirmation"
-      ></v-text-field>
-    </v-form>
   </div>
 </template>
 
 <script>
 import Vue from "vue";
 import form from "../../../form";
-import { passwordRules } from "../utils";
-
-const PasswordField = {
-  props: {
-    autofocus: { default: false, type: Boolean },
-    disabled: { default: false, type: Boolean },
-    label: { required: true, type: String },
-    required: { default: false, type: Boolean },
-    rules: { required: false, type: Array },
-    type: { required: true, type: String },
-    value: { required: false, type: String }
-  },
-  template: `<div>HERE{{ $props }}</div>`,
-  template_: `
-  <v-text-field
-  :autofocus="autofocus"
-        :append-icon="passwordHidden ? 'mdi-eye-off' : 'mdi-eye'"
-        :disabled="loading"
-        label="password"
-        name="password"
-        required
-        :rules="passwordRules"
-        :type="passwordHidden ? 'password' : 'text'"
-        v-model="password"
-        @click:append="() => (passwordHidden = !passwordHidden)"
-      ></v-text-field>
-  `
-};
+import PasswordField from "./PasswordField";
 
 export default {
   name: "ChangePassword",
@@ -110,11 +58,7 @@ export default {
       error: null,
       loading: false,
       form: {},
-      // TODO
-      passwordHidden: true,
-      password: null,
-      passwordConfirmation: null,
-      passwordRules
+      hiddenPassword: true
     };
   },
   computed: {
@@ -126,13 +70,13 @@ export default {
       ];
       return [
         {
-          appendIcon: this.passwordHidden ? "mdi-eye-off" : "mdi-eye",
+          appendIcon: this.hiddenPassword ? "mdi-eye-off" : "mdi-eye",
           autofocus: true,
           component: PasswordField,
           label: "password",
           key: "password",
           required: () => true,
-          type: this.passwordHidden ? "password" : "text"
+          type: this.hiddenPassword ? "password" : "text"
         },
         {
           appendIcon: "mdi-lock",
@@ -152,6 +96,11 @@ export default {
     }
   },
   methods: {
+    onFieldClick(field) {
+      if (field.key == "password") {
+        this.hiddenPassword = !this.hiddenPassword;
+      }
+    },
     submit() {
       this.loading = true;
 
