@@ -1,96 +1,93 @@
 <template>
-  <v-main>
-    <div class="w-50 mx-auto">
-      <h2 class="text-uppercase text-center my-4">
-        {{ $t("change-password") }}
-      </h2>
-      <p>
-        Please enter a new password with the following rules:
-        {{ passwordRulesMessage }}
-      </p>
+  <div class="w-50 mx-auto">
+    <ditto-form
+      :fields="fields"
+      :fields-style="{ 'flex-basis': '100%' }"
+      :loading="loading"
+      submit-label="change-password"
+      :footer-style="{ 'flex-direction': 'row-reverse' }"
+      v-model="form"
+      @icon-click="onFieldClick"
+      @submit="submit"
+    >
+      <template v-slot:header>
+        <h2 class="text-uppercase text-center primary--text my-4">
+          {{ $t("change-password") }}
+        </h2>
+        <p class="text-center">
+          Please enter a new password.
+        </p>
 
-      <v-form v-model="validForm" @submit.prevent="submit">
-        <v-text-field
-          :append-icon="passwordHidden ? 'mdi-eye-off' : 'mdi-eye'"
-          :disabled="loading"
-          label="Password"
-          name="password"
-          outlined
-          required
-          :rules="passwordRules"
-          :type="passwordHidden ? 'password' : 'text'"
-          v-model="password"
-          @click:append="() => (passwordHidden = !passwordHidden)"
-        ></v-text-field>
-
-        <v-text-field
-          :disabled="loading"
-          label="Password confirmation"
-          name="password_confirmation"
-          outlined
-          required
-          :rules="passwordConfirmationRules"
-          type="password"
-          v-model="passwordConfirmation"
-        ></v-text-field>
-
-        <div v-if="error">
-          <v-alert
-            icon="mdi-alert-circle"
-            outlined
-            type="warning"
-            prominent
-            border="left"
-          >
-            <b class="pl-1" v-html="error" />
+        <div :style="{ minHeight: '4em' }">
+          <v-alert v-if="error" dense outlined type="error">
+            <span v-html="error" />
           </v-alert>
-        </div>
 
-        <div class="d-flex align-center justify-space-between">
+          <div v-else class="error-placeholder" />
+        </div>
+      </template>
+
+      <template v-slot:footer>
+        <div class="flex-grow-1">
           <b>
-            <a :disabled="loading" is="router-link" :to="{ name: 'login' }">
+            <a :disabled="loading" @click="$router.replace({ name: 'login' })">
+              <v-icon color="anchor">mdi-chevron-left</v-icon>
               Back to login
             </a>
           </b>
-
-          <v-btn
-            class="ml-4"
-            :loading="loading"
-            :disabled="loading || !validForm"
-            :elevation="0"
-            primary
-            x-large
-            type="submit"
-          >
-            {{ $t("reset-password") }}
-          </v-btn>
         </div>
-      </v-form>
-    </div>
-  </v-main>
+      </template>
+    </ditto-form>
+  </div>
 </template>
 
 <script>
 import Vue from "vue";
-import { passwordRules, passwordRulesMessage } from "../utils";
+import form from "../../../form";
+import PasswordField from "./PasswordField";
 
 export default {
   name: "ChangePassword",
+  components: { DittoForm: form.component },
   props: {
     token: {},
     uid: {}
   },
-  data: () => ({
-    loading: false,
-    passwordHidden: true,
-    error: null,
-    password: null,
-    passwordConfirmation: null,
-    passwordRules,
-    passwordRulesMessage,
-    validForm: false
-  }),
+  data: () => {
+    return {
+      error: null,
+      loading: false,
+      form: {},
+      hiddenPassword: true
+    };
+  },
   computed: {
+    fields() {
+      const passwordConfirmationRules = [
+        () =>
+          this.form.password == this.form.confirmPassword ||
+          "Please make sure your passwords match."
+      ];
+      return [
+        {
+          appendIcon: this.hiddenPassword ? "mdi-eye-off" : "mdi-eye",
+          autofocus: true,
+          component: PasswordField,
+          label: "password",
+          key: "password",
+          required: () => true,
+          type: this.hiddenPassword ? "password" : "text"
+        },
+        {
+          appendIcon: "mdi-lock",
+          label: "confirm password",
+          key: "confirmPassword",
+          required: () => true,
+          rules: passwordConfirmationRules,
+          type: "password"
+        }
+      ];
+    },
     passwordConfirmationRules() {
       return [
         this.password === this.passwordConfirmation ||
@@ -99,6 +96,11 @@ export default {
     }
   },
   methods: {
+    onFieldClick(field) {
+      if (field.key == "password") {
+        this.hiddenPassword = !this.hiddenPassword;
+      }
+    },
     submit() {
       this.loading = true;
 
@@ -106,8 +108,8 @@ export default {
         .resetPassword(
           this.uid,
           this.token,
-          this.password,
-          this.passwordConfirmation
+          this.form.password,
+          this.form.confirmPassword
         )
         .then(() => {
           this.$router.replace({

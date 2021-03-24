@@ -21,7 +21,9 @@
                 :dirty="dirty"
                 :field="field"
                 :loading="loading"
+                :style="fieldsStyle"
                 v-model="value"
+                @icon-click="field => $emit('icon-click', field)"
               ></form-field>
             </v-card-text>
           </v-card>
@@ -34,21 +36,23 @@
           :dirty="dirty"
           :field="field"
           :loading="loading"
+          :style="fieldsStyle"
           v-model="value"
+          @icon-click="field => $emit('icon-click', field)"
         ></form-field>
       </template>
     </div>
 
-    <div class="mt-4">
+    <div class="d-flex flex-wrap align-center mt-4" :style="footerStyle">
       <v-btn
+        class="flex-grow-1"
         :disabled="loading || !valid"
         :elevation="0"
         :loading="loading"
-        primary
         x-large
         type="submit"
       >
-        submit
+        <span class="primary--text">{{ submitLabel }}</span>
       </v-btn>
 
       <slot name="footer" v-bind:value="value" />
@@ -87,13 +91,16 @@ export default {
   components: { FormField },
   props: {
     fields: { required: true, type: Array },
+    fieldsStyle: { required: false, type: Object },
+    footerStyle: { required: false, type: Object },
     lazyValidation: { default: true, type: Boolean },
+    loading: { default: true, type: Boolean },
+    submitLabel: { default: "submit", type: String },
     value: { default: () => ({}), type: Object }
   },
 
   data: () => ({
     dirty: false,
-    loading: false,
     valid: true
   }),
   methods: {

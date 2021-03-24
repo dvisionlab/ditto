@@ -1,12 +1,12 @@
 <template>
   <div>
     <component
-      :append-icon="required ? 'mdi-asterisk' : null"
+      :append-icon="field.appendIcon"
       :autofocus="field.autofocus"
       :class="{ 'mt-1': field.component }"
       :is="getComponentName(field)"
       :disabled="
-        loading || field.disabled ? field.disabled(field, value) : false
+        loading || (field.disabled ? field.disabled(field, value) : false)
       "
       :hint="field.hint"
       :label="field.label"
@@ -14,7 +14,16 @@
       :rules="dirty ? getRules(field) : undefined"
       :type="field.type"
       v-model="value[field.key]"
-    />
+      @icon-click="() => $emit('icon-click', field)"
+    >
+      <template slot="append">
+        <v-icon v-if="field.appendIcon" small>{{ field.appendIcon }}</v-icon>
+      </template>
+
+      <template v-slot:label>
+        <span class="text-capitalize">{{ field.label }}</span>
+      </template>
+    </component>
 
     <component v-if="field.slot" :is="field.slot" />
   </div>
@@ -82,11 +91,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-::v-deep .v-input__icon {
-  .v-icon.v-icon {
-    font-size: 0.7em;
-  }
-}
-</style>

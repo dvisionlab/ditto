@@ -1,85 +1,65 @@
 <template>
-  <v-main>
-    <div class="w-50 mx-auto">
-      <h2 class="text-uppercase text-center my-4">{{ $t("login") }}</h2>
+  <div class="w-50 mx-auto">
+    <ditto-form
+      :fields="fields"
+      :fields-style="{ 'flex-basis': '100%' }"
+      :loading="loading"
+      submit-label="login"
+      v-model="form"
+      @submit="submit"
+    >
+      <template v-slot:header>
+        <h2 class="text-uppercase text-center primary--text my-4">
+          {{ $t("login") }}
+        </h2>
 
-      <div class="pb-4">
-        <v-alert
-          v-if="alertMessage"
-          dismissible
-          :icon="false"
-          :type="alertType"
-        >
-          {{ $t(alertMessage) }}
-        </v-alert>
-      </div>
+        <div :style="{ minHeight: '4em' }">
+          <template v-if="alertMessage || error">
+            <v-alert
+              v-if="alertMessage"
+              close-icon="mdi-close"
+              dense
+              dismissible
+              outlined
+              :type="alertType"
+              @input="dismissAlert"
+            >
+              {{ $t(alertMessage) }}
+            </v-alert>
 
-      <v-form v-model="validForm" @submit.prevent="submit">
-        <v-text-field
-          append-icon="mdi-email"
-          :disabled="loading"
-          label="Email"
-          name="email"
-          outlined
-          required
-          :rules="emailRules"
-          type="email"
-          v-model="email"
-        ></v-text-field>
-        <v-text-field
-          append-icon="mdi-lock"
-          :disabled="loading"
-          label="Password"
-          name="password"
-          outlined
-          required
-          :rules="passwordRules"
-          type="password"
-          v-model="password"
-        ></v-text-field>
+            <v-alert v-if="error" dense outlined type="error">
+              <span v-html="error" />
+            </v-alert>
+          </template>
 
-        <div v-if="error">
-          <v-alert
-            icon="mdi-alert-circle"
-            outlined
-            type="warning"
-            prominent
-            border="left"
-          >
-            <b class="pl-1" v-html="error" />
-          </v-alert>
+          <div v-else class="error-placeholder" />
         </div>
+      </template>
 
-        <v-btn
-          block
-          :disabled="loading || !validForm"
-          :elevation="0"
-          :loading="loading"
-          primary
-          x-large
-          type="submit"
-          >{{ $t("login") }}</v-btn
-        >
-      </v-form>
-
-      <div class="mt-4 text-right">
-        <div v-if="allowPasswordReset">
-          <a @click="resetPassword">Forgot Password?</a>
+      <template v-slot:footer>
+        <div class="mt-6 text-right" :style="{ 'flex-basis': '100%' }">
+          <div v-if="allowPasswordReset">
+            <a @click="resetPassword">Forgot Password?</a>
+          </div>
+          <div v-if="allowUserRegistration">
+            New here?
+            <a @click="register">Sign up</a>.
+          </div>
         </div>
-        <div v-if="allowUserRegistration">
-          New here?
-          <a is="router-link" :to="{ name: 'register' }">Sign up</a>.
-        </div>
-      </div>
-    </div>
-  </v-main>
+      </template>
+    </ditto-form>
+  </div>
 </template>
 
 <script>
-import { emailRules, passwordRules } from "../utils";
+import form from "../../../form";
+if (process.env.NODE_ENV !== "production") {
+  form.customizeRules({ passwordValidationRegex: new RegExp(".*") });
+}
 
 export default {
   name: "LoginForm",
+  components: { DittoForm: form.component },
   props: {
     alertMessage: {
       required: false,
@@ -104,21 +84,38 @@ export default {
   },
   data: () => ({
     loading: false,
-    email: null,
-    emailRules,
     error: null,
-    password: null,
-    passwordRules:
-      process.env.NODE_ENV === "production" ? passwordRules : [() => true],
-    validForm: false
+    fields: [
+      {
+        appendIcon: "mdi-email",
+        autofocus: true,
+        label: "email",
+        key: "email",
+        required: () => true,
+        type: "email"
+      },
+      {
+        appendIcon: "mdi-lock",
+        label: "password",
+        key: "password",
+        required: () => true,
+        type: "password"
+      }
+    ],
+    form: {}
   }),
   methods: {
+    dismissAlert() {
+      // eslint-disable-next-line no-unused-vars
+      var { alertMessage, alertType, ...query } = this.$route.query;
+      this.$router.replace({ query });
+    },
     submit() {
       this.error = null;
       this.loading = true;
 
       this.$store
-        .dispatch("auth/login", { email: this.email, password: this.password })
+        .dispatch("auth/login", this.form)
         .then(() => this.$router.replace(`${this.authRoot}/`))
         .catch(error => {
           let details = "";
@@ -142,6 +139,11 @@ export default {
         })
         .finally(() => (this.loading = false));
     },
+    register() {
+      this.$router.replace({
+        name: "register"
+      });
+    },
     resetPassword() {
       this.$router.replace({
         name: "forgot-password",
@@ -151,3 +153,5 @@ export default {
   }
 };
 </script>
+
+<style scoped src="./style.css"></style>

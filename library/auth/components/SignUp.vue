@@ -1,57 +1,59 @@
 <template>
-  <v-main>
-    <div class="w-50 mx-auto">
-      <h2 class="text-uppercase text-center my-4">
-        {{ $t("register") }}
-      </h2>
-
-      <div>TODO</div>
-
-      <div v-if="error" class="mt-4">
-        <v-alert
-          icon="mdi-alert-circle"
-          outlined
-          type="warning"
-          prominent
-          border="left"
-        >
-          <b>{{ error }}</b>
-        </v-alert>
-      </div>
-
-      <div class="d-flex align-center justify-space-between">
-        <b>
-          <a :disabled="loading" is="router-link" :to="{ name: 'login' }">
-            Back to login
-          </a>
-        </b>
-
-        <v-btn
-          class="ml-4"
-          :loading="loading"
-          :disabled="loading || !validForm"
-          :elevation="0"
-          primary
-          x-large
-          @click="submit"
-        >
+  <div class="w-50 mx-auto">
+    <ditto-form
+      :fields="fields"
+      :fields-style="{ 'flex-basis': '100%' }"
+      :loading="loading"
+      submit-label="register"
+      :footer-style="{ 'flex-direction': 'row-reverse' }"
+      v-model="form"
+      @submit="submit"
+    >
+      <template v-slot:header>
+        <h2 class="text-uppercase text-center primary--text my-4">
           {{ $t("register") }}
-        </v-btn>
-      </div>
-    </div>
-  </v-main>
+        </h2>
+        <div>TODO</div>
+
+        <div :style="{ minHeight: '4em' }">
+          <v-alert v-if="error" dense outlined type="error">
+            <span v-html="error" />
+          </v-alert>
+
+          <div v-else class="error-placeholder" />
+        </div>
+      </template>
+
+      <template v-slot:footer>
+        <div class="flex-grow-1">
+          <b>
+            <a :disabled="loading" @click="$router.replace({ name: 'login' })">
+              <v-icon color="anchor">mdi-chevron-left</v-icon>
+              Back to login
+            </a>
+          </b>
+        </div>
+      </template>
+    </ditto-form>
+  </div>
 </template>
 
 <script>
+import form from "../../../form";
+
 export default {
   name: "SignUp",
+  components: { DittoForm: form.component },
   data: () => ({
     error: null,
     loading: false,
-    validForm: false
+    fields: [],
+    form: {}
   }),
   methods: {
     submit() {}
   }
 };
 </script>
+
+<style scoped src="./style.css"></style>

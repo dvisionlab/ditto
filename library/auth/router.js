@@ -1,57 +1,86 @@
 // Dependencies
 import persist from "./persist";
 import LoginForm from "./components/LoginForm";
+import AuthWrapper from "./components/Wrapper";
 
 // Local variables
 let alreadyAutoLoggedIn = false;
 
 // Auth plugin routes
 export const getRoutes = options => {
+  const Wrapper = options.wrapperComponent
+    ? options.wrapperComponent
+    : AuthWrapper;
+
   return [
     {
-      component: LoginForm,
+      component: Wrapper,
       path: `${options.authRoot}/login`,
       meta: {
         autoLogin: options.autoLogin,
         guest: true
       },
-      name: "login",
-      props: route => ({
-        ...route.query,
-        allowPasswordReset: options.allowPasswordReset,
-        allowUserRegistration: options.allowUserRegistration,
-        authRoot: options.authRoot
-      })
+      children: [
+        {
+          path: "",
+          name: "login",
+          component: LoginForm,
+          props: route => ({
+            ...route.query,
+            allowPasswordReset: options.allowPasswordReset,
+            allowUserRegistration: options.allowUserRegistration,
+            authRoot: options.authRoot
+          })
+        }
+      ]
     },
     options.allowPasswordReset
       ? {
-          component: () => import("./components/ForgotPassword"),
+          component: Wrapper,
           path: `${options.authRoot}/forgot-password`,
           meta: {
             guest: true
           },
-          name: "forgot-password"
+          children: [
+            {
+              path: "",
+              name: "forgot-password",
+              component: () => import("./components/ForgotPassword")
+            }
+          ]
         }
       : null,
     options.allowPasswordReset
       ? {
-          component: () => import("./components/ChangePassword"),
+          component: Wrapper,
           path: `${options.authRoot}/reset-password/:uid/:token`,
           meta: {
             guest: true
           },
-          name: "reset-password",
-          props: true
+          children: [
+            {
+              path: "",
+              name: "reset-password",
+              component: () => import("./components/ChangePassword"),
+              props: true
+            }
+          ]
         }
       : null,
     options.allowUserRegistration
       ? {
-          component: () => import("./components/SignUp"), // TODO
+          component: Wrapper,
           path: `${options.authRoot}/register`,
           meta: {
             guest: true
           },
-          name: "register"
+          children: [
+            {
+              path: "",
+              name: "register",
+              component: () => import("./components/SignUp") // TODO
+            }
+          ]
         }
       : null
   ].filter(Boolean); // equal to _.compact
