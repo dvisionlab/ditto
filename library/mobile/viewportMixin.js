@@ -1,7 +1,8 @@
 export default {
   created() {
-    // TODO optional
-    import("./vuetifyViewportStyle.css");
+    if (this.$vuetify) {
+      import("./vuetifyViewportStyle.css");
+    }
   },
   mounted() {
     // Listen for resize events to update viewport unit variable
