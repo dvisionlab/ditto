@@ -10,7 +10,7 @@
 
     <div
       v-if="!loading"
-      class="d-flex dropzone"
+      class="d-flex dropzone pa-4"
       :class="{ dragging, 'primary--text': dragging }"
       @drop.prevent.stop="loadSeries"
       @dragover.prevent.stop="onDragOver"
@@ -92,6 +92,7 @@ export default {
   height: 100%;
   width: 100%;
   border: 0.5em solid var(--v-primary-base);
+  overflow: auto;
 
   &.dragging {
     opacity: 0.5;
