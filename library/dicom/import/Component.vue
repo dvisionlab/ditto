@@ -79,6 +79,7 @@
       <component
         :is="`import-step-${currentStep + 1}`"
         class="h-100"
+        :get-viewport-fn="getViewportFn"
         :headers="headers"
         :import-errors="errors"
         :metadata="metadata"
@@ -102,7 +103,13 @@
 </template>
 
 <script>
-import { getCanvasTools, getHeaders, getMetadata, getSteps } from "./options";
+import {
+  getCanvasTools,
+  getHeaders,
+  getMetadata,
+  getSteps,
+  getViewportFn
+} from "./options";
 import { mergeSeries, storeSeriesStack } from "@/js/utils.dicoms";
 
 const ImportStep1 = () => import("./steps/Step1");
@@ -123,6 +130,7 @@ export default {
     return {
       currentStep: 0,
       errors: [],
+      getViewportFn: getViewportFn(this.options),
       headers: getHeaders(this.options),
       metadata: getMetadata(this.options),
       series: [],

@@ -41,6 +41,7 @@ export default {
     clearCacheOnDestroy: { default: false, type: Boolean },
     clearOnDestroy: { default: false, type: Boolean },
     canvasId: { required: true, type: String },
+    getViewportFn: { default: () => ({}), type: Function },
     seriesId: { required: true, type: [String, Number] },
     showProgress: { default: true, type: Boolean },
     stack: { required: false, type: Object },
@@ -78,11 +79,11 @@ export default {
   computed: {
     // TODO access larvitar store?
     larvitarViewport() {
-      return {};
-      //   return this.$store.getters["larvitar/viewport"](this.validCanvasId) || {};
+      return this.$store.getters["larvitar/viewport"](this.validCanvasId) || {};
     },
     progress() {
-      return this.larvitarViewport.loading;
+      return this.getViewportFn(this.$store, this.seriesId, this.validCanvasId)
+        .loading;
     }
   },
   methods: {

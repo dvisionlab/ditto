@@ -85,6 +85,7 @@
               ({ seriesUID }) => seriesUID == item.seriesUID
             ) == null
           "
+          :get-viewport-fn="getViewportFn"
           :series-id="item.seriesUID"
           :stack="item"
           :style="{ width: '10em', height: '10em' }"
@@ -129,6 +130,7 @@ export default {
     }
   },
   props: {
+    getViewportFn: { required: false, type: Function },
     headers: { required: true, type: Array },
     importErrors: { required: false, type: Array },
     series: { required: true, type: Array },
