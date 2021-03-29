@@ -4,7 +4,7 @@
     <div
       v-if="importErrors.length || !series.length"
       class="pa-3"
-      v-relative-height
+      v-relative-height:2px="'tableHeight'"
     >
       <v-alert
         border="left"
@@ -42,8 +42,6 @@
         </div>
       </v-alert>
     </div>
-
-    <!-- <slot v-bind:test="'test2'" name="metadata" /> -->
 
     <v-data-table
       v-if="series.length"
@@ -105,30 +103,13 @@
 </template>
 
 <script>
+import RelativeHeight from "../../../relative-height";
 const DicomCanvas = () => import("../../render/Canvas");
-
-const updateTableHeight = (el, vnode) => {
-  setTimeout(() => {
-    vnode.context.updateTableHeight(el.offsetHeight);
-  }, 0);
-};
 
 export default {
   name: "DicomImportStep2",
   components: { DicomCanvas },
-  directives: {
-    // TODO extract directive
-    relativeHeight: {
-      inserted(el, binding, vnode) {
-        updateTableHeight(el, vnode);
-      },
-      update(el, binding, vnode) {
-        setTimeout(() => {
-          updateTableHeight(el, vnode);
-        }, 0);
-      }
-    }
-  },
+  directives: { RelativeHeight },
   props: {
     getViewportFn: { required: false, type: Function },
     headers: { required: true, type: Array },
@@ -141,11 +122,6 @@ export default {
   data: () => ({
     showErrorDetails: false,
     tableHeight: "100%"
-  }),
-  methods: {
-    updateTableHeight(alertHeight) {
-      this.tableHeight = `calc(100% - ${alertHeight}px - 2px)`;
-    }
-  }
+  })
 };
 </script>

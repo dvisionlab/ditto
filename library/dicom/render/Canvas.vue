@@ -77,10 +77,6 @@ export default {
     }
   },
   computed: {
-    // TODO access larvitar store?
-    larvitarViewport() {
-      return this.$store.getters["larvitar/viewport"](this.validCanvasId) || {};
-    },
     progress() {
       return this.getViewportFn(this.$store, this.seriesId, this.validCanvasId)
         .loading;

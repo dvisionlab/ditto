@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO clear on close -->
   <div class="step-wrapper">
     <div class="step-header d-flex justify-space-between align-center">
       <div class="d-flex align-center">
