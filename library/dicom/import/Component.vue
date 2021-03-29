@@ -152,8 +152,6 @@ export default {
         this.series.find(s => s.seriesUID == seriesUID)
       );
 
-      // TODO check stacks when selecting the same series twice
-
       // Store series stack in larvitar
       if (this.selectedAction.storeStacks) {
         stacks.forEach(stack => storeSeriesStack(stack.seriesUID, stack));
@@ -180,12 +178,9 @@ export default {
           this.$set(this.series, index, mergeSeries(this.series[index], s));
         } else {
           this.series.push(s);
+          this.selectedSeries.push({ seriesUID: s.seriesUID });
         }
       });
-
-      this.series.forEach(s =>
-        this.selectedSeries.push({ seriesUID: s.seriesUID })
-      );
 
       this.currentStep++;
     },
