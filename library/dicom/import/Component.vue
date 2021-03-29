@@ -18,21 +18,8 @@
           back
         </v-btn>
 
-        <!-- TODO review this in step 2 -->
-        <!-- TODO remove back/next -->
-        <v-btn
-          color="primary"
-          :disabled="!steps[currentStep].next(series)"
-          @click="currentStep++"
-        >
-          {{ series.length }} series detected
-          <v-icon v-if="steps[currentStep].next(series)"
-            >mdi-chevron-right</v-icon
-          >
-        </v-btn>
-
-        <div v-if="steps[currentStep].actions" class="ml-2">
-          <v-menu offset-y>
+        <div v-if="steps[currentStep].actions">
+          <v-menu max-width="412px" offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 class="primary--text"
@@ -46,8 +33,8 @@
             </template>
             <v-list>
               <v-list-item
-                v-for="item in steps[currentStep].actions"
-                :key="item.value"
+                v-for="(item, i) in steps[currentStep].actions"
+                :key="i"
                 :disabled="item.disabled"
                 link
                 @click="selectedAction = item"
@@ -56,20 +43,35 @@
                   <v-list-item-title class="text-uppercase">{{
                     item.text
                   }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ item.hint }}</v-list-item-subtitle>
+                  <v-list-item-subtitle :style="{ whiteSpace: 'normal' }">{{
+                    item.hint
+                  }}</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
             </v-list>
           </v-menu>
           <v-btn
             color="primary"
-            :disabled="selectedSeries.length <= 0"
+            :disabled="selectedSeries.length <= 0 || !selectedAction"
             :elevation="0"
             @click="onAction"
           >
             confirm
+            <v-icon>mdi-chevron-right</v-icon>
           </v-btn>
         </div>
+
+        <v-btn
+          v-else
+          color="primary"
+          :disabled="!steps[currentStep].next(series)"
+          @click="currentStep++"
+        >
+          {{ series.length }} series detected
+          <v-icon v-if="steps[currentStep].next(series)"
+            >mdi-chevron-right</v-icon
+          >
+        </v-btn>
       </div>
     </div>
 
@@ -128,14 +130,8 @@ export default {
     };
   },
   computed: {
-    selectedAction: {
-      get() {
-        const actions = this.steps[this.currentStep].actions;
-        return actions ? actions.find(a => !a.disabled) : null;
-      },
-      set(value) {
-        this.selectedAction = value;
-      }
+    actions() {
+      return this.steps[this.currentStep].actions;
     }
   },
   methods: {
@@ -188,6 +184,14 @@ export default {
           v => v.seriesUID !== event.item.seriesUID
         );
       }
+    }
+  },
+  watch: {
+    actions: {
+      handler(actions) {
+        this.selectedAction = actions ? actions.find(a => !a.disabled) : null;
+      },
+      immediate: true
     }
   }
 };

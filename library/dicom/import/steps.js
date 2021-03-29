@@ -51,24 +51,24 @@ const defaultActions = [
   }
 ];
 
-// TODO remove back/next
+// Default import steps configuration
 const defaultSteps = [
   {
-    label: "import-files",
     component: () => import("./steps/Step1"),
+    label: "import-files",
     back: () => false,
     next: series => series.length > 0
   },
   {
     actions: defaultActions,
-    label: "select-series",
     component: () => import("./steps/Step2"),
+    label: "select-series",
     back: () => true,
     next: () => false
   },
   {
-    label: "upload",
     component: () => import("./steps/Step3"),
+    label: "upload",
     back: () => false,
     next: () => false
   }
