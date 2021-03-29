@@ -18,8 +18,7 @@
       @dragleave="onDragEnd"
     >
       <div class="text-center text-uppercase ma-auto">
-        <!-- TODO customizable icon -->
-        <img :draggable="false" src="/media/images/drag-and-drop.svg" alt="" />
+        <img :draggable="false" :src="icon" alt="" />
         <h3>drop files and folders here</h3>
         <div class="line-wraps"><span>or</span></div>
         <v-btn block color="primary" @click="$refs.inputFile.click()">
@@ -40,6 +39,7 @@
 <script>
 import fs from "@/../ditto/fileSystemApi";
 import { parseFiles } from "../../utils";
+import icon from "../drag-and-drop.svg";
 
 export default {
   name: "DicomImportStep1",
@@ -49,6 +49,7 @@ export default {
   },
   data: () => ({
     dragging: false,
+    icon,
     loading: false,
     totalSize: 0 // total files size in mb
   }),
