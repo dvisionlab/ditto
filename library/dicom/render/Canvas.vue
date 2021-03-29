@@ -34,6 +34,9 @@ import {
 } from "../utils";
 import resize from "vue-resize-directive";
 
+const defaultGetViewportFn = (store, seriesId, canvasId) =>
+  store.getters["larvitar/viewport"](canvasId) || {};
+
 export default {
   name: "DicomCanvas",
   directives: { resize },
@@ -41,11 +44,11 @@ export default {
     clearCacheOnDestroy: { default: false, type: Boolean },
     clearOnDestroy: { default: false, type: Boolean },
     canvasId: { required: true, type: String },
-    getViewportFn: { default: () => ({}), type: Function },
+    getViewportFn: { default: defaultGetViewportFn, type: Function },
     seriesId: { required: true, type: [String, Number] },
     showProgress: { default: true, type: Boolean },
     stack: { required: false, type: Object },
-    tools: { required: false, type: Array }
+    tools: { default: () => [], type: Array }
   },
   data: () => ({
     error: false,

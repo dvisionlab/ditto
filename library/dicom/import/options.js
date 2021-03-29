@@ -7,9 +7,6 @@ const defaultCanvasTools = [
   { name: "StackScrollMouseWheel", configuration: {} }
 ];
 
-const defaultGetViewportFn = (store, seriesId, canvasId) =>
-  store.getters["larvitar/viewport"](canvasId) || {};
-
 // Loaded series extracted metadata and table headers
 // TODO all codes?
 const defaultMetadata = [
@@ -109,6 +106,3 @@ export const getSteps = (options = {}) => {
   }
   return steps;
 };
-
-export const getViewportFn = options =>
-  options.getViewportFn || defaultGetViewportFn;

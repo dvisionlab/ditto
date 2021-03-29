@@ -103,13 +103,7 @@
 </template>
 
 <script>
-import {
-  getCanvasTools,
-  getHeaders,
-  getMetadata,
-  getSteps,
-  getViewportFn
-} from "./options";
+import { getCanvasTools, getHeaders, getMetadata, getSteps } from "./options";
 import { mergeSeries, storeSeriesStack } from "@/js/utils.dicoms";
 
 const ImportStep1 = () => import("./steps/Step1");
@@ -130,7 +124,7 @@ export default {
     return {
       currentStep: 0,
       errors: [],
-      getViewportFn: getViewportFn(this.options),
+      getViewportFn: this.options.getViewportFn,
       headers: getHeaders(this.options),
       metadata: getMetadata(this.options),
       series: [],
