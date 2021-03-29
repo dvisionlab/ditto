@@ -77,22 +77,30 @@
       <component
         :is="`import-step-${currentStep + 1}`"
         class="h-100"
+        :headers="headers"
         :import-errors="errors"
+        :metadata="metadata"
         :series="series"
         :selected-series="selectedSeries"
         :step="steps[currentStep]"
         @new-series="onNewSeries"
         @select-series="onSelectSeries"
       >
-        <!-- TODO pass custom slots -->
+        <!-- Add a slot for each header item that requires it (component customization) -->
+        <template
+          v-for="h in headers.filter(({ slot }) => slot)"
+          v-slot:[h.value]="{ item }"
+        >
+          <slot v-bind:item="item" :name="h.value" />
+        </template>
       </component>
     </div>
   </div>
 </template>
 
 <script>
-import getSteps from "./steps";
-import { mergeSeries } from "@/js/utils.dicoms";
+import { getHeaders, getMetadata, getSteps } from "./steps";
+import { mergeSeries, storeSeriesStack } from "@/js/utils.dicoms";
 
 const ImportStep1 = () => import("./steps/Step1");
 const ImportStep2 = () => import("./steps/Step2");
@@ -109,13 +117,14 @@ export default {
     options: { default: () => ({}), type: Object }
   },
   data() {
-    const steps = getSteps(this.options);
     return {
       currentStep: 0,
       errors: [],
+      headers: getHeaders(this.options),
+      metadata: getMetadata(this.options),
       series: [],
       selectedSeries: [],
-      steps
+      steps: getSteps(this.options)
     };
   },
   computed: {
@@ -131,7 +140,25 @@ export default {
   },
   methods: {
     onAction() {
-      this.$emit(this.selectedAction.emitter, this.selectedSeries);
+      // List of selected stacks
+      const stacks = this.selectedSeries.map(({ seriesUID }) =>
+        this.series.find(s => s.seriesUID == seriesUID)
+      );
+
+      // Store series stack in larvitar
+      if (this.selectedAction.storeStacks) {
+        stacks.forEach(stack => storeSeriesStack(stack.seriesUID, stack));
+      }
+
+      // Emit action with stacks data
+      const emitData = stacks.map(stack => {
+        return this.metadata.reduce((obj, value) => {
+          obj[value] = stack[value];
+          return obj;
+        }, {});
+      });
+
+      this.$emit(this.selectedAction.emitter, emitData);
     },
     onNewSeries({ errors, series }) {
       this.errors = [...this.errors, ...errors];

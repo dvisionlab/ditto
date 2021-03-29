@@ -43,13 +43,15 @@
       </v-alert>
     </div>
 
+    <!-- <slot v-bind:test="'test2'" name="metadata" /> -->
+
     <v-data-table
       v-if="series.length"
       :style="{ height: tableHeight }"
       disable-pagination
       fixed-header
       group-by="studyUID"
-      :headers="step.tableHeaders"
+      :headers="headers"
       height="100%"
       hide-default-footer
       :items="series"
@@ -61,7 +63,7 @@
       <template v-slot:[`group.header`]="{ items }">
         <td
           class="text-center"
-          :colspan="step.tableHeaders.length + 1"
+          :colspan="headers.length + 1"
           :style="{ height: '2em' }"
         >
           <b>{{
@@ -75,7 +77,7 @@
       <template v-slot:[`item.preview`]="{ item }">
         <!-- clear-on-destroy is true when series is not selected (user discard from open/updload) -->
         <!-- TODO LT always clear-on-destroy if upload without opening in viewer -->
-        <!-- TODO preview tools -->
+        <!-- TODO preview tools, tools-settings="preview" -->
         <dicom-canvas
           :canvas-id="item.seriesUID"
           :clear-cache-on-destroy="true"
@@ -91,8 +93,13 @@
         />
       </template>
 
-      <!-- TODO -->
-      <slot />
+      <!-- Add a slot for each header item that requires it (component customization) -->
+      <template
+        v-for="h in headers.filter(({ slot }) => slot)"
+        v-slot:[`item.${h.value}`]="{ item }"
+      >
+        <slot v-bind:item="item" :name="h.value" />
+      </template>
     </v-data-table>
   </div>
 </template>
@@ -123,6 +130,7 @@ export default {
     }
   },
   props: {
+    headers: { required: true, type: Array },
     importErrors: { required: false, type: Array },
     series: { required: true, type: Array },
     selectedSeries: { required: true, type: Array },
@@ -139,5 +147,3 @@ export default {
   }
 };
 </script>
-
-<style></style>

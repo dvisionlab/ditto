@@ -1,11 +1,28 @@
 // Import steps configuration
 // --------------------------
 
-// Loaded series table headers
-const defaultTableHeaders = [
-  { sortable: false, text: "", value: "preview" },
-  { sortable: false, text: "series-description", value: "seriesDescription" }
+// Loaded series extracted metadata and table headers
+// TODO all codes?
+const defaultMetadata = [
+  "patientName",
+  "patientSex",
+  "seriesDescription",
+  "seriesModality",
+  "x00080022",
+  "numberOfImages",
+  "sliceThickness"
 ];
+
+const computeHeaders = metadata => {
+  return [
+    { sortable: false, text: "", value: "preview" },
+    ...metadata.map(value => ({
+      sortable: true,
+      text: `metadata-${value}`,
+      value
+    }))
+  ];
+};
 
 // Loaded series actions
 const defaultActions = [
@@ -13,28 +30,28 @@ const defaultActions = [
     disabled: true,
     emitter: "dicom-import-upload",
     hint: "series will be saved in your dashboard",
-    text: "upload series",
-    value: 0
+    storeStacks: false,
+    text: "upload series"
   },
   {
     disabled: true,
     emitter: "dicom-import-upload-and-open",
     hint: "series will be saved in your dashboard",
-    text: "upload series and open viewer",
-    value: 1
+    storeStacks: true,
+    text: "upload series and open viewer"
   },
   {
+    default: true,
     disabled: false,
     emitter: "dicom-import-open",
-    default: true,
     hint:
       "you won't be able to access these series again once the browser session will be lost",
-    text: "open viewer without uploading",
-    value: 2
+    storeStacks: true,
+    text: "open viewer without uploading"
   }
 ];
 
-// TODO remove back/next, review confirm options
+// TODO remove back/next
 const defaultSteps = [
   {
     label: "import-files",
@@ -43,12 +60,11 @@ const defaultSteps = [
     next: series => series.length > 0
   },
   {
+    actions: defaultActions,
     label: "select-series",
     component: () => import("./steps/Step2"),
     back: () => true,
-    next: () => false,
-    actions: defaultActions,
-    tableHeaders: defaultTableHeaders
+    next: () => false
   },
   {
     label: "upload",
@@ -58,7 +74,20 @@ const defaultSteps = [
   }
 ];
 
-export default (options = {}) => {
+// Exports
+// -------
+
+export const getMetadata = options => options.metadata || defaultMetadata;
+
+export const getHeaders = options => {
+  if (options.headers) {
+    return options.headers;
+  }
+
+  return computeHeaders(options.metadata || defaultMetadata);
+};
+
+export const getSteps = (options = {}) => {
   let steps = [...defaultSteps];
   if (options.steps) {
     options.steps.forEach((step, i) => {

@@ -18,6 +18,7 @@
       @dragleave="onDragEnd"
     >
       <div class="text-center text-uppercase ma-auto">
+        <!-- TODO customizable icon -->
         <img :draggable="false" src="/media/images/drag-and-drop.svg" alt="" />
         <h3>drop files and folders here</h3>
         <div class="line-wraps"><span>or</span></div>
@@ -43,7 +44,8 @@ import { parseFiles } from "../../utils";
 export default {
   name: "DicomImportStep1",
   props: {
-    series: { required: true, type: Array }
+    series: { required: true, type: Array },
+    metadata: { required: false, type: Array }
   },
   data: () => ({
     dragging: false,
@@ -68,8 +70,7 @@ export default {
       this.totalSize = this.totalSize + parseFloat(currentSize);
 
       // Get DICOM series
-      // TODO pass extra metadata
-      parseFiles(files).then(({ series, errors }) => {
+      parseFiles(files, this.metadata).then(({ series, errors }) => {
         allErrors.push(...errors);
         this.loading = false;
         this.$emit("new-series", { errors: allErrors, series });
