@@ -1,0 +1,195 @@
+<template>
+  <div class="step-wrapper">
+    <div class="step-header d-flex justify-space-between align-center">
+      <div class="d-flex align-center">
+        <v-btn icon @click="$emit('cancel')">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+        <h3 class="text-uppercase">import exams</h3>
+      </div>
+
+      <div class="d-flex">
+        <v-btn
+          :disabled="!steps[currentStep].back()"
+          text
+          @click="currentStep--"
+        >
+          <v-icon>mdi-chevron-left</v-icon>
+          back
+        </v-btn>
+
+        <!-- TODO review this in step 2 -->
+        <!-- TODO remove back/next -->
+        <v-btn
+          color="primary"
+          :disabled="!steps[currentStep].next(series)"
+          @click="currentStep++"
+        >
+          {{ series.length }} series detected
+          <v-icon v-if="steps[currentStep].next(series)"
+            >mdi-chevron-right</v-icon
+          >
+        </v-btn>
+
+        <div v-if="steps[currentStep].actions" class="ml-2">
+          <v-menu offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="primary--text"
+                :elevation="0"
+                v-bind="attrs"
+                v-on="on"
+              >
+                {{ selectedAction ? selectedAction.text : "---" }}
+                <v-icon>mdi-chevron-down</v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="item in steps[currentStep].actions"
+                :key="item.value"
+                :disabled="item.disabled"
+                link
+                @click="selectedAction = item"
+              >
+                <v-list-item-content>
+                  <v-list-item-title class="text-uppercase">{{
+                    item.text
+                  }}</v-list-item-title>
+                  <v-list-item-subtitle>{{ item.hint }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+          <v-btn
+            color="primary"
+            :disabled="selectedSeries.length <= 0"
+            :elevation="0"
+            @click="onAction"
+          >
+            confirm
+          </v-btn>
+        </div>
+      </div>
+    </div>
+
+    <div :class="['step-content', `step-${currentStep + 1}`]">
+      <component
+        :is="`import-step-${currentStep + 1}`"
+        class="h-100"
+        :import-errors="errors"
+        :series="series"
+        :selected-series="selectedSeries"
+        :step="steps[currentStep]"
+        @new-series="onNewSeries"
+        @select-series="onSelectSeries"
+      >
+        <!-- TODO pass custom slots -->
+      </component>
+    </div>
+  </div>
+</template>
+
+<script>
+import getSteps from "./steps";
+import { mergeSeries } from "@/js/utils.dicoms";
+
+const ImportStep1 = () => import("./steps/Step1");
+const ImportStep2 = () => import("./steps/Step2");
+const ImportStep3 = () => import("./steps/Step3");
+
+export default {
+  name: "DicomImportSteps",
+  components: {
+    ImportStep1,
+    ImportStep2,
+    ImportStep3
+  },
+  props: {
+    options: { default: () => ({}), type: Object }
+  },
+  data() {
+    const steps = getSteps(this.options);
+    return {
+      currentStep: 0,
+      errors: [],
+      series: [],
+      selectedSeries: [],
+      steps
+    };
+  },
+  computed: {
+    selectedAction: {
+      get() {
+        const actions = this.steps[this.currentStep].actions;
+        return actions ? actions.find(a => !a.disabled) : null;
+      },
+      set(value) {
+        this.selectedAction = value;
+      }
+    }
+  },
+  methods: {
+    onAction() {
+      this.$emit(this.selectedAction.emitter, this.selectedSeries);
+    },
+    onNewSeries({ errors, series }) {
+      this.errors = [...this.errors, ...errors];
+
+      // Check if series are new or merge same series
+      series.forEach(s => {
+        const index = this.series.findIndex(_s => _s.seriesUID == s.seriesUID);
+        if (index >= 0) {
+          // merge information
+          this.$set(this.series, index, mergeSeries(this.series[index], s));
+        } else {
+          this.series.push(s);
+        }
+      });
+
+      this.series.forEach(s =>
+        this.selectedSeries.push({ seriesUID: s.seriesUID })
+      );
+
+      this.currentStep++;
+    },
+    onSelectSeries(event) {
+      if (event.value) {
+        this.selectedSeries.push({ seriesUID: event.item.seriesUID });
+      } else {
+        this.selectedSeries = this.selectedSeries.filter(
+          v => v.seriesUID !== event.item.seriesUID
+        );
+      }
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+$header-height: 6em;
+
+.step-wrapper {
+  height: 80vh;
+  max-height: 100%;
+  background: white;
+}
+
+.step-header {
+  height: $header-height;
+
+  & > div {
+    padding: 1em;
+  }
+}
+
+.step-content {
+  background: var(--v-grey-base);
+  height: calc(100% - #{$header-height});
+  overflow: auto;
+
+  &.step-3 > div {
+    padding: 1em;
+  }
+}
+</style>
