@@ -58,7 +58,6 @@ export default {
     const stack = this.stack || getSeriesStack(this.seriesId);
     if (stack) {
       renderSeries(this.validCanvasId, stack);
-      // TODO pass tools directly
       addTools(this.validCanvasId, this.tools);
     } else {
       console.warn("Series stack not available for canvas", this.validCanvasId);

@@ -77,7 +77,6 @@
       <template v-slot:[`item.preview`]="{ item }">
         <!-- clear-on-destroy is true when series is not selected (user discard from open/updload) -->
         <!-- TODO LT always clear-on-destroy if upload without opening in viewer -->
-        <!-- TODO preview tools, tools-settings="preview" -->
         <dicom-canvas
           :canvas-id="item.seriesUID"
           :clear-cache-on-destroy="true"
@@ -89,7 +88,7 @@
           :series-id="item.seriesUID"
           :stack="item"
           :style="{ width: '10em', height: '10em' }"
-          :tools="[]"
+          :tools="tools"
         />
       </template>
 
@@ -134,7 +133,8 @@ export default {
     importErrors: { required: false, type: Array },
     series: { required: true, type: Array },
     selectedSeries: { required: true, type: Array },
-    step: { required: true, type: Object }
+    step: { required: true, type: Object },
+    tools: { required: false, type: Array }
   },
   data: () => ({
     showErrorDetails: false,

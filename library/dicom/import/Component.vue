@@ -85,6 +85,7 @@
         :series="series"
         :selected-series="selectedSeries"
         :step="steps[currentStep]"
+        :tools="tools"
         @new-series="onNewSeries"
         @select-series="onSelectSeries"
       >
@@ -101,7 +102,7 @@
 </template>
 
 <script>
-import { getHeaders, getMetadata, getSteps } from "./steps";
+import { getCanvasTools, getHeaders, getMetadata, getSteps } from "./options";
 import { mergeSeries, storeSeriesStack } from "@/js/utils.dicoms";
 
 const ImportStep1 = () => import("./steps/Step1");
@@ -126,7 +127,8 @@ export default {
       metadata: getMetadata(this.options),
       series: [],
       selectedSeries: [],
-      steps: getSteps(this.options)
+      steps: getSteps(this.options),
+      tools: getCanvasTools(this.options)
     };
   },
   computed: {
@@ -140,6 +142,8 @@ export default {
       const stacks = this.selectedSeries.map(({ seriesUID }) =>
         this.series.find(s => s.seriesUID == seriesUID)
       );
+
+      // TODO check stacks when selecting the same series twice
 
       // Store series stack in larvitar
       if (this.selectedAction.storeStacks) {
