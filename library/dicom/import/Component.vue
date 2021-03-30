@@ -104,7 +104,7 @@
 
 <script>
 import { getCanvasTools, getHeaders, getMetadata, getSteps } from "./options";
-import { mergeSeries, storeSeriesStack } from "@/js/utils.dicoms";
+import { mergeSeries, storeSeriesStack } from "../utils";
 
 const ImportStep1 = () => import("./steps/Step1");
 const ImportStep2 = () => import("./steps/Step2");
