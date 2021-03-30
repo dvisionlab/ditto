@@ -32,7 +32,9 @@
           <b>
             <a
               :disabled="loading"
-              @click="$router.replace({ name: 'login', query: { email } })"
+              @click="
+                $router.replace({ name: 'login', query: { email: form.email } })
+              "
             >
               <v-icon color="anchor">mdi-chevron-left</v-icon>
               Back to login
@@ -64,23 +66,26 @@ export default {
         type: "email"
       }
     ],
-    form: {}
+    form: {
+      email: null
+    }
   }),
   created() {
-    this.email = this.$route.query.email || null;
+    this.form.email = this.$route.query.email || null;
   },
   methods: {
     submit() {
       this.loading = true;
 
       Vue.$http.auth
-        .requestPasswordReset(this.email)
+        .requestPasswordReset(this.form.email)
         .then(() => {
           this.$router.replace({
             name: "login",
             query: {
               // TODO translation: An email with password reset instructions has been sent to your email address.
-              alertMessage: "send-forgot-password-email-success"
+              alertMessage: "send-forgot-password-email-success",
+              email: this.form.email
             }
           });
         })

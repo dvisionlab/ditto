@@ -104,6 +104,9 @@ export default {
     ],
     form: {}
   }),
+  created() {
+    this.form.email = this.$route.query.email || null;
+  },
   methods: {
     dismissAlert() {
       // eslint-disable-next-line no-unused-vars
@@ -119,22 +122,27 @@ export default {
         .then(() => this.$router.replace(`${this.authRoot}/`))
         .catch(error => {
           let details = "";
-          if (error.body.email || error.body.password) {
-            if (error.body.email) {
-              details += `${this.$t("email")}:<br />`;
-              details += error.body.email.join("<br />");
-            }
+          if (error.body) {
+            if (error.body.email || error.body.password) {
+              if (error.body.email) {
+                details += `${this.$t("email")}:<br />`;
+                details += error.body.email.join("<br />");
+              }
 
-            if (error.body.password) {
-              error.body.email ? (details += "<br /><br />") : null;
-              details += `${this.$t("password")}:<br />`;
-              details += error.body.password.join("<br />");
+              if (error.body.password) {
+                error.body.email ? (details += "<br /><br />") : null;
+                details += `${this.$t("password")}:<br />`;
+                details += error.body.password.join("<br />");
+              }
+            } else {
+              details =
+                error.body.detail ||
+                `ERROR ${error.status} - ${error.statusText}`;
             }
           } else {
-            details =
-              error.body.detail ||
-              `ERROR ${error.status} - ${error.statusText}`;
+            details = error;
           }
+
           this.error = details;
         })
         .finally(() => (this.loading = false));
@@ -147,7 +155,7 @@ export default {
     resetPassword() {
       this.$router.replace({
         name: "forgot-password",
-        query: { email: this.email }
+        query: { email: this.form.email }
       });
     }
   }
