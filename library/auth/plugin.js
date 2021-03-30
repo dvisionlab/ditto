@@ -7,6 +7,7 @@ import persist from "./persist";
 
 // Local variables
 const defaultOptions = {
+  accountPanel: true,
   addTrailingSlashInterceptor: false,
   allowPasswordReset: true,
   allowUserRegistration: true,
@@ -79,5 +80,12 @@ export default {
 
     // Register auth vuex module
     options.store.registerModule("auth", store);
+
+    // Register components
+    if (options.accountPanel) {
+      Vue.component("ditto-auth-account-panel", () =>
+        import("./components/AccountPanel")
+      );
+    }
   }
 };
