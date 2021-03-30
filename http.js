@@ -1,4 +1,4 @@
-// Import/export httpw modules
+// Import/export http modules
 
 import http from "./library/http/plugin";
 export default http;
