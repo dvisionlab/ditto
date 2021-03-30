@@ -13,10 +13,7 @@ const REQUEST_OPTIONS = {
 // ---------
 
 // Generate random string
-const getRandomString = () =>
-  Math.random()
-    .toString(36)
-    .substring(2);
+const getRandomString = () => Math.random().toString(36).substring(2);
 
 // Append params to endpoint
 const getUrl = (endpoint, params, useRandomString = true) => {

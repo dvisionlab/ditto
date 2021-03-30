@@ -14,9 +14,7 @@
         <h2 class="text-uppercase text-center primary--text my-4">
           {{ $t("change-password") }}
         </h2>
-        <p class="text-center">
-          Please enter a new password.
-        </p>
+        <p class="text-center">Please enter a new password.</p>
 
         <div :style="{ minHeight: '4em' }">
           <v-alert v-if="error" dense outlined type="error">

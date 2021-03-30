@@ -90,7 +90,7 @@ export const getRoutes = options => {
 export const getBeforeEachGuard = options => {
   // meta.guest = true ==> solo utenti non autenticati
   // meta.auth = true ==> solo utenti autenticati
-  return async function(to, from, next) {
+  return async function (to, from, next) {
     if (
       alreadyAutoLoggedIn == false &&
       to.matched.some(record => record.meta.autoLogin)
