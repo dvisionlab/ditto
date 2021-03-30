@@ -15,12 +15,12 @@
         </h2>
         <div>TODO</div>
 
-        <div :style="{ minHeight: '4em' }">
+        <div>
           <v-alert v-if="error" dense outlined type="error">
             <span v-html="error" />
           </v-alert>
 
-          <div v-else class="error-placeholder" />
+          <!-- <div v-else class="error-placeholder" /> -->
         </div>
       </template>
 

@@ -46,13 +46,14 @@
     <div class="d-flex flex-wrap align-center mt-4" :style="footerStyle">
       <v-btn
         class="flex-grow-1"
+        color="primary"
         :disabled="loading || !valid"
         :elevation="0"
         :loading="loading"
         x-large
         type="submit"
       >
-        <span class="primary--text">{{ submitLabel }}</span>
+        <span>{{ submitLabel }}</span>
       </v-btn>
 
       <slot name="footer" v-bind:value="value" />

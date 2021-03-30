@@ -10,20 +10,20 @@
       @submit="submit"
     >
       <template v-slot:header>
-        <h2 class="text-uppercase text-center primary--text my-4">
+        <h2 class="text-uppercase primary--text my-4">
           {{ $t("reset-password") }}
         </h2>
-        <p class="text-center ma-0">
+        <p class="ma-0 mb-4">
           Please enter your email address. You will receive a link to create a
           new password via email.
         </p>
 
-        <div :style="{ minHeight: '4em' }">
+        <div>
           <v-alert v-if="error" dense outlined type="error">
             <span v-html="error" />
           </v-alert>
 
-          <div v-else class="error-placeholder" />
+          <!-- <div v-else class="error-placeholder" /> -->
         </div>
       </template>
 
@@ -58,7 +58,7 @@ export default {
     error: null,
     fields: [
       {
-        appendIcon: "mdi-email",
+        // appendIcon: "mdi-email",
         autofocus: true,
         label: "email",
         key: "email",
