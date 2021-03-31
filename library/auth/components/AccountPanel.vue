@@ -1,14 +1,21 @@
 <template>
   <!-- personal account panel -->
-  <v-menu v-if="user" :offset-x="offsetX" :offset-y="offsetY" tile>
+  <v-menu
+    v-if="user"
+    :offset-x="offsetX"
+    :offset-y="offsetY"
+    open-on-hover
+    tile
+  >
     <template v-slot:activator="{ on, attrs }">
       <slot v-bind="{ on, attrs }">
         <!-- default slot content -->
         <v-btn height="100%" text v-bind="attrs" v-on="on">
           <div class="text-center lh-small">
             <v-icon :color="iconColor">{{ icon }}</v-icon>
-            <div>
+            <div class="d-flex align-center">
               <b :class="`${iconColor}--text`">{{ label }}</b>
+              <v-icon :color="iconColor" small>mdi-chevron-down</v-icon>
             </div>
           </div>
         </v-btn>

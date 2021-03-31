@@ -1,26 +1,35 @@
 <template>
-  <v-dialog max-width="1200px" width="95wv" v-model="showDialog">
+  <!-- TODO manage @click:outside -->
+  <v-dialog max-width="1200px" width="95wv" v-model="visible">
     <template v-slot:activator="{ on, attrs }">
-      <div v-bind="attrs" v-on="on">
-        <slot v-bind="{ on, attrs }">
-          <!-- default slot content -->
-          <v-btn height="100%" text v-bind="attrs" v-on="on">
-            <div class="text-center lh-small">
-              <v-icon class="mb-1" color="accent">{{ icon }}</v-icon>
-              <div class="lh-small">
-                <b>{{ label }}</b>
-              </div>
+      <slot v-bind="{ on, attrs }">
+        <!-- default slot content -->
+
+        <v-btn height="100%" text v-bind="attrs" v-on="on">
+          <div class="text-center lh-small">
+            <v-badge bordered overlap :value="minimizedSeries">
+              <template v-slot:badge>
+                <span>{{ minimizedSeries }}</span>
+              </template>
+
+              <v-icon>{{ icon }}</v-icon>
+            </v-badge>
+            <div>
+              <b>{{ label }}</b>
             </div>
-          </v-btn>
-        </slot>
-      </div>
+          </div>
+        </v-btn>
+      </slot>
     </template>
 
     <dicom-import
-      v-if="showDialog"
+      v-if="isOpen || minimizedSeries"
+      :icon="icon"
+      :label="label"
       :options="options"
+      @cancel="isOpen = false"
       @dicom-import-open="data => $emit('dicom-import-open', data)"
-      @cancel="showDialog = false"
+      @minimize="minimize"
     >
       <!-- Add a slot for each header item that requires it (component customization) -->
       <template
@@ -45,9 +54,34 @@ export default {
     options: { default: () => ({}), type: Object }
   },
   data: () => ({
-    showDialog: false
-  })
+    isOpen: false,
+    minimizedSeries: 0
+  }),
+  computed: {
+    visible: {
+      get() {
+        return this.isOpen;
+      },
+      set(value) {
+        this.minimizedSeries = 0;
+        this.isOpen = value;
+      }
+    }
+  },
+  methods: {
+    minimize(n) {
+      this.minimizedSeries = n;
+      this.isOpen = false;
+    }
+  }
 };
 </script>
 
-<style></style>
+<style scoped>
+::v-deep .v-badge__badge {
+  height: 15px;
+  min-width: 15px;
+  font-size: x-small;
+  padding: 3px;
+}
+</style>

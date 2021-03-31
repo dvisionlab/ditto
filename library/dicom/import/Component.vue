@@ -1,21 +1,19 @@
 <template>
   <div class="step-wrapper">
-    <div class="step-header d-flex justify-space-between align-center">
-      <div class="d-flex align-center">
-        <v-btn icon @click="$emit('cancel')">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-        <h3 class="text-uppercase">import exams</h3>
+    <div class="step-header d-flex justify-space-between">
+      <div class="d-flex align-center px-3">
+        <v-icon color="black">{{ icon }}</v-icon>
+        <h3 class="text-uppercase lh-small px-3">{{ label }}</h3>
       </div>
 
-      <div class="d-flex">
+      <div class="d-flex align-center">
         <v-btn
           :disabled="!steps[currentStep].back()"
           text
           @click="currentStep--"
         >
           <v-icon>mdi-chevron-left</v-icon>
-          back
+          <span class="pr-2">back</span>
         </v-btn>
 
         <div v-if="steps[currentStep].actions">
@@ -56,7 +54,7 @@
             :elevation="0"
             @click="onAction"
           >
-            confirm
+            <span class="pl-2">confirm</span>
             <v-icon>mdi-chevron-right</v-icon>
           </v-btn>
         </div>
@@ -72,6 +70,17 @@
             >mdi-chevron-right</v-icon
           >
         </v-btn>
+
+        <v-divider class="px-3" vertical></v-divider>
+
+        <div class="px-3 modal-controllers">
+          <v-btn icon x-small @click="$emit('minimize', selectedSeries.length)">
+            <v-icon>mdi-minus</v-icon>
+          </v-btn>
+          <v-btn icon x-small @click="$emit('cancel')">
+            <v-icon>mdi-window-close</v-icon>
+          </v-btn>
+        </div>
       </div>
     </div>
 
@@ -118,6 +127,8 @@ export default {
     ImportStep3
   },
   props: {
+    icon: { default: "mdi-upload-multiple", type: String },
+    label: { default: "import-exams", type: String },
     options: { default: () => ({}), type: Object }
   },
   data() {
@@ -206,7 +217,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$header-height: 6em;
+$header-height: 5.5em;
 
 .step-wrapper {
   height: 80vh;
@@ -216,10 +227,7 @@ $header-height: 6em;
 
 .step-header {
   height: $header-height;
-
-  & > div {
-    padding: 1em;
-  }
+  border-bottom: 1px solid var(--v-grey-base);
 }
 
 .step-content {
@@ -229,6 +237,18 @@ $header-height: 6em;
 
   &.step-3 > div {
     padding: 1em;
+  }
+}
+
+.modal-controllers {
+  overflow: hidden;
+
+  .v-btn::before {
+    background-color: transparent;
+  }
+  .v-btn i:hover {
+    color: var(--v-primary-base);
+    transform: scale(1.15);
   }
 }
 </style>
