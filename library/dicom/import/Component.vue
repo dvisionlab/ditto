@@ -105,7 +105,7 @@
       <modal-controllers
         class="flex-shrink-0 align-self-center"
         @cancel="$emit('cancel')"
-        @minimize="$emit('minimize', selectedSeries.length)"
+        @minimize="$emit('minimize')"
       />
     </div>
 

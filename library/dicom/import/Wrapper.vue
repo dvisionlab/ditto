@@ -1,6 +1,11 @@
 <template>
-  <!-- TODO manage @click:outside -->
-  <v-dialog max-width="1200px" width="95wv" v-model="visible">
+  <v-dialog
+    max-width="1200px"
+    persistent
+    width="95wv"
+    v-model="visible"
+    @click:outside="() => minimize()"
+  >
     <template v-slot:activator="{ on, attrs }">
       <slot v-bind="{ on, attrs }">
         <!-- default slot content -->
@@ -27,6 +32,7 @@
       :icon="icon"
       :label="label"
       :options="options"
+      ref="content"
       @cancel="isOpen = false"
       @dicom-import-open="data => $emit('dicom-import-open', data)"
       @minimize="minimize"
@@ -69,8 +75,8 @@ export default {
     }
   },
   methods: {
-    minimize(n) {
-      this.minimizedSeries = n;
+    minimize() {
+      this.minimizedSeries = this.$refs.content.selectedSeries.length;
       this.isOpen = false;
     }
   }
