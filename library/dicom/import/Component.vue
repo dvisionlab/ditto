@@ -178,6 +178,13 @@ export default {
       this.currentStep++;
     },
     onSelectSeries(event) {
+      if (event.items) {
+        event.items.forEach(item =>
+          this.onSelectSeries({ item, value: event.value })
+        );
+        return;
+      }
+
       if (event.value) {
         this.selectedSeries.push({ seriesUID: event.item.seriesUID });
       } else {

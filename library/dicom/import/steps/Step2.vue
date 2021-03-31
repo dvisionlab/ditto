@@ -57,6 +57,7 @@
       show-select
       :value="selectedSeries"
       @item-selected="event => $emit('select-series', event)"
+      @toggle-select-all="event => $emit('select-series', event)"
     >
       <template v-slot:[`group.header`]="{ items }">
         <td
