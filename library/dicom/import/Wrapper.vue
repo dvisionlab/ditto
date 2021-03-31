@@ -22,7 +22,13 @@
       @dicom-import-open="data => $emit('dicom-import-open', data)"
       @cancel="showDialog = false"
     >
-      <!-- TODO custom slots -->
+      <!-- Add a slot for each header item that requires it (component customization) -->
+      <template
+        v-for="h in (options.headers || []).filter(({ slot }) => slot)"
+        v-slot:[h.value]="{ item }"
+      >
+        <slot v-bind:item="item" :name="h.value" />
+      </template>
     </dicom-import>
   </v-dialog>
 </template>
@@ -36,7 +42,7 @@ export default {
   props: {
     icon: { default: "mdi-upload-multiple", type: String },
     label: { default: "import-exams", type: String },
-    options: { required: false, type: Object }
+    options: { default: () => ({}), type: Object }
   },
   data: () => ({
     showDialog: false
