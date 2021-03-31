@@ -21,6 +21,7 @@ export default async (Vue, options) => {
   // import component
   if (options.import) {
     Vue.component("ditto-dicom-import", () => import("./import/Component"));
+    Vue.component("ditto-dicom-import-modal", () => import("./import/Wrapper"));
   }
 
   // expose utilities functions

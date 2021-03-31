@@ -8,7 +8,7 @@
           <div class="text-center lh-small">
             <v-icon :color="iconColor">{{ icon }}</v-icon>
             <div>
-              <b :class="`${iconColor}--text`">{{ title }}</b>
+              <b :class="`${iconColor}--text`">{{ label }}</b>
             </div>
           </div>
         </v-btn>
@@ -38,10 +38,10 @@ export default {
   name: "AccountPanel",
   props: {
     icon: { default: "mdi-account", type: String },
+    label: { default: "account", type: String },
     offsetX: { default: true, type: Boolean },
     offsetY: { default: false, type: Boolean },
-    settingsRoute: { required: false, type: String },
-    title: { default: "account", type: String }
+    settingsRoute: { required: false, type: String }
   },
   computed: {
     iconColor() {

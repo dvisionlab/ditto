@@ -12,6 +12,9 @@ const defaultCanvasTools = [
 const defaultMetadata = [
   "patientName",
   "patientSex",
+  "x00100030",
+  "studyUID",
+  "studyDescription",
   "seriesDescription",
   "seriesModality",
   "x00080022",
@@ -92,7 +95,9 @@ export const getHeaders = options => {
     return options.headers;
   }
 
-  return computeHeaders(options.metadata || defaultMetadata);
+  return computeHeaders(
+    options.metadata || defaultMetadata.filter(v => v !== "studyDescription")
+  );
 };
 
 export const getSteps = (options = {}) => {
