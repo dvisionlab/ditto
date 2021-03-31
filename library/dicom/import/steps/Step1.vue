@@ -10,15 +10,24 @@
 
     <div
       v-if="!loading"
-      class="d-flex dropzone pa-4"
+      class="d-flex flex-column justify-center dropzone pa-4"
       :class="{ dragging, 'primary--text': dragging }"
       @drop.prevent.stop="loadSeries"
       @dragover.prevent.stop="onDragOver"
       @dragend="onDragEnd"
       @dragleave="onDragEnd"
     >
-      <div class="text-center text-uppercase ma-auto">
-        <img :draggable="false" :src="icon" alt="" />
+      <v-img
+        class="mx-auto flex-shrink-1 drop-icon"
+        contain
+        :draggable="false"
+        max-height="350px"
+        max-width="400px"
+        width="100%"
+        :src="icon"
+      />
+
+      <div class="mx-auto text-center text-uppercase">
         <h3>drop files and folders here</h3>
         <div class="line-wraps"><span>or</span></div>
         <v-btn block color="primary" @click="$refs.inputFile.click()">
@@ -97,6 +106,12 @@ export default {
 
   &.dragging {
     opacity: 0.5;
+  }
+
+  .drop-icon {
+    @media (max-height: 600px) {
+      display: none;
+    }
   }
 }
 
