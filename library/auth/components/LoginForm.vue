@@ -9,11 +9,11 @@
       @submit="submit"
     >
       <template v-slot:header>
-        <h2 class="text-uppercase text-center primary--text my-4">
+        <h2 class="text-uppercase primary--text my-4">
           {{ $t("login") }}
         </h2>
 
-        <div :style="{ minHeight: '4em' }">
+        <div>
           <template v-if="alertMessage || error">
             <v-alert
               v-if="alertMessage"
@@ -32,14 +32,14 @@
             </v-alert>
           </template>
 
-          <div v-else class="error-placeholder" />
+          <!-- <div v-else class="error-placeholder" /> -->
         </div>
       </template>
 
       <template v-slot:footer>
         <div class="mt-6 text-right" :style="{ 'flex-basis': '100%' }">
           <div v-if="allowPasswordReset">
-            <a @click="resetPassword">Forgot Password?</a>
+            <a @click="resetPassword"><b>Forgot Password?</b></a>
           </div>
           <div v-if="allowUserRegistration">
             New here?
@@ -87,7 +87,7 @@ export default {
     error: null,
     fields: [
       {
-        appendIcon: "mdi-email",
+        // appendIcon: "mdi-email",
         autofocus: true,
         label: "email",
         key: "email",
@@ -95,7 +95,7 @@ export default {
         type: "email"
       },
       {
-        appendIcon: "mdi-lock",
+        // appendIcon: "mdi-lock",
         label: "password",
         key: "password",
         required: () => true,

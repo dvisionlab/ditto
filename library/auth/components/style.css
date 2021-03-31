@@ -7,11 +7,11 @@ a:hover {
   opacity: 0.75;
 }
 
-.error-placeholder {
+/* .error-placeholder {
   border-bottom: 1px dashed rgba(0, 0, 0, 0.42);
   padding-top: 1em;
   width: 100%;
-}
+} */
 
 .w-50 {
   width: 50%;

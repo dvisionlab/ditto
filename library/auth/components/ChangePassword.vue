@@ -11,17 +11,17 @@
       @submit="submit"
     >
       <template v-slot:header>
-        <h2 class="text-uppercase text-center primary--text my-4">
+        <h2 class="text-uppercase primary--text my-4">
           {{ $t("change-password") }}
         </h2>
-        <p class="text-center">Please enter a new password.</p>
+        <p class="ma-0 mb-4">Please enter a new password.</p>
 
-        <div :style="{ minHeight: '4em' }">
+        <div>
           <v-alert v-if="error" dense outlined type="error">
             <span v-html="error" />
           </v-alert>
 
-          <div v-else class="error-placeholder" />
+          <!-- <div v-else class="error-placeholder" /> -->
         </div>
       </template>
 
@@ -77,7 +77,7 @@ export default {
           type: this.hiddenPassword ? "password" : "text"
         },
         {
-          appendIcon: "mdi-lock",
+          // appendIcon: "mdi-lock",
           label: "confirm password",
           key: "confirmPassword",
           required: () => true,
