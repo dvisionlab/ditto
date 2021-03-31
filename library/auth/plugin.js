@@ -87,5 +87,15 @@ export default {
         import("./components/AccountPanel")
       );
     }
+
+    // Sync accessToken localStorage value between tabs
+    window.addEventListener("storage", e => {
+      if (e.key === "access-token") {
+        if (!e.newValue) {
+          // automatically log out
+          options.forceLogout();
+        }
+      }
+    });
   }
 };

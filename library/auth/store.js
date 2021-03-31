@@ -1,6 +1,3 @@
-// TODO
-// - localStorage or sessionStorage
-
 // Dependencies
 import Vue from "vue";
 import persist from "./persist";
