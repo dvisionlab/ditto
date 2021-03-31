@@ -9,12 +9,12 @@ const defaultCanvasTools = [
 
 // Loaded series extracted metadata and table headers
 // TODO all codes?
+const patientMetadata = ["patientName", "x00100030", "patientSex"];
+const studyMetadata = ["studyUID", "studyDescription"];
+
 const defaultMetadata = [
-  "patientName",
-  "patientSex",
-  "x00100030",
-  "studyUID",
-  "studyDescription",
+  ...patientMetadata,
+  ...studyMetadata,
   "seriesDescription",
   "seriesModality",
   "x00080022",
@@ -95,9 +95,25 @@ export const getHeaders = options => {
     return options.headers;
   }
 
-  return computeHeaders(
-    options.metadata || defaultMetadata.filter(v => v !== "studyDescription")
+  if (options.metadata) {
+    return computeHeaders(
+      options.metadata.filter(v => !studyMetadata.find(vv => vv == v))
+    );
+  }
+
+  const omit = [...patientMetadata, ...studyMetadata];
+  let headers = computeHeaders(
+    defaultMetadata.filter(v => !omit.find(vv => vv == v))
   );
+  // Add patient header
+  headers.splice(1, 0, {
+    keys: patientMetadata,
+    sortable: false,
+    text: "patient",
+    value: "patient"
+  });
+
+  return headers;
 };
 
 export const getSteps = (options = {}) => {

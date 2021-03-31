@@ -91,6 +91,10 @@
         />
       </template>
 
+      <template v-if="!patientHeader.slot" v-slot:[`item.patient`]="{ item }">
+        <div v-for="key in patientHeader.keys" :key="key">{{ item[key] }}</div>
+      </template>
+
       <!-- Add a slot for each header item that requires it (component customization) -->
       <template
         v-for="h in headers.filter(({ slot }) => slot)"
@@ -119,9 +123,12 @@ export default {
     step: { required: true, type: Object },
     tools: { required: false, type: Array }
   },
-  data: () => ({
-    showErrorDetails: false,
-    tableHeight: "100%"
-  })
+  data() {
+    return {
+      patientHeader: this.headers.find(h => h.value == "patient"),
+      showErrorDetails: false,
+      tableHeight: "100%"
+    };
+  }
 };
 </script>
