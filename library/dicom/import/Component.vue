@@ -253,7 +253,9 @@ export default {
 $min-header-height: 5.5em;
 
 .step-wrapper {
-  height: 80vh;
+  height: 80vh; /* Fallback for browsers that do not support Custom Properties */
+  height: calc(var(--vh, 1vh) * 80);
+
   max-height: 100%;
   background: white;
 }
