@@ -1,6 +1,6 @@
 <template>
   <!-- personal account panel -->
-  <v-menu v-if="user" open-on-hover tile v-bind="options">
+  <v-menu v-if="user" :open-on-hover="openOnHover" tile v-bind="options">
     <template v-slot:activator="{ on, attrs }">
       <slot v-bind="{ on, attrs }">
         <!-- default slot content -->
@@ -42,6 +42,7 @@ export default {
     icon: { default: "mdi-account", type: String },
     label: { default: "account", type: String },
     settingsRoute: { required: false, type: String },
+    openOnHover: { default: false, type: Boolean },
     title: { default: "account", type: String }
   },
   computed: {

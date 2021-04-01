@@ -69,7 +69,7 @@
             items[0].studyDescription || "[missing study description]"
           }}</b>
 
-          | <b>{{ items.length }} series</b>
+          | <b class="primary--text">{{ items.length }} series</b>
         </td>
       </template>
 

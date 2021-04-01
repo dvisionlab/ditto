@@ -9,15 +9,20 @@
     <template v-slot:activator="{ on, attrs }">
       <slot v-bind="{ on, attrs }">
         <!-- default slot content -->
-
-        <v-btn height="100%" text v-bind="attrs" v-on="on">
+        <v-btn
+          :class="activatorClass"
+          height="100%"
+          text
+          v-bind="attrs"
+          v-on="on"
+        >
           <div class="text-center lh-small">
-            <v-badge bordered overlap :value="minimizedSeries">
+            <v-badge bordered :color="badgeColor" overlap :value="minimizedSeries">
               <template v-slot:badge>
                 <span>{{ minimizedSeries }}</span>
               </template>
 
-              <v-icon>{{ icon }}</v-icon>
+              <v-icon class="mb-1" :color="iconColor">{{ icon }}</v-icon>
             </v-badge>
             <div>
               <b>{{ label }}</b>
@@ -55,7 +60,10 @@ export default {
   name: "DicomImportModal",
   components: { DicomImport },
   props: {
+    activatorClass: { required: false, type: String },
+    badgeColor: { default: "primary", type: String },
     icon: { default: "mdi-upload-multiple", type: String },
+    iconColor: { required: false, type: String },
     label: { default: "import-exams", type: String },
     options: { default: () => ({}), type: Object }
   },
