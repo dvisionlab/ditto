@@ -9,15 +9,21 @@ const defaultCanvasTools = [
 
 // Loaded series extracted metadata and table headers
 // TODO all codes?
+const patientMetadata = ["patientName", "x00100030", "patientSex"];
+const studyMetadata = ["studyUID", "studyDescription"];
+
 const defaultMetadata = [
-  "patientName",
-  "patientSex",
+  ...patientMetadata,
+  ...studyMetadata,
+  "seriesUID",
   "seriesDescription",
   "seriesModality",
   "x00080022",
   "numberOfImages",
   "sliceThickness"
 ];
+
+const requiredMetadata = ["studyUID", "studyDescription", "seriesUID"];
 
 const computeHeaders = metadata => {
   return [
@@ -85,14 +91,44 @@ const defaultSteps = [
 
 export const getCanvasTools = options => options.tools || defaultCanvasTools;
 
-export const getMetadata = options => options.metadata || defaultMetadata;
+export const getMetadata = options => {
+  if (options.metadata) {
+    // Add required keys if missing
+    requiredMetadata.forEach(key => {
+      if (!options.metadata.find(value => key == value)) {
+        options.metadata.push(key);
+      }
+    });
+    return options.metadata;
+  }
+
+  return defaultMetadata;
+};
 
 export const getHeaders = options => {
   if (options.headers) {
     return options.headers;
   }
 
-  return computeHeaders(options.metadata || defaultMetadata);
+  if (options.metadata) {
+    return computeHeaders(
+      options.metadata.filter(v => !studyMetadata.find(vv => vv == v))
+    );
+  }
+
+  const omit = [...patientMetadata, ...requiredMetadata];
+  let headers = computeHeaders(
+    defaultMetadata.filter(v => !omit.find(vv => vv == v))
+  );
+  // Add patient header
+  headers.splice(1, 0, {
+    keys: patientMetadata,
+    sortable: false,
+    text: "patient",
+    value: "patient"
+  });
+
+  return headers;
 };
 
 export const getSteps = (options = {}) => {

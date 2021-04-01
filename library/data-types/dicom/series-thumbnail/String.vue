@@ -15,7 +15,7 @@ export default {
       type: String
     },
     width: {
-      default: "8em",
+      default: "6em",
       type: String
     }
   }

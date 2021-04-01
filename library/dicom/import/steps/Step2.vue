@@ -57,6 +57,7 @@
       show-select
       :value="selectedSeries"
       @item-selected="event => $emit('select-series', event)"
+      @toggle-select-all="event => $emit('select-series', event)"
     >
       <template v-slot:[`group.header`]="{ items }">
         <td
@@ -68,7 +69,7 @@
             items[0].studyDescription || "[missing study description]"
           }}</b>
 
-          | <b>{{ items.length }} series</b>
+          | <b class="primary--text">{{ items.length }} series</b>
         </td>
       </template>
 
@@ -89,6 +90,10 @@
           :style="{ width: '10em', height: '10em' }"
           :tools="tools"
         />
+      </template>
+
+      <template v-if="!patientHeader.slot" v-slot:[`item.patient`]="{ item }">
+        <div v-for="key in patientHeader.keys" :key="key">{{ item[key] }}</div>
       </template>
 
       <!-- Add a slot for each header item that requires it (component customization) -->
@@ -119,9 +124,12 @@ export default {
     step: { required: true, type: Object },
     tools: { required: false, type: Array }
   },
-  data: () => ({
-    showErrorDetails: false,
-    tableHeight: "100%"
-  })
+  data() {
+    return {
+      patientHeader: this.headers.find(h => h.value == "patient"),
+      showErrorDetails: false,
+      tableHeight: "100%"
+    };
+  }
 };
 </script>

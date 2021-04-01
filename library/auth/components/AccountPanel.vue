@@ -1,21 +1,22 @@
 <template>
   <!-- personal account panel -->
-  <v-menu v-if="user" :offset-x="offsetX" :offset-y="offsetY" tile>
+  <v-menu v-if="user" :open-on-hover="openOnHover" tile v-bind="options">
     <template v-slot:activator="{ on, attrs }">
       <slot v-bind="{ on, attrs }">
         <!-- default slot content -->
         <v-btn height="100%" text v-bind="attrs" v-on="on">
           <div class="text-center lh-small">
             <v-icon :color="iconColor">{{ icon }}</v-icon>
-            <div>
-              <b :class="`${iconColor}--text`">{{ title }}</b>
+            <div class="d-flex align-center">
+              <b :class="`${iconColor}--text`">{{ label }}</b>
+              <v-icon :color="iconColor" small>mdi-chevron-down</v-icon>
             </div>
           </div>
         </v-btn>
       </slot>
     </template>
 
-    <v-card flat tile>
+    <v-card color="grey" flat tile>
       <v-card-title class="d-inline-block">
         <span class="text-capitalize">{{ user.firstname }}</span>
         &nbsp;
@@ -37,10 +38,11 @@
 export default {
   name: "AccountPanel",
   props: {
+    direction: { required: false, type: String },
     icon: { default: "mdi-account", type: String },
-    offsetX: { default: true, type: Boolean },
-    offsetY: { default: false, type: Boolean },
+    label: { default: "account", type: String },
     settingsRoute: { required: false, type: String },
+    openOnHover: { default: false, type: Boolean },
     title: { default: "account", type: String }
   },
   computed: {
@@ -48,6 +50,25 @@ export default {
       return this.settingsRoute && this.$route.name == this.settingsRoute
         ? "accent"
         : "inherit";
+    },
+    options() {
+      let result = {};
+
+      switch (this.direction) {
+        case "bottom":
+          result["offset-y"] = true;
+          break;
+
+        case "right":
+          result["offset-x"] = true;
+          result["top"] = true;
+          break;
+
+        default:
+          break;
+      }
+
+      return result;
     },
     user() {
       return this.$store.state.auth.user;
