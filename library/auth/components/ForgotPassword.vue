@@ -1,5 +1,5 @@
 <template>
-  <div class="w-50 mx-auto">
+  <div class="mx-auto">
     <ditto-form
       :fields="fields"
       :fields-style="{ 'flex-basis': '100%' }"
