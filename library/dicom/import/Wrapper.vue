@@ -17,7 +17,12 @@
           v-on="on"
         >
           <div class="text-center lh-small">
-            <v-badge bordered :color="badgeColor" overlap :value="minimizedSeries">
+            <v-badge
+              bordered
+              :color="badgeColor"
+              overlap
+              :value="minimizedSeries"
+            >
               <template v-slot:badge>
                 <span>{{ minimizedSeries }}</span>
               </template>
