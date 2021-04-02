@@ -18,9 +18,9 @@
 
     <v-card color="grey" flat tile>
       <v-card-title class="d-inline-block">
-        <span class="text-capitalize">{{ user.firstname }}</span>
+        <span class="text-capitalize">{{ user.first_name }}</span>
         &nbsp;
-        <span class="text-capitalize">{{ user.lastname }}</span>
+        <span class="text-capitalize">{{ user.last_name }}</span>
       </v-card-title>
       <v-card-subtitle>{{ user.email }}</v-card-subtitle>
       <v-divider></v-divider>
