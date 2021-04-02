@@ -5,6 +5,7 @@
       clipped-left
       clipped-right
       :color="bar.color"
+      :dark="bar.dark"
       flat
       :height="bar.height"
     >
@@ -72,7 +73,7 @@ export default {
   },
   methods: {
     show(name) {
-      return this.components.find(v => v == name);
+      return (this.components || []).find(v => v == name);
     }
   }
 };

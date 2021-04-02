@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     show(name) {
-      return this.components.find(v => v == name);
+      return (this.components || []).find(v => v == name);
     }
   }
 };
