@@ -25,6 +25,7 @@ export const getRoutes = options => {
           path: "",
           name: "login",
           component: LoginForm,
+          meta: { guest: true },
           props: route => ({
             ...route.query,
             allowPasswordReset: options.allowPasswordReset,
@@ -38,13 +39,12 @@ export const getRoutes = options => {
       ? {
           component: Wrapper,
           path: `${options.authRoot}/forgot-password`,
-          meta: {
-            guest: true
-          },
+          meta: { guest: true },
           children: [
             {
               path: "",
               name: "forgot-password",
+              meta: { guest: true },
               component: () => import("./components/ForgotPassword")
             }
           ]
@@ -54,13 +54,12 @@ export const getRoutes = options => {
       ? {
           component: Wrapper,
           path: `${options.authRoot}/reset-password/:uid/:token`,
-          meta: {
-            guest: true
-          },
+          meta: { guest: true },
           children: [
             {
               path: "",
               name: "reset-password",
+              meta: { guest: true },
               component: () => import("./components/ChangePassword"),
               props: true
             }
@@ -71,13 +70,12 @@ export const getRoutes = options => {
       ? {
           component: Wrapper,
           path: `${options.authRoot}/register`,
-          meta: {
-            guest: true
-          },
+          meta: { guest: true },
           children: [
             {
               path: "",
               name: "register",
+              meta: { guest: true },
               component: () => import("./components/SignUp") // TODO
             }
           ]
