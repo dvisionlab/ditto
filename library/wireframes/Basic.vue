@@ -48,20 +48,18 @@
       app
       clipped
       :color="navLeft.color"
+      :dark="navLeft.dark"
       :mobile-breakpoint="mobileBreakpoint"
-      :style="{
-        height: `calc(calc(var(--vh, 1vh) * 100) - ${$vuetify.application.top}px)`,
-        top: `${$vuetify.application.top}px`
-      }"
+      :style="navStyle"
       :width="navLeft.width"
       v-model="navLeftVisible"
     >
-      <router-view name="nav-left" />
+      <router-view :dark="navLeft.dark" name="nav-left" />
 
       <template v-slot:append>
         <v-btn block text @click="navLeftVisible = !navLeftVisible">
           <v-spacer />
-          <v-icon color="accent">mdi-chevron-left</v-icon>
+          <v-icon :dark="navLeft.dark">mdi-chevron-left</v-icon>
         </v-btn>
       </template>
     </v-navigation-drawer>
@@ -72,20 +70,18 @@
       app
       clipped
       :color="navRight.color"
+      :dark="navRight.dark"
       :mobile-breakpoint="mobileBreakpoint"
       right
-      :style="{
-        height: `calc(calc(var(--vh, 1vh) * 100) - ${$vuetify.application.top}px)`,
-        top: `${$vuetify.application.top}px`
-      }"
+      :style="navStyle"
       :width="navRight.width"
       v-model="navRightVisible"
     >
-      <router-view name="nav-right" />
+      <router-view :dark="navRight.dark" name="nav-right" />
 
       <template v-slot:append>
         <v-btn block text @click="navRightVisible = !navRightVisible">
-          <v-icon color="accent">mdi-chevron-right</v-icon>
+          <v-icon :dark="navRight.dark">mdi-chevron-right</v-icon>
           <v-spacer />
         </v-btn>
       </template>
@@ -109,24 +105,30 @@
       v-if="show('nav-left') && !navLeftVisible"
       v-slot:navigation-drawer-toggler-left
     >
-      <a
-        class="d-flex align-middle navigation-drawer-toggler"
+      <div
+        class="navigation-drawer-toggler"
+        :style="navStyle"
         @click="navLeftVisible = !navLeftVisible"
       >
-        <v-icon color="accent">mdi-chevron-right</v-icon>
-      </a>
+        <a class="d-flex align-middle">
+          <v-icon>mdi-chevron-right</v-icon>
+        </a>
+      </div>
     </template>
 
     <template
       v-if="show('nav-right') && !navRightVisible"
       v-slot:navigation-drawer-toggler-right
     >
-      <a
-        class="d-flex align-middle navigation-drawer-toggler right"
+      <div
+        class="navigation-drawer-toggler right"
+        :style="navStyle"
         @click="navRightVisible = !navRightVisible"
       >
-        <v-icon color="accent">mdi-chevron-left</v-icon>
-      </a>
+        <a class="d-flex align-middle">
+          <v-icon>mdi-chevron-left</v-icon>
+        </a>
+      </div>
     </template>
   </wireframe-wrapper>
 </template>
@@ -152,6 +154,12 @@ export default {
     };
   },
   computed: {
+    navStyle() {
+      return {
+        height: `calc(calc(var(--vh, 1vh) * 100) - ${this.$vuetify.application.top}px)`,
+        top: `${this.$vuetify.application.top}px`
+      };
+    },
     components() {
       const route = this.$router.options.routes.find(
         r => r.name == this.$route.name
@@ -180,19 +188,22 @@ export default {
 
 .navigation-drawer-toggler {
   position: absolute;
-  top: 50%;
-
-  height: 4rem;
-  background: var(--v-grey-base);
-  border-bottom-right-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
+  display: flex;
 
   &.right {
     right: 0;
-    border-bottom-right-radius: 0rem;
-    border-top-right-radius: 0rem;
-    border-bottom-left-radius: 0.5rem;
-    border-top-left-radius: 0.5rem;
+  }
+
+  a {
+    margin: auto;
+    height: 4rem;
+    background: var(--v-grey-base);
+    opacity: 0.75;
+
+    &:hover {
+      opacity: 1;
+      cursor: pointer;
+    }
   }
 }
 </style>
