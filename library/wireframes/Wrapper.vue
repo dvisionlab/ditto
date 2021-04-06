@@ -1,7 +1,13 @@
 <template>
   <v-app>
     <router-view v-if="$route.meta.guest" />
-    <slot v-else />
+    <template v-else>
+      <slot />
+
+      <!-- root elements -->
+      <slot name="navigation-drawer-toggler-left" />
+      <slot name="navigation-drawer-toggler-right" />
+    </template>
   </v-app>
 </template>
 
