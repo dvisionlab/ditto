@@ -9,30 +9,37 @@
     <template v-slot:activator="{ on, attrs }">
       <slot v-bind="{ on, attrs }">
         <!-- default slot content -->
+        <v-list-item v-if="mobile" v-bind="attrs" v-on="on">
+          <v-list-item-icon>
+            <activator-content
+              :badge-color="badgeColor"
+              class="text-center lh-small"
+              :icon="icon"
+              :icon-color="iconColor"
+              :minimized-series="minimizedSeries"
+            />
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>{{ label }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
         <v-btn
+          v-else
           :class="activatorClass"
           height="100%"
           text
           v-bind="attrs"
           v-on="on"
         >
-          <div class="text-center lh-small">
-            <v-badge
-              bordered
-              :color="badgeColor"
-              overlap
-              :value="minimizedSeries"
-            >
-              <template v-slot:badge>
-                <span>{{ minimizedSeries }}</span>
-              </template>
-
-              <v-icon class="mb-1" :color="iconColor">{{ icon }}</v-icon>
-            </v-badge>
-            <div>
-              <b>{{ label }}</b>
-            </div>
-          </div>
+          <activator-content
+            :badge-color="badgeColor"
+            class="text-center lh-small"
+            :icon="icon"
+            :icon-color="iconColor"
+            :label="label"
+            :minimized-series="minimizedSeries"
+          />
         </v-btn>
       </slot>
     </template>
@@ -60,16 +67,18 @@
 
 <script>
 import DicomImport from "./Component";
+import ActivatorContent from "./Activator";
 
 export default {
   name: "DicomImportModal",
-  components: { DicomImport },
+  components: { ActivatorContent, DicomImport },
   props: {
     activatorClass: { required: false, type: String },
     badgeColor: { default: "primary", type: String },
     icon: { default: "mdi-upload-multiple", type: String },
     iconColor: { required: false, type: String },
     label: { default: "import-exams", type: String },
+    mobile: { default: false, type: Boolean },
     options: { default: () => ({}), type: Object }
   },
   data: () => ({

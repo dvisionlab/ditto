@@ -1,17 +1,48 @@
 <template>
   <wireframe-wrapper>
+    <!-- top menu -->
     <v-app-bar
       app
       clipped-left
       clipped-right
       :color="bar.color"
       :dark="bar.dark"
+      dense
       flat
       :height="bar.height"
     >
-      <router-view class="d-flex flex-grow-1 align-center h-100" name="bar" />
+      <v-btn
+        v-if="$vuetify.breakpoint[mobileBreakpoint]"
+        height="100%"
+        text
+        @click="mobileMenuVisible = !mobileMenuVisible"
+      >
+        <div class="text-center lh-small">
+          <v-icon>mdi-menu</v-icon>
+          <b class="d-flex align-center">menu</b>
+        </div>
+      </v-btn>
+
+      <router-view
+        v-else
+        class="d-flex flex-grow-1 align-center h-100"
+        name="bar"
+      />
     </v-app-bar>
 
+    <!-- mobile top menu -->
+    <v-navigation-drawer
+      v-if="$vuetify.breakpoint[mobileBreakpoint]"
+      app
+      class="sm-menu"
+      clipped
+      :dark="bar.dark"
+      v-model="mobileMenuVisible"
+    >
+      <v-list><router-view :dark="bar.dark" mobile name="bar" /></v-list>
+    </v-navigation-drawer>
+
+    <!-- left navigation drawer -->
     <v-navigation-drawer
       v-if="show('nav-left')"
       app
@@ -35,6 +66,7 @@
       </template>
     </v-navigation-drawer>
 
+    <!-- right navigation drawer -->
     <v-navigation-drawer
       v-if="show('nav-right')"
       app
@@ -59,7 +91,7 @@
       </template>
     </v-navigation-drawer>
 
-    <!-- Sizes your content based upon application components -->
+    <!-- main content -->
     <v-main>
       <v-container class="h-100 pa-0" fluid>
         <!-- router default component -->
@@ -67,12 +99,16 @@
       </v-container>
     </v-main>
 
+    <!-- footer -->
     <v-footer v-if="show('footer')" app :height="footer.height">
       <router-view name="footer" />
     </v-footer>
 
     <!-- togglers -->
-    <template v-if="!navLeftVisible" v-slot:navigation-drawer-toggler-left>
+    <template
+      v-if="show('nav-left') && !navLeftVisible"
+      v-slot:navigation-drawer-toggler-left
+    >
       <a
         class="d-flex align-middle navigation-drawer-toggler"
         @click="navLeftVisible = !navLeftVisible"
@@ -81,7 +117,10 @@
       </a>
     </template>
 
-    <template v-if="!navRightVisible" v-slot:navigation-drawer-toggler-right>
+    <template
+      v-if="show('nav-right') && !navRightVisible"
+      v-slot:navigation-drawer-toggler-right
+    >
       <a
         class="d-flex align-middle navigation-drawer-toggler right"
         @click="navRightVisible = !navRightVisible"
@@ -93,10 +132,10 @@
 </template>
 
 <script>
-import WireframeWrapper from "./Wrapper";
+import WireframeWrapper from "./common/Wrapper";
 
 export default {
-  name: "DoubleNavigationWireframe",
+  name: "BasicWireframe",
   components: { WireframeWrapper },
   props: {
     bar: { default: () => ({}), type: Object },
@@ -107,6 +146,7 @@ export default {
   },
   data() {
     return {
+      mobileMenuVisible: false,
       navLeftVisible: !this.$vuetify.breakpoint[this.mobileBreakpoint],
       navRightVisible: !this.$vuetify.breakpoint[this.mobileBreakpoint]
     };
@@ -132,6 +172,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep .sm-menu {
+  .v-list-item__title {
+    text-transform: uppercase;
+  }
+}
+
 .navigation-drawer-toggler {
   position: absolute;
   top: 50%;

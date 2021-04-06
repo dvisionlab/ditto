@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import WireframeWrapper from "./Wrapper";
+import WireframeWrapper from "./common/Wrapper";
 
 export default {
   name: "BasicWireframe",
