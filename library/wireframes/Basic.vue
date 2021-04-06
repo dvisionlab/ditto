@@ -11,17 +11,24 @@
       flat
       :height="bar.height"
     >
-      <v-btn
-        v-if="$vuetify.breakpoint[mobileBreakpoint]"
-        height="100%"
-        text
-        @click="mobileMenuVisible = !mobileMenuVisible"
-      >
-        <div class="text-center lh-small">
-          <v-icon>mdi-menu</v-icon>
-          <b class="d-flex align-center">menu</b>
-        </div>
-      </v-btn>
+      <template v-if="$vuetify.breakpoint[mobileBreakpoint]">
+        <v-btn
+          height="100%"
+          text
+          @click="mobileMenuVisible = !mobileMenuVisible"
+        >
+          <div class="text-center lh-small">
+            <v-icon>mdi-menu</v-icon>
+            <!-- <b class="d-flex align-center">menu</b> -->
+          </div>
+        </v-btn>
+
+        <component
+          v-if="bar.mobileMenuComponent"
+          :is="bar.mobileMenuComponent"
+          class="pl-0"
+        />
+      </template>
 
       <router-view
         v-else
@@ -39,7 +46,14 @@
       :dark="bar.dark"
       v-model="mobileMenuVisible"
     >
-      <v-list><router-view :dark="bar.dark" mobile name="bar" /></v-list>
+      <v-list class="h-100">
+        <router-view
+          class="h-100 d-flex flex-column"
+          :dark="bar.dark"
+          mobile
+          name="bar"
+        />
+      </v-list>
     </v-navigation-drawer>
 
     <!-- left navigation drawer -->
@@ -181,6 +195,10 @@ export default {
 
 <style lang="scss" scoped>
 ::v-deep .sm-menu {
+  .v-list-item {
+    flex: 0 1 auto;
+  }
+
   .v-list-item__title {
     text-transform: uppercase;
   }
