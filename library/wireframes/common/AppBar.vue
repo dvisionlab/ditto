@@ -12,15 +12,15 @@
     <template v-if="$vuetify.breakpoint[mobileBreakpoint]">
       <v-btn height="100%" text @click="$emit('toggle-mobile-menu')">
         <div class="text-center lh-small">
-          <v-icon>mdi-menu</v-icon>
-          <!-- <b class="d-flex align-center">menu</b> -->
+          <v-icon>{{ `mdi-${mobileMenuVisible ? "close" : "menu"}` }}</v-icon>
+          <span class="d-flex align-center text-caption">menu</span>
         </div>
       </v-btn>
 
       <component
         v-if="mobileMenuComponent"
         :is="mobileMenuComponent"
-        class="pl-0"
+        class="pl-1"
       />
     </template>
 
@@ -43,6 +43,7 @@ export default {
     left: { default: true, type: Boolean },
     mobileBreakpoint: { default: "xs", type: String },
     mobileMenuComponent: { required: false, type: Function },
+    mobileMenuVisible: { default: false, type: Boolean },
     right: { default: true, type: Boolean }
   }
 };

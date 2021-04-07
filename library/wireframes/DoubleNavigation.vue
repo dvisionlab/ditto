@@ -9,6 +9,7 @@
       :left="false"
       :mobile-breakpoint="mobileBreakpoint"
       :mobile-menu-component="bar.mobileMenuComponent"
+      :mobile-menu-visible="mobileMenuVisible"
       @toggle-mobile-menu="mobileMenuVisible = !mobileMenuVisible"
     />
 
