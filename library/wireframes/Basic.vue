@@ -7,7 +7,7 @@
       clipped-right
       :color="bar.color"
       :dark="bar.dark"
-      dense
+      :dense="bar.dense"
       flat
       :height="bar.height"
     >

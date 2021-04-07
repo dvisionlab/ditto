@@ -9,6 +9,7 @@
     <template v-slot:activator="{ on, attrs }">
       <slot v-bind="{ on, attrs }">
         <!-- default slot content -->
+        <!-- mobile -->
         <v-list-item v-if="mobile" v-bind="attrs" v-on="on">
           <v-list-item-icon>
             <activator-content
@@ -24,6 +25,7 @@
           </v-list-item-content>
         </v-list-item>
 
+        <!-- desktop -->
         <v-btn
           v-else
           :class="activatorClass"

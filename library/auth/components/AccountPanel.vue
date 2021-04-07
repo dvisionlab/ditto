@@ -1,5 +1,6 @@
 <template>
   <!-- personal account panel -->
+  <!-- mobile -->
   <v-list-item v-if="user && mobile">
     <v-list-item-icon>
       <v-icon :color="iconColor">{{ icon }}</v-icon>
@@ -29,11 +30,18 @@
     </v-list-item-content>
   </v-list-item>
 
+  <!-- desktop -->
   <v-menu v-else-if="user" :open-on-hover="openOnHover" tile v-bind="options">
     <template v-slot:activator="{ on, attrs }">
       <slot v-bind="{ on, attrs }">
         <!-- default slot content -->
-        <v-btn height="100%" text v-bind="attrs" v-on="on">
+        <v-btn
+          :class="activatorClass"
+          height="100%"
+          text
+          v-bind="attrs"
+          v-on="on"
+        >
           <div class="text-center lh-small">
             <v-icon :color="iconColor">{{ icon }}</v-icon>
             <div class="d-flex align-center">
@@ -45,7 +53,7 @@
       </slot>
     </template>
 
-    <v-card color="grey" :dark="dark" flat tile>
+    <v-card :dark="dark" flat tile>
       <v-card-title class="d-inline-block">
         <span class="text-capitalize">{{ user.first_name }}</span>
         &nbsp;
@@ -53,7 +61,7 @@
       </v-card-title>
       <v-card-subtitle>{{ user.email }}</v-card-subtitle>
       <v-divider></v-divider>
-      <v-card-actions class=" ">
+      <v-card-actions>
         <v-btn v-if="settingsRoute" color="primary" text :to="settingsRoute">
           Personal settings
         </v-btn>
@@ -67,6 +75,7 @@
 export default {
   name: "AccountPanel",
   props: {
+    activatorClass: { required: false, type: String },
     dark: { default: false, type: Boolean },
     direction: { required: false, type: String },
     icon: { default: "mdi-account", type: String },
@@ -87,6 +96,11 @@ export default {
       switch (this.direction) {
         case "bottom":
           result["offset-y"] = true;
+          break;
+
+        case "bottom-left":
+          result["offset-y"] = true;
+          result["left"] = true;
           break;
 
         case "right":
