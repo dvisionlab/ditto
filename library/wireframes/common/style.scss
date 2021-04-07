@@ -1,0 +1,30 @@
+::v-deep .sm-menu {
+  .v-list-item {
+    flex: 0 1 auto;
+  }
+
+  .v-list-item__title {
+    text-transform: uppercase;
+  }
+}
+
+::v-deep .navigation-drawer-toggler {
+  position: absolute;
+  display: flex;
+
+  &.right {
+    right: 0;
+  }
+
+  a {
+    margin: auto;
+    height: 4rem;
+    background: var(--v-grey-base);
+    opacity: 0.75;
+
+    &:hover {
+      opacity: 1;
+      cursor: pointer;
+    }
+  }
+}

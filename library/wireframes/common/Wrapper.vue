@@ -7,6 +7,7 @@
       <!-- root elements -->
       <slot name="navigation-drawer-toggler-left" />
       <slot name="navigation-drawer-toggler-right" />
+      <slot name="navigation-drawer-toggler-inner" />
     </template>
   </v-app>
 </template>

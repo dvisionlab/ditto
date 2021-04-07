@@ -1,41 +1,62 @@
 <template>
   <wireframe-wrapper>
-    <v-navigation-drawer
-      app
-      :color="nav.color"
+    <!-- top menu -->
+    <app-bar
+      :color="bar.color"
+      :dark="bar.dark"
+      :dense="bar.dense"
+      :height="bar.height"
+      :left="false"
+      :mobile-breakpoint="mobileBreakpoint"
+      :mobile-menu-component="bar.mobileMenuComponent"
+      @toggle-mobile-menu="mobileMenuVisible = !mobileMenuVisible"
+    />
+
+    <!-- mobile top menu -->
+    <mobile-top-menu
+      :dark="bar.dark"
+      :mobile-breakpoint="mobileBreakpoint"
+      :steteless="bar.stateless"
+      v-model="mobileMenuVisible"
+    />
+
+    <!-- left navigation drawer -->
+    <app-navigation
+      v-if="show('nav-left')"
+      :color="navLeft.color"
+      :collapsable="false"
+      :dark="navLeft.dark"
       mini-variant
       :mini-variant-width="nav.width"
-    >
-      <router-view name="nav" />
-    </v-navigation-drawer>
+      :mobile-breakpoint="mobileBreakpoint"
+      :style="navStyle"
+      :width="navLeft.width"
+      v-model="navLeftVisible"
+    />
 
-    <v-app-bar app clipped-right :color="bar.color" flat :height="bar.height">
-      <router-view class="d-flex flex-grow-1 align-center h-100" name="bar" />
-    </v-app-bar>
-
-    <v-navigation-drawer
+    <!-- right navigation drawer -->
+    <app-navigation
       v-if="show('nav-right')"
-      app
-      clipped
+      :clipped="true"
       :color="navRight.color"
-      right
+      :dark="navRight.dark"
+      :mobile-breakpoint="mobileBreakpoint"
+      :right="true"
+      :style="navStyle"
       :width="navRight.width"
-    >
-      <router-view name="nav-right" />
-    </v-navigation-drawer>
+      v-model="navRightVisible"
+    />
 
     <!-- Sizes your content based upon application components -->
     <v-main>
       <v-container class="d-flex h-100 pa-0" fluid>
-        <!-- TODO auto hide on small screens + toggle button -->
-        <v-navigation-drawer
-          v-if="show('nav-left')"
-          :color="navLeft.color"
-          :width="navLeft.width"
-          v-model="drawer"
-        >
-          <router-view name="nav-left" />
-        </v-navigation-drawer>
+        <app-navigation
+          v-if="show('nav-inner')"
+          :color="nav.color"
+          route-name="nav-inner"
+          :width="nav.width"
+          v-model="navVisible"
+        />
 
         <!-- router default component -->
         <router-view />
@@ -45,39 +66,51 @@
     <v-footer v-if="show('footer')" app inset>
       <router-view name="footer" :height="footer.height" />
     </v-footer>
+
+    <!-- togglers -->
+    <template
+      v-if="show('nav-inner') && !navVisible"
+      v-slot:navigation-drawer-toggler-inner
+    >
+      <navigation-toggler
+        :style="navStyle"
+        @toggle="navVisible = !navVisible"
+      />
+    </template>
+
+    <template
+      v-if="show('nav-right') && !navRightVisible"
+      v-slot:navigation-drawer-toggler-right
+    >
+      <navigation-toggler
+        right
+        :style="navStyle"
+        @toggle="navLeftVisible = !navLeftVisible"
+      />
+    </template>
   </wireframe-wrapper>
 </template>
 
 <script>
-import WireframeWrapper from "./common/Wrapper";
+import AppBar from "./common/AppBar";
+import AppNavigation from "./common/Navigation";
+import Common from "./common/mixin";
+import MobileTopMenu from "./common/MobileTopMenu";
+import NavigationToggler from "./common/NavigationToggler";
 
 export default {
   name: "BasicWireframe",
-  components: { WireframeWrapper },
+  mixins: [Common],
+  components: { AppBar, AppNavigation, MobileTopMenu, NavigationToggler },
   props: {
-    bar: { default: () => ({}), type: Object },
-    footer: { default: () => ({}), type: Object },
-    nav: { default: () => ({}), type: Object },
-    navLeft: { default: () => ({}), type: Object },
-    navRight: { default: () => ({}), type: Object }
+    nav: { default: () => ({}), type: Object }
   },
-  data: () => ({ drawer: null }), // TODO show/hide button + automatic on small screens
-  computed: {
-    components() {
-      const route = this.$router.options.routes.find(
-        r => r.name == this.$route.name
-      );
-      if (!route) {
-        return;
-      }
-
-      return Object.keys(route.components || {});
-    }
-  },
-  methods: {
-    show(name) {
-      return (this.components || []).find(v => v == name);
-    }
+  data() {
+    return {
+      navVisible: !this.$vuetify.breakpoint[this.mobileBreakpoint]
+    };
   }
 };
 </script>
+
+<style lang="scss" scoped src="./common/style.scss" />
