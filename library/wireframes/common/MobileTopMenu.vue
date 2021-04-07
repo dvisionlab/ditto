@@ -9,7 +9,7 @@
     :value="value"
     @input="value => $emit('input', value)"
   >
-    <v-list class="h-100">
+    <v-list class="h-100 py-0">
       <router-view
         class="h-100 d-flex flex-column"
         :dark="dark"
