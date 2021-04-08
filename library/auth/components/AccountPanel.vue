@@ -62,10 +62,16 @@
       <v-card-subtitle>{{ user.email }}</v-card-subtitle>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn v-if="settingsRoute" color="primary" text :to="settingsRoute">
+        <v-btn
+          v-if="settingsRoute"
+          color="primary"
+          :dark="dark"
+          text
+          :to="settingsRoute"
+        >
           Personal settings
         </v-btn>
-        <v-btn color="primary" text @click="logout">Log out</v-btn>
+        <v-btn color="primary" :dark="dark" text @click="logout">Log out</v-btn>
       </v-card-actions>
     </v-card>
   </v-menu>

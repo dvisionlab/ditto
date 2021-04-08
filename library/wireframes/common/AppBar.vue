@@ -27,6 +27,7 @@
     <router-view
       v-else
       class="d-flex flex-grow-1 align-center h-100"
+      :dark="dark"
       name="bar"
     />
   </v-app-bar>
