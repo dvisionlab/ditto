@@ -21,15 +21,16 @@ export default async (Vue, options) => {
   }
 
   if (options.dataTypes) {
-    Vue.component("ditto-dicom-data-series-modality", () =>
-      import("../data-types/dicom/series-modality")
-    );
-    Vue.component("ditto-dicom-data-series-thumbnail", () =>
-      import("../data-types/dicom/series-thumbnail")
-    );
-    Vue.component("ditto-dicom-data-slice-thickness", () =>
-      import("../data-types/dicom/slice-thickness")
-    );
+    // TODO + update dv import
+    // Vue.component("ditto-dicom-data-series-modality", () =>
+    //   import("../data-types/dicom/series-modality")
+    // );
+    // Vue.component("ditto-dicom-data-series-thumbnail", () =>
+    //   import("../data-types/dicom/series-thumbnail")
+    // );
+    // Vue.component("ditto-dicom-data-slice-thickness", () =>
+    //   import("../data-types/dicom/slice-thickness")
+    // );
   }
 
   // import component
@@ -41,7 +42,7 @@ export default async (Vue, options) => {
   // series components
   if (options.series) {
     Vue.component("ditto-dicom-series-summary", () =>
-      import("./series/Summary")
+      import("./sop/SeriesSummary.vue")
     );
   }
 
