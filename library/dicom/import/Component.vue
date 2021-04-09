@@ -203,6 +203,7 @@ export default {
       });
 
       this.$emit(this.selectedAction.emitter, emitData);
+      this.$emit("cancel");
     },
     onNewSeries({ errors, series }) {
       this.errors = [...this.errors, ...errors];
