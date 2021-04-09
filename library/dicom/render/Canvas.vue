@@ -60,6 +60,7 @@ export default {
   },
   mounted() {
     const stack = this.stack || getSeriesStack(this.seriesId);
+
     if (stack) {
       renderSeries(this.validCanvasId, stack);
       addTools(this.validCanvasId, this.tools);

@@ -183,15 +183,20 @@ export default {
     }
   },
   methods: {
-    onAction() {
+    async onAction() {
       // List of selected stacks
       const stacks = this.selectedSeries.map(({ seriesUID }) =>
         this.series.find(s => s.seriesUID == seriesUID)
       );
 
       // Store series stack in larvitar
+      // TODO loader
       if (this.selectedAction.storeStacks) {
-        stacks.forEach(stack => storeSeriesStack(stack.seriesUID, stack));
+        await Promise.all(
+          stacks.map(
+            async stack => await storeSeriesStack(stack.seriesUID, stack)
+          )
+        );
       }
 
       // Emit action with stacks data
