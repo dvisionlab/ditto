@@ -21,16 +21,12 @@ export default async (Vue, options) => {
   }
 
   if (options.dataTypes) {
-    // TODO + update dv import
-    // Vue.component("ditto-dicom-data-series-modality", () =>
-    //   import("../data-types/dicom/series-modality")
-    // );
-    // Vue.component("ditto-dicom-data-series-thumbnail", () =>
-    //   import("../data-types/dicom/series-thumbnail")
-    // );
-    // Vue.component("ditto-dicom-data-slice-thickness", () =>
-    //   import("../data-types/dicom/slice-thickness")
-    // );
+    const dicomDataTypes = () => import("../../dicomDataTypes");
+    dicomDataTypes().then(({ default: components }) => {
+      Object.keys(components).forEach(key =>
+        Vue.component(`DittoDataType${key}`, components[key])
+      );
+    });
   }
 
   // import component
