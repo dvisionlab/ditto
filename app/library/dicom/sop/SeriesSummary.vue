@@ -8,7 +8,7 @@
       clear-cache-on-destroy
       clear-on-destroy
       :series-id="data.seriesUID"
-      :style="{ minHeight: '6em' }"
+      :style="{ height: '10em', width: '100%' }"
       :tools="tools"
     />
 
