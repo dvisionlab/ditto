@@ -6,7 +6,7 @@ const routes = [
   {
     path: "/basic-wireframe",
     name: "basic-wireframe",
-    component: () => import("./examples/wireframes/BasicWireframe")
+    component: () => import("@/examples/wireframes/BasicWireframe")
   }
 ];
 
