@@ -190,12 +190,11 @@ export default {
       );
 
       // Store series stack in larvitar
-      // TODO loader
-      // TODO don't wait for all instances cache
       if (this.selectedAction.storeStacks) {
-        await Promise.all(
-          stacks.map(
-            async stack => await storeSeriesStack(stack.seriesUID, stack)
+        stacks.forEach(stack =>
+          storeSeriesStack(stack.seriesUID, stack, progress =>
+            // TODO LT upadate progress in state
+            console.log("progress", stack.seriesUID, progress)
           )
         );
       }

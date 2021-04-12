@@ -73,7 +73,6 @@ export default {
     // disable larvitar canvas
     // TODO LT not working, pass this.$refs.canvas?
     disableCanvas(this.validCanvasId);
-    // TODO LT preserve previous viewport settings?
     deleteViewport(this.validCanvasId);
 
     if (this.clearOnDestroy) {

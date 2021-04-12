@@ -19,7 +19,7 @@ export const addTools = (elementId, tools) => {
 // Remove viewport data from larvitar stores
 export const clearSeriesData = (seriesId, clearCache = false) => {
   lt.larvitar_store.removeSeriesIds(seriesId);
-  lt.removeSeriesFromDicomManager(seriesId);
+  lt.removeSeriesFromLarvitarManager(seriesId);
 
   // TODO LT evaluate when clearing cache
   if (clearCache) {
@@ -90,9 +90,7 @@ export const parseFiles = (files, extractMetadata = []) => {
 
 // Use Larvitar to render a series into a canvas
 export const renderSeries = (elementId, seriesStack) => {
-  console.log("addViewport", elementId);
   lt.larvitar_store.addViewport(elementId);
-  console.log("renderImage", seriesStack);
   lt.renderImage(seriesStack, elementId);
 };
 
@@ -118,13 +116,12 @@ export const setup = store => {
 };
 
 // Call the Larvitar "populateLarvitarManager" function
-export const storeSeriesStack = (seriesId, stack) => {
-  return new Promise(resolve =>
-    lt.populateLarvitarManager(seriesId, stack, data => {
-      console.log("populateLarvitarManager", data);
-      if (data.loading === 100) {
-        resolve();
-      }
-    })
-  );
+export const storeSeriesStack = (seriesId, stack, onProgress) => {
+  lt.populateLarvitarManager(seriesId, stack, data => {
+    console.log("populateLarvitarManager", data.loading);
+    // if (data.loading === 100) {
+    //   onProgress(data.loading);
+    // }
+    onProgress(data.loading);
+  });
 };
