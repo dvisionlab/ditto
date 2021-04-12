@@ -1,5 +1,5 @@
 <template>
-  <div class="p-relative d-flex w-100 h-100 black">
+  <div class="d-flex w-100 h-100 black" :style="{ position: 'relative' }">
     <v-icon v-if="error" class="ma-auto" dark>
       mdi-alert-decagram-outline
     </v-icon>
@@ -60,6 +60,7 @@ export default {
   },
   mounted() {
     const stack = this.stack || getSeriesStack(this.seriesId);
+
     if (stack) {
       renderSeries(this.validCanvasId, stack);
       addTools(this.validCanvasId, this.tools);

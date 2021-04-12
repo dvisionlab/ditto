@@ -40,7 +40,10 @@ export const disableCanvas = element => {
 };
 
 // Return series stack stored in larvitar dicom manager
-export const getSeriesStack = seriesId => lt.dicomManager[seriesId];
+export const getSeriesStack = seriesId => {
+  const stack = lt.dicomManager[seriesId];
+  return Object.keys(stack).length !== 0 ? stack : null;
+};
 
 // Merge parsed files with previous parsed files if the instance uids matches
 export const mergeSeries = (...series) => {
