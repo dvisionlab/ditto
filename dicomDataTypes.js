@@ -1,9 +1,9 @@
 // Import/export dicom data types modules
 
-import seriesAcquisitionDateComponents from "./library/data-types/dicom/series-acquisition-date";
-import seriesModalityComponents from "./library/data-types/dicom/series-modality";
-import seriesThumbnailComponents from "./library/data-types/dicom/series-thumbnail";
-import sliceThicknessComponents from "./library/data-types/dicom/slice-thickness";
+import seriesAcquisitionDateComponents from "./app/library/data-types/dicom/series-acquisition-date";
+import seriesModalityComponents from "./app/library/data-types/dicom/series-modality";
+import seriesThumbnailComponents from "./app/library/data-types/dicom/series-thumbnail";
+import sliceThicknessComponents from "./app/library/data-types/dicom/slice-thickness";
 
 const components = {
   SeriesAcquisitionDate: seriesAcquisitionDateComponents,
