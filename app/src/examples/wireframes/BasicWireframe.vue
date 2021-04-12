@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { BasicWireframe } from "../../../../wireframes";
+import BasicWireframe from "@/../library/wireframes/Basic";
 // console.log(BasicWireframe);
 // const wireframeOptions = {
 //   bar: { dark: true, mobileMenuComponent: () => import("@/components/Logo") },
