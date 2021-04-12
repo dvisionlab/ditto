@@ -1,19 +1,21 @@
 <template>
-  <basic-wireframe />
+  <basic-wireframe :options="options" />
 </template>
 
 <script>
 import BasicWireframe from "@/../library/wireframes/Basic";
-// console.log(BasicWireframe);
-// const wireframeOptions = {
-//   bar: { dark: true, mobileMenuComponent: () => import("@/components/Logo") },
-//   "nav-left": { dark: false, width: 200 }
-// };
+const options = {
+  bar: { dark: true, mobileMenuComponent: () => import("@/components/Logo") },
+  "nav-left": { dark: false, width: 200 }
+};
 
 export default {
   name: "BasicWireframeExample",
   components: {
     BasicWireframe
-  }
+  },
+  data: () => ({
+    options
+  })
 };
 </script>

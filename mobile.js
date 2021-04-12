@@ -1,7 +1,7 @@
 // Import/export mobile modules
 
-import * as fullscreenUtils from "./library/mobile/fullscreen";
-import viewportMixin from "./library/mobile/viewportMixin";
+import * as fullscreenUtils from "./app/library/mobile/fullscreen";
+import viewportMixin from "./app/library/mobile/viewportMixin";
 
 export default Vue => {
   // add instance method

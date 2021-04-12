@@ -1,4 +1,4 @@
 // Import/export auth modules
 
-import auth from "./library/auth/plugin";
+import auth from "./app/library/auth/plugin";
 export default auth;
