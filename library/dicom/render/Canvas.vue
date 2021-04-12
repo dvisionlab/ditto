@@ -60,6 +60,8 @@ export default {
   },
   mounted() {
     const stack = this.stack || getSeriesStack(this.seriesId);
+    // TODO LT what if stack is caching?
+    console.log("stack.imageIds.length", stack.imageIds.length);
 
     if (stack) {
       renderSeries(this.validCanvasId, stack);
@@ -87,6 +89,7 @@ export default {
   },
   methods: {
     onResize() {
+      // console.log("on resize", this.$refs.canvas.offsetHeight);
       resizeViewport(this.validCanvasId);
     }
   }

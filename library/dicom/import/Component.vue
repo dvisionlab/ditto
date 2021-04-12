@@ -192,9 +192,17 @@ export default {
       // Store series stack in larvitar
       if (this.selectedAction.storeStacks) {
         stacks.forEach(stack =>
-          storeSeriesStack(stack.seriesUID, stack, progress =>
-            // TODO LT upadate progress in state
-            console.log("progress", stack.seriesUID, progress)
+          storeSeriesStack(
+            stack.seriesUID,
+            stack,
+            () => {}
+            // progress =>
+            //   // TODO LT upadate progress in state, but link progress to series, not viewport
+            //   console.log("progress", stack.seriesUID, progress)
+            // // this.$store.dispatch("larvitar/setLoadingProgress", [
+            // //   stack.seriesUID,
+            // //   progress
+            // // ])
           )
         );
       }

@@ -19,6 +19,7 @@ export const addTools = (elementId, tools) => {
 // Remove viewport data from larvitar stores
 export const clearSeriesData = (seriesId, clearCache = false) => {
   lt.larvitar_store.removeSeriesIds(seriesId);
+  // TODO LT omit is not defined
   lt.removeSeriesFromLarvitarManager(seriesId);
 
   // TODO LT evaluate when clearing cache
@@ -41,8 +42,8 @@ export const disableCanvas = element => {
 
 // Return series stack stored in larvitar dicom manager
 export const getSeriesStack = seriesId => {
-  const stack = lt.dicomManager[seriesId];
-  return Object.keys(stack).length !== 0 ? stack : null;
+  const stack = lt.getSeriesDataFromLarvitarManager(seriesId);
+  return stack && Object.keys(stack).length !== 0 ? stack : null;
 };
 
 // Merge parsed files with previous parsed files if the instance uids matches
@@ -117,11 +118,5 @@ export const setup = store => {
 
 // Call the Larvitar "populateLarvitarManager" function
 export const storeSeriesStack = (seriesId, stack, onProgress) => {
-  lt.populateLarvitarManager(seriesId, stack, data => {
-    console.log("populateLarvitarManager", data.loading);
-    // if (data.loading === 100) {
-    //   onProgress(data.loading);
-    // }
-    onProgress(data.loading);
-  });
+  lt.populateLarvitarManager(seriesId, stack, data => onProgress(data.loading));
 };
