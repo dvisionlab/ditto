@@ -5,7 +5,7 @@
 <script>
 import BasicWireframe from "@/../library/wireframes/Basic";
 const options = {
-  bar: { dark: true, mobileMenuComponent: () => import("@/components/Logo") },
+  bar: { dark: true },
   "nav-left": { dark: false, width: 200 }
 };
 
