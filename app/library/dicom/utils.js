@@ -90,7 +90,9 @@ export const parseFiles = (files, extractMetadata = []) => {
 
 // Use Larvitar to render a series into a canvas
 export const renderSeries = (elementId, seriesStack) => {
+  console.log("addViewport", elementId);
   lt.larvitar_store.addViewport(elementId);
+  console.log("renderImage", seriesStack);
   lt.renderImage(seriesStack, elementId);
 };
 
@@ -115,9 +117,14 @@ export const setup = store => {
   lt.initializeCSTools();
 };
 
-// Call the Larvitar "populateDicomManager" function
+// Call the Larvitar "populateLarvitarManager" function
 export const storeSeriesStack = (seriesId, stack) => {
   return new Promise(resolve =>
-    lt.populateDicomManager(seriesId, stack, () => resolve())
+    lt.populateLarvitarManager(seriesId, stack, data => {
+      console.log("populateLarvitarManager", data);
+      if (data.loading === 100) {
+        resolve();
+      }
+    })
   );
 };

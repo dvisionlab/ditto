@@ -191,6 +191,7 @@ export default {
 
       // Store series stack in larvitar
       // TODO loader
+      // TODO don't wait for all instances cache
       if (this.selectedAction.storeStacks) {
         await Promise.all(
           stacks.map(
