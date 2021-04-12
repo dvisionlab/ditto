@@ -1,26 +1,19 @@
 // Import steps configuration
 // --------------------------
 
+import { stackMetadata, stackTools } from "../defaults";
+
 // Preview canvas tools
-const defaultCanvasTools = [
-  { name: "Wwwc", configuration: {} },
-  { name: "StackScrollMouseWheel", configuration: {} }
-];
+const defaultCanvasTools = stackTools.preview;
 
 // Loaded series extracted metadata and table headers
-// TODO all codes?
-const patientMetadata = ["patientName", "x00100030", "patientSex"];
-const studyMetadata = ["studyUID", "studyDescription"];
+const patientMetadata = stackMetadata.patient;
+const studyMetadata = stackMetadata.study;
 
 const defaultMetadata = [
   ...patientMetadata,
   ...studyMetadata,
-  "seriesUID",
-  "seriesDescription",
-  "seriesModality",
-  "x00080022",
-  "numberOfImages",
-  "sliceThickness"
+  ...stackMetadata.series
 ];
 
 const requiredMetadata = ["studyUID", "studyDescription", "seriesUID"];

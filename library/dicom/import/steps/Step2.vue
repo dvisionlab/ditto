@@ -19,11 +19,6 @@
         <div v-if="!series.length">
           Unfortunately none of your files can be loaded: please check your
           files complies with the DICOM standard fromat.
-          <div class="mt-2">
-            <v-btn color="red lighten-2" dark @click="currentStep--">
-              Try again
-            </v-btn>
-          </div>
         </div>
 
         <div v-if="importErrors.length">
