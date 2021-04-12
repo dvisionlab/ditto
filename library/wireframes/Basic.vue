@@ -22,7 +22,7 @@
 
     <!-- left navigation drawer -->
     <app-navigation
-      v-if="show('nav-left')"
+      v-if="show('nav-left') && navLeft.visible !== false"
       :color="navLeft.color"
       :dark="navLeft.dark"
       :mobile-breakpoint="mobileBreakpoint"
@@ -33,7 +33,7 @@
 
     <!-- right navigation drawer -->
     <app-navigation
-      v-if="show('nav-right')"
+      v-if="show('nav-right') && navRight.visible !== false"
       :clipped="true"
       :color="navRight.color"
       :dark="navRight.dark"
@@ -59,7 +59,7 @@
 
     <!-- togglers -->
     <template
-      v-if="show('nav-left') && !navLeftVisible"
+      v-if="show('nav-left') && navLeft.visible !== false && !navLeftVisible"
       v-slot:navigation-drawer-toggler-left
     >
       <navigation-toggler
@@ -69,7 +69,7 @@
     </template>
 
     <template
-      v-if="show('nav-right') && !navRightVisible"
+      v-if="show('nav-right') && navRight.visible !== false && !navRightVisible"
       v-slot:navigation-drawer-toggler-right
     >
       <navigation-toggler
