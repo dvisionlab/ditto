@@ -32,6 +32,7 @@ import {
   resizeViewport,
   seriesIdToElementId
 } from "../utils";
+
 import resize from "vue-resize-directive";
 
 const defaultGetViewportFn = (store, seriesId, canvasId) =>
@@ -59,17 +60,23 @@ export default {
     this.validCanvasId = seriesIdToElementId(this.canvasId);
   },
   mounted() {
-    const stack = this.stack || getSeriesStack(this.seriesId);
-    // TODO LT what if stack is caching?
-    console.log("stack.imageIds.length", stack.imageIds.length);
+    // !!! setTimeout needed to have a canvas div with the correct height
+    setTimeout(() => {
+      const stack = this.stack || getSeriesStack(this.seriesId);
+      // TODO LT what if stack is caching?
+      console.log("stack.imageIds.length", stack.imageIds.length);
 
-    if (stack) {
-      renderSeries(this.validCanvasId, stack);
-      addTools(this.validCanvasId, this.tools);
-    } else {
-      console.warn("Series stack not available for canvas", this.validCanvasId);
-      this.error = true;
-    }
+      if (stack) {
+        renderSeries(this.validCanvasId, stack);
+        addTools(this.validCanvasId, this.tools);
+      } else {
+        console.warn(
+          "Series stack not available for canvas",
+          this.validCanvasId
+        );
+        this.error = true;
+      }
+    }, 0);
   },
   beforeDestroy() {
     // disable larvitar canvas
@@ -82,6 +89,7 @@ export default {
     }
   },
   computed: {
+    // TODO LT read from series key, show a loader if viewport not ready
     progress() {
       return this.getViewportFn(this.$store, this.seriesId, this.validCanvasId)
         .loading;
@@ -89,7 +97,6 @@ export default {
   },
   methods: {
     onResize() {
-      // console.log("on resize", this.$refs.canvas.offsetHeight);
       resizeViewport(this.validCanvasId);
     }
   }
