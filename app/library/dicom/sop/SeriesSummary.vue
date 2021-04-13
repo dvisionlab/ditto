@@ -4,7 +4,7 @@
     <series-thumbnail v-if="showThumbnail" :value="data.thumbnail" />
     <dicom-canvas
       v-else-if="showCanvas"
-      :canvas-id="`nav-${data.seriesUID}`"
+      :canvas-id="canvasId || data.seriesUID"
       clear-cache-on-destroy
       clear-on-destroy
       :series-id="data.seriesUID"
@@ -37,6 +37,7 @@ export default {
     DicomCanvas
   },
   props: {
+    canvasId: { required: false, type: String },
     data: { required: true, type: Object },
     showCanvas: { default: true, type: Boolean },
     showThumbnail: { default: false, type: Boolean }
