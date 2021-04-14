@@ -1,18 +1,13 @@
 <template>
-  <div id="app">
-    <h1>{{ name }}</h1>
+  <div>
+    DITTO
+
+    <router-link to="/basic-wireframe">/basic-wireframe</router-link>
+
+    <router-view />
   </div>
 </template>
 
 <script>
-import { name } from "@/../package.json";
-
-export default {
-  name: "App",
-  data() {
-    return {
-      name
-    };
-  }
-};
+export default {};
 </script>
