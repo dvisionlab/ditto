@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import form from "../../../form";
+import form from "../../../../form";
 if (process.env.NODE_ENV !== "production") {
   form.customizeRules({ passwordValidationRegex: new RegExp(".*") });
 }

@@ -21,7 +21,7 @@ export default async (Vue, options) => {
   }
 
   if (options.dataTypes) {
-    const dicomDataTypes = () => import("../../dicomDataTypes");
+    const dicomDataTypes = () => import("../../../dicomDataTypes");
     dicomDataTypes().then(({ default: components }) => {
       Object.keys(components).forEach(key =>
         Vue.component(`DittoDataType${key}`, components[key])

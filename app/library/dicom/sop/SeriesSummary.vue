@@ -27,7 +27,7 @@
 
 <script>
 import { stackMetadata, stackTools } from "../defaults";
-import dicomDataTypes from "../../../dicomDataTypes";
+import dicomDataTypes from "../../../../dicomDataTypes";
 import DicomCanvas from "../render/Canvas";
 
 export default {

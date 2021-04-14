@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import form from "../../../form";
+import form from "../../../../form";
 
 export default {
   name: "SignUp",
