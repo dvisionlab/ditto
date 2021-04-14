@@ -19,7 +19,6 @@ export const addTools = (elementId, tools) => {
 // Remove viewport data from larvitar stores
 export const clearSeriesData = (seriesId, clearCache = false) => {
   lt.larvitar_store.removeSeriesIds(seriesId);
-  // TODO LT omit is not defined
   lt.removeSeriesFromLarvitarManager(seriesId);
 
   // TODO LT evaluate when clearing cache
@@ -36,7 +35,7 @@ export const deleteViewport = elementId =>
 // unrender an image on a html div using cornerstone
 // export const disableCanvas = lt.disableViewport;
 export const disableCanvas = element => {
-  // lt.enableMouseHandlers(elementId, true); // flagged true to disable handlers
+  // lt.enableMouseHandlers(elementId, true); // TODO LT flagged true to disable handlers
   lt.cornerstone.disable(element);
 };
 
@@ -117,6 +116,10 @@ export const setup = store => {
 };
 
 // Call the Larvitar "populateLarvitarManager" function
-export const storeSeriesStack = (seriesId, stack, onProgress) => {
-  lt.populateLarvitarManager(seriesId, stack, data => onProgress(data.loading));
+export const storeSeriesStack = (seriesId, stack, cache = true) => {
+  lt.populateLarvitarManager(seriesId, stack);
+
+  if (cache) {
+    lt.cacheImages(seriesId, stack);
+  }
 };
