@@ -8,6 +8,7 @@
       :clear-cache-on-destroy="clearCacheOnDestroy"
       :clear-on-destroy="clearOnDestroy"
       :series-id="data.seriesUID"
+      :show-progress="showProgress"
       :style="{ height: '10em', width: '100%' }"
       :tools="canvasTools"
     />
@@ -42,6 +43,7 @@ export default {
     clearOnDestroy: { default: true, type: Boolean },
     data: { required: true, type: Object },
     showCanvas: { default: true, type: Boolean },
+    showProgress: { default: false, type: Boolean },
     showThumbnail: { default: false, type: Boolean },
     tools: { required: false, type: Array }
   },
