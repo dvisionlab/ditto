@@ -110,19 +110,19 @@ export default {
     left: 0;
     top: 0;
     transition: opacity 0.4s;
-    background-color: rgba(255, 0, 0, 0.3);
+    background-color: rgba(#ccc, 0.2);
     opacity: 0;
-    z-index: 1;
+    z-index: 2;
   }
   .splitpanes__splitter:hover:before {
     opacity: 1;
   }
-  .splitpanes--vertical > .splitpanes__splitter:before {
+  &.splitpanes--vertical > .splitpanes__splitter:hover:before {
     left: -30px;
     right: -30px;
     height: 100%;
   }
-  .splitpanes--horizontal > .splitpanes__splitter:before {
+  &.splitpanes--horizontal > .splitpanes__splitter:before {
     top: -30px;
     bottom: -30px;
     width: 100%;

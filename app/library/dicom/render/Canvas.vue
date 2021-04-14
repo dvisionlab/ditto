@@ -34,6 +34,7 @@ import {
 } from "../utils";
 
 import resize from "vue-resize-directive";
+import { stackTools } from "../defaults";
 
 const defaultGetViewportFn = (store, seriesId, canvasId) =>
   store.getters["larvitar/viewport"](canvasId) || {};
@@ -49,7 +50,7 @@ export default {
     seriesId: { required: true, type: [String, Number] },
     showProgress: { default: true, type: Boolean },
     stack: { required: false, type: Object },
-    tools: { default: () => [], type: Array }
+    tools: { default: () => stackTools.default, type: Array }
   },
   data: () => ({
     error: false,

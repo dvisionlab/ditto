@@ -74,7 +74,6 @@
         <!-- TODO LT always clear-on-destroy on close modal without any action -->
         <dicom-canvas
           :canvas-id="item.seriesUID"
-          :clear-cache-on-destroy="true"
           :clear-on-destroy="
             selectedSeries.find(
               ({ seriesUID }) => seriesUID == item.seriesUID

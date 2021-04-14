@@ -5,11 +5,11 @@
     <dicom-canvas
       v-else-if="showCanvas"
       :canvas-id="canvasId || data.seriesUID"
-      clear-cache-on-destroy
-      clear-on-destroy
+      :clear-cache-on-destroy="clearCacheOnDestroy"
+      :clear-on-destroy="clearOnDestroy"
       :series-id="data.seriesUID"
       :style="{ height: '10em', width: '100%' }"
-      :tools="tools"
+      :tools="canvasTools"
     />
 
     <div class="lh-small pa-1">
@@ -38,14 +38,19 @@ export default {
   },
   props: {
     canvasId: { required: false, type: String },
+    clearCacheOnDestroy: { default: true, type: Boolean },
+    clearOnDestroy: { default: true, type: Boolean },
     data: { required: true, type: Object },
     showCanvas: { default: true, type: Boolean },
-    showThumbnail: { default: false, type: Boolean }
+    showThumbnail: { default: false, type: Boolean },
+    tools: { required: false, type: Array }
   },
-  data: () => ({
-    fields: stackMetadata.series,
-    tools: stackTools.preview
-  }),
+  data() {
+    return {
+      canvasTools: this.tools || stackTools.preview,
+      fields: stackMetadata.series
+    };
+  },
   methods: {
     getComponentName(field) {
       return field.charAt(0).toUpperCase() + field.slice(1) + "String";
