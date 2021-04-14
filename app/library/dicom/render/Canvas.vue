@@ -57,35 +57,8 @@ export default {
     error: false,
     validCanvasId: null
   }),
-  beforeMount() {
-    // Compute valid element id (dots not allowed)
-    this.validCanvasId = seriesIdToElementId(this.canvasId);
-  },
-  mounted() {
-    // !!! setTimeout needed to have a canvas div with the correct height
-    setTimeout(() => {
-      const stack = this.stack || getSeriesStack(this.seriesId);
-
-      if (stack) {
-        renderSeries(this.validCanvasId, stack);
-        addTools(this.validCanvasId, this.tools);
-      } else {
-        console.warn(
-          "Series stack not available for canvas",
-          this.validCanvasId
-        );
-        this.error = true;
-      }
-    }, 0);
-  },
   beforeDestroy() {
-    // disable larvitar canvas
-    disableCanvas(this.$refs.canvas);
-    deleteViewport(this.$refs.canvas);
-
-    if (this.clearOnDestroy) {
-      clearSeriesData(this.seriesId, this.clearCacheOnDestroy);
-    }
+    this.destroy();
   },
   computed: {
     ...mapState("larvitar", {
@@ -99,8 +72,50 @@ export default {
     }
   },
   methods: {
+    destroy() {
+      // disable larvitar canvas
+      disableCanvas(this.$refs.canvas);
+      deleteViewport(this.$refs.canvas);
+
+      if (this.clearOnDestroy) {
+        clearSeriesData(this.seriesId, this.clearCacheOnDestroy);
+      }
+    },
     onResize() {
       resizeViewport(this.validCanvasId);
+    }
+  },
+  watch: {
+    canvasId: {
+      handler() {
+        // Compute valid element id (dots not allowed)
+        this.validCanvasId = seriesIdToElementId(this.canvasId);
+      },
+      immediate: true
+    },
+    seriesId: {
+      handler() {
+        if (this.$refs.canvas) {
+          this.destroy();
+        }
+
+        // !!! setTimeout needed to have a canvas div with the correct height
+        setTimeout(() => {
+          const stack = this.stack || getSeriesStack(this.seriesId);
+
+          if (stack) {
+            renderSeries(this.validCanvasId, stack);
+            addTools(this.validCanvasId, this.tools);
+          } else {
+            console.warn(
+              "Series stack not available for canvas",
+              this.validCanvasId
+            );
+            this.error = true;
+          }
+        }, 0);
+      },
+      immediate: true
     }
   }
 };
