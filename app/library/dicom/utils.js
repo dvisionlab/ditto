@@ -33,11 +33,7 @@ export const deleteViewport = elementId =>
 
 // Call the Larvitar "disableViewport" function:
 // unrender an image on a html div using cornerstone
-// export const disableCanvas = lt.disableViewport;
-export const disableCanvas = element => {
-  // lt.enableMouseHandlers(elementId, true); // TODO LT flagged true to disable handlers
-  lt.cornerstone.disable(element);
-};
+export const disableCanvas = lt.disableViewport;
 
 // Return series stack stored in larvitar dicom manager
 export const getSeriesStack = seriesId => {

@@ -80,9 +80,8 @@ export default {
   },
   beforeDestroy() {
     // disable larvitar canvas
-    // TODO LT not working, pass this.$refs.canvas?
-    disableCanvas(this.validCanvasId);
-    deleteViewport(this.validCanvasId);
+    disableCanvas(this.$refs.canvas);
+    deleteViewport(this.$refs.canvas);
 
     if (this.clearOnDestroy) {
       clearSeriesData(this.seriesId, this.clearCacheOnDestroy);
