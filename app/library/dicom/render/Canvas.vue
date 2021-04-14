@@ -18,6 +18,9 @@
       :height="5"
       :value="progress"
     />
+
+    <slot name="stack-metadata" v-bind="stackMetadata"></slot>
+    <slot name="viewport-data" v-bind="viewport"></slot>
   </div>
 </template>
 
@@ -25,7 +28,7 @@
 import { mapState } from "vuex";
 import resize from "vue-resize-directive";
 
-import { stackTools } from "../defaults";
+import { stackMetadata as stackMetadataDict, stackTools } from "../defaults";
 import {
   addTools,
   clearSeriesData,
@@ -55,6 +58,7 @@ export default {
   },
   data: () => ({
     error: false,
+    stackMetadata: null,
     validCanvasId: null
   }),
   beforeDestroy() {
@@ -102,6 +106,18 @@ export default {
         // !!! setTimeout needed to have a canvas div with the correct height
         setTimeout(() => {
           const stack = this.stack || getSeriesStack(this.seriesId);
+
+          // fill stack metadata
+          this.stackMetadata = Object.keys(stackMetadataDict).reduce(
+            (result, category) => {
+              result[category] = stackMetadataDict[category].reduce(
+                (o, key) => ({ ...o, [key]: stack[key] }),
+                {}
+              );
+              return result;
+            },
+            {}
+          );
 
           if (stack) {
             renderSeries(this.validCanvasId, stack);

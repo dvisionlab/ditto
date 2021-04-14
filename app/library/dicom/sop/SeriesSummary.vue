@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { stackMetadata, stackTools } from "../defaults";
+import { stackTools } from "../defaults";
 import dicomDataTypes from "../../../../dicomDataTypes";
 import DicomCanvas from "../render/Canvas";
 
@@ -49,8 +49,7 @@ export default {
   },
   data() {
     return {
-      canvasTools: this.tools || stackTools.preview,
-      fields: stackMetadata.series
+      canvasTools: this.tools || stackTools.preview
     };
   },
   methods: {
