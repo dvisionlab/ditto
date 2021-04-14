@@ -15,13 +15,17 @@
       v-if="showProgress && progress !== 100"
       absolute
       bottom
-      :height="10"
+      :height="5"
       :value="progress"
     />
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import resize from "vue-resize-directive";
+
+import { stackTools } from "../defaults";
 import {
   addTools,
   clearSeriesData,
@@ -32,9 +36,6 @@ import {
   resizeViewport,
   seriesIdToElementId
 } from "../utils";
-
-import resize from "vue-resize-directive";
-import { stackTools } from "../defaults";
 
 const defaultGetViewportFn = (store, seriesId, canvasId) =>
   store.getters["larvitar/viewport"](canvasId) || {};
@@ -64,8 +65,6 @@ export default {
     // !!! setTimeout needed to have a canvas div with the correct height
     setTimeout(() => {
       const stack = this.stack || getSeriesStack(this.seriesId);
-      // TODO LT what if stack is caching?
-      console.log("stack.imageIds.length", stack.imageIds.length);
 
       if (stack) {
         renderSeries(this.validCanvasId, stack);
@@ -90,10 +89,14 @@ export default {
     }
   },
   computed: {
-    // TODO LT read from series key, show a loader if viewport not ready
-    progress() {
-      return this.getViewportFn(this.$store, this.seriesId, this.validCanvasId)
-        .loading;
+    ...mapState("larvitar", {
+      progress(state) {
+        return (state.series[this.seriesId] || {}).progress;
+      }
+    }),
+    // TODO LT show a loader if viewport not ready
+    viewport() {
+      return this.getViewportFn(this.$store, this.seriesId, this.validCanvasId);
     }
   },
   methods: {
