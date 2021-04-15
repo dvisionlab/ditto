@@ -129,6 +129,13 @@ export const getSteps = (options = {}) => {
   if (options.steps) {
     options.steps.forEach((step, i) => {
       if (step) {
+        if (step.actions && steps[i].actions) {
+          step.actions = steps[i].actions.map((a, j) => ({
+            ...a,
+            ...step.actions[j]
+          }));
+        }
+
         steps[i] = { ...steps[i], ...step };
       }
     });
