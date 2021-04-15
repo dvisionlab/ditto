@@ -19,7 +19,7 @@ export const addTools = (elementId, tools) => {
 // Remove viewport data from larvitar stores
 export const clearSeriesData = (seriesId, clearCache = false) => {
   lt.larvitar_store.removeSeriesIds(seriesId);
-  lt.removeSeriesFromDicomManager(seriesId);
+  lt.removeSeriesFromLarvitarManager(seriesId);
 
   // TODO LT evaluate when clearing cache
   if (clearCache) {
@@ -33,16 +33,12 @@ export const deleteViewport = elementId =>
 
 // Call the Larvitar "disableViewport" function:
 // unrender an image on a html div using cornerstone
-// export const disableCanvas = lt.disableViewport;
-export const disableCanvas = element => {
-  // lt.enableMouseHandlers(elementId, true); // flagged true to disable handlers
-  lt.cornerstone.disable(element);
-};
+export const disableCanvas = lt.disableViewport;
 
 // Return series stack stored in larvitar dicom manager
 export const getSeriesStack = seriesId => {
-  const stack = lt.dicomManager[seriesId];
-  return Object.keys(stack).length !== 0 ? stack : null;
+  const stack = lt.getSeriesDataFromLarvitarManager(seriesId);
+  return stack && Object.keys(stack).length !== 0 ? stack : null;
 };
 
 // Merge parsed files with previous parsed files if the instance uids matches
@@ -115,9 +111,11 @@ export const setup = store => {
   lt.initializeCSTools();
 };
 
-// Call the Larvitar "populateDicomManager" function
-export const storeSeriesStack = (seriesId, stack) => {
-  return new Promise(resolve =>
-    lt.populateDicomManager(seriesId, stack, () => resolve())
-  );
+// Call the Larvitar "populateLarvitarManager" function
+export const storeSeriesStack = (seriesId, stack, cache = true) => {
+  lt.populateLarvitarManager(seriesId, stack);
+
+  if (cache) {
+    lt.cacheImages(seriesId, stack);
+  }
 };

@@ -20,7 +20,11 @@ export const stackMetadata = {
 // Cornerstone tools
 
 export const stackTools = {
-  canvas: [], // TODO all?
+  default: [
+    // TODO all?
+    { name: "Wwwc", configuration: {} },
+    { name: "StackScrollMouseWheel", configuration: {} }
+  ],
   preview: [
     { name: "Wwwc", configuration: {} },
     { name: "StackScrollMouseWheel", configuration: {} }

@@ -15,13 +15,20 @@
       v-if="showProgress && progress !== 100"
       absolute
       bottom
-      :height="10"
+      :height="5"
       :value="progress"
     />
+
+    <slot name="stack-metadata" v-bind="stackMetadata"></slot>
+    <slot name="viewport-data" v-bind="viewport"></slot>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import resize from "vue-resize-directive";
+
+import { stackMetadata as stackMetadataDict, stackTools } from "../defaults";
 import {
   addTools,
   clearSeriesData,
@@ -32,7 +39,6 @@ import {
   resizeViewport,
   seriesIdToElementId
 } from "../utils";
-import resize from "vue-resize-directive";
 
 const defaultGetViewportFn = (store, seriesId, canvasId) =>
   store.getters["larvitar/viewport"](canvasId) || {};
@@ -48,47 +54,84 @@ export default {
     seriesId: { required: true, type: [String, Number] },
     showProgress: { default: true, type: Boolean },
     stack: { required: false, type: Object },
-    tools: { default: () => [], type: Array }
+    tools: { default: () => stackTools.default, type: Array }
   },
   data: () => ({
     error: false,
+    stackMetadata: null,
     validCanvasId: null
   }),
-  beforeMount() {
-    // Compute valid element id (dots not allowed)
-    this.validCanvasId = seriesIdToElementId(this.canvasId);
-  },
-  mounted() {
-    const stack = this.stack || getSeriesStack(this.seriesId);
-
-    if (stack) {
-      renderSeries(this.validCanvasId, stack);
-      addTools(this.validCanvasId, this.tools);
-    } else {
-      console.warn("Series stack not available for canvas", this.validCanvasId);
-      this.error = true;
-    }
-  },
   beforeDestroy() {
-    // disable larvitar canvas
-    // TODO LT not working, pass this.$refs.canvas?
-    disableCanvas(this.validCanvasId);
-    // TODO LT preserve previous viewport settings?
-    deleteViewport(this.validCanvasId);
-
-    if (this.clearOnDestroy) {
-      clearSeriesData(this.seriesId, this.clearCacheOnDestroy);
-    }
+    this.destroy();
   },
   computed: {
-    progress() {
-      return this.getViewportFn(this.$store, this.seriesId, this.validCanvasId)
-        .loading;
+    ...mapState("larvitar", {
+      progress(state) {
+        return (state.series[this.seriesId] || {}).progress;
+      }
+    }),
+    // TODO LT show a loader if viewport not ready
+    viewport() {
+      return this.getViewportFn(this.$store, this.seriesId, this.validCanvasId);
     }
   },
   methods: {
+    destroy() {
+      // disable larvitar canvas
+      disableCanvas(this.$refs.canvas);
+      deleteViewport(this.$refs.canvas);
+
+      if (this.clearOnDestroy) {
+        clearSeriesData(this.seriesId, this.clearCacheOnDestroy);
+      }
+    },
     onResize() {
       resizeViewport(this.validCanvasId);
+    }
+  },
+  watch: {
+    canvasId: {
+      handler() {
+        // Compute valid element id (dots not allowed)
+        this.validCanvasId = seriesIdToElementId(this.canvasId);
+      },
+      immediate: true
+    },
+    seriesId: {
+      handler() {
+        if (this.$refs.canvas) {
+          this.destroy();
+        }
+
+        // !!! setTimeout needed to have a canvas div with the correct height
+        setTimeout(() => {
+          const stack = this.stack || getSeriesStack(this.seriesId);
+
+          // fill stack metadata
+          this.stackMetadata = Object.keys(stackMetadataDict).reduce(
+            (result, category) => {
+              result[category] = stackMetadataDict[category].reduce(
+                (o, key) => ({ ...o, [key]: stack[key] }),
+                {}
+              );
+              return result;
+            },
+            {}
+          );
+
+          if (stack) {
+            renderSeries(this.validCanvasId, stack);
+            addTools(this.validCanvasId, this.tools);
+          } else {
+            console.warn(
+              "Series stack not available for canvas",
+              this.validCanvasId
+            );
+            this.error = true;
+          }
+        }, 0);
+      },
+      immediate: true
     }
   }
 };

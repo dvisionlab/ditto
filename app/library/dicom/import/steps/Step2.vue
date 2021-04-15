@@ -71,9 +71,9 @@
       <template v-slot:[`item.preview`]="{ item }">
         <!-- clear-on-destroy is true when series is not selected (user discard from open/updload) -->
         <!-- TODO LT always clear-on-destroy if upload without opening in viewer -->
+        <!-- TODO LT always clear-on-destroy on close modal without any action -->
         <dicom-canvas
           :canvas-id="item.seriesUID"
-          :clear-cache-on-destroy="true"
           :clear-on-destroy="
             selectedSeries.find(
               ({ seriesUID }) => seriesUID == item.seriesUID
@@ -81,6 +81,7 @@
           "
           :get-viewport-fn="getViewportFn"
           :series-id="item.seriesUID"
+          :show-progress="false"
           :stack="item"
           :style="{ width: '10em', height: '10em' }"
           :tools="tools"

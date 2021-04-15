@@ -190,13 +190,8 @@ export default {
       );
 
       // Store series stack in larvitar
-      // TODO loader
       if (this.selectedAction.storeStacks) {
-        await Promise.all(
-          stacks.map(
-            async stack => await storeSeriesStack(stack.seriesUID, stack)
-          )
-        );
+        stacks.forEach(stack => storeSeriesStack(stack.seriesUID, stack));
       }
 
       // Emit action with stacks data

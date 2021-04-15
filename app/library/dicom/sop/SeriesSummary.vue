@@ -4,12 +4,13 @@
     <series-thumbnail v-if="showThumbnail" :value="data.thumbnail" />
     <dicom-canvas
       v-else-if="showCanvas"
-      :canvas-id="`nav-${data.seriesUID}`"
-      clear-cache-on-destroy
-      clear-on-destroy
+      :canvas-id="canvasId || data.seriesUID"
+      :clear-cache-on-destroy="clearCacheOnDestroy"
+      :clear-on-destroy="clearOnDestroy"
       :series-id="data.seriesUID"
-      :style="{ minHeight: '6em' }"
-      :tools="tools"
+      :show-progress="showProgress"
+      :style="{ height: '10em', width: '100%' }"
+      :tools="canvasTools"
     />
 
     <div class="lh-small pa-1">
@@ -26,7 +27,7 @@
 </template>
 
 <script>
-import { stackMetadata, stackTools } from "../defaults";
+import { stackTools } from "../defaults";
 import dicomDataTypes from "../../../../dicomDataTypes";
 import DicomCanvas from "../render/Canvas";
 
@@ -37,14 +38,20 @@ export default {
     DicomCanvas
   },
   props: {
+    canvasId: { required: false, type: String },
+    clearCacheOnDestroy: { default: true, type: Boolean },
+    clearOnDestroy: { default: true, type: Boolean },
     data: { required: true, type: Object },
     showCanvas: { default: true, type: Boolean },
-    showThumbnail: { default: false, type: Boolean }
+    showProgress: { default: false, type: Boolean },
+    showThumbnail: { default: false, type: Boolean },
+    tools: { required: false, type: Array }
   },
-  data: () => ({
-    fields: stackMetadata.series,
-    tools: stackTools.preview
-  }),
+  data() {
+    return {
+      canvasTools: this.tools || stackTools.preview
+    };
+  },
   methods: {
     getComponentName(field) {
       return field.charAt(0).toUpperCase() + field.slice(1) + "String";
