@@ -193,7 +193,13 @@ export default {
 
       // Store series stack in larvitar
       if (this.selectedAction.storeStacks) {
-        stacks.forEach(stack => storeSeriesStack(stack.seriesUID, stack));
+        stacks.forEach(stack =>
+          storeSeriesStack(
+            stack.seriesUID,
+            stack,
+            this.selectedAction.cacheStacks
+          )
+        );
       }
 
       // Emit action with stacks data
