@@ -54,6 +54,10 @@
       ref="content"
       @cancel="isOpen = false"
       @dicom-import-open="data => $emit('dicom-import-open', data)"
+      @dicom-import-upload="data => $emit('dicom-import-upload', data)"
+      @dicom-import-upload-and-open="
+        data => $emit('dicom-import-upload-and-open', data)
+      "
       @minimize="minimize"
     >
       <!-- Add a slot for each header item that requires it (component customization) -->
