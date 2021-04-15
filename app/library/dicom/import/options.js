@@ -46,6 +46,7 @@ const defaultActions = [
     disabled: true,
     emitter: "dicom-import-upload-and-open",
     hint: "series will be saved in your dashboard",
+    cacheStacks: true,
     storeStacks: true,
     text: "upload series and open viewer"
   },
@@ -57,6 +58,7 @@ const defaultActions = [
     emitter: "dicom-import-open",
     hint:
       "you won't be able to access these series again once the browser session will be lost",
+    cacheStacks: true,
     storeStacks: true,
     text: "open viewer without uploading"
   }
