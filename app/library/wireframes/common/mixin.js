@@ -17,7 +17,7 @@ export default {
     };
   },
   computed: {
-    navStyle() {
+    navTogglerStyle() {
       return {
         height: `calc(calc(var(--vh, 1vh) * 100) - ${this.$vuetify.application.top}px)`,
         top: `${this.$vuetify.application.top}px`

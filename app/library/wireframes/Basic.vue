@@ -26,7 +26,6 @@
       :color="navLeft.color"
       :dark="navLeft.dark"
       :mobile-breakpoint="mobileBreakpoint"
-      :style="navStyle"
       :width="navLeft.width"
       v-model="navLeftVisible"
     />
@@ -39,7 +38,6 @@
       :dark="navRight.dark"
       :mobile-breakpoint="mobileBreakpoint"
       :right="true"
-      :style="navStyle"
       :width="navRight.width"
       v-model="navRightVisible"
     />
@@ -63,7 +61,7 @@
       v-slot:navigation-drawer-toggler-left
     >
       <navigation-toggler
-        :style="navStyle"
+        :style="navTogglerStyle"
         @toggle="navLeftVisible = !navLeftVisible"
       />
     </template>
@@ -74,7 +72,7 @@
     >
       <navigation-toggler
         right
-        :style="navStyle"
+        :style="navTogglerStyle"
         @toggle="navRightVisible = !navRightVisible"
       />
     </template>
