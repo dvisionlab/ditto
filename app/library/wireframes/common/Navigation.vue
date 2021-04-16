@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer
-    app
+    :app="app"
     :clipped="clipped"
     :color="color"
     :dark="dark"
@@ -32,6 +32,7 @@
 export default {
   name: "Navigation",
   props: {
+    app: { default: true, type: Boolean },
     clipped: { default: true, type: Boolean },
     collapsable: { default: true, type: Boolean },
     color: { required: false, type: String },

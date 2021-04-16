@@ -7,7 +7,14 @@
 
     <div :style="{ padding: '3em' }">
       <h3>EXAMPLES</h3>
-      <router-link to="/basic-wireframe">/basic-wireframe</router-link>
+      <div>
+        <router-link to="/basic-wireframe">/basic-wireframe</router-link>
+      </div>
+      <div>
+        <router-link to="/double-navigation-wireframe"
+          >/double-navigation-wireframe</router-link
+        >
+      </div>
     </div>
   </div>
 </template>

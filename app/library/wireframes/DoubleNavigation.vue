@@ -24,11 +24,12 @@
     <!-- left navigation drawer -->
     <app-navigation
       v-if="show('nav-left')"
+      :clipped="false"
       :color="navLeft.color"
       :collapsable="false"
       :dark="navLeft.dark"
       mini-variant
-      :mini-variant-width="nav.width"
+      :mini-variant-width="navLeft.width"
       :mobile-breakpoint="mobileBreakpoint"
       :style="navStyle"
       :width="navLeft.width"
@@ -50,9 +51,10 @@
 
     <!-- Sizes your content based upon application components -->
     <v-main>
-      <v-container class="d-flex h-100 pa-0" fluid>
+      <v-container class="d-flex pa-0" fluid :style="{ height: '100%' }">
         <app-navigation
           v-if="show('nav-inner')"
+          :app="false"
           :color="nav.color"
           route-name="nav-inner"
           :width="nav.width"
@@ -64,8 +66,14 @@
       </v-container>
     </v-main>
 
-    <v-footer v-if="show('footer')" app inset>
-      <router-view name="footer" :height="footer.height" />
+    <v-footer
+      v-if="show('footer')"
+      app
+      :dark="footer.dark"
+      :height="footer.height"
+      inset
+    >
+      <router-view name="footer" />
     </v-footer>
 
     <!-- togglers -->
@@ -74,7 +82,7 @@
       v-slot:navigation-drawer-toggler-inner
     >
       <navigation-toggler
-        :style="navStyle"
+        :style="{ ...navStyle, left: `${$vuetify.application.left}px` }"
         @toggle="navVisible = !navVisible"
       />
     </template>
@@ -86,18 +94,19 @@
       <navigation-toggler
         right
         :style="navStyle"
-        @toggle="navLeftVisible = !navLeftVisible"
+        @toggle="navRightVisible = !navRightVisible"
       />
     </template>
   </wireframe-wrapper>
 </template>
 
 <script>
-import AppBar from "./common/AppBar";
-import AppNavigation from "./common/Navigation";
 import Common from "./common/mixin";
-import MobileTopMenu from "./common/MobileTopMenu";
-import NavigationToggler from "./common/NavigationToggler";
+
+const AppBar = () => import("./common/Bar");
+const AppNavigation = () => import("./common/Navigation");
+const MobileTopMenu = () => import("./common/MobileTopMenu");
+const NavigationToggler = () => import("./common/NavigationToggler");
 
 export default {
   name: "BasicWireframe",

@@ -26,6 +26,26 @@ const routes = [
         }
       }
     ]
+  },
+  {
+    path: "/double-navigation-wireframe",
+    name: "double-navigation-wireframe",
+    redirect: "/double-navigation-wireframe/home",
+    component: () => import("@/examples/wireframes/double-navigation/Root"),
+    children: [
+      {
+        name: "double-navigation-wireframe-home",
+        path: "home",
+        components: {
+          default: { template: "<div>Home</div>" },
+          bar: { template: "<div>Header</div>" },
+          "nav-inner": { template: "<div>Inner nav</div>" },
+          "nav-left": { template: "<div>Sidebar</div>" },
+          "nav-right": { template: "<div>Right nav</div>" },
+          footer: { template: "<div>Footer</div>" }
+        }
+      }
+    ]
   }
 ];
 
