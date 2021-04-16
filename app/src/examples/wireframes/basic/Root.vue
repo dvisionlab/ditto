@@ -13,9 +13,9 @@ const options = {
       template: "<div>Mobile menu</div>"
     }
   },
-  footer: { height: 80 },
-  navLeft: { color: "orange", dark: false, width: 300 },
-  navRight: { color: "purple", dark: true, width: 200 },
+  footer: { dark: true, height: 80 },
+  navLeft: { color: "orange", width: 300 },
+  navRight: { dark: true, width: 200 },
   mobileBreakpoint: "xs" // default: xs
 };
 

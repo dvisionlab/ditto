@@ -51,7 +51,12 @@
     </v-main>
 
     <!-- footer -->
-    <v-footer v-if="show('footer')" app :height="footer.height">
+    <v-footer
+      v-if="show('footer')"
+      app
+      :dark="footer.dark"
+      :height="footer.height"
+    >
       <router-view name="footer" />
     </v-footer>
 
