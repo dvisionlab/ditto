@@ -12,10 +12,7 @@
     :value="value"
     @input="value => $emit('input', value)"
   >
-    <router-view
-      :dark="dark"
-      :name="routeName || `nav-${right ? 'right' : 'left'}`"
-    />
+    <slot v-bind:dark="dark" />
 
     <template v-if="collapsable" v-slot:append>
       <v-btn block text @click="$emit('input', !value)">

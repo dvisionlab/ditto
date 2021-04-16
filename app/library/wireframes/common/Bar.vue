@@ -24,11 +24,10 @@
       />
     </template>
 
-    <router-view
+    <slot
       v-else
-      class="d-flex flex-grow-1 align-center h-100"
-      :dark="dark"
-      name="bar"
+      v-bind:class-name="'d-flex flex-grow-1 align-center h-100'"
+      v-bind:dark="dark"
     />
   </v-app-bar>
 </template>

@@ -10,7 +10,9 @@
       :mobile-menu-component="bar.mobileMenuComponent"
       :mobile-menu-visible="mobileMenuVisible"
       @toggle-mobile-menu="mobileMenuVisible = !mobileMenuVisible"
-    />
+    >
+      <template v-slot="data"><slot name="bar" v-bind="data"/></template>
+    </app-bar>
 
     <!-- mobile top menu -->
     <mobile-top-menu
@@ -18,21 +20,25 @@
       :mobile-breakpoint="mobileBreakpoint"
       :steteless="bar.stateless"
       v-model="mobileMenuVisible"
-    />
+    >
+      <template v-slot="data"><slot name="bar" v-bind="data"/></template>
+    </mobile-top-menu>
 
     <!-- left navigation drawer -->
     <app-navigation
-      v-if="show('nav-left') && navLeft.visible !== false"
+      v-if="$scopedSlots.navLeft && navLeft.visible !== false"
       :color="navLeft.color"
       :dark="navLeft.dark"
       :mobile-breakpoint="mobileBreakpoint"
       :width="navLeft.width"
       v-model="navLeftVisible"
-    />
+    >
+      <template v-slot="data"><slot name="navLeft" v-bind="data"/></template>
+    </app-navigation>
 
     <!-- right navigation drawer -->
     <app-navigation
-      v-if="show('nav-right') && navRight.visible !== false"
+      v-if="$scopedSlots.navRight && navRight.visible !== false"
       :clipped="true"
       :color="navRight.color"
       :dark="navRight.dark"
@@ -40,29 +46,33 @@
       :right="true"
       :width="navRight.width"
       v-model="navRightVisible"
-    />
+    >
+      <template v-slot="data"><slot name="navRight" v-bind="data"/></template>
+    </app-navigation>
 
     <!-- main content -->
     <v-main>
       <v-container class="h-100 pa-0" fluid>
-        <!-- router default component -->
-        <router-view />
+        <!-- default slot -->
+        <slot />
       </v-container>
     </v-main>
 
     <!-- footer -->
     <v-footer
-      v-if="show('footer')"
+      v-if="$scopedSlots.footer"
       app
       :dark="footer.dark"
       :height="footer.height"
     >
-      <router-view name="footer" />
+      <slot name="footer" />
     </v-footer>
 
     <!-- togglers -->
     <template
-      v-if="show('nav-left') && navLeft.visible !== false && !navLeftVisible"
+      v-if="
+        $scopedSlots.navLeft && navLeft.visible !== false && !navLeftVisible
+      "
       v-slot:navigation-drawer-toggler-left
     >
       <navigation-toggler
@@ -72,7 +82,9 @@
     </template>
 
     <template
-      v-if="show('nav-right') && navRight.visible !== false && !navRightVisible"
+      v-if="
+        $scopedSlots.navRight && navRight.visible !== false && !navRightVisible
+      "
       v-slot:navigation-drawer-toggler-right
     >
       <navigation-toggler

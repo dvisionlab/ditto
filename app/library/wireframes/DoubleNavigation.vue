@@ -11,7 +11,9 @@
       :mobile-menu-component="bar.mobileMenuComponent"
       :mobile-menu-visible="mobileMenuVisible"
       @toggle-mobile-menu="mobileMenuVisible = !mobileMenuVisible"
-    />
+    >
+      <template v-slot="data"><slot name="bar" v-bind="data"/></template>
+    </app-bar>
 
     <!-- mobile top menu -->
     <mobile-top-menu
@@ -19,11 +21,13 @@
       :mobile-breakpoint="mobileBreakpoint"
       :steteless="bar.stateless"
       v-model="mobileMenuVisible"
-    />
+    >
+      <template v-slot="data"><slot name="bar" v-bind="data"/></template>
+    </mobile-top-menu>
 
     <!-- left navigation drawer -->
     <app-navigation
-      v-if="show('nav-left')"
+      v-if="$scopedSlots.navLeft"
       :clipped="false"
       :color="navLeft.color"
       :collapsable="false"
@@ -33,11 +37,13 @@
       :mobile-breakpoint="mobileBreakpoint"
       :width="navLeft.width"
       v-model="navLeftVisible"
-    />
+    >
+      <template v-slot="data"><slot name="navLeft" v-bind="data"/></template>
+    </app-navigation>
 
     <!-- right navigation drawer -->
     <app-navigation
-      v-if="show('nav-right')"
+      v-if="$scopedSlots.navRight"
       :clipped="true"
       :color="navRight.color"
       :dark="navRight.dark"
@@ -45,38 +51,43 @@
       :right="true"
       :width="navRight.width"
       v-model="navRightVisible"
-    />
+    >
+      <template v-slot="data"><slot name="navRight" v-bind="data"/></template>
+    </app-navigation>
 
     <!-- Sizes your content based upon application components -->
     <v-main>
       <v-container class="d-flex pa-0" fluid :style="{ height: '100%' }">
         <app-navigation
-          v-if="show('nav-inner')"
+          v-if="$scopedSlots.navInner"
           :app="false"
           :color="nav.color"
-          route-name="nav-inner"
           :width="nav.width"
           v-model="navVisible"
-        />
+        >
+          <template v-slot="data"
+            ><slot name="navInner" v-bind="data"
+          /></template>
+        </app-navigation>
 
-        <!-- router default component -->
-        <router-view />
+        <!-- default slot -->
+        <slot />
       </v-container>
     </v-main>
 
     <v-footer
-      v-if="show('footer')"
+      v-if="$scopedSlots.footer"
       app
       :dark="footer.dark"
       :height="footer.height"
       inset
     >
-      <router-view name="footer" />
+      <slot name="footer" />
     </v-footer>
 
     <!-- togglers -->
     <template
-      v-if="show('nav-inner') && !navVisible"
+      v-if="$scopedSlots.navInner && !navVisible"
       v-slot:navigation-drawer-toggler-inner
     >
       <navigation-toggler
@@ -86,7 +97,7 @@
     </template>
 
     <template
-      v-if="show('nav-right') && !navRightVisible"
+      v-if="$scopedSlots.navRight && !navRightVisible"
       v-slot:navigation-drawer-toggler-right
     >
       <navigation-toggler

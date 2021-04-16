@@ -1,5 +1,16 @@
 <template>
-  <basic-wireframe v-bind="options" />
+  <basic-wireframe v-bind="options">
+    <router-view />
+
+    <template v-slot:bar="{ className, dark, mobile }">
+      <div :class="className">
+        Header (dark: {{ dark }}, mobile: {{ mobile }})
+      </div>
+    </template>
+    <template v-slot:navLeft="{ dark }">Left (dark: {{ dark }})</template>
+    <template v-slot:navRight="{ dark }">Right (dark: {{ dark }})</template>
+    <template v-slot:footer>Footer</template>
+  </basic-wireframe>
 </template>
 
 <script>

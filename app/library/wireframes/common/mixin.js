@@ -22,22 +22,6 @@ export default {
         height: `calc(calc(var(--vh, 1vh) * 100) - ${this.$vuetify.application.top}px)`,
         top: `${this.$vuetify.application.top}px`
       };
-    },
-    components() {
-      const route = this.$route.matched.find(
-        ({ name }) => name == this.$route.name
-      );
-
-      if (!route) {
-        return;
-      }
-
-      return Object.keys(route.components || {});
-    }
-  },
-  methods: {
-    show(name) {
-      return (this.components || []).find(v => v == name);
     }
   }
 };

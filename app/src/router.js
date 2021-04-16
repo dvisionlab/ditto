@@ -17,13 +17,12 @@ const routes = [
       {
         name: "basic-wireframe-home",
         path: "home",
-        components: {
-          default: { template: "<div>Home</div>" },
-          bar: { template: "<div>Header</div>" },
-          "nav-left": { template: "<div>Left</div>" },
-          "nav-right": { template: "<div>Right</div>" },
-          footer: { template: "<div>Footer</div>" }
-        }
+        component: { template: "<div>Home</div>" }
+      },
+      {
+        name: "basic-wireframe-other",
+        path: "other",
+        component: { template: "<div>Other</div>" }
       }
     ]
   },
@@ -36,14 +35,12 @@ const routes = [
       {
         name: "double-navigation-wireframe-home",
         path: "home",
-        components: {
-          default: { template: "<div>Home</div>" },
-          bar: { template: "<div>Header</div>" },
-          "nav-inner": { template: "<div>Inner nav</div>" },
-          "nav-left": { template: "<div>Sidebar</div>" },
-          "nav-right": { template: "<div>Right nav</div>" },
-          footer: { template: "<div>Footer</div>" }
-        }
+        component: { template: "<div>Home</div>" }
+      },
+      {
+        name: "double-navigation-wireframe-other",
+        path: "other",
+        component: { template: "<div>Other</div>" }
       }
     ]
   }
