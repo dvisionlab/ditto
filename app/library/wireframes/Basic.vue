@@ -75,18 +75,19 @@
       <navigation-toggler
         right
         :style="navStyle"
-        @toggle="navLeftVisible = !navLeftVisible"
+        @toggle="navRightVisible = !navRightVisible"
       />
     </template>
   </wireframe-wrapper>
 </template>
 
 <script>
-import AppBar from "./common/AppBar";
-import AppNavigation from "./common/Navigation";
 import Common from "./common/mixin";
-import MobileTopMenu from "./common/MobileTopMenu";
-import NavigationToggler from "./common/NavigationToggler";
+
+const AppBar = () => import("./common/Bar");
+const AppNavigation = () => import("./common/Navigation");
+const MobileTopMenu = () => import("./common/MobileTopMenu");
+const NavigationToggler = () => import("./common/NavigationToggler");
 
 export default {
   name: "BasicWireframe",

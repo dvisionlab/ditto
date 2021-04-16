@@ -24,9 +24,10 @@ export default {
       };
     },
     components() {
-      const route = this.$router.options.routes.find(
-        r => r.name == this.$route.name
+      const route = this.$route.matched.find(
+        ({ name }) => name == this.$route.name
       );
+
       if (!route) {
         return;
       }

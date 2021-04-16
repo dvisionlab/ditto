@@ -43,7 +43,7 @@ export default {
     height: { required: false, type: Number },
     left: { default: true, type: Boolean },
     mobileBreakpoint: { default: "xs", type: String },
-    mobileMenuComponent: { required: false, type: Function },
+    mobileMenuComponent: { required: false, type: [Object, Function] },
     mobileMenuVisible: { default: false, type: Boolean },
     right: { default: true, type: Boolean }
   }
