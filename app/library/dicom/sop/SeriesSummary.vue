@@ -13,16 +13,18 @@
       :tools="canvasTools"
     />
 
-    <div class="lh-small pa-1">
-      <div>{{ data.seriesDescription }}</div>
-      <div>
-        <series-acquisition-date-string tag="span" :value="data.x00080022" />
-        <span v-if="data.x00080022 && data.seriesModality"> | </span>
-        <series-modality-string tag="span" :value="data.seriesModality" />
+    <div class="d-flex">
+      <div class="flex-grow-1 lh-small pa-1">
+        <div>{{ data.seriesDescription }}</div>
+        <div>
+          <series-acquisition-date-string tag="span" :value="data.x00080022" />
+          <span v-if="data.x00080022 && data.seriesModality"> | </span>
+          <series-modality-string tag="span" :value="data.seriesModality" />
+        </div>
       </div>
-    </div>
 
-    <slot />
+      <slot />
+    </div>
   </div>
 </template>
 
