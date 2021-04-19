@@ -10,7 +10,9 @@
       :mobile-menu-component="bar.mobileMenuComponent"
       :mobile-menu-visible="mobileMenuVisible"
       @toggle-mobile-menu="mobileMenuVisible = !mobileMenuVisible"
-    />
+    >
+      <template v-slot="data"><slot name="bar" v-bind="data"/></template>
+    </app-bar>
 
     <!-- mobile top menu -->
     <mobile-top-menu
@@ -18,75 +20,89 @@
       :mobile-breakpoint="mobileBreakpoint"
       :steteless="bar.stateless"
       v-model="mobileMenuVisible"
-    />
+    >
+      <template v-slot="data"><slot name="bar" v-bind="data"/></template>
+    </mobile-top-menu>
 
     <!-- left navigation drawer -->
     <app-navigation
-      v-if="show('nav-left') && navLeft.visible !== false"
+      v-if="$scopedSlots.navLeft && navLeft.visible !== false"
       :color="navLeft.color"
       :dark="navLeft.dark"
       :mobile-breakpoint="mobileBreakpoint"
-      :style="navStyle"
       :width="navLeft.width"
       v-model="navLeftVisible"
-    />
+    >
+      <template v-slot="data"><slot name="navLeft" v-bind="data"/></template>
+    </app-navigation>
 
     <!-- right navigation drawer -->
     <app-navigation
-      v-if="show('nav-right') && navRight.visible !== false"
+      v-if="$scopedSlots.navRight && navRight.visible !== false"
       :clipped="true"
       :color="navRight.color"
       :dark="navRight.dark"
       :mobile-breakpoint="mobileBreakpoint"
       :right="true"
-      :style="navStyle"
       :width="navRight.width"
       v-model="navRightVisible"
-    />
+    >
+      <template v-slot="data"><slot name="navRight" v-bind="data"/></template>
+    </app-navigation>
 
     <!-- main content -->
     <v-main>
       <v-container class="h-100 pa-0" fluid>
-        <!-- router default component -->
-        <router-view />
+        <!-- default slot -->
+        <slot />
       </v-container>
     </v-main>
 
     <!-- footer -->
-    <v-footer v-if="show('footer')" app :height="footer.height">
-      <router-view name="footer" />
+    <v-footer
+      v-if="$scopedSlots.footer"
+      app
+      :dark="footer.dark"
+      :height="footer.height"
+    >
+      <slot name="footer" />
     </v-footer>
 
     <!-- togglers -->
     <template
-      v-if="show('nav-left') && navLeft.visible !== false && !navLeftVisible"
+      v-if="
+        $scopedSlots.navLeft && navLeft.visible !== false && !navLeftVisible
+      "
       v-slot:navigation-drawer-toggler-left
     >
       <navigation-toggler
-        :style="navStyle"
+        :style="navTogglerStyle"
         @toggle="navLeftVisible = !navLeftVisible"
       />
     </template>
 
     <template
-      v-if="show('nav-right') && navRight.visible !== false && !navRightVisible"
+      v-if="
+        $scopedSlots.navRight && navRight.visible !== false && !navRightVisible
+      "
       v-slot:navigation-drawer-toggler-right
     >
       <navigation-toggler
         right
-        :style="navStyle"
-        @toggle="navLeftVisible = !navLeftVisible"
+        :style="navTogglerStyle"
+        @toggle="navRightVisible = !navRightVisible"
       />
     </template>
   </wireframe-wrapper>
 </template>
 
 <script>
-import AppBar from "./common/AppBar";
-import AppNavigation from "./common/Navigation";
 import Common from "./common/mixin";
-import MobileTopMenu from "./common/MobileTopMenu";
-import NavigationToggler from "./common/NavigationToggler";
+
+const AppBar = () => import("./common/Bar");
+const AppNavigation = () => import("./common/Navigation");
+const MobileTopMenu = () => import("./common/MobileTopMenu");
+const NavigationToggler = () => import("./common/NavigationToggler");
 
 export default {
   name: "BasicWireframe",

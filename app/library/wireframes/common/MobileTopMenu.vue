@@ -10,11 +10,10 @@
     @input="value => $emit('input', value)"
   >
     <v-list class="h-100 py-0">
-      <router-view
-        class="h-100 d-flex flex-column"
-        :dark="dark"
-        mobile
-        name="bar"
+      <slot
+        v-bind:class-name="'h-100 d-flex flex-column'"
+        v-bind:dark="dark"
+        v-bind:mobile="true"
       />
     </v-list>
   </v-navigation-drawer>

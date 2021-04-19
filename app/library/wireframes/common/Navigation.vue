@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer
-    app
+    :app="app"
     :clipped="clipped"
     :color="color"
     :dark="dark"
@@ -12,10 +12,7 @@
     :value="value"
     @input="value => $emit('input', value)"
   >
-    <router-view
-      :dark="dark"
-      :name="routeName || `nav-${right ? 'right' : 'left'}`"
-    />
+    <slot v-bind:dark="dark" />
 
     <template v-if="collapsable" v-slot:append>
       <v-btn block text @click="$emit('input', !value)">
@@ -32,6 +29,7 @@
 export default {
   name: "Navigation",
   props: {
+    app: { default: true, type: Boolean },
     clipped: { default: true, type: Boolean },
     collapsable: { default: true, type: Boolean },
     color: { required: false, type: String },

@@ -5,6 +5,10 @@ import vuetify from "./plugins/vuetify";
 
 Vue.config.productionTip = false;
 
+// Mobile plugin
+import mobileViewportMixin from "@/../library/mobile/viewportMixin";
+Vue.mixin(mobileViewportMixin);
+
 new Vue({
   router,
   vuetify,
