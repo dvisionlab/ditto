@@ -11,6 +11,10 @@
       v-resize:debounce="onResize"
     />
 
+    <div v-if="!error && !isReady" class="ready-status">
+      <v-progress-circular class="ma-auto" color="white" indeterminate />
+    </div>
+
     <v-progress-linear
       v-if="showProgress && progress !== 100"
       absolute
@@ -67,10 +71,12 @@ export default {
     this.destroy();
   },
   computed: {
+    isReady() {
+      return this.viewport.ready;
+    },
     progress() {
       return this.getProgressFn(this.$store, this.seriesId, this.validCanvasId);
     },
-    // TODO LT show a loader if viewport not ready
     viewport() {
       return this.getViewportFn(this.$store, this.seriesId, this.validCanvasId);
     }
@@ -136,3 +142,12 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.ready-status {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+</style>

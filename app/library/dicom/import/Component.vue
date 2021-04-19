@@ -185,7 +185,7 @@ export default {
     }
   },
   methods: {
-    async onAction() {
+    onAction() {
       // List of selected stacks
       const stacks = this.selectedSeries.map(({ seriesUID }) =>
         this.series.find(s => s.seriesUID == seriesUID)

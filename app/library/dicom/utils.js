@@ -18,13 +18,14 @@ export const addTools = (elementId, tools) => {
 
 // Remove viewport data from larvitar stores
 export const clearSeriesData = (seriesId, clearCache = false) => {
-  lt.larvitar_store.removeSeriesIds(seriesId);
   lt.removeSeriesFromLarvitarManager(seriesId);
 
   // TODO LT evaluate when clearing cache
   if (clearCache) {
     lt.clearImageCache(seriesId);
   }
+
+  lt.larvitar_store.removeSeriesIds(seriesId);
 };
 
 // Remove a viewport from the larvitar store
