@@ -67,6 +67,9 @@
       >
         <slot v-bind:item="item" :name="h.value" />
       </template>
+
+      <!-- Steps customization slots (actually only step-3 is supported) -->
+      <template v-slot:step-3><slot name="step-3"/></template>
     </dicom-import>
   </v-dialog>
 </template>
