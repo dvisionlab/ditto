@@ -1,10 +1,14 @@
 <template>
-  <!-- TODO manage exit modal before upload ends -->
+  <!-- TODO manage exit modal before upload ends (minimize) -->
   <div>
-    <div>TODO: upload</div>
+    <div>Upload:</div>
     <div>{{ selectedSeries.map(s => s.seriesUID) }}</div>
 
-    <v-btn color="accent" @click="$emit('open-viewer')">Open viewer</v-btn>
+    <slot name="step-3" />
+
+    <v-btn color="accent" disabled @click="$emit('open-viewer')">
+      Open viewer
+    </v-btn>
   </div>
 </template>
 

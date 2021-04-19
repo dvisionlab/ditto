@@ -135,6 +135,9 @@
         >
           <slot v-bind:item="item" :name="h.value" />
         </template>
+
+        <!-- Steps customization slots (actually only step-3 is supported) -->
+        <template v-slot:step-3><slot name="step-3"/></template>
       </component>
     </div>
   </div>
@@ -211,7 +214,12 @@ export default {
       });
 
       this.$emit(this.selectedAction.emitter, emitData);
-      this.$emit("cancel");
+
+      if (this.selectedAction.closeOnEmit) {
+        this.$emit("cancel");
+      } else {
+        this.currentStep++;
+      }
     },
     onNewSeries({ errors, series }) {
       this.errors = [...this.errors, ...errors];
