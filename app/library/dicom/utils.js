@@ -16,6 +16,10 @@ export const addTools = (elementId, tools) => {
   lt.setToolActive(lt.larvitar_store.state.leftMouseHandler);
 };
 
+export const buildData = lt.buildData;
+
+export const buildHeader = lt.buildHeader;
+
 // Remove viewport data from larvitar stores
 export const clearSeriesData = (seriesId, clearCache = false) => {
   lt.removeSeriesFromLarvitarManager(seriesId);
