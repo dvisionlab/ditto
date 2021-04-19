@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import resize from "vue-resize-directive";
 
 import { stackMetadata as stackMetadataDict, stackTools } from "../defaults";
@@ -40,6 +39,8 @@ import {
   seriesIdToElementId
 } from "../utils";
 
+const defaultGetProgressFn = (store, seriesId) =>
+  (store.state.larvitar.series[seriesId] || {}).progress;
 const defaultGetViewportFn = (store, seriesId, canvasId) =>
   store.getters["larvitar/viewport"](canvasId) || {};
 
@@ -50,6 +51,7 @@ export default {
     clearCacheOnDestroy: { default: false, type: Boolean },
     clearOnDestroy: { default: false, type: Boolean },
     canvasId: { required: true, type: String },
+    getProgressFn: { default: defaultGetProgressFn, type: Function },
     getViewportFn: { default: defaultGetViewportFn, type: Function },
     seriesId: { required: true, type: [String, Number] },
     showProgress: { default: true, type: Boolean },
@@ -65,11 +67,9 @@ export default {
     this.destroy();
   },
   computed: {
-    ...mapState("larvitar", {
-      progress(state) {
-        return (state.series[this.seriesId] || {}).progress;
-      }
-    }),
+    progress() {
+      return this.getProgressFn(this.$store, this.seriesId, this.validCanvasId);
+    },
     // TODO LT show a loader if viewport not ready
     viewport() {
       return this.getViewportFn(this.$store, this.seriesId, this.validCanvasId);

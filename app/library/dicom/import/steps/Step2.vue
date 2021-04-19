@@ -79,6 +79,7 @@
               ({ seriesUID }) => seriesUID == item.seriesUID
             ) == null
           "
+          :get-progress-fn="getProgressFn"
           :get-viewport-fn="getViewportFn"
           :series-id="item.seriesUID"
           :show-progress="false"
@@ -112,6 +113,7 @@ export default {
   components: { DicomCanvas },
   directives: { RelativeHeight },
   props: {
+    getProgressFn: { required: false, type: Function },
     getViewportFn: { required: false, type: Function },
     headers: { required: true, type: Array },
     importErrors: { required: false, type: Array },

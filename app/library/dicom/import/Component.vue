@@ -116,6 +116,7 @@
       <component
         :is="`import-step-${currentStep + 1}`"
         class="h-100"
+        :get-progress-fn="getProgressFn"
         :get-viewport-fn="getViewportFn"
         :headers="headers"
         :import-errors="errors"
@@ -168,6 +169,7 @@ export default {
       contentHeight: "100%",
       currentStep: 0,
       errors: [],
+      getProgressFn: this.options.getProgressFn,
       getViewportFn: this.options.getViewportFn,
       headers: getHeaders(this.options),
       metadata: getMetadata(this.options),
