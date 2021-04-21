@@ -14,12 +14,13 @@
     />
 
     <div class="d-flex">
+      <!-- TODO all metadata -->
       <div class="flex-grow-1 lh-small pa-1">
         <div>{{ data.seriesDescription }}</div>
         <div>
-          <series-acquisition-date-string tag="span" :value="data.x00080022" />
-          <span v-if="data.x00080022 && data.seriesModality"> | </span>
           <series-modality-string tag="span" :value="data.seriesModality" />
+          <span v-if="data.x00080022 && data.seriesModality"> | </span>
+          <series-acquisition-date-string tag="span" :value="data.x00080022" />
         </div>
       </div>
 
@@ -53,11 +54,6 @@ export default {
     return {
       canvasTools: this.tools || stackTools.preview
     };
-  },
-  methods: {
-    getComponentName(field) {
-      return field.charAt(0).toUpperCase() + field.slice(1) + "String";
-    }
   }
 };
 </script>

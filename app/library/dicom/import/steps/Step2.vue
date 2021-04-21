@@ -82,8 +82,16 @@
         />
       </template>
 
+      <!-- Default patient slot -->
       <template v-if="!patientHeader.slot" v-slot:[`item.patient`]="{ item }">
-        <div v-for="key in patientHeader.keys" :key="key">{{ item[key] }}</div>
+        <div v-for="key in patientHeader.keys" :key="key">
+          <component
+            v-if="getComponentName(key)"
+            :is="getComponentName(key)"
+            :value="item[key]"
+          />
+          <div v-else>{{ item[key] }}</div>
+        </div>
       </template>
 
       <!-- Add a slot for each header item that requires it (component customization) -->
@@ -93,17 +101,36 @@
       >
         <slot v-bind:item="item" :name="h.value" />
       </template>
+
+      <!-- Add default slots using data types for other headers fields -->
+      <template
+        v-for="h in headers.filter(
+          ({ slot, value }) =>
+            !slot && value !== 'patient' && value !== 'preview'
+        )"
+        v-slot:[`item.${h.value}`]="{ item }"
+      >
+        <component
+          :key="h.value"
+          v-if="getComponentName(h.value)"
+          :is="getComponentName(h.value)"
+          :value="item[h.value]"
+        />
+        <div v-else :key="h.value">{{ item[h.value] }}</div>
+      </template>
     </v-data-table>
   </div>
 </template>
 
 <script>
 import RelativeHeight from "../../../relative-height";
+import dicomDataTypes from "../../../../../dicomDataTypes";
+
 const DicomCanvas = () => import("../../render/Canvas");
 
 export default {
   name: "DicomImportStep2",
-  components: { DicomCanvas },
+  components: { ...dicomDataTypes, DicomCanvas },
   directives: { RelativeHeight },
   props: {
     getProgressFn: { required: false, type: Function },
@@ -121,6 +148,12 @@ export default {
       showErrorDetails: false,
       tableHeight: "100%"
     };
+  },
+  methods: {
+    getComponentName(field) {
+      const name = `${field.charAt(0).toUpperCase() + field.slice(1)}String`;
+      return this.$options.components[name] ? name : null;
+    }
   }
 };
 </script>

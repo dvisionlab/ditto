@@ -18,6 +18,9 @@ export default async (Vue, options) => {
   // canvas component
   if (options.canvas) {
     Vue.component("ditto-dicom-canvas", () => import("./render/Canvas"));
+    Vue.component("ditto-dicom-canvas-data", () =>
+      import("./render/CanvasData")
+    );
   }
 
   if (options.dataTypes) {
