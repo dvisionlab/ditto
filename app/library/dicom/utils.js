@@ -62,7 +62,8 @@ export const mergeSeries = (...series) => {
     });
   });
 
-  let merged = { ...series[0], instances };
+  let merged = series.reduce((result, s) => ({ ...result, ...s }), {});
+  merged = { ...merged, instances };
   merged.imageIds = Object.keys(merged.instances);
 
   return merged;
