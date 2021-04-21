@@ -107,6 +107,7 @@ export default {
   },
   methods: {
     minimize() {
+      // TODO show loader while uploading
       this.minimizedSeries = this.$refs.content.selectedSeries.length;
       this.isOpen = false;
     }

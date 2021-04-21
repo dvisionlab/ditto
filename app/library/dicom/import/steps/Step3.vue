@@ -1,6 +1,5 @@
 <template>
   <!-- TODO manage exit modal before upload ends (minimize or force stop upload) -->
-  <!-- TODO do not minimize if upload is complete: close modal -->
   <div class="text-center">
     <h3 class="text-uppercase ma-auto" :style="{ width: 'fit-content' }">
       <template v-if="step.uploadStatus.loading">
@@ -19,6 +18,8 @@
           :color="hasErrors ? 'warning' : 'success'"
           :value="100"
         />
+
+        <!-- TODO upload other exams button -->
       </div>
     </h3>
 

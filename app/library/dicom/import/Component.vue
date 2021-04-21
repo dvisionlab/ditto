@@ -123,7 +123,7 @@
 
       <modal-controllers
         class="flex-shrink-0 align-self-center"
-        @cancel="$emit('cancel')"
+        @cancel="onCancel"
         @minimize="$emit('minimize')"
       />
     </div>
@@ -240,6 +240,12 @@ export default {
       } else {
         this.currentStep++;
       }
+    },
+    onCancel() {
+      // TODO check for closeConfirmation
+      // console.log(this.currentStep);
+      // console.log(this.currentStep.closeConfirmation());
+      this.$emit("cancel");
     },
     onNewSeries({ errors, series }) {
       this.errors = [...this.errors, ...errors];
