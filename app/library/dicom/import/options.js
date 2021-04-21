@@ -78,10 +78,22 @@ const defaultSteps = [
     next: () => false
   },
   {
+    actions: [
+      {
+        cacheStacks: true,
+        closeOnEmit: true,
+        disabled: false,
+        emitter: "dicom-import-open",
+        // hint: "upload will continue in background",
+        storeStacks: false,
+        text: "open viewer"
+      }
+    ],
     component: () => import("./steps/Step3"),
     label: "upload",
     back: () => false,
-    next: () => false
+    next: () => false,
+    uploadStatus: null // { loading: false, errors: null, progress: {} }
   }
 ];
 
