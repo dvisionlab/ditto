@@ -16,6 +16,7 @@
         <h3 class="headline mb-1">
           Some errors occured while parsing your DICOM files.
         </h3>
+        <!-- TODO show in previous step as dialog -->
         <div v-if="!series.length">
           Unfortunately none of your files can be loaded: please check your
           files complies with the DICOM standard fromat.
@@ -69,7 +70,6 @@
       </template>
 
       <template v-slot:[`item.preview`]="{ item }">
-        <!-- clear-on-destroy is true when series is not selected (user discard from open/updload) -->
         <dicom-canvas
           :canvas-id="item.seriesUID"
           :get-progress-fn="getProgressFn"
