@@ -21,6 +21,7 @@
         v-if="mobileMenuComponent"
         :is="mobileMenuComponent"
         class="pl-1"
+        :mobile="true"
       />
     </template>
 
