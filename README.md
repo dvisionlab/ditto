@@ -31,7 +31,19 @@ import MODULE_NAME from "@/../ditto/MODULE_NAME";
 
 ## Available modules
 
-| Module name | Type       |
-| ----------- | ---------- |
-| **auth**    | Vue plugin |
-| **http**    | Vue plugin |
+| Module name        | Type                  | Doc                                       |
+| ------------------ | --------------------- | ----------------------------------------- |
+| **auth**           | Vue plugin            |                                           |
+| **dicom**          | Vue plugin            |                                           |
+| **dicomDataTypes** | Components collection |                                           |
+| **fileSystemApi**  | Js library            |                                           |
+| **form**           | Components collection |                                           |
+| **http**           | Vue plugin            |                                           |
+| **mobile**         | Vue plugin            |                                           |
+| **relativeHeight** | Vue directive         |                                           |
+| **style**          | Js library            |                                           |
+| **wireframes**     | Components collection | [DOC](./app/library/wireframes/README.md) |
+
+## Run the examples
+
+TODO

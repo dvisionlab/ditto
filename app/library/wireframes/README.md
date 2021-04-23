@@ -1,6 +1,6 @@
 # Wireframes
 
-Application wireframes components. Intended to use as root component of Vue apps.
+Provides a component collections of application wireframes. Intended to use as root component of Vue apps.
 
 ## Basic wireframe
 

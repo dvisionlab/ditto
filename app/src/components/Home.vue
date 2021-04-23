@@ -28,7 +28,7 @@
               </div>
             </td>
             <td>
-              <a href="../../library/wireframes/docs/index.html" target="_blank"
+              <a href="" target="_blank"
                 >docs</a
               >
             </td>
