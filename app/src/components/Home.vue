@@ -6,15 +6,48 @@
     </div>
 
     <div :style="{ padding: '3em' }">
-      <h3>EXAMPLES</h3>
-      <div>
-        <router-link to="/basic-wireframe">/basic-wireframe</router-link>
-      </div>
-      <div>
-        <router-link to="/double-navigation-wireframe"
-          >/double-navigation-wireframe</router-link
-        >
-      </div>
+      <table :style="{ width: '100%' }">
+        <thead>
+          <th>TOOL</th>
+          <th>EXAMPLE</th>
+          <th>DOCS</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>wireframes</td>
+            <td>
+              <div>
+                <router-link to="/basic-wireframe" target="_blank"
+                  >/basic-wireframe</router-link
+                >
+              </div>
+              <div>
+                <router-link to="/double-navigation-wireframe" target="_blank"
+                  >/double-navigation-wireframe</router-link
+                >
+              </div>
+            </td>
+            <td>
+              <a href="../../library/wireframes/docs/index.html" target="_blank"
+                >docs</a
+              >
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              ...
+            </td>
+            <td>docs</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
+
+<style scoped>
+thead {
+  text-align: left;
+}
+</style>
