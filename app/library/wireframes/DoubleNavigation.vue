@@ -2,6 +2,7 @@
   <wireframe-wrapper>
     <!-- top menu -->
     <app-bar
+      v-if="$scopedSlots.bar"
       :color="bar.color"
       :dark="bar.dark"
       :dense="bar.dense"
