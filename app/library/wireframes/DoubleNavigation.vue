@@ -60,14 +60,14 @@
     <v-main>
       <v-container class="d-flex pa-0" fluid :style="{ height: '100%' }">
         <app-navigation
-          v-if="$scopedSlots.navInner"
+          v-if="$scopedSlots.nav"
           :app="false"
           :color="nav.color"
           :width="nav.width"
           v-model="navVisible"
         >
           <template v-slot="data"
-            ><slot name="navInner" v-bind="data"
+            ><slot name="nav" v-bind="data"
           /></template>
         </app-navigation>
 
@@ -88,7 +88,7 @@
 
     <!-- togglers -->
     <template
-      v-if="$scopedSlots.navInner && !navVisible"
+      v-if="$scopedSlots.nav && !navVisible"
       v-slot:navigation-drawer-toggler-inner
     >
       <navigation-toggler
