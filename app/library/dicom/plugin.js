@@ -26,9 +26,12 @@ export default async (Vue, options) => {
   if (options.dataTypes) {
     const dicomDataTypes = () => import("../data-types/dicom");
     dicomDataTypes().then(({ default: components }) => {
-      Object.keys(components).forEach(key =>
-        Vue.component(`ditto-data-type-${key}`, components[key])
-      );
+      Object.keys(components).forEach(key => {
+        const name = key
+          .split(/(?=[A-Z])/)
+          .reduce((string, chunk) => `${string}-${chunk.toLowerCase()}`, "");
+        Vue.component(`ditto-data-type${name}`, components[key]);
+      });
     });
   }
 
