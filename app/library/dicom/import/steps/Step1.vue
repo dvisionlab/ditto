@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import fs from "@/../ditto/fileSystemApi";
+import * as fs from "../../../file-system-api";
 import { parseFiles } from "../../utils";
 import icon from "../drag-and-drop.svg";
 

@@ -25,6 +25,7 @@
       />
     </template>
 
+    <!-- App bar content -->
     <slot
       v-else
       v-bind:class-name="'d-flex flex-grow-1 align-center h-100'"
@@ -37,14 +38,27 @@
 export default {
   name: "AppBar",
   props: {
+    // Color of the v-app-bar component
     color: { required: false, type: String },
+    // Dark status of the v-app-bar component
     dark: { default: false, type: Boolean },
+    // Dense status of the v-app-bar component
     dense: { default: false, type: Boolean },
+    // Height of the v-app-bar component
     height: { required: false, type: Number },
+    // Clipped left status of the v-app-bar component
     left: { default: true, type: Boolean },
-    mobileBreakpoint: { default: "xs", type: String },
+    // Mobile breakpoint
+    mobileBreakpoint: {
+      default: "xs",
+      // One of the $vuetify.breakpoint keys
+      type: String
+    },
+    // Vue component to render in mobile screens, instead of the default slot
     mobileMenuComponent: { required: false, type: [Object, Function] },
+    // Mobile menu visibility
     mobileMenuVisible: { default: false, type: Boolean },
+    // Clipped right status of the v-app-bar component
     right: { default: true, type: Boolean }
   }
 };

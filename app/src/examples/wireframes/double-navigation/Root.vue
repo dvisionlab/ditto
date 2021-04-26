@@ -7,7 +7,7 @@
         Header (dark: {{ dark }}, mobile: {{ mobile }})
       </div>
     </template>
-    <template v-slot:navInner="{ dark }">Inner (dark: {{ dark }})</template>
+    <template v-slot:nav="{ dark }">Inner (dark: {{ dark }})</template>
     <template v-slot:navLeft="{ dark }">Left (dark: {{ dark }})</template>
     <template v-slot:navRight="{ dark }">Right (dark: {{ dark }})</template>
     <template v-slot:footer>Footer</template>
