@@ -24,10 +24,10 @@ export default async (Vue, options) => {
   }
 
   if (options.dataTypes) {
-    const dicomDataTypes = () => import("../../../dicomDataTypes");
+    const dicomDataTypes = () => import("../data-types/dicom");
     dicomDataTypes().then(({ default: components }) => {
       Object.keys(components).forEach(key =>
-        Vue.component(`DittoDataType${key}`, components[key])
+        Vue.component(`ditto-data-type-${key}`, components[key])
       );
     });
   }

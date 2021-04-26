@@ -124,7 +124,7 @@
 
 <script>
 import RelativeHeight from "../../../relative-height";
-import dicomDataTypes from "../../../../../dicomDataTypes";
+import dicomDataTypes from "../../../data-types/dicom";
 
 const DicomCanvas = () => import("../../render/Canvas");
 

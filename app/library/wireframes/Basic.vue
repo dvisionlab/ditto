@@ -2,6 +2,7 @@
   <wireframe-wrapper>
     <!-- top menu -->
     <app-bar
+      v-if="$scopedSlots.bar"
       :color="bar.color"
       :dark="bar.dark"
       :dense="bar.dense"
@@ -11,17 +12,24 @@
       :mobile-menu-visible="mobileMenuVisible"
       @toggle-mobile-menu="mobileMenuVisible = !mobileMenuVisible"
     >
-      <template v-slot="data"><slot name="bar" v-bind="data"/></template>
+      <template v-slot="data">
+        <!-- App bar slot (desktop) -->
+        <slot name="bar" v-bind="data" />
+      </template>
     </app-bar>
 
     <!-- mobile top menu -->
     <mobile-top-menu
+      v-if="$scopedSlots.bar"
       :dark="bar.dark"
       :mobile-breakpoint="mobileBreakpoint"
-      :steteless="bar.stateless"
+      :stateless="bar.stateless"
       v-model="mobileMenuVisible"
     >
-      <template v-slot="data"><slot name="bar" v-bind="data"/></template>
+      <template v-slot="data">
+        <!-- App bar slot (mobile) -->
+        <slot name="bar" v-bind="data" />
+      </template>
     </mobile-top-menu>
 
     <!-- left navigation drawer -->
@@ -33,7 +41,10 @@
       :width="navLeft.width"
       v-model="navLeftVisible"
     >
-      <template v-slot="data"><slot name="navLeft" v-bind="data"/></template>
+      <template v-slot="data">
+        <!-- Left navigator slot -->
+        <slot name="navLeft" v-bind="data" />
+      </template>
     </app-navigation>
 
     <!-- right navigation drawer -->
@@ -47,13 +58,16 @@
       :width="navRight.width"
       v-model="navRightVisible"
     >
-      <template v-slot="data"><slot name="navRight" v-bind="data"/></template>
+      <template v-slot="data">
+        <!-- Right navigator slot -->
+        <slot name="navRight" v-bind="data" />
+      </template>
     </app-navigation>
 
     <!-- main content -->
     <v-main>
       <v-container class="h-100 pa-0" fluid>
-        <!-- default slot -->
+        <!-- Main content slot -->
         <slot />
       </v-container>
     </v-main>
@@ -65,6 +79,7 @@
       :dark="footer.dark"
       :height="footer.height"
     >
+      <!-- Footer slot -->
       <slot name="footer" />
     </v-footer>
 
@@ -103,6 +118,14 @@ const AppBar = () => import("./common/Bar");
 const AppNavigation = () => import("./common/Navigation");
 const MobileTopMenu = () => import("./common/MobileTopMenu");
 const NavigationToggler = () => import("./common/NavigationToggler");
+
+// Basic wireframe component.
+// Available slots:
+// - default: main app container
+// - bar: top menu (optional)
+// - navLeft: collapsable left navigator (optional)
+// - navRight: collapsable right navigator (optional)
+// - footer (optional)
 
 export default {
   name: "BasicWireframe",

@@ -14,6 +14,7 @@
 export default {
   name: "NavigationToggler",
   props: {
+    // Right status of the navigation-drawer parent component
     right: { default: false, type: Boolean }
   }
 };
