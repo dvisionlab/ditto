@@ -46,4 +46,12 @@ import MODULE_NAME from "@/../ditto/MODULE_NAME";
 
 ## Run the examples
 
-TODO
+Run _ditto_:
+
+```
+cd app
+yarn install
+yarn serve
+```
+
+Go to _http://localhost:8080/_: you'll find the links to the available examples and documentation.

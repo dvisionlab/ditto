@@ -2,13 +2,18 @@
 
 Provides a component collections of application wireframes. Intended to use as root component of Vue apps.
 
+Available wireframes:
+
+- basic
+- double navigation
+
+## Dependencies
+
+- Vuetify
+
 ## Basic wireframe
 
 Basic wireframe component.
-
-### Dependencies
-
-- Vuetify
 
 ### Props
 
@@ -56,10 +61,6 @@ Basic wireframe component.
 
 Wireframe component with a fixed left mini-variant navigator.
 
-### Dependencies
-
-- Vuetify
-
 ### Props
 
 Like _basic wireframe_, plus:
@@ -91,7 +92,7 @@ import { BasicWireframe } from "@/../ditto/wireframes";
 // import { DoubleNavigationWireframe } from "@/../ditto/wireframes";
 ```
 
-1. Register the component and the desired wireframe options
+2. Register the component and the desired wireframe options
 
 ```js
 export default {
@@ -102,7 +103,7 @@ export default {
 };
 ```
 
-1. use the wireframe component in the html section
+3. Use the wireframe component in the html section (usually the wifreframe is the application root component)
 
 ```html
 <template>
@@ -132,7 +133,70 @@ export default {
 
 ## Notes
 
-TODO
+### Guest section
 
-- guest section
-- router/slot definition
+All routes with `$route.meta.guest == true` (see _ditto_ **auth** module) are mounted outside the layout structure. If needed, a specific wireframe configuration must be specified in the _AuthWrapper_ component.
+
+## Slots definition
+
+To customize the wireframe slots you can:
+
+- **import your custom components locally** and use them inside the wireframes slots definition:
+
+```js
+const MyBarComponent = () => import("@/components/MyBarComponent");
+
+export default {
+  components: { BasicWireframe, MyBarComponent },
+  data: () => ({ ... })
+};
+```
+
+```html
+<template>
+  <basic-wireframe v-bind="options">
+    ...
+
+    <!-- named slots -->
+    <template v-slot:bar="{ className, ...data }">
+      <router-view name="bar" :class="className" v-bind="data" />
+    </template>
+
+    ...
+  </basic-wireframe>
+</template>
+```
+
+Use this option for slots whose content are fixed through all your application routes.
+
+- **use named routes**, defining your custom components in the router configuration:
+
+```js
+{
+  name: "basic-wireframe-home",
+  path: "home",
+  components: {
+    ...
+    bar: () => import("@/components/MyBarComponent")
+  }
+},
+```
+
+```html
+<template>
+  <basic-wireframe v-bind="options">
+    ...
+
+    <!-- named slots -->
+    <template v-slot:bar="{ className, ...data }">
+      <my-bar-component :class="className" v-bind="data" />
+    </template>
+
+    ...
+  </basic-wireframe>
+</template>
+```
+
+Use this option for slots whose content change through your application routes.
+
+See the [wireframes examples code](https://github.com/dvisionlab/ditto/tree/examples/app/src/master/wireframes) for more information.

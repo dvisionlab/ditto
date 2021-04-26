@@ -8,7 +8,7 @@
     <div :style="{ padding: '3em' }">
       <table :style="{ width: '100%' }">
         <thead>
-          <th>TOOL</th>
+          <th>MODULE</th>
           <th>EXAMPLE</th>
           <th>DOCS</th>
         </thead>
@@ -28,17 +28,13 @@
               </div>
             </td>
             <td>
-              <a href="" target="_blank"
-                >docs</a
+              <a
+                href="https://github.com/dvisionlab/ditto/blob/master/app/library/wireframes/README.md"
+                target="_blank"
               >
+                docs
+              </a>
             </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>
-              ...
-            </td>
-            <td>docs</td>
           </tr>
         </tbody>
       </table>
