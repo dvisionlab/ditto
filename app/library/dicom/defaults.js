@@ -21,12 +21,13 @@ export const stackMetadata = {
 
 export const stackTools = {
   default: [
-    // TODO all?
-    { name: "Wwwc", configuration: {} },
-    { name: "StackScrollMouseWheel", configuration: {} }
+    { name: "Wwwc", configuration: {}, defaultActive: true },
+    { name: "Zoom", configuration: {} },
+    { name: "Pan", configuration: {} },
+    { name: "StackScrollMouseWheel", configuration: {}, defaultActive: true }
   ],
   preview: [
-    { name: "Wwwc", configuration: {} },
-    { name: "StackScrollMouseWheel", configuration: {} }
+    { name: "Wwwc", configuration: {}, defaultActive: true },
+    { name: "StackScrollMouseWheel", configuration: {}, defaultActive: true }
   ]
 };

@@ -7,13 +7,22 @@ import * as lt from "larvitar";
 
 // Public methods
 
+export const activateTool = (tool, mask = 1) => {
+  let options = {
+    ...tool.options,
+    mouseButtonMask: mask
+  };
+  lt.setToolActive(tool.name, options);
+};
+
 export const addTools = (elementId, tools) => {
   tools.forEach(t => {
     lt.addTool(t.name, t.configuration, elementId);
-    lt.setToolActive(t.name, t.options);
-  });
 
-  lt.setToolActive(lt.larvitar_store.state.leftMouseHandler);
+    if (t.defaultActive) {
+      lt.setToolActive(t.name, t.options);
+    }
+  });
 };
 
 export const buildData = stack => {
