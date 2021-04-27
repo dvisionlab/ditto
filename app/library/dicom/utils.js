@@ -16,7 +16,15 @@ export const addTools = (elementId, tools) => {
   lt.setToolActive(lt.larvitar_store.state.leftMouseHandler);
 };
 
-export const buildData = lt.buildData;
+export const buildData = stack => {
+  return new Promise((resolve, reject) => {
+    try {
+      lt.buildDataAsync(stack, data => resolve(data));
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 
 export const buildHeader = lt.buildHeader;
 
@@ -24,7 +32,6 @@ export const buildHeader = lt.buildHeader;
 export const clearSeriesData = (seriesId, clearCache = false) => {
   lt.removeSeriesFromLarvitarManager(seriesId);
 
-  // TODO LT evaluate when clearing cache
   if (clearCache) {
     lt.clearImageCache(seriesId);
   }
@@ -118,7 +125,7 @@ export const setup = store => {
 };
 
 // Call the Larvitar "populateLarvitarManager" function
-export const storeSeriesStack = (seriesId, stack, cache = true) => {
+export const storeSeriesStack = (seriesId, stack, cache = false) => {
   lt.populateLarvitarManager(seriesId, stack);
 
   if (cache) {

@@ -75,7 +75,6 @@
           :get-progress-fn="getProgressFn"
           :get-viewport-fn="getViewportFn"
           :series-id="item.seriesUID"
-          :show-progress="false"
           :stack="item"
           :style="{ width: '10em', height: '10em' }"
           :tools="tools"
