@@ -58,7 +58,7 @@ export default {
     getProgressFn: { default: defaultGetProgressFn, type: Function },
     getViewportFn: { default: defaultGetViewportFn, type: Function },
     seriesId: { required: true, type: [String, Number] },
-    showProgress: { default: true, type: Boolean },
+    showProgress: { default: false, type: Boolean },
     stack: { required: false, type: Object },
     tools: { default: () => stackTools.default, type: Array }
   },
