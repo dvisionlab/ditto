@@ -25,6 +25,10 @@ export const addTools = (elementId, tools) => {
   });
 };
 
+export const disableTool = tool => {
+  lt.setToolDisabled(tool.name);
+};
+
 export const buildData = stack => {
   return new Promise((resolve, reject) => {
     try {
