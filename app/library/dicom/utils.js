@@ -145,3 +145,22 @@ export const storeSeriesStack = (seriesId, stack, cache = false) => {
     lt.cacheImages(seriesId, stack);
   }
 };
+
+export const updateViewportProperty = (action, element) => {
+  switch (action) {
+    case "flip-horizontal": {
+      lt.flipImageHorizontal(element);
+      break;
+    }
+
+    case "flip-vertical": {
+      lt.flipImageVertical(element);
+      break;
+    }
+
+    case "invert": {
+      lt.invertImage(element);
+      break;
+    }
+  }
+};
