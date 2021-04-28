@@ -6,7 +6,9 @@
 import * as lt from "larvitar";
 
 // Public methods
+// --------------
 
+// Tools functionalities
 export const activateTool = (tool, mask = 1) => {
   let options = {
     ...tool.options,
@@ -26,9 +28,14 @@ export const addTools = (elementId, tools) => {
 };
 
 export const disableTool = tool => {
-  lt.setToolDisabled(tool.name);
+  lt.setToolEnabled(tool.name); // tool not editable but visible
 };
 
+export const hideTool = tool => {
+  lt.setToolDisabled(tool.name); // tool hidden
+};
+
+// Build data and header functions
 export const buildData = stack => {
   return new Promise((resolve, reject) => {
     try {
@@ -146,6 +153,7 @@ export const storeSeriesStack = (seriesId, stack, cache = false) => {
   }
 };
 
+// Update viewport actions
 export const updateViewportProperty = (action, element) => {
   switch (action) {
     case "flip-horizontal": {
