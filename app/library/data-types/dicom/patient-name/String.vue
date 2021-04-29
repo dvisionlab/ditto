@@ -1,5 +1,7 @@
 <template>
-  <component class="text-capitalize" :is="tag">{{ string }}</component>
+  <component v-if="value" class="text-capitalize" :is="tag">
+    {{ string }}
+  </component>
 </template>
 
 <script>
