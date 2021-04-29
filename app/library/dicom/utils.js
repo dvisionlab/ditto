@@ -18,7 +18,7 @@ export const addTools = (elementId, tools) => {
     lt.addTool(t.name, t.configuration, elementId);
 
     if (t.defaultActive) {
-      // TODO @mattia move in larvitar? use default options and default interactions
+      // TODO TOOL @mattia move in larvitar? use default options and default interactions
       // lt.setToolActive(t.name, t.options);
       lt.cornerstoneTools.setToolActiveForElement(
         document.getElementById(elementId),
