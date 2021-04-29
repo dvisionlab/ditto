@@ -21,13 +21,37 @@ export const stackMetadata = {
 
 export const stackTools = {
   default: [
-    { name: "Wwwc", configuration: {}, defaultActive: true },
-    { name: "Zoom", configuration: {} },
-    { name: "Pan", configuration: {} },
-    { name: "StackScrollMouseWheel", configuration: {}, defaultActive: true }
+    {
+      name: "Wwwc",
+      configuration: {},
+      defaultActive: true,
+      mixins: ["enabledOrDisabledBinaryTool"]
+    },
+    {
+      name: "Zoom",
+      configuration: {},
+      mixins: ["enabledOrDisabledBinaryTool"]
+    },
+    { name: "Pan", configuration: {}, mixins: ["enabledOrDisabledBinaryTool"] },
+    {
+      name: "StackScrollMouseWheel",
+      configuration: {},
+      defaultActive: true,
+      mixins: ["enabledOrDisabledBinaryTool"]
+    }
   ],
   preview: [
-    { name: "Wwwc", configuration: {}, defaultActive: true },
-    { name: "StackScrollMouseWheel", configuration: {}, defaultActive: true }
+    {
+      name: "Wwwc",
+      configuration: {},
+      defaultActive: true,
+      mixins: ["enabledOrDisabledBinaryTool"]
+    },
+    {
+      name: "StackScrollMouseWheel",
+      configuration: {},
+      defaultActive: true,
+      mixins: ["enabledOrDisabledBinaryTool"]
+    }
   ]
 };
