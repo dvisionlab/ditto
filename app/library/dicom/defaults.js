@@ -1,24 +1,36 @@
 // Default DICOM settings
 // ----------------------
 
-// Top level stacks metadata
+import metadata from "./metadata";
 
-// TODO all codes?
+// Top level stacks metadata
 export const stackMetadata = {
-  patient: ["patientName", "x00100030", "patientSex"],
-  study: ["studyUID", "studyDescription"],
+  patient: [
+    metadata.PatientID,
+    metadata.PatientName,
+    metadata.PatientBirthDate,
+    metadata.PatientSex
+  ],
+  study: [
+    metadata.StudyInstanceUID,
+    metadata.AccessionNumber,
+    metadata.StudyDate,
+    metadata.StudyTime,
+    metadata.StudyDescription
+  ],
   series: [
-    "seriesUID",
-    "seriesDescription",
-    "seriesModality",
-    "x00080022",
-    "numberOfImages",
-    "sliceThickness"
+    metadata.SeriesInstanceUID,
+    metadata.SeriesDate,
+    metadata.SeriesTime,
+    metadata.SeriesDescription,
+    metadata.Modality,
+    metadata.SliceThickness,
+    // Larvitar tags
+    "numberOfImages"
   ]
 };
 
 // Cornerstone tools
-
 export const stackTools = {
   default: [
     {

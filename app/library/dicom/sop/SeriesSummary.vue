@@ -4,10 +4,10 @@
     <series-thumbnail v-if="showThumbnail" :value="data.thumbnail" />
     <dicom-canvas
       v-else-if="showCanvas"
-      :canvas-id="canvasId || data.seriesUID"
+      :canvas-id="canvasId || data[metadata.SeriesInstanceUID]"
       :clear-cache-on-destroy="clearCacheOnDestroy"
       :clear-on-destroy="clearOnDestroy"
-      :series-id="data.seriesUID"
+      :series-id="data[metadata.SeriesInstanceUID]"
       :show-progress="showProgress"
       :style="{ height: '10em', width: '100%' }"
       :tools="canvasTools"
@@ -16,11 +16,17 @@
     <div class="d-flex">
       <!-- TODO all metadata -->
       <div class="flex-grow-1 lh-small pa-1">
-        <div>{{ data.seriesDescription }}</div>
+        <div>{{ data[metadata.SeriesDescription] }}</div>
         <div>
-          <series-modality-string tag="span" :value="data.seriesModality" />
-          <span v-if="data.x00080022 && data.seriesModality"> | </span>
-          <series-acquisition-date-string tag="span" :value="data.x00080022" />
+          <series-modality-string tag="span" :value="data[metadata.Modality]" />
+          <span v-if="data[metadata.SeriesDate] && data[metadata.Modality]">
+            |
+          </span>
+          <!-- TODO rename component + show datetime? -->
+          <series-acquisition-date-string
+            tag="span"
+            :value="data[metadata.SeriesDate]"
+          />
         </div>
       </div>
 
@@ -31,6 +37,7 @@
 
 <script>
 import { stackTools } from "../defaults";
+import metadata from "../metadata";
 import dicomDataTypes from "../../data-types/dicom";
 import DicomCanvas from "../render/Canvas";
 
@@ -52,7 +59,8 @@ export default {
   },
   data() {
     return {
-      canvasTools: this.tools || stackTools.preview
+      canvasTools: this.tools || stackTools.preview,
+      metadata
     };
   }
 };
