@@ -153,7 +153,7 @@ export default {
   },
   methods: {
     getComponentName(field) {
-      const name = `${field.charAt(0).toUpperCase() + field.slice(1)}String`;
+      const name = `${field}-string`;
       return this.$options.components[name] ? name : null;
     }
   }

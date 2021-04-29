@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- thumbnail or dicom canvas -->
-    <series-thumbnail v-if="showThumbnail" :value="data.thumbnail" />
+    <thumbnail-string v-if="showThumbnail" :value="data.thumbnail" />
     <dicom-canvas
       v-else-if="showCanvas"
       :canvas-id="canvasId || data[metadata.SeriesInstanceUID]"
@@ -18,12 +18,17 @@
       <div class="flex-grow-1 lh-small pa-1">
         <div>{{ data[metadata.SeriesDescription] }}</div>
         <div>
-          <series-modality-string tag="span" :value="data[metadata.Modality]" />
+          <component
+            :is="`${metadata.Modality}-string`"
+            tag="span"
+            :value="data[metadata.Modality]"
+          />
           <span v-if="data[metadata.SeriesDate] && data[metadata.Modality]">
             |
           </span>
-          <!-- TODO rename component + show datetime? -->
-          <series-acquisition-date-string
+          <!-- TODO show datetime? -->
+          <scomponent
+            :is="`${metadata.SeriesDate}-string`"
             tag="span"
             :value="data[metadata.SeriesDate]"
           />

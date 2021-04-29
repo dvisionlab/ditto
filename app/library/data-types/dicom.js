@@ -1,29 +1,32 @@
 // Import/export dicom data types modules
-// TODO automatic import
+import metadata from "../dicom/metadata";
 
+import modalityComponents from "./dicom/modality";
 import patientNameComponents from "./dicom/patient-name";
 import patientSexComponents from "./dicom/patient-sex";
-import seriesAcquisitionDateComponents from "./dicom/series-acquisition-date";
-import seriesModalityComponents from "./dicom/series-modality";
-import seriesThumbnailComponents from "./dicom/series-thumbnail";
 import sliceThicknessComponents from "./dicom/slice-thickness";
-import x00100030Components from "./dicom/x-00100030";
-import x00080022Components from "./dicom/x-00100030";
+import thumbnailComponents from "./dicom/thumbnail";
+
+const genericDateComponents = {
+  string: () => import("./date/String")
+};
 
 const components = {
-  PatientName: patientNameComponents,
-  PatientSex: patientSexComponents,
-  SeriesAcquisitionDate: seriesAcquisitionDateComponents,
-  SeriesModality: seriesModalityComponents,
-  SeriesThumbnail: seriesThumbnailComponents,
-  SliceThickness: sliceThicknessComponents,
-  X00100030: x00100030Components,
-  X00080022: x00080022Components
+  [metadata.Modality]: modalityComponents,
+  [metadata.PatientBirthDate]: genericDateComponents,
+  [metadata.PatientName]: patientNameComponents,
+  [metadata.PatientSex]: patientSexComponents,
+  [metadata.StudyDate]: genericDateComponents,
+  [metadata.StudyTime]: genericDateComponents,
+  [metadata.SeriesDate]: genericDateComponents,
+  [metadata.SeriesTime]: genericDateComponents,
+  [metadata.SliceThickness]: sliceThicknessComponents,
+  thumbnail: thumbnailComponents
 };
 
 export default Object.keys(components).reduce((result, name) => {
   Object.keys(components[name]).forEach(
-    key => (result[`${name}${key}`] = components[name][key])
+    key => (result[`${name}-${key}`] = components[name][key])
   );
   return result;
 }, {});
