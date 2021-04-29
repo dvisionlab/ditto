@@ -81,41 +81,35 @@
         />
       </template>
 
-      <!-- Default patient slot -->
-      <template v-if="!patientHeader.slot" v-slot:[`item.patient`]="{ item }">
-        <div v-for="key in patientHeader.keys" :key="key">
+      <template
+        v-for="h in headers.filter(({ value }) => value !== 'preview')"
+        v-slot:[`item.${h.value}`]="{ item }"
+      >
+        <!-- Default patient slot -->
+        <template v-if="h.value == 'patient' && !h.slot">
+          <div v-for="key in h.keys" :key="key">
+            <component
+              v-if="getComponentName(key)"
+              :is="getComponentName(key)"
+              :value="item[key]"
+            />
+            <div v-else>{{ item[key] }}</div>
+          </div>
+        </template>
+
+        <!-- Add a slot for each header item that requires it (component customization) -->
+        <slot v-else-if="h.slot" :name="h.value" v-bind:item="item" />
+
+        <!-- Add default slots using data types for other headers fields -->
+        <template v-else>
           <component
-            v-if="getComponentName(key)"
-            :is="getComponentName(key)"
-            :value="item[key]"
+            :key="h.value"
+            v-if="getComponentName(h.value)"
+            :is="getComponentName(h.value)"
+            :value="item[h.value]"
           />
-          <div v-else>{{ item[key] }}</div>
-        </div>
-      </template>
-
-      <!-- Add a slot for each header item that requires it (component customization) -->
-      <template
-        v-for="h in headers.filter(({ slot }) => slot)"
-        v-slot:[`item.${h.value}`]="{ item }"
-      >
-        <slot v-bind:item="item" :name="h.value" />
-      </template>
-
-      <!-- Add default slots using data types for other headers fields -->
-      <template
-        v-for="h in headers.filter(
-          ({ slot, value }) =>
-            !slot && value !== 'patient' && value !== 'preview'
-        )"
-        v-slot:[`item.${h.value}`]="{ item }"
-      >
-        <component
-          :key="h.value"
-          v-if="getComponentName(h.value)"
-          :is="getComponentName(h.value)"
-          :value="item[h.value]"
-        />
-        <div v-else :key="h.value">{{ item[h.value] }}</div>
+          <div v-else :key="h.value">{{ item[h.value] }}</div>
+        </template>
       </template>
     </v-data-table>
   </div>
@@ -143,7 +137,6 @@ export default {
   },
   data() {
     return {
-      patientHeader: this.headers.find(h => h.value == "patient"),
       showErrorDetails: false,
       tableHeight: "100%"
     };
