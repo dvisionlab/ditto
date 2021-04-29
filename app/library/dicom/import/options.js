@@ -1,6 +1,7 @@
 // Import steps configuration
 // --------------------------
 
+import metadata from "../metadata";
 import { stackMetadata, stackTools } from "../defaults";
 
 // Preview canvas tools
@@ -16,7 +17,11 @@ const defaultMetadata = [
   ...stackMetadata.series
 ];
 
-const requiredMetadata = ["studyUID", "studyDescription", "seriesUID"];
+const requiredMetadata = [
+  metadata.StudyInstanceUID,
+  metadata.StudyDescription,
+  metadata.seriesInstanceUID
+];
 
 const computeHeaders = metadata => {
   return [

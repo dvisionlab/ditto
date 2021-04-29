@@ -43,25 +43,26 @@
       :style="{ height: tableHeight }"
       disable-pagination
       fixed-header
-      group-by="studyUID"
+      :group-by="metadata.StudyInstanceUID"
       :headers="headers"
       height="100%"
       hide-default-footer
       :items="series"
-      item-key="seriesUID"
+      :item-key="metadata.SeriesInstanceUID"
       show-select
       :value="selectedSeries"
       @item-selected="event => $emit('select-series', event)"
       @toggle-select-all="event => $emit('select-series', event)"
     >
       <template v-slot:[`group.header`]="{ items }">
+        <!-- TODO add other study meta fields -->
         <td
           class="text-center"
           :colspan="headers.length + 1"
           :style="{ height: '2em' }"
         >
           <b>{{
-            items[0].studyDescription || "[missing study description]"
+            items[0][metadata.StudyDescription] || "[missing study description]"
           }}</b>
 
           | <b class="primary--text">{{ items.length }} series</b>
@@ -71,10 +72,10 @@
       <template v-slot:[`item.preview`]="{ item }">
         <!-- clear-on-destroy is true when series is not selected (user discard from open/updload) -->
         <dicom-canvas
-          :canvas-id="item.seriesUID"
+          :canvas-id="item[metadata.SeriesInstanceUID]"
           :get-progress-fn="getProgressFn"
           :get-viewport-fn="getViewportFn"
-          :series-id="item.seriesUID"
+          :series-id="item[metadata.SeriesInstanceUID]"
           :stack="item"
           :style="{ width: '10em', height: '10em' }"
           :tools="tools"
@@ -124,6 +125,7 @@
 <script>
 import RelativeHeight from "../../../relative-height";
 import dicomDataTypes from "../../../data-types/dicom";
+import metadataDictionary from "../../metadata";
 
 const DicomCanvas = () => import("../../render/Canvas");
 
@@ -143,6 +145,7 @@ export default {
   },
   data() {
     return {
+      metadata: metadataDictionary,
       patientHeader: this.headers.find(h => h.value == "patient"),
       showErrorDetails: false,
       tableHeight: "100%"
