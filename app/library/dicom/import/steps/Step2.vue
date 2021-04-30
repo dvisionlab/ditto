@@ -59,14 +59,17 @@
         <td></td>
         <td>
           <div>
-            <b class="primary--text">{{ items.length }} series in study</b>
+            <b class="primary--text">{{ items.length }}</b>
+            series in study
           </div>
-          <div>AN: {{ items[0][metadata.AccessionNumber] }}</div>
+          <div v-if="items[0][metadata.AccessionNumber]">
+            AN: {{ items[0][metadata.AccessionNumber] }}
+          </div>
         </td>
         <!-- patient col -->
         <td></td>
         <td>
-          <div>{{ items[0][metadata.StudyDescription] }}</div>
+          <div>{{ items[0][metadata.StudyDescription] || "&mdash;" }}</div>
         </td>
         <td>
           <component
@@ -195,7 +198,7 @@ td.cell-x0008103e > * {
 }
 
 td.cell-patient > * {
-  max-width: 250px;
+  max-width: 200px;
   width: max-content;
 }
 </style>

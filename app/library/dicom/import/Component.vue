@@ -166,13 +166,18 @@ export default {
     options: { default: () => ({}), type: Object }
   },
   data() {
+    const headers = getHeaders(this.options).map(h => ({
+      ...h,
+      text: h.text ? this.$t(`dicom-import.${h.text}`) : h.text
+    }));
+
     return {
       contentHeight: "100%",
       currentStep: 0,
       errors: [],
       getProgressFn: this.options.getProgressFn,
       getViewportFn: this.options.getViewportFn,
-      headers: getHeaders(this.options),
+      headers: headers,
       metadata: getMetadata(this.options),
       series: [],
       selectedSeries: [],
