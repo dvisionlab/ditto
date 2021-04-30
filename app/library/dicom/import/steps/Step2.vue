@@ -62,9 +62,10 @@
             <b class="primary--text">{{ items.length }}</b>
             series in study
           </div>
-          <div v-if="items[0][metadata.AccessionNumber]">
-            AN: {{ items[0][metadata.AccessionNumber] }}
-          </div>
+          <component
+            :is="getComponentName(metadata.AccessionNumber)"
+            :value="items[0][metadata.AccessionNumber]"
+          />
         </td>
         <!-- patient col -->
         <td></td>

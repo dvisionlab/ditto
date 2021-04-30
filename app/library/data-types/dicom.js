@@ -1,6 +1,7 @@
 // Import/export dicom data types modules
 import metadata from "../dicom/metadata";
 
+import accessionNumberComponents from "./dicom/accession-number";
 import modalityComponents from "./dicom/modality";
 import patientIdComponents from "./dicom/patient-id";
 import patientNameComponents from "./dicom/patient-name";
@@ -17,6 +18,7 @@ const genericTimeComponents = {
 };
 
 const components = {
+  [metadata.AccessionNumber]: accessionNumberComponents,
   [metadata.Modality]: modalityComponents,
   [metadata.PatientBirthDate]: genericDateComponents,
   [metadata.PatientID]: patientIdComponents,

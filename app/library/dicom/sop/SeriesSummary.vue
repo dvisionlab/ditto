@@ -4,35 +4,26 @@
     <thumbnail-string v-if="showThumbnail" :value="data.thumbnail" />
     <dicom-canvas
       v-else-if="showCanvas"
-      :canvas-id="canvasId || data[metadata.SeriesInstanceUID]"
+      :canvas-id="canvasId || data[metadataDictionary.SeriesInstanceUID]"
       :clear-cache-on-destroy="clearCacheOnDestroy"
       :clear-on-destroy="clearOnDestroy"
-      :series-id="data[metadata.SeriesInstanceUID]"
+      :series-id="data[metadataDictionary.SeriesInstanceUID]"
       :show-progress="showProgress"
       :style="{ height: '10em', width: '100%' }"
       :tools="canvasTools"
     />
 
     <div class="d-flex">
-      <!-- TODO all metadata -->
-      <div class="flex-grow-1 lh-small pa-1">
-        <div>{{ data[metadata.SeriesDescription] }}</div>
-        <div>
+      <div class="flex-grow-1 ma-auto lh-small pa-1">
+        <template v-for="key in metadata">
           <component
-            :is="`${metadata.Modality}-string`"
-            tag="span"
-            :value="data[metadata.Modality]"
+            v-if="getComponentName(metadataDictionary[key])"
+            :key="key"
+            :is="getComponentName(metadataDictionary[key])"
+            :value="data[metadataDictionary[key]]"
           />
-          <span v-if="data[metadata.SeriesDate] && data[metadata.Modality]">
-            |
-          </span>
-          <!-- TODO show datetime? -->
-          <scomponent
-            :is="`${metadata.SeriesDate}-string`"
-            tag="span"
-            :value="data[metadata.SeriesDate]"
-          />
-        </div>
+          <div v-else :key="key">{{ data[metadataDictionary[key]] }}</div>
+        </template>
       </div>
 
       <slot />
@@ -42,7 +33,7 @@
 
 <script>
 import { stackTools } from "../defaults";
-import metadata from "../metadata";
+import metadataDictionary from "../metadata";
 import dicomDataTypes from "../../data-types/dicom";
 import DicomCanvas from "../render/Canvas";
 
@@ -65,8 +56,16 @@ export default {
   data() {
     return {
       canvasTools: this.tools || stackTools.preview,
-      metadata
+      // TODO allow to customize this
+      metadata: ["SeriesDescription"],
+      metadataDictionary
     };
+  },
+  methods: {
+    getComponentName(field) {
+      const name = `${field}-string`;
+      return this.$options.components[name] ? name : null;
+    }
   }
 };
 </script>

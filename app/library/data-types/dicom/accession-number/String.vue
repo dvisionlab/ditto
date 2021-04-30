@@ -1,6 +1,6 @@
 <template>
   <component v-if="value" :is="tag">
-    ID <b>{{ value }}</b>
+    AN <b>{{ value }}</b>
   </component>
 </template>
 
