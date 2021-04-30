@@ -40,7 +40,6 @@
 
     <v-data-table
       v-if="series.length"
-      :style="{ height: tableHeight }"
       disable-pagination
       fixed-header
       :group-by="metadata.StudyInstanceUID"
@@ -50,31 +49,40 @@
       :items="series"
       :item-key="metadata.SeriesInstanceUID"
       show-select
+      :style="{ height: tableHeight }"
       :value="selectedSeries"
       @item-selected="event => $emit('select-series', event)"
       @toggle-select-all="event => $emit('select-series', event)"
     >
       <template v-slot:[`group.header`]="{ items }">
-        <!-- TODO add other study meta fields (stackMetadata.study) + make this slot customizable -->
+        <!-- TODO make this slot customizable -->
         <td></td>
         <td>
-          <div>study {{ items[0][metadata.AccessionNumber] }}</div>
           <div>
-            <b class="primary--text">{{ items.length }} series</b>
+            <b class="primary--text">{{ items.length }} series in study</b>
           </div>
+          <div>AN: {{ items[0][metadata.AccessionNumber] }}</div>
         </td>
+        <!-- patient col -->
+        <td></td>
         <td>
           <div>{{ items[0][metadata.StudyDescription] }}</div>
         </td>
-        <td>{{ items[0][metadata.StudyDate] }}</td>
-        <td>{{ items[0][metadata.StudyTime] }}</td>
-        <!-- <td :colspan="headers.length" :style="{ height: '2em' }">
-          <template v-if="items[0][metadata.StudyDescription]">
-            <b>{{ items[0][metadata.StudyDescription] }}</b>
-            <span> | </span>
-          </template>
-          <b class="primary--text">{{ items.length }} series</b>
-        </td> -->
+        <td>
+          <component
+            :is="getComponentName(metadata.StudyDate)"
+            :value="items[0][metadata.StudyDate]"
+          />
+        </td>
+        <td>
+          <component
+            :is="getComponentName(metadata.StudyTime)"
+            :value="items[0][metadata.StudyTime]"
+          />
+        </td>
+        <td></td>
+        <td>{{ items[0][metadata.ModalitiesInStudy] }}</td>
+        <td :colspan="headers.length - 1"></td>
       </template>
 
       <template v-slot:[`item.preview`]="{ item }">
@@ -167,3 +175,27 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+::v-deep
+  .v-data-table--fixed-header
+  > .v-data-table__wrapper
+  > table
+  > thead
+  > tr
+  > th,
+::v-deep .v-data-table > .v-data-table__wrapper > table > tbody > tr > td {
+  padding: 0.5em;
+}
+
+td.cell-x0008103e > * {
+  min-width: 200px;
+  max-width: 250px;
+  width: max-content;
+}
+
+td.cell-patient > * {
+  max-width: 250px;
+  width: max-content;
+}
+</style>

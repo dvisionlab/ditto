@@ -1,7 +1,7 @@
 // Import steps configuration
 // --------------------------
 
-import metadata from "../metadata";
+import metadataDictionary from "../metadata";
 import { stackMetadata, stackTools } from "../defaults";
 
 // Preview canvas tools
@@ -18,14 +18,15 @@ const defaultMetadata = [
 ];
 
 const requiredMetadata = [
-  metadata.StudyInstanceUID,
-  metadata.SeriesInstanceUID
+  metadataDictionary.StudyInstanceUID,
+  metadataDictionary.SeriesInstanceUID
 ];
 
 const computeHeaders = metadata => {
   return [
     { sortable: false, text: "", value: "preview" },
     ...metadata.map(value => ({
+      cellClass: `cell-${value}`,
       sortable: true,
       text: `metadata-${value}`,
       value
@@ -113,12 +114,13 @@ export const getHeaders = options => {
     );
   }
 
-  const omit = [...patientMetadata, ...requiredMetadata];
+  const omit = [...patientMetadata, ...studyMetadata, ...requiredMetadata];
   let headers = computeHeaders(
     defaultMetadata.filter(v => !omit.find(vv => vv == v))
   );
   // Add patient header
   headers.splice(1, 0, {
+    cellClass: "cell-patient",
     keys: patientMetadata,
     sortable: false,
     text: "patient",

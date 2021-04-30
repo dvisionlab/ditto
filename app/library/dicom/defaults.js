@@ -14,17 +14,18 @@ export const stackMetadata = {
   study: [
     metadata.StudyInstanceUID,
     metadata.AccessionNumber,
+    metadata.StudyDescription,
     metadata.StudyDate,
-    metadata.StudyTime,
-    metadata.StudyDescription
+    metadata.StudyTime
   ],
   series: [
     metadata.SeriesInstanceUID,
+    metadata.SeriesDescription,
     metadata.SeriesDate,
     metadata.SeriesTime,
-    metadata.SeriesDescription,
     metadata.Modality,
     metadata.SliceThickness,
+    metadata.SeriesNumber,
     // Larvitar tags
     "numberOfImages"
   ]

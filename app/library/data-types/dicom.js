@@ -2,6 +2,7 @@
 import metadata from "../dicom/metadata";
 
 import modalityComponents from "./dicom/modality";
+import patientIdComponents from "./dicom/patient-id";
 import patientNameComponents from "./dicom/patient-name";
 import patientSexComponents from "./dicom/patient-sex";
 import sliceThicknessComponents from "./dicom/slice-thickness";
@@ -11,15 +12,20 @@ const genericDateComponents = {
   string: () => import("./date/String")
 };
 
+const genericTimeComponents = {
+  string: () => import("./time/String")
+};
+
 const components = {
   [metadata.Modality]: modalityComponents,
   [metadata.PatientBirthDate]: genericDateComponents,
+  [metadata.PatientID]: patientIdComponents,
   [metadata.PatientName]: patientNameComponents,
   [metadata.PatientSex]: patientSexComponents,
   [metadata.StudyDate]: genericDateComponents,
-  [metadata.StudyTime]: genericDateComponents,
+  [metadata.StudyTime]: genericTimeComponents,
   [metadata.SeriesDate]: genericDateComponents,
-  [metadata.SeriesTime]: genericDateComponents,
+  [metadata.SeriesTime]: genericTimeComponents,
   [metadata.SliceThickness]: sliceThicknessComponents,
   thumbnail: thumbnailComponents
 };
