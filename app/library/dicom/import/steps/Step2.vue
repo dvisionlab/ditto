@@ -55,18 +55,26 @@
       @toggle-select-all="event => $emit('select-series', event)"
     >
       <template v-slot:[`group.header`]="{ items }">
-        <!-- TODO add other study meta fields -->
-        <td
-          class="text-center"
-          :colspan="headers.length + 1"
-          :style="{ height: '2em' }"
-        >
-          <b>{{
-            items[0][metadata.StudyDescription] || "[missing study description]"
-          }}</b>
-
-          | <b class="primary--text">{{ items.length }} series</b>
+        <!-- TODO add other study meta fields (stackMetadata.study) + make this slot customizable -->
+        <td></td>
+        <td>
+          <div>study {{ items[0][metadata.AccessionNumber] }}</div>
+          <div>
+            <b class="primary--text">{{ items.length }} series</b>
+          </div>
         </td>
+        <td>
+          <div>{{ items[0][metadata.StudyDescription] }}</div>
+        </td>
+        <td>{{ items[0][metadata.StudyDate] }}</td>
+        <td>{{ items[0][metadata.StudyTime] }}</td>
+        <!-- <td :colspan="headers.length" :style="{ height: '2em' }">
+          <template v-if="items[0][metadata.StudyDescription]">
+            <b>{{ items[0][metadata.StudyDescription] }}</b>
+            <span> | </span>
+          </template>
+          <b class="primary--text">{{ items.length }} series</b>
+        </td> -->
       </template>
 
       <template v-slot:[`item.preview`]="{ item }">

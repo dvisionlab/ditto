@@ -19,8 +19,7 @@ const defaultMetadata = [
 
 const requiredMetadata = [
   metadata.StudyInstanceUID,
-  metadata.StudyDescription,
-  metadata.seriesInstanceUID
+  metadata.SeriesInstanceUID
 ];
 
 const computeHeaders = metadata => {
