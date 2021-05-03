@@ -198,5 +198,14 @@ export const updateViewportProperty = (action, element) => {
       lt.invertImage(element);
       break;
     }
+
+    case "reset-viewport": {
+      lt.resetViewports([element]);
+      break;
+    }
+
+    default: {
+      console.warn("Unknown viewport action", action);
+    }
   }
 };
