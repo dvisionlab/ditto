@@ -5,17 +5,43 @@
 // Dependencies
 import * as lt from "larvitar";
 
+// Local methods
+// -------------
+
+const getKeyboardOptions = tool => {
+  if (!tool.options || !tool.options.keyboardMask) {
+    return null;
+  }
+
+  return {
+    [`mouse_button_${tool.options.keyboardMask.mouse}`]: {
+      [tool.options.keyboardMask.key]: tool.name
+    }
+  };
+};
+
 // Public methods
 // --------------
 
 // Tools functionalities
 export const activateTool = (
-  elementIds,
   tool,
-  options = { mouseButtonMask: 1 }
+  options = { mouseButtonMask: 1 },
+  elementIds
 ) => {
-  console.log("ACTIVATE", tool.name, elementIds);
-  lt.setToolActive(tool.name, { ...tool.options, ...options }, elementIds);
+  console.log("tool", tool.name, tool.options, options);
+
+  const mouseOptions = { ...tool.options, ...options };
+  if (mouseOptions.mouseButtonMask) {
+    console.log("ACTIVATE", tool.name, mouseOptions);
+    lt.setToolActive(tool.name, mouseOptions, elementIds);
+  }
+
+  const keyboardOptions = getKeyboardOptions(tool);
+  if (keyboardOptions) {
+    console.log("KEY HANDLER", tool.name, keyboardOptions);
+    lt.addMouseKeyHandlers(keyboardOptions, elementIds);
+  }
 };
 
 export const addTools = (elementId, tools) => {
@@ -24,14 +50,7 @@ export const addTools = (elementId, tools) => {
 
     if (t.defaultActive) {
       // TODO TOOL test with next version
-      activateTool([elementId], t, t.options);
-      // TODO TOOL @mattia move in larvitar? use default options and default interactions
-      // lt.setToolActive(t.name, t.options);
-      // lt.cornerstoneTools.setToolActiveForElement(
-      //   document.getElementById(elementId),
-      //   t.name,
-      //   t.options || { mouseButtonMask: 1 }
-      // );
+      activateTool(t, t.options, [elementId]);
     }
   });
 };
