@@ -15,6 +15,7 @@ const getKeyboardOptions = tool => {
 
   return {
     [`mouse_button_${tool.options.keyboardMask.mouse}`]: {
+      default: "Wwwc", // TODO TOOL @mattia not working without this
       [tool.options.keyboardMask.key]: tool.name
     }
   };
