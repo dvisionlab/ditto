@@ -29,6 +29,11 @@
 
     <slot name="stack-metadata" v-bind="stackMetadata"></slot>
     <slot name="viewport-data" v-bind="viewport"></slot>
+    <slot
+      name="viewport-slider"
+      v-bind:i="viewport.sliceId"
+      v-bind:n="viewport.maxSliceId"
+    ></slot>
   </div>
 </template>
 
