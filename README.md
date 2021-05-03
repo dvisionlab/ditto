@@ -38,7 +38,7 @@ import MODULE_NAME from "@/../ditto/MODULE_NAME";
 | **dicomDataTypes** | Components collection |                                           |
 | **fileSystemApi**  | Js library            |                                           |
 | **form**           | Components collection |                                           |
-| **http**           | Vue plugin            |                                           |
+| **http**           | Vue plugin            | [DOC](./app/library/http/README.md)       |
 | **mobile**         | Vue plugin            |                                           |
 | **relativeHeight** | Vue directive         |                                           |
 | **style**          | Js library            |                                           |

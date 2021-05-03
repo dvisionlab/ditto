@@ -7,7 +7,7 @@ import persist from "./persist";
 
 // Local variables
 const defaultOptions = {
-  accountPanel: true,
+  accountPanelComponent: true,
   addTrailingSlashInterceptor: false,
   allowPasswordReset: true,
   allowUserRegistration: true,
@@ -18,7 +18,9 @@ const defaultOptions = {
   // http requests base url
   httpRoot: "/",
   // log rocket module and custom string
-  logrocket: null
+  logrocket: null,
+  // wrapper component for auth routes
+  wrapperComponent: null
 };
 
 // Plugin
@@ -91,7 +93,7 @@ export default {
     options.store.registerModule("auth", getStore(options));
 
     // Register components
-    if (options.accountPanel) {
+    if (options.accountPanelComponent) {
       Vue.component("ditto-auth-account-panel", () =>
         import("./components/AccountPanel")
       );
