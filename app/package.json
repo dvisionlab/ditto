@@ -13,6 +13,7 @@
     "larvitar": "https://github.com/dvisionlab/Larvitar.git#master",
     "vue": "^2.6.11",
     "vue-resize-directive": "^1.2.0",
+    "vue-resource": "^1.5.2",
     "vue-router": "^3.5.1",
     "vuetify": "^2.4.0"
   },

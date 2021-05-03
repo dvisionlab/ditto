@@ -36,6 +36,19 @@
               </a>
             </td>
           </tr>
+
+          <tr>
+            <td>http</td>
+            <td><router-link to="/http" target="_blank">/http</router-link></td>
+            <td>
+              <a
+                href="https://github.com/dvisionlab/ditto/blob/master/app/library/http/README.md"
+                target="_blank"
+              >
+                docs
+              </a>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

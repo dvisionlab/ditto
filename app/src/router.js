@@ -49,6 +49,11 @@ const routes = [
         component: { template: "<div>Other</div>" }
       }
     ]
+  },
+  {
+    path: "/http",
+    name: "http",
+    component: () => import("@/examples/http/Test")
   }
 ];
 
