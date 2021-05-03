@@ -69,21 +69,23 @@
         </td>
         <!-- patient col -->
         <td></td>
-        <td>
+        <td :class="`cell-${metadata.StudyDescription}`">
           <div>{{ items[0][metadata.StudyDescription] || "&mdash;" }}</div>
         </td>
-        <td>
+        <td :class="`cell-${metadata.StudyDate}`">
           <component
             :is="getComponentName(metadata.StudyDate)"
+            tag="span"
             :value="items[0][metadata.StudyDate]"
           />
-        </td>
-        <td>
           <component
+            class="ml-1"
             :is="getComponentName(metadata.StudyTime)"
+            tag="span"
             :value="items[0][metadata.StudyTime]"
           />
         </td>
+        <td></td>
         <td></td>
         <td>{{ items[0][metadata.ModalitiesInStudy] }}</td>
         <td :colspan="headers.length - 1"></td>
@@ -106,20 +108,23 @@
         v-for="h in headers.filter(({ value }) => value !== 'preview')"
         v-slot:[`item.${h.value}`]="{ item }"
       >
+        <!-- Add a slot for each header item that requires it (component customization) -->
+        <slot v-if="h.slot" :name="h.value" v-bind:item="item" />
+
         <!-- Default patient slot -->
-        <template v-if="h.value == 'patient' && !h.slot">
-          <div v-for="key in h.keys" :key="key">
+        <template v-else-if="h.keys">
+          <template v-for="key in h.keys">
             <component
               v-if="getComponentName(key)"
+              :class="h.keyClass"
+              :key="key"
               :is="getComponentName(key)"
+              :tag="h.keyTag"
               :value="item[key]"
             />
-            <div v-else>{{ item[key] }}</div>
-          </div>
+            <div v-else :key="key">{{ item[key] }}</div>
+          </template>
         </template>
-
-        <!-- Add a slot for each header item that requires it (component customization) -->
-        <slot v-else-if="h.slot" :name="h.value" v-bind:item="item" />
 
         <!-- Add default slots using data types for other headers fields -->
         <template v-else>
@@ -185,13 +190,25 @@ export default {
   padding: 0.5em;
 }
 
-td.cell-x0008103e > * {
+::v-deep th {
+  white-space: nowrap;
+}
+
+::v-deep td.cell-x00081030,
+::v-deep td.cell-x0008103e {
   min-width: 200px;
   max-width: 250px;
   width: max-content;
 }
 
-td.cell-patient > * {
+::v-deep td.cell-x00080020,
+::v-deep td.cell-x00080021 {
+  min-width: 35px;
+  max-width: 120px;
+  width: max-content;
+}
+
+::v-deep td.cell-patient {
   max-width: 200px;
   width: max-content;
 }

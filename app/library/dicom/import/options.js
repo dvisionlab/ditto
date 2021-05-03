@@ -114,10 +114,27 @@ export const getHeaders = options => {
     );
   }
 
-  const omit = [...patientMetadata, ...studyMetadata, ...requiredMetadata];
+  const omit = [
+    ...patientMetadata,
+    ...studyMetadata,
+    ...requiredMetadata,
+    metadataDictionary.SeriesTime
+  ];
   let headers = computeHeaders(
     defaultMetadata.filter(v => !omit.find(vv => vv == v))
   );
+
+  // Merge date and time
+  let seriesDateHeader = headers.find(
+    h => h.value == metadataDictionary.SeriesDate
+  );
+  seriesDateHeader.keys = [
+    metadataDictionary.SeriesDate,
+    metadataDictionary.SeriesTime
+  ];
+  seriesDateHeader.keyTag = "span";
+  seriesDateHeader.keyClass = "ml-1";
+
   // Add patient header
   headers.splice(1, 0, {
     cellClass: "cell-patient",
