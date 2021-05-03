@@ -1,4 +1,5 @@
 import * as utils from "./utils";
+import metadata from "./metadata";
 
 // Async imports based on options for partial functionalities support
 const defaultOptions = {
@@ -52,7 +53,7 @@ export default async (Vue, options) => {
   if (options.utils) {
     Vue.prototype.$ditto = {
       ...Vue.prototype.$ditto,
-      dicom: utils
+      dicom: { ...utils, metadataDictionary: metadata }
     };
   }
 };
