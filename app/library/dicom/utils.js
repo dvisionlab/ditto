@@ -9,8 +9,13 @@ import * as lt from "larvitar";
 // --------------
 
 // Tools functionalities
-export const activateTool = (tool, options = { mouseButtonMask: 1 }) => {
-  lt.setToolActive(tool.name, { ...tool.options, ...options });
+export const activateTool = (
+  elementIds,
+  tool,
+  options = { mouseButtonMask: 1 }
+) => {
+  console.log("ACTIVATE", tool.name, elementIds);
+  lt.setToolActive(tool.name, { ...tool.options, ...options }, elementIds);
 };
 
 export const addTools = (elementId, tools) => {
@@ -18,13 +23,15 @@ export const addTools = (elementId, tools) => {
     lt.addTool(t.name, t.configuration, elementId);
 
     if (t.defaultActive) {
+      // TODO TOOL test with next version
+      activateTool([elementId], t, t.options);
       // TODO TOOL @mattia move in larvitar? use default options and default interactions
       // lt.setToolActive(t.name, t.options);
-      lt.cornerstoneTools.setToolActiveForElement(
-        document.getElementById(elementId),
-        t.name,
-        t.options || { mouseButtonMask: 1 }
-      );
+      // lt.cornerstoneTools.setToolActiveForElement(
+      //   document.getElementById(elementId),
+      //   t.name,
+      //   t.options || { mouseButtonMask: 1 }
+      // );
     }
   });
 };
