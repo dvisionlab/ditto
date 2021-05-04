@@ -9,22 +9,28 @@ import * as lt from "larvitar";
 // --------------
 
 // Tools functionalities
-export const activateTool = (tool, options = { mouseButtonMask: 1 }) => {
-  lt.setToolActive(tool.name, { ...tool.options, ...options });
+export const activateTool = (
+  tool,
+  options = { mouseButtonMask: 1 },
+  elementIds
+) => {
+  const mouseOptions = { ...tool.options, ...options };
+  if (mouseOptions.mouseButtonMask) {
+    lt.setToolActive(tool.name, mouseOptions, elementIds);
+  }
 };
 
-export const addTools = (elementId, tools) => {
+export const addTools = (elementId, tools, handlers) => {
+  // Add tools keyboard handlers
+  if (handlers) {
+    lt.addMouseKeyHandlers(handlers, [elementId]);
+  }
+
+  // Add mouse button tools
   tools.forEach(t => {
     lt.addTool(t.name, t.configuration, elementId);
-
     if (t.defaultActive) {
-      // TODO TOOL @mattia move in larvitar? use default options and default interactions
-      // lt.setToolActive(t.name, t.options);
-      lt.cornerstoneTools.setToolActiveForElement(
-        document.getElementById(elementId),
-        t.name,
-        t.options || { mouseButtonMask: 1 }
-      );
+      activateTool(t, t.options, [elementId]);
     }
   });
 };
@@ -171,6 +177,15 @@ export const updateViewportProperty = (action, element) => {
     case "invert": {
       lt.invertImage(element);
       break;
+    }
+
+    case "reset-viewport": {
+      lt.resetViewports([element]);
+      break;
+    }
+
+    default: {
+      console.warn("Unknown viewport action", action);
     }
   }
 };

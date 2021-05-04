@@ -29,6 +29,11 @@
 
     <slot name="stack-metadata" v-bind="stackMetadata"></slot>
     <slot name="viewport-data" v-bind="viewport"></slot>
+    <slot
+      name="viewport-slider"
+      v-bind:i="viewport.sliceId"
+      v-bind:n="viewport.maxSliceId"
+    ></slot>
   </div>
 </template>
 
@@ -64,7 +69,8 @@ export default {
     seriesId: { required: true, type: [String, Number] },
     showProgress: { default: false, type: Boolean },
     stack: { required: false, type: Object },
-    tools: { default: () => stackTools.default, type: Array }
+    tools: { default: () => stackTools.default, type: Array },
+    toolsHandlers: { required: false, type: Object }
   },
   data: () => ({
     error: false,
@@ -131,7 +137,8 @@ export default {
 
           if (stack) {
             renderSeries(this.validCanvasId, stack);
-            addTools(this.validCanvasId, this.tools);
+            // TODO LT await render series
+            addTools(this.validCanvasId, this.tools, this.toolsHandlers);
             this.$emit("ready");
           } else {
             console.warn(

@@ -22,6 +22,9 @@
         rotation: {{ data.viewport.rotation.toFixed(2) }}°
       </div>
     </template>
+    <div v-if="data.maxSliceId">
+      slice: {{ data.sliceId }}/{{ data.maxSliceId }}
+    </div>
   </div>
 </template>
 
