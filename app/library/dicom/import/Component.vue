@@ -60,6 +60,9 @@
                 <v-list-item
                   v-for="(item, i) in steps[currentStep].actions"
                   :key="i"
+                  :class="{
+                    'selected-action': item.emitter == selectedAction.emitter
+                  }"
                   :disabled="item.disabled"
                   link
                   @click="selectedAction = item"
@@ -270,6 +273,10 @@ export default {
 
 <style lang="scss" scoped>
 $min-header-height: 5.5em;
+
+.selected-action {
+  background: rgba(var(--v-primary-rgb), 0.12);
+}
 
 .step-wrapper {
   height: 80vh; /* Fallback for browsers that do not support Custom Properties */
