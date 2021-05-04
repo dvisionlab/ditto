@@ -1,5 +1,7 @@
 <template>
-  <component :is="tag" class="text-uppercase">{{ value }}</component>
+  <component v-if="value" :is="tag">
+    AN <b>{{ value }}</b>
+  </component>
 </template>
 
 <script>

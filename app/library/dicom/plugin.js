@@ -1,4 +1,5 @@
 import * as utils from "./utils";
+import metadata from "./metadata";
 
 // Async imports based on options for partial functionalities support
 const defaultOptions = {
@@ -24,11 +25,14 @@ export default async (Vue, options) => {
   }
 
   if (options.dataTypes) {
-    const dicomDataTypes = () => import("../../../dicomDataTypes");
+    const dicomDataTypes = () => import("../data-types/dicom");
     dicomDataTypes().then(({ default: components }) => {
-      Object.keys(components).forEach(key =>
-        Vue.component(`DittoDataType${key}`, components[key])
-      );
+      Object.keys(components).forEach(key => {
+        const name = key
+          .split(/(?=[A-Z])/)
+          .reduce((string, chunk) => `${string}-${chunk.toLowerCase()}`, "");
+        Vue.component(`ditto-data-type${name}`, components[key]);
+      });
     });
   }
 
@@ -49,7 +53,7 @@ export default async (Vue, options) => {
   if (options.utils) {
     Vue.prototype.$ditto = {
       ...Vue.prototype.$ditto,
-      dicom: utils
+      dicom: { ...utils, metadataDictionary: metadata }
     };
   }
 };

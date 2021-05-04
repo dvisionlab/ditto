@@ -1,3 +1,3 @@
 export default {
-  String: () => import("./String")
+  string: () => import("./String")
 };

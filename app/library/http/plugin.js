@@ -92,7 +92,7 @@ const remove = (endpoint, params) => {
 
 // Plugin
 export default {
-  async install(Vue, { extensions, options }) {
+  async install(Vue, { extensions, options = {} } = {}) {
     // Register vue-resource
     Vue.use(VueResource);
 

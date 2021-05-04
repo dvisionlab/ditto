@@ -12,7 +12,7 @@ const initialState = () => {
 };
 
 // Store
-export default {
+export default options => ({
   namespaced: true,
   state: () => initialState(),
   getters: {
@@ -33,8 +33,15 @@ export default {
                 key: "refreshToken",
                 value: persist.getRefreshToken()
               });
-              commit("update", { key: "user", value: persist.getUser() });
-              resolve(persist.getUser());
+
+              const user = persist.getUser();
+              commit("update", { key: "user", value: user });
+
+              if (options.onLoginSuccess) {
+                options.onLoginSuccess(user);
+              }
+
+              resolve(user);
             })
             .catch(error => {
               dispatch("logout");
@@ -66,6 +73,11 @@ export default {
                 });
                 commit("update", { key: "user", value: user });
                 persist.setUser(user);
+
+                if (options.onLoginSuccess) {
+                  options.onLoginSuccess(user);
+                }
+
                 resolve({
                   ...tokens,
                   user
@@ -100,4 +112,4 @@ export default {
       state[key] = value;
     }
   }
-};
+});

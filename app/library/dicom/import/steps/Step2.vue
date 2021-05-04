@@ -41,82 +41,101 @@
 
     <v-data-table
       v-if="series.length"
-      :style="{ height: tableHeight }"
       disable-pagination
       fixed-header
-      group-by="studyUID"
+      :group-by="metadata.StudyInstanceUID"
       :headers="headers"
       height="100%"
       hide-default-footer
       :items="series"
-      item-key="seriesUID"
+      :item-key="metadata.SeriesInstanceUID"
       show-select
+      :style="{ height: tableHeight }"
       :value="selectedSeries"
       @item-selected="event => $emit('select-series', event)"
       @toggle-select-all="event => $emit('select-series', event)"
     >
       <template v-slot:[`group.header`]="{ items }">
-        <td
-          class="text-center"
-          :colspan="headers.length + 1"
-          :style="{ height: '2em' }"
-        >
-          <b>{{
-            items[0].studyDescription || "[missing study description]"
-          }}</b>
-
-          | <b class="primary--text">{{ items.length }} series</b>
+        <!-- TODO make this slot customizable -->
+        <td></td>
+        <td>
+          <div>
+            <b class="primary--text">{{ items.length }}</b>
+            series in study
+          </div>
+          <component
+            :is="getComponentName(metadata.AccessionNumber)"
+            :value="items[0][metadata.AccessionNumber]"
+          />
         </td>
+        <!-- patient col -->
+        <td></td>
+        <td :class="`cell-${metadata.StudyDescription}`">
+          <div>{{ items[0][metadata.StudyDescription] || "&mdash;" }}</div>
+        </td>
+        <td :class="`cell-${metadata.StudyDate}`">
+          <component
+            :is="getComponentName(metadata.StudyDate)"
+            tag="span"
+            :value="items[0][metadata.StudyDate]"
+          />
+          <component
+            class="ml-1"
+            :is="getComponentName(metadata.StudyTime)"
+            tag="span"
+            :value="items[0][metadata.StudyTime]"
+          />
+        </td>
+        <td></td>
+        <td></td>
+        <td>{{ items[0][metadata.ModalitiesInStudy] }}</td>
+        <td :colspan="headers.length - 1"></td>
       </template>
 
       <template v-slot:[`item.preview`]="{ item }">
         <dicom-canvas
-          :canvas-id="item.seriesUID"
+          :canvas-id="item[metadata.SeriesInstanceUID]"
           :get-progress-fn="getProgressFn"
           :get-viewport-fn="getViewportFn"
-          :series-id="item.seriesUID"
-          :show-progress="false"
+          :series-id="item[metadata.SeriesInstanceUID]"
           :stack="item"
           :style="{ width: '10em', height: '10em' }"
           :tools="tools"
         />
       </template>
 
-      <!-- Default patient slot -->
-      <template v-if="!patientHeader.slot" v-slot:[`item.patient`]="{ item }">
-        <div v-for="key in patientHeader.keys" :key="key">
+      <template
+        v-for="h in headers.filter(({ value }) => value !== 'preview')"
+        v-slot:[`item.${h.value}`]="{ item }"
+      >
+        <!-- Add a slot for each header item that requires it (component customization) -->
+        <slot v-if="h.slot" :name="h.value" v-bind:item="item" />
+
+        <!-- Default patient slot -->
+        <template v-else-if="h.keys">
+          <template v-for="key in h.keys">
+            <component
+              v-if="getComponentName(key)"
+              :class="h.keyClass"
+              :key="key"
+              :is="getComponentName(key)"
+              :tag="h.keyTag"
+              :value="item[key]"
+            />
+            <div v-else :key="key">{{ item[key] }}</div>
+          </template>
+        </template>
+
+        <!-- Add default slots using data types for other headers fields -->
+        <template v-else>
           <component
-            v-if="getComponentName(key)"
-            :is="getComponentName(key)"
-            :value="item[key]"
+            :key="h.value"
+            v-if="getComponentName(h.value)"
+            :is="getComponentName(h.value)"
+            :value="item[h.value]"
           />
-          <div v-else>{{ item[key] }}</div>
-        </div>
-      </template>
-
-      <!-- Add a slot for each header item that requires it (component customization) -->
-      <template
-        v-for="h in headers.filter(({ slot }) => slot)"
-        v-slot:[`item.${h.value}`]="{ item }"
-      >
-        <slot v-bind:item="item" :name="h.value" />
-      </template>
-
-      <!-- Add default slots using data types for other headers fields -->
-      <template
-        v-for="h in headers.filter(
-          ({ slot, value }) =>
-            !slot && value !== 'patient' && value !== 'preview'
-        )"
-        v-slot:[`item.${h.value}`]="{ item }"
-      >
-        <component
-          :key="h.value"
-          v-if="getComponentName(h.value)"
-          :is="getComponentName(h.value)"
-          :value="item[h.value]"
-        />
-        <div v-else :key="h.value">{{ item[h.value] }}</div>
+          <div v-else :key="h.value">{{ item[h.value] }}</div>
+        </template>
       </template>
     </v-data-table>
   </div>
@@ -124,7 +143,8 @@
 
 <script>
 import RelativeHeight from "../../../relative-height";
-import dicomDataTypes from "../../../../../dicomDataTypes";
+import dicomDataTypes from "../../../data-types/dicom";
+import metadataDictionary from "../../metadata";
 
 const DicomCanvas = () => import("../../render/Canvas");
 
@@ -144,16 +164,52 @@ export default {
   },
   data() {
     return {
-      patientHeader: this.headers.find(h => h.value == "patient"),
+      metadata: metadataDictionary,
       showErrorDetails: false,
       tableHeight: "100%"
     };
   },
   methods: {
     getComponentName(field) {
-      const name = `${field.charAt(0).toUpperCase() + field.slice(1)}String`;
+      const name = `${field}-string`;
       return this.$options.components[name] ? name : null;
     }
   }
 };
 </script>
+
+<style scoped>
+::v-deep
+  .v-data-table--fixed-header
+  > .v-data-table__wrapper
+  > table
+  > thead
+  > tr
+  > th,
+::v-deep .v-data-table > .v-data-table__wrapper > table > tbody > tr > td {
+  padding: 0.5em;
+}
+
+::v-deep th {
+  white-space: nowrap;
+}
+
+::v-deep td.cell-x00081030,
+::v-deep td.cell-x0008103e {
+  min-width: 200px;
+  max-width: 250px;
+  width: max-content;
+}
+
+::v-deep td.cell-x00080020,
+::v-deep td.cell-x00080021 {
+  min-width: 35px;
+  max-width: 120px;
+  width: max-content;
+}
+
+::v-deep td.cell-patient {
+  max-width: 200px;
+  width: max-content;
+}
+</style>

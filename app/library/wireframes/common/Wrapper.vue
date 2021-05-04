@@ -1,7 +1,11 @@
 <template>
   <v-app>
-    <router-view v-if="$route.meta.guest" />
+    <slot v-if="$route.meta.guest" name="guest">
+      <!-- default guest slot -->
+      <router-view />
+    </slot>
     <template v-else>
+      <!-- !guest slot -->
       <slot />
 
       <!-- root elements -->

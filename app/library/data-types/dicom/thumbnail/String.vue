@@ -1,5 +1,6 @@
 <template>
   <img
+    v-if="value"
     alt="Missing series preview"
     class="d-flex"
     :src="value"

@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag">{{ dateString }}</component>
+  <component v-if="value" :is="tag">{{ dateString }}</component>
 </template>
 
 <script>

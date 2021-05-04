@@ -1,7 +1,7 @@
 <template>
-  <component v-if="value !== undefined" :is="tag"
-    >{{ value.toFixed(2) }} mm</component
-  >
+  <component v-if="value" :is="tag" class="text-uppercase">
+    {{ value }}
+  </component>
 </template>
 
 <script>
@@ -13,7 +13,7 @@ export default {
     },
     value: {
       required: false,
-      type: Number
+      type: String
     }
   }
 };

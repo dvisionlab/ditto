@@ -6,17 +6,47 @@
 import * as lt from "larvitar";
 
 // Public methods
+// --------------
+
+// Tools functionalities
+export const activateTool = (tool, options = { mouseButtonMask: 1 }) => {
+  lt.setToolActive(tool.name, { ...tool.options, ...options });
+};
 
 export const addTools = (elementId, tools) => {
   tools.forEach(t => {
     lt.addTool(t.name, t.configuration, elementId);
-    lt.setToolActive(t.name, t.options);
-  });
 
-  lt.setToolActive(lt.larvitar_store.state.leftMouseHandler);
+    if (t.defaultActive) {
+      // TODO TOOL @mattia move in larvitar? use default options and default interactions
+      // lt.setToolActive(t.name, t.options);
+      lt.cornerstoneTools.setToolActiveForElement(
+        document.getElementById(elementId),
+        t.name,
+        t.options || { mouseButtonMask: 1 }
+      );
+    }
+  });
 };
 
-export const buildData = lt.buildData;
+export const disableTool = tool => {
+  lt.setToolEnabled(tool.name); // tool not editable but visible
+};
+
+export const hideTool = tool => {
+  lt.setToolDisabled(tool.name); // tool hidden
+};
+
+// Build data and header functions
+export const buildData = stack => {
+  return new Promise((resolve, reject) => {
+    try {
+      lt.buildDataAsync(stack, data => resolve(data));
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 
 export const buildHeader = lt.buildHeader;
 
@@ -24,7 +54,6 @@ export const buildHeader = lt.buildHeader;
 export const clearSeriesData = (seriesId, clearCache = false) => {
   lt.removeSeriesFromLarvitarManager(seriesId);
 
-  // TODO LT evaluate when clearing cache
   if (clearCache) {
     lt.clearImageCache(seriesId);
   }
@@ -62,7 +91,8 @@ export const mergeSeries = (...series) => {
     });
   });
 
-  let merged = { ...series[0], instances };
+  let merged = series.reduce((result, s) => ({ ...result, ...s }), {});
+  merged = { ...merged, instances };
   merged.imageIds = Object.keys(merged.instances);
 
   return merged;
@@ -113,16 +143,34 @@ export const setup = store => {
   }
 
   lt.initializeImageLoader();
+  lt.registerMultiFrameImageLoader();
   lt.initializeCSTools();
 };
 
 // Call the Larvitar "populateLarvitarManager" function
-export const storeSeriesStack = (seriesId, stack, cache = true) => {
+export const storeSeriesStack = (seriesId, stack, cache = false) => {
   lt.populateLarvitarManager(seriesId, stack);
-
   if (cache) {
     lt.cacheImages(seriesId, stack);
   }
 };
 
+// Update viewport actions
+export const updateViewportProperty = (action, element) => {
+  switch (action) {
+    case "flip-horizontal": {
+      lt.flipImageHorizontal(element);
+      break;
+    }
 
+    case "flip-vertical": {
+      lt.flipImageVertical(element);
+      break;
+    }
+
+    case "invert": {
+      lt.invertImage(element);
+      break;
+    }
+  }
+};

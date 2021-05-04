@@ -17,12 +17,18 @@ const routes = [
       {
         name: "basic-wireframe-home",
         path: "home",
-        component: { template: "<div>Home</div>" }
+        components: {
+          default: { template: "<div>Home</div>" },
+          navLeft: () => import("@/examples/wireframes/basic/HomeNavLeft")
+        }
       },
       {
         name: "basic-wireframe-other",
         path: "other",
-        component: { template: "<div>Other</div>" }
+        components: {
+          default: { template: "<div>Other</div>" },
+          navLeft: () => import("@/examples/wireframes/basic/OtherNavLeft")
+        }
       }
     ]
   },
@@ -43,6 +49,11 @@ const routes = [
         component: { template: "<div>Other</div>" }
       }
     ]
+  },
+  {
+    path: "/http",
+    name: "http",
+    component: () => import("@/examples/http/Test")
   }
 ];
 

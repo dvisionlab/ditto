@@ -24,6 +24,8 @@
     </h3>
 
     <div class="d-flex flex-wrap justify-center mt-3">
+      {{ series }}
+
       <div v-for="s in selectedSeries" :key="s.seriesUID" class="ma-1">
         <dicom-canvas
           :canvas-id="s.seriesUID"
@@ -65,6 +67,7 @@
 
 <script>
 const DicomCanvas = () => import("../../render/Canvas");
+import metadataDictionary from "../../metadata";
 
 export default {
   name: "DicomImportStep3",
@@ -77,6 +80,9 @@ export default {
     step: { required: true, type: Object },
     tools: { required: false, type: Array }
   },
+  data: () => ({
+    metadata: metadataDictionary
+  }),
   computed: {
     hasErrors() {
       return Object.keys(this.step.uploadStatus.errors).length;

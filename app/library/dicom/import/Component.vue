@@ -166,6 +166,7 @@
 <script>
 import { getCanvasTools, getHeaders, getMetadata, getSteps } from "./options";
 import { mergeSeries, storeSeriesStack } from "../utils";
+import metadataDictionary from "../metadata";
 import RelativeHeight from "../../relative-height";
 import ModalControllers from "./ModalControllers";
 
@@ -188,13 +189,18 @@ export default {
     options: { default: () => ({}), type: Object }
   },
   data() {
+    const headers = getHeaders(this.options).map(h => ({
+      ...h,
+      text: h.text ? this.$t(`dicom-import.${h.text}`) : h.text
+    }));
+
     return {
       contentHeight: "100%",
       currentStep: 0,
       errors: [],
       getProgressFn: this.options.getProgressFn,
       getViewportFn: this.options.getViewportFn,
-      headers: getHeaders(this.options),
+      headers: headers,
       metadata: getMetadata(this.options),
       series: [],
       selectedSeries: [],
@@ -210,15 +216,20 @@ export default {
   methods: {
     onAction() {
       // List of selected stacks
-      const stacks = this.selectedSeries.map(({ seriesUID }) =>
-        this.series.find(s => s.seriesUID == seriesUID)
+      const stacks = this.selectedSeries.map(v =>
+        this.series.find(
+          s =>
+            s[metadataDictionary.SeriesInstanceUID] ==
+            v[metadataDictionary.SeriesInstanceUID]
+        )
       );
 
       // Store series stack in larvitar
       if (this.selectedAction.storeStacks) {
         stacks.forEach(stack =>
+          // TODO review cache options
           storeSeriesStack(
-            stack.seriesUID,
+            stack[metadataDictionary.SeriesInstanceUID],
             stack,
             this.selectedAction.cacheStacks
           )
@@ -252,13 +263,20 @@ export default {
 
       // Check if series are new or merge same series
       series.forEach(s => {
-        const index = this.series.findIndex(_s => _s.seriesUID == s.seriesUID);
+        const index = this.series.findIndex(
+          _s =>
+            _s[metadataDictionary.SeriesInstanceUID] ==
+            s[metadataDictionary.SeriesInstanceUID]
+        );
         if (index >= 0) {
           // merge information
           this.$set(this.series, index, mergeSeries(this.series[index], s));
         } else {
           this.series.push(s);
-          this.selectedSeries.push({ seriesUID: s.seriesUID });
+          this.selectedSeries.push({
+            [metadataDictionary.SeriesInstanceUID]:
+              s[metadataDictionary.SeriesInstanceUID]
+          });
         }
       });
 
@@ -277,10 +295,15 @@ export default {
       }
 
       if (event.value) {
-        this.selectedSeries.push({ seriesUID: event.item.seriesUID });
+        this.selectedSeries.push({
+          [metadataDictionary.SeriesInstanceUID]:
+            event.item[metadataDictionary.SeriesInstanceUID]
+        });
       } else {
         this.selectedSeries = this.selectedSeries.filter(
-          v => v.seriesUID !== event.item.seriesUID
+          v =>
+            v[metadataDictionary.SeriesInstanceUID] !==
+            event.item[metadataDictionary.SeriesInstanceUID]
         );
       }
     }

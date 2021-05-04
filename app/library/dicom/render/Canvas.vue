@@ -1,5 +1,9 @@
 <template>
-  <div class="d-flex w-100 h-100 black" :style="{ position: 'relative' }">
+  <div
+    class="d-flex w-100 h-100 black"
+    :style="{ position: 'relative' }"
+    @contextmenu.prevent
+  >
     <v-icon v-if="error" class="ma-auto" dark>
       mdi-alert-decagram-outline
     </v-icon>
@@ -58,7 +62,7 @@ export default {
     getProgressFn: { default: defaultGetProgressFn, type: Function },
     getViewportFn: { default: defaultGetViewportFn, type: Function },
     seriesId: { required: true, type: [String, Number] },
-    showProgress: { default: true, type: Boolean },
+    showProgress: { default: false, type: Boolean },
     stack: { required: false, type: Object },
     tools: { default: () => stackTools.default, type: Array }
   },
@@ -128,6 +132,7 @@ export default {
           if (stack) {
             renderSeries(this.validCanvasId, stack);
             addTools(this.validCanvasId, this.tools);
+            this.$emit("ready");
           } else {
             console.warn(
               "Series stack not available for canvas",
