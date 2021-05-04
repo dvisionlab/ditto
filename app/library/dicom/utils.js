@@ -143,13 +143,13 @@ export const setup = store => {
   }
 
   lt.initializeImageLoader();
+  lt.registerMultiFrameImageLoader();
   lt.initializeCSTools();
 };
 
 // Call the Larvitar "populateLarvitarManager" function
 export const storeSeriesStack = (seriesId, stack, cache = false) => {
   lt.populateLarvitarManager(seriesId, stack);
-
   if (cache) {
     lt.cacheImages(seriesId, stack);
   }
