@@ -69,7 +69,8 @@ export default {
     seriesId: { required: true, type: [String, Number] },
     showProgress: { default: false, type: Boolean },
     stack: { required: false, type: Object },
-    tools: { default: () => stackTools.default, type: Array }
+    tools: { default: () => stackTools.default, type: Array },
+    toolsHandlers: { required: false, type: Object }
   },
   data: () => ({
     error: false,
@@ -136,7 +137,8 @@ export default {
 
           if (stack) {
             renderSeries(this.validCanvasId, stack);
-            addTools(this.validCanvasId, this.tools);
+            // TODO LT await render series
+            addTools(this.validCanvasId, this.tools, this.toolsHandlers);
             this.$emit("ready");
           } else {
             console.warn(

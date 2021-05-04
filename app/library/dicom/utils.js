@@ -5,22 +5,6 @@
 // Dependencies
 import * as lt from "larvitar";
 
-// Local methods
-// -------------
-
-const getKeyboardOptions = tool => {
-  if (!tool.options || !tool.options.keyboardMask) {
-    return null;
-  }
-
-  return {
-    [`mouse_button_${tool.options.keyboardMask.mouse}`]: {
-      default: "Wwwc", // TODO TOOL @mattia not working without this
-      [tool.options.keyboardMask.key]: tool.name
-    }
-  };
-};
-
 // Public methods
 // --------------
 
@@ -30,27 +14,22 @@ export const activateTool = (
   options = { mouseButtonMask: 1 },
   elementIds
 ) => {
-  console.log("tool", tool.name, tool.options, options);
-
   const mouseOptions = { ...tool.options, ...options };
   if (mouseOptions.mouseButtonMask) {
-    console.log("ACTIVATE", tool.name, mouseOptions);
     lt.setToolActive(tool.name, mouseOptions, elementIds);
-  }
-
-  const keyboardOptions = getKeyboardOptions(tool);
-  if (keyboardOptions) {
-    console.log("KEY HANDLER", tool.name, keyboardOptions);
-    lt.addMouseKeyHandlers(keyboardOptions, elementIds);
   }
 };
 
-export const addTools = (elementId, tools) => {
+export const addTools = (elementId, tools, handlers) => {
+  // Add tools keyboard handlers
+  if (handlers) {
+    lt.addMouseKeyHandlers(handlers, [elementId]);
+  }
+
+  // Add mouse button tools
   tools.forEach(t => {
     lt.addTool(t.name, t.configuration, elementId);
-
     if (t.defaultActive) {
-      // TODO TOOL test with next version
       activateTool(t, t.options, [elementId]);
     }
   });
