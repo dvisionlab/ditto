@@ -143,7 +143,6 @@
 <script>
 import { getCanvasTools, getHeaders, getMetadata, getSteps } from "./options";
 import { mergeSeries, storeSeriesStack } from "../utils";
-import metadataDictionary from "../metadata";
 import RelativeHeight from "../../relative-height";
 import ModalControllers from "./ModalControllers";
 
@@ -195,16 +194,14 @@ export default {
       // List of selected stacks
       const stacks = this.selectedSeries.map(v =>
         this.series.find(
-          s =>
-            s[metadataDictionary.SeriesInstanceUID] ==
-            v[metadataDictionary.SeriesInstanceUID]
+          s => s.larvitarSeriesInstanceUID == v.larvitarSeriesInstanceUID
         )
       );
 
       // Store series stack in larvitar
       if (this.selectedAction.storeStacks) {
         stacks.forEach(stack =>
-          storeSeriesStack(stack[metadataDictionary.SeriesInstanceUID], stack)
+          storeSeriesStack(stack.larvitarSeriesInstanceUID, stack)
         );
       }
 
@@ -225,9 +222,7 @@ export default {
       // Check if series are new or merge same series
       series.forEach(s => {
         const index = this.series.findIndex(
-          _s =>
-            _s[metadataDictionary.SeriesInstanceUID] ==
-            s[metadataDictionary.SeriesInstanceUID]
+          _s => _s.larvitarSeriesInstanceUID == s.larvitarSeriesInstanceUID
         );
         if (index >= 0) {
           // merge information
@@ -235,8 +230,7 @@ export default {
         } else {
           this.series.push(s);
           this.selectedSeries.push({
-            [metadataDictionary.SeriesInstanceUID]:
-              s[metadataDictionary.SeriesInstanceUID]
+            larvitarSeriesInstanceUID: s.larvitarSeriesInstanceUID
           });
         }
       });
@@ -253,14 +247,12 @@ export default {
 
       if (event.value) {
         this.selectedSeries.push({
-          [metadataDictionary.SeriesInstanceUID]:
-            event.item[metadataDictionary.SeriesInstanceUID]
+          larvitarSeriesInstanceUID: event.item.larvitarSeriesInstanceUID
         });
       } else {
         this.selectedSeries = this.selectedSeries.filter(
           v =>
-            v[metadataDictionary.SeriesInstanceUID] !==
-            event.item[metadataDictionary.SeriesInstanceUID]
+            v.larvitarSeriesInstanceUID !== event.item.larvitarSeriesInstanceUID
         );
       }
     }

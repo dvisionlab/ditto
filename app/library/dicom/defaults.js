@@ -19,7 +19,6 @@ export const stackMetadata = {
     metadata.StudyTime
   ],
   series: [
-    metadata.SeriesInstanceUID,
     metadata.SeriesDescription,
     metadata.SeriesDate,
     metadata.SeriesTime,
@@ -27,6 +26,7 @@ export const stackMetadata = {
     metadata.SliceThickness,
     metadata.SeriesNumber,
     // Larvitar tags
+    "larvitarSeriesInstanceUID",
     "numberOfImages"
   ]
 };

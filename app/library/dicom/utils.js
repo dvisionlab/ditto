@@ -112,13 +112,22 @@ export const parseFiles = (files, extractMetadata = []) => {
     lt.readFiles(files, (series, errors = []) => {
       const list = Object.values(series).map(s => {
         const meta = s.instances[Object.keys(s.instances)[0]].metadata;
-        return {
+        const stack = {
           ...[].concat(extractMetadata).reduce((result, value) => {
             result[value] = meta[value];
             return result;
           }, {}),
           ...s
         };
+
+        if (stack.isMultiframe) {
+          // TODO larvitarNumberOfImages?
+          stack.numberOfImages = stack.numberOfFrames;
+          delete stack.numberOfFrames;
+        }
+
+        console.log(stack);
+        return stack;
       });
       return resolve({ series: list, errors });
     });
