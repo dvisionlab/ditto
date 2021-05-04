@@ -120,13 +120,10 @@ export const parseFiles = (files, extractMetadata = []) => {
           ...s
         };
 
-        if (stack.isMultiframe) {
-          // TODO larvitarNumberOfImages?
-          stack.numberOfImages = stack.numberOfFrames;
-          delete stack.numberOfFrames;
-        }
+        stack.larvitarNumberOfSlices = stack.isMultiframe
+          ? stack.numberOfFrames
+          : stack.numberOfImages;
 
-        console.log(stack);
         return stack;
       });
       return resolve({ series: list, errors });

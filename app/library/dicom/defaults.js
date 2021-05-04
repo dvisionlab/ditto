@@ -27,7 +27,7 @@ export const stackMetadata = {
     metadata.SeriesNumber,
     // Larvitar tags
     "larvitarSeriesInstanceUID",
-    "numberOfImages"
+    "larvitarNumberOfSlices"
   ]
 };
 
