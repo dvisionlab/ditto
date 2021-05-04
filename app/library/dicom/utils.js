@@ -150,10 +150,6 @@ export const setup = store => {
 // Call the Larvitar "populateLarvitarManager" function
 export const storeSeriesStack = (seriesId, stack, cache = false) => {
   lt.populateLarvitarManager(seriesId, stack);
-  if (stack.isMultiframe) {
-    lt.removeSeriesFromLarvitarManager(seriesId);
-    lt.buildMultiFrameImage(seriesId, stack);
-  }
   if (cache) {
     lt.cacheImages(seriesId, stack);
   }
