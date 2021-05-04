@@ -122,7 +122,6 @@ export default {
         // !!! setTimeout needed to have a canvas div with the correct height
         setTimeout(() => {
           const stack = this.stack || getSeriesStack(this.seriesId);
-          console.log(stack);
 
           // fill stack metadata
           this.stackMetadata = Object.keys(stackMetadataDict).reduce(
