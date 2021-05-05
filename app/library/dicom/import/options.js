@@ -85,7 +85,7 @@ const defaultSteps = [
   {
     actions: [
       {
-        cacheStacks: true,
+        cacheStacks: false,
         closeOnEmit: true,
         disabled: false,
         emitter: "dicom-import-open",
