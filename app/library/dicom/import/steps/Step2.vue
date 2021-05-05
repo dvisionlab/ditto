@@ -89,7 +89,11 @@
         <td></td>
         <td></td>
         <td>{{ items[0][metadata.ModalitiesInStudy] }}</td>
-        <td :colspan="headers.length - 1"></td>
+        <!-- headers length + 1 selection col + 8 study cols -->
+        <td
+          v-if="headers.length + 1 - 8"
+          :colspan="headers.length + 1 - 8"
+        ></td>
       </template>
 
       <template v-slot:[`item.preview`]="{ item }">
