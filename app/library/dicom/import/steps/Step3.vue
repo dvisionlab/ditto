@@ -13,13 +13,26 @@
         v-else-if="step.uploadStatus.completed"
         :class="[hasErrors ? 'warning--text' : 'success--text']"
       >
-        upload completed {{ hasErrors ? "with errors" : "" }}
+        <template v-if="step.uploadStatus.errors.post">
+          upload failed
+        </template>
+        <template v-else>
+          upload completed {{ hasErrors ? "with errors" : "" }}
+        </template>
+
         <v-progress-linear
           :color="hasErrors ? 'warning' : 'success'"
           :value="100"
         />
 
-        <!-- TODO upload other exams button -->
+        <v-tooltip v-if="step.uploadStatus.errors.post" bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn color="warning" icon v-bind="attrs" v-on="on">
+              <v-icon>mdi-alert</v-icon>
+            </v-btn>
+          </template>
+          {{ step.uploadStatus.errors.post }}
+        </v-tooltip>
       </div>
     </h3>
 
@@ -29,8 +42,6 @@
         :key="s.larvitarSeriesInstanceUID"
         class="ma-1"
       >
-        {{ s.larvitarSeriesInstanceUID }}
-
         <dicom-canvas
           :canvas-id="s.larvitarSeriesInstanceUID"
           :get-progress-fn="getProgressFn"
@@ -39,17 +50,14 @@
           :show-progress="false"
           :stack="
             series.find(
-              _s =>
-                _s.larvitarSeriesInstanceUID == s.larvitarSeriesInstanceUID
+              _s => _s.larvitarSeriesInstanceUID == s.larvitarSeriesInstanceUID
             )
           "
           :style="{ width: '10em', height: '10em' }"
           :tools="tools"
         />
 
-        <div
-          v-if="getProgressPercentage(s.larvitarSeriesInstanceUID) !== null"
-        >
+        <div v-if="getProgressPercentage(s.larvitarSeriesInstanceUID) !== null">
           <v-progress-linear
             color="warning"
             :value="getProgressPercentage(s.larvitarSeriesInstanceUID)"
