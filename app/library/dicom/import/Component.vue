@@ -39,53 +39,71 @@
           </v-btn>
 
           <div v-if="steps[currentStep].actions" class="d-flex">
-            <v-menu max-width="295px" offset-y>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  class="primary--text"
-                  :elevation="0"
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  <v-icon v-if="$vuetify.breakpoint.smAndDown">
-                    mdi-dots-horizontal
-                  </v-icon>
-                  <span v-else>{{
-                    selectedAction ? selectedAction.text : "---"
-                  }}</span>
-                  <v-icon>mdi-chevron-down</v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item
-                  v-for="(item, i) in steps[currentStep].actions"
-                  :key="i"
-                  :class="{
-                    'selected-action': item.emitter == selectedAction.emitter
-                  }"
-                  :disabled="item.disabled"
-                  link
-                  @click="selectedAction = item"
-                >
-                  <v-list-item-content>
-                    <v-list-item-title class="text-uppercase">{{
-                      item.text
-                    }}</v-list-item-title>
-                    <v-list-item-subtitle :style="{ whiteSpace: 'normal' }">{{
-                      item.hint
-                    }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-menu>
+            <!-- multiple actions -->
+            <template v-if="steps[currentStep].actions.length > 1">
+              <v-menu max-width="295px" offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    class="primary--text"
+                    :elevation="0"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <v-icon v-if="$vuetify.breakpoint.smAndDown">
+                      mdi-dots-horizontal
+                    </v-icon>
+                    <span v-else>{{
+                      selectedAction ? selectedAction.text : "---"
+                    }}</span>
+                    <v-icon>mdi-chevron-down</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(item, i) in steps[currentStep].actions"
+                    :key="i"
+                    :class="{
+                      'selected-action': item.emitter == selectedAction.emitter
+                    }"
+                    :disabled="item.disabled"
+                    link
+                    @click="selectedAction = item"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title class="text-uppercase">{{
+                        item.text
+                      }}</v-list-item-title>
+                      <v-list-item-subtitle :style="{ whiteSpace: 'normal' }">{{
+                        item.hint
+                      }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+              <v-btn
+                color="primary"
+                :disabled="selectedSeries.length <= 0 || !selectedAction"
+                :elevation="0"
+                @click="onAction"
+              >
+                <span class="pl-2">confirm</span>
+                <v-icon>mdi-chevron-right</v-icon>
+              </v-btn>
+            </template>
+
+            <!-- single action -->
             <v-btn
+              v-else
               color="primary"
-              :disabled="selectedSeries.length <= 0 || !selectedAction"
               :elevation="0"
-              @click="onAction"
+              @click="onSelectAction(steps[currentStep].actions[0])"
             >
-              <span class="pl-2">confirm</span>
-              <v-icon>mdi-chevron-right</v-icon>
+              <div class="d-block">
+                {{ steps[currentStep].actions[0].text }}
+                <div class="font-weight-light text-lowercase grey--text">
+                  {{ steps[currentStep].actions[0].hint }}
+                </div>
+              </div>
             </v-btn>
           </div>
 
@@ -95,7 +113,7 @@
             :disabled="!steps[currentStep].next(series)"
             @click="currentStep++"
           >
-            {{ series.length }} series detected
+            {{ series.length }} exam{{ series.length == 1 ? "" : "s" }} detected
             <v-icon v-if="steps[currentStep].next(series)"
               >mdi-chevron-right</v-icon
             >
@@ -107,7 +125,7 @@
 
       <modal-controllers
         class="flex-shrink-0 align-self-center"
-        @cancel="$emit('cancel')"
+        @cancel="onCancel"
         @minimize="$emit('minimize')"
       />
     </div>
@@ -129,6 +147,7 @@
         :step="steps[currentStep]"
         :tools="tools"
         @new-series="onNewSeries"
+        @select-action="onSelectAction"
         @select-series="onSelectSeries"
       >
         <!-- Add a slot for each header item that requires it (component customization) -->
@@ -138,6 +157,9 @@
         >
           <slot v-bind:item="item" :name="h.value" />
         </template>
+
+        <!-- Steps customization slots (actually only step-3 is supported) -->
+        <template v-slot:step-3><slot name="step-3"/></template>
       </component>
     </div>
   </div>
@@ -204,7 +226,11 @@ export default {
       // Store series stack in larvitar
       if (this.selectedAction.storeStacks) {
         stacks.forEach(stack =>
-          storeSeriesStack(stack.larvitarSeriesInstanceUID, stack)
+          storeSeriesStack(
+            stack.larvitarSeriesInstanceUID,
+            stack,
+            this.selectedAction.cacheStacks
+          )
         );
       }
 
@@ -217,6 +243,17 @@ export default {
       });
 
       this.$emit(this.selectedAction.emitter, emitData);
+
+      if (this.selectedAction.closeOnEmit) {
+        this.$emit("cancel");
+      } else {
+        this.currentStep++;
+      }
+    },
+    onCancel() {
+      // TODO check for closeConfirmation
+      // console.log(this.currentStep);
+      // console.log(this.currentStep.closeConfirmation());
       this.$emit("cancel");
     },
     onNewSeries({ errors, series }) {
@@ -239,6 +276,10 @@ export default {
       });
 
       this.currentStep++;
+    },
+    onSelectAction(action) {
+      this.selectedAction = action;
+      this.onAction();
     },
     onSelectSeries(event) {
       if (event.items) {

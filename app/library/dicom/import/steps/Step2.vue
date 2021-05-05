@@ -16,6 +16,7 @@
         <h3 class="headline mb-1">
           Some errors occured while parsing your DICOM files.
         </h3>
+        <!-- TODO show in previous step as dialog -->
         <div v-if="!series.length">
           Unfortunately none of your files can be loaded: please check your
           files complies with the DICOM standard fromat.
@@ -88,11 +89,14 @@
         <td></td>
         <td></td>
         <td>{{ items[0][metadata.ModalitiesInStudy] }}</td>
-        <td :colspan="headers.length - 1"></td>
+        <!-- headers length + 1 selection col + 8 study cols -->
+        <td
+          v-if="headers.length + 1 - 8"
+          :colspan="headers.length + 1 - 8"
+        ></td>
       </template>
 
       <template v-slot:[`item.preview`]="{ item }">
-        <!-- clear-on-destroy is true when series is not selected (user discard from open/updload) -->
         <dicom-canvas
           :canvas-id="item.larvitarSeriesInstanceUID"
           :get-progress-fn="getProgressFn"

@@ -54,6 +54,10 @@
       ref="content"
       @cancel="isOpen = false"
       @dicom-import-open="data => $emit('dicom-import-open', data)"
+      @dicom-import-upload="data => $emit('dicom-import-upload', data)"
+      @dicom-import-upload-and-open="
+        data => $emit('dicom-import-upload-and-open', data)
+      "
       @minimize="minimize"
     >
       <!-- Add a slot for each header item that requires it (component customization) -->
@@ -63,6 +67,9 @@
       >
         <slot v-bind:item="item" :name="h.value" />
       </template>
+
+      <!-- Steps customization slots (actually only step-3 is supported) -->
+      <template v-slot:step-3><slot name="step-3"/></template>
     </dicom-import>
   </v-dialog>
 </template>
@@ -100,6 +107,7 @@ export default {
   },
   methods: {
     minimize() {
+      // TODO show loader while uploading
       this.minimizedSeries = this.$refs.content.selectedSeries.length;
       this.isOpen = false;
     }

@@ -37,13 +37,17 @@ const computeHeaders = metadata => {
 // Loaded series actions
 const defaultActions = [
   {
+    cacheStacks: false,
+    closeOnEmit: false,
     disabled: true,
     emitter: "dicom-import-upload",
     hint: "series will be saved in your dashboard",
-    storeStacks: false,
+    storeStacks: true, // TODO clear once uploaded
     text: "upload series"
   },
   {
+    cacheStacks: false,
+    closeOnEmit: false,
     disabled: true,
     emitter: "dicom-import-upload-and-open",
     hint: "series will be saved in your dashboard",
@@ -51,6 +55,8 @@ const defaultActions = [
     text: "upload series and open viewer"
   },
   {
+    cacheStacks: false,
+    closeOnEmit: true,
     default: true,
     disabled: false,
     emitter: "dicom-import-open",
@@ -77,10 +83,23 @@ const defaultSteps = [
     next: () => false
   },
   {
+    actions: [
+      {
+        cacheStacks: false,
+        closeOnEmit: true,
+        disabled: false,
+        emitter: "dicom-import-open",
+        // hint: "upload will continue in background",
+        storeStacks: false,
+        text: "open viewer"
+      }
+    ],
     component: () => import("./steps/Step3"),
     label: "upload",
     back: () => false,
-    next: () => false
+    next: () => false,
+    // closeConfirmation: () => this.uploadStatus.completed,
+    uploadStatus: null // { loading: false, errors: null, progress: {} }
   }
 ];
 
@@ -152,6 +171,13 @@ export const getSteps = (options = {}) => {
   if (options.steps) {
     options.steps.forEach((step, i) => {
       if (step) {
+        if (step.actions && steps[i].actions) {
+          step.actions = steps[i].actions.map((a, j) => ({
+            ...a,
+            ...step.actions[j]
+          }));
+        }
+
         steps[i] = { ...steps[i], ...step };
       }
     });
