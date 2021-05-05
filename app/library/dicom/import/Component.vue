@@ -58,11 +58,13 @@
                     <v-icon>mdi-chevron-down</v-icon>
                   </v-btn>
                 </template>
-                <!-- TODO highlight selected -->
                 <v-list>
                   <v-list-item
                     v-for="(item, i) in steps[currentStep].actions"
                     :key="i"
+                    :class="{
+                      'selected-action': item.emitter == selectedAction.emitter
+                    }"
                     :disabled="item.disabled"
                     link
                     @click="selectedAction = item"
@@ -166,7 +168,6 @@
 <script>
 import { getCanvasTools, getHeaders, getMetadata, getSteps } from "./options";
 import { mergeSeries, storeSeriesStack } from "../utils";
-import metadataDictionary from "../metadata";
 import RelativeHeight from "../../relative-height";
 import ModalControllers from "./ModalControllers";
 
@@ -218,9 +219,7 @@ export default {
       // List of selected stacks
       const stacks = this.selectedSeries.map(v =>
         this.series.find(
-          s =>
-            s[metadataDictionary.SeriesInstanceUID] ==
-            v[metadataDictionary.SeriesInstanceUID]
+          s => s.larvitarSeriesInstanceUID == v.larvitarSeriesInstanceUID
         )
       );
 
@@ -229,7 +228,7 @@ export default {
         stacks.forEach(stack =>
           // TODO review cache options
           storeSeriesStack(
-            stack[metadataDictionary.SeriesInstanceUID],
+            stack.larvitarSeriesInstanceUID,
             stack,
             this.selectedAction.cacheStacks
           )
@@ -264,9 +263,7 @@ export default {
       // Check if series are new or merge same series
       series.forEach(s => {
         const index = this.series.findIndex(
-          _s =>
-            _s[metadataDictionary.SeriesInstanceUID] ==
-            s[metadataDictionary.SeriesInstanceUID]
+          _s => _s.larvitarSeriesInstanceUID == s.larvitarSeriesInstanceUID
         );
         if (index >= 0) {
           // merge information
@@ -274,8 +271,7 @@ export default {
         } else {
           this.series.push(s);
           this.selectedSeries.push({
-            [metadataDictionary.SeriesInstanceUID]:
-              s[metadataDictionary.SeriesInstanceUID]
+            larvitarSeriesInstanceUID: s.larvitarSeriesInstanceUID
           });
         }
       });
@@ -296,14 +292,12 @@ export default {
 
       if (event.value) {
         this.selectedSeries.push({
-          [metadataDictionary.SeriesInstanceUID]:
-            event.item[metadataDictionary.SeriesInstanceUID]
+          larvitarSeriesInstanceUID: event.item.larvitarSeriesInstanceUID
         });
       } else {
         this.selectedSeries = this.selectedSeries.filter(
           v =>
-            v[metadataDictionary.SeriesInstanceUID] !==
-            event.item[metadataDictionary.SeriesInstanceUID]
+            v.larvitarSeriesInstanceUID !== event.item.larvitarSeriesInstanceUID
         );
       }
     }
@@ -321,6 +315,10 @@ export default {
 
 <style lang="scss" scoped>
 $min-header-height: 5.5em;
+
+.selected-action {
+  background: rgba(var(--v-primary-rgb), 0.12);
+}
 
 .step-wrapper {
   height: 80vh; /* Fallback for browsers that do not support Custom Properties */

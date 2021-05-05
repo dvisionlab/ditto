@@ -19,7 +19,7 @@ const defaultMetadata = [
 
 const requiredMetadata = [
   metadataDictionary.StudyInstanceUID,
-  metadataDictionary.SeriesInstanceUID
+  "larvitarSeriesInstanceUID"
 ];
 
 const computeHeaders = metadata => {

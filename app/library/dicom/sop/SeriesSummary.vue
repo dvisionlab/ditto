@@ -4,10 +4,10 @@
     <thumbnail-string v-if="showThumbnail" :value="data.thumbnail" />
     <dicom-canvas
       v-else-if="showCanvas"
-      :canvas-id="canvasId || data[metadataDictionary.SeriesInstanceUID]"
+      :canvas-id="canvasId || data.larvitarSeriesInstanceUID"
       :clear-cache-on-destroy="clearCacheOnDestroy"
       :clear-on-destroy="clearOnDestroy"
-      :series-id="data[metadataDictionary.SeriesInstanceUID]"
+      :series-id="data.larvitarSeriesInstanceUID"
       :show-progress="showProgress"
       :style="{ height: '10em', width: '100%' }"
       :tools="canvasTools"

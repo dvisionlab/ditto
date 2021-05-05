@@ -48,7 +48,7 @@
       height="100%"
       hide-default-footer
       :items="series"
-      :item-key="metadata.SeriesInstanceUID"
+      item-key="larvitarSeriesInstanceUID"
       show-select
       :style="{ height: tableHeight }"
       :value="selectedSeries"
@@ -94,10 +94,10 @@
 
       <template v-slot:[`item.preview`]="{ item }">
         <dicom-canvas
-          :canvas-id="item[metadata.SeriesInstanceUID]"
+          :canvas-id="item.larvitarSeriesInstanceUID"
           :get-progress-fn="getProgressFn"
           :get-viewport-fn="getViewportFn"
-          :series-id="item[metadata.SeriesInstanceUID]"
+          :series-id="item.larvitarSeriesInstanceUID"
           :stack="item"
           :style="{ width: '10em', height: '10em' }"
           :tools="tools"
