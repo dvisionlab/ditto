@@ -42,11 +42,11 @@ const defaultActions = [
     disabled: true,
     emitter: "dicom-import-upload",
     hint: "series will be saved in your dashboard",
-    storeStacks: true,
+    storeStacks: true, // TODO clear once uploaded
     text: "upload series"
   },
   {
-    cacheStacks: true,
+    cacheStacks: false,
     closeOnEmit: false,
     disabled: true,
     emitter: "dicom-import-upload-and-open",
@@ -55,7 +55,7 @@ const defaultActions = [
     text: "upload series and open viewer"
   },
   {
-    cacheStacks: true,
+    cacheStacks: false,
     closeOnEmit: true,
     default: true,
     disabled: false,

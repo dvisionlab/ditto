@@ -226,7 +226,6 @@ export default {
       // Store series stack in larvitar
       if (this.selectedAction.storeStacks) {
         stacks.forEach(stack =>
-          // TODO review cache options
           storeSeriesStack(
             stack.larvitarSeriesInstanceUID,
             stack,
