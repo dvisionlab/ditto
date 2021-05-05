@@ -26,21 +26,21 @@
     <div class="d-flex flex-wrap justify-center mt-3">
       <div
         v-for="s in selectedSeries"
-        :key="s[metadata.SeriesInstanceUID]"
+        :key="s.larvitarSeriesInstanceUID"
         class="ma-1"
       >
-        {{ s[metadata.SeriesInstanceUID] }}
+        {{ s.larvitarSeriesInstanceUID }}
 
         <dicom-canvas
-          :canvas-id="s[metadata.SeriesInstanceUID]"
+          :canvas-id="s.larvitarSeriesInstanceUID"
           :get-progress-fn="getProgressFn"
           :get-viewport-fn="getViewportFn"
-          :series-id="s[metadata.SeriesInstanceUID]"
+          :series-id="s.larvitarSeriesInstanceUID"
           :show-progress="false"
           :stack="
             series.find(
               _s =>
-                _s[metadata.SeriesInstanceUID] == s[metadata.SeriesInstanceUID]
+                _s.larvitarSeriesInstanceUID == s.larvitarSeriesInstanceUID
             )
           "
           :style="{ width: '10em', height: '10em' }"
@@ -48,16 +48,16 @@
         />
 
         <div
-          v-if="getProgressPercentage(s[metadata.SeriesInstanceUID]) !== null"
+          v-if="getProgressPercentage(s.larvitarSeriesInstanceUID) !== null"
         >
           <v-progress-linear
             color="warning"
-            :value="getProgressPercentage(s[metadata.SeriesInstanceUID])"
+            :value="getProgressPercentage(s.larvitarSeriesInstanceUID)"
           />
         </div>
 
         <v-tooltip
-          v-if="step.uploadStatus.errors[s[metadata.SeriesInstanceUID]]"
+          v-if="step.uploadStatus.errors[s.larvitarSeriesInstanceUID]"
           bottom
         >
           <template v-slot:activator="{ on, attrs }">
@@ -67,7 +67,7 @@
           </template>
           <div
             v-for="(text, i) in step.uploadStatus.errors[
-              s[metadata.SeriesInstanceUID]
+              s.larvitarSeriesInstanceUID
             ]"
             :key="i"
           >
