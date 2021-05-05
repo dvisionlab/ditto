@@ -90,7 +90,7 @@ const defaultSteps = [
         disabled: false,
         emitter: "dicom-import-open",
         // hint: "upload will continue in background",
-        storeStacks: false,
+        storeStacks: true,
         text: "open viewer"
       }
     ],

@@ -123,19 +123,20 @@ export default {
         setTimeout(() => {
           const stack = this.stack || getSeriesStack(this.seriesId);
 
-          // fill stack metadata
-          this.stackMetadata = Object.keys(stackMetadataDict).reduce(
-            (result, category) => {
-              result[category] = stackMetadataDict[category].reduce(
-                (o, key) => ({ ...o, [key]: stack[key] }),
-                {}
-              );
-              return result;
-            },
-            {}
-          );
-
           if (stack) {
+            // fill stack metadata
+            this.stackMetadata = Object.keys(stackMetadataDict).reduce(
+              (result, category) => {
+                result[category] = stackMetadataDict[category].reduce(
+                  (o, key) => ({ ...o, [key]: stack[key] }),
+                  {}
+                );
+                return result;
+              },
+              {}
+            );
+
+            // render
             renderSeries(this.validCanvasId, stack);
             // TODO LT await render series
             addTools(this.validCanvasId, this.tools, this.toolsHandlers);

@@ -1,5 +1,5 @@
 <template>
-  <!-- TODO manage exit modal before upload ends (minimize or force stop upload) -->
+  <!-- TODO manage exit modal before upload ends (minimize or force stop upload -> clearSeriesData) -->
   <div class="text-center">
     <h3 class="text-uppercase ma-auto" :style="{ width: 'fit-content' }">
       <template v-if="step.uploadStatus.loading">
