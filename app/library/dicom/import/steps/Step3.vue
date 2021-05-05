@@ -24,35 +24,51 @@
     </h3>
 
     <div class="d-flex flex-wrap justify-center mt-3">
-      {{ series }}
+      <div
+        v-for="s in selectedSeries"
+        :key="s[metadata.SeriesInstanceUID]"
+        class="ma-1"
+      >
+        {{ s[metadata.SeriesInstanceUID] }}
 
-      <div v-for="s in selectedSeries" :key="s.seriesUID" class="ma-1">
         <dicom-canvas
-          :canvas-id="s.seriesUID"
+          :canvas-id="s[metadata.SeriesInstanceUID]"
           :get-progress-fn="getProgressFn"
           :get-viewport-fn="getViewportFn"
-          :series-id="s.seriesUID"
+          :series-id="s[metadata.SeriesInstanceUID]"
           :show-progress="false"
-          :stack="series.find(({ seriesUID }) => seriesUID == s.seriesUID)"
+          :stack="
+            series.find(
+              _s =>
+                _s[metadata.SeriesInstanceUID] == s[metadata.SeriesInstanceUID]
+            )
+          "
           :style="{ width: '10em', height: '10em' }"
           :tools="tools"
         />
 
-        <div v-if="getProgressPercentage(s.seriesUID) !== null">
+        <div
+          v-if="getProgressPercentage(s[metadata.SeriesInstanceUID]) !== null"
+        >
           <v-progress-linear
             color="warning"
-            :value="getProgressPercentage(s.seriesUID)"
+            :value="getProgressPercentage(s[metadata.SeriesInstanceUID])"
           />
         </div>
 
-        <v-tooltip v-if="step.uploadStatus.errors[s.seriesUID]" bottom>
+        <v-tooltip
+          v-if="step.uploadStatus.errors[s[metadata.SeriesInstanceUID]]"
+          bottom
+        >
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="warning" icon v-bind="attrs" v-on="on">
               <v-icon>mdi-alert</v-icon>
             </v-btn>
           </template>
           <div
-            v-for="(text, i) in step.uploadStatus.errors[s.seriesUID]"
+            v-for="(text, i) in step.uploadStatus.errors[
+              s[metadata.SeriesInstanceUID]
+            ]"
             :key="i"
           >
             {{ text }}
