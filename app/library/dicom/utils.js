@@ -43,6 +43,10 @@ export const hideTool = tool => {
   lt.setToolDisabled(tool.name); // tool hidden
 };
 
+export const editTool = tool => {
+  lt.setToolPassive(tool.name); // only existing tools editable
+};
+
 // Build data and header functions
 export const buildData = stack => {
   return new Promise((resolve, reject) => {
@@ -192,6 +196,33 @@ export const updateViewportProperty = (action, element) => {
 
     default: {
       console.warn("Unknown viewport action", action);
+    }
+  }
+};
+
+// Update tools actions
+export const updateToolsOption = (action, option, tools) => {
+  switch (action) {
+    case "toggle-edit-tools": {
+      if (option.value) {
+        tools.forEach(t => editTool(t));
+      } else {
+        tools.forEach(t => disableTool(t));
+      }
+      break;
+    }
+
+    case "toggle-tools-visibility": {
+      if (option.value) {
+        tools.forEach(t => disableTool(t));
+      } else {
+        tools.forEach(t => hideTool(t));
+      }
+      break;
+    }
+
+    default: {
+      console.warn("Unknown tool option action", action);
     }
   }
 };
