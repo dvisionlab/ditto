@@ -259,6 +259,7 @@ export default {
     onNewSeries({ errors, series }) {
       this.errors = [...this.errors, ...errors];
 
+      // TODO test this, new instances added but series is not scrolling
       // Check if series are new or merge same series
       series.forEach(s => {
         const index = this.series.findIndex(
