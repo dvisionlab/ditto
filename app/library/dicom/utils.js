@@ -79,6 +79,16 @@ export const deleteViewport = elementId =>
 // unrender an image on a html div using cornerstone
 export const disableCanvas = lt.disableViewport;
 
+// Return the cinematic data of a series
+export const getCinematicData = seriesId => {
+  const stack = getSeriesStack(seriesId);
+  if (!stack) {
+    return null;
+  }
+  const { frameDelay, frameTime } = stack;
+  return { frameDelay, frameTime };
+};
+
 // Return series stack stored in larvitar dicom manager
 export const getSeriesStack = seriesId => {
   const stack = lt.getSeriesDataFromLarvitarManager(seriesId);
@@ -169,6 +179,14 @@ export const storeSeriesStack = (seriesId, stack, cache = false) => {
   if (cache) {
     lt.cacheImages(seriesId, stack);
   }
+};
+
+// Use Larvitar to update a series slice
+export const updateSeriesSlice = (elementId, seriesId, sliceId) => {
+  const stack = getSeriesStack(seriesId);
+
+  lt.larvitar_store.set("sliceId", [elementId, sliceId]);
+  lt.updateImage(stack, elementId, sliceId);
 };
 
 // Update viewport actions
