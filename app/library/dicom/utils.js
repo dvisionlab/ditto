@@ -39,12 +39,16 @@ export const disableTool = (tool, elements) => {
   lt.setToolEnabled(tool.name, elements); // tool not editable but visible
 };
 
+export const editTool = (tool, elements) => {
+  lt.setToolPassive(tool.name, elements); // only existing tools editable
+};
+
 export const hideTool = (tool, elements) => {
   lt.setToolDisabled(tool.name, elements); // tool hidden
 };
 
-export const editTool = (tool, elements) => {
-  lt.setToolPassive(tool.name, elements); // only existing tools editable
+export const showTool = (tool, elements) => {
+  lt.setToolEnabled(tool.name, elements); // tool not editable but visible
 };
 
 // Build data and header functions
