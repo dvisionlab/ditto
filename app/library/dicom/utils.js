@@ -163,7 +163,7 @@ export const seriesIdToElementId = seriesId =>
   seriesId.toString().replaceAll(".", "_");
 
 // Setup Larvitar
-export const setup = store => {
+export const setup = (store, toolsStyle) => {
   lt.clearImageCache();
 
   if (store) {
@@ -174,6 +174,8 @@ export const setup = store => {
 
   lt.initializeImageLoader();
   lt.registerMultiFrameImageLoader();
+
+  lt.setToolsStyle(toolsStyle);
   lt.initializeCSTools();
 };
 

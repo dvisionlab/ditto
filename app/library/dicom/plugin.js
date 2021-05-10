@@ -7,6 +7,7 @@ const defaultOptions = {
   dataTypes: false,
   import: true,
   series: false,
+  toolsStyle: undefined,
   utils: false
 };
 
@@ -14,7 +15,7 @@ export default async (Vue, options) => {
   options = { ...defaultOptions, ...options };
 
   // setup larvitar
-  utils.setup(options.store);
+  utils.setup(options.store, options.toolsStyle);
 
   // canvas component
   if (options.canvas) {
