@@ -36,9 +36,15 @@
         </v-tooltip>
 
         <!-- TODO clearSeriesData? -->
-        <v-btn class="mt-1" depressed @click="$emit('restart')"
-          >Import other exams</v-btn
-        >
+        <!-- TODO need to reset imported series -->
+        <!-- <div>
+          <v-btn
+            class="mt-1"
+            @click="$emit('restart')"
+          >
+            Import other exams
+          </v-btn>
+        </div> -->
       </div>
     </h3>
 
