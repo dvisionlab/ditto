@@ -40,6 +40,7 @@
             :icon="icon"
             :icon-color="iconColor"
             :label="label"
+            :loading="uploading"
             :minimized-series="minimizedSeries"
           />
         </v-btn>
@@ -92,7 +93,8 @@ export default {
   },
   data: () => ({
     isOpen: false,
-    minimizedSeries: 0
+    minimizedSeries: 0,
+    uploading: false
   }),
   computed: {
     visible: {
@@ -107,8 +109,17 @@ export default {
   },
   methods: {
     minimize() {
-      // TODO show loader while uploading
-      this.minimizedSeries = this.$refs.content.selectedSeries.length;
+      const upload = this.$refs.content.steps[this.$refs.content.currentStep]
+        .uploadStatus;
+      if (upload) {
+        this.uploading = upload.loading;
+      }
+
+      this.minimizedSeries =
+        !upload || upload.loading
+          ? this.$refs.content.selectedSeries.length
+          : 0;
+
       this.isOpen = false;
     }
   }

@@ -98,7 +98,7 @@ const defaultSteps = [
     label: "upload",
     back: () => false,
     next: () => false,
-    // closeConfirmation: () => this.uploadStatus.completed,
+    closeConfirmation: uploadStatus => uploadStatus.completed,
     uploadStatus: null // { loading: false, errors: null, progress: {} }
   }
 ];

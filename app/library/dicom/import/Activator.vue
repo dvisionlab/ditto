@@ -3,6 +3,14 @@
     <v-badge bordered :color="badgeColor" overlap :value="minimizedSeries">
       <template v-slot:badge>
         <span>{{ minimizedSeries }}</span>
+        <v-progress-circular
+          v-if="loading"
+          color="black"
+          indeterminate
+          :size="23"
+          :style="{ position: 'absolute', top: '-4px', left: '-4px' }"
+          :width="2"
+        />
       </template>
 
       <v-icon class="mb-1" :color="iconColor">{{ icon }}</v-icon>
@@ -21,6 +29,7 @@ export default {
     icon: { default: "mdi-upload-multiple", type: String },
     iconColor: { required: false, type: String },
     label: { required: false, type: String },
+    loading: { default: false, type: Boolean },
     minimizedSeries: { default: 0, type: Number }
   }
 };
