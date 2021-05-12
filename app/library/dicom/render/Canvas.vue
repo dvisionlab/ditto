@@ -139,7 +139,7 @@ export default {
             // render
             renderSeries(this.validCanvasId, stack);
             // TODO LT await render series
-            addTools(this.validCanvasId, this.tools, this.toolsHandlers);
+            addTools(this.tools, this.validCanvasId, this.toolsHandlers);
             this.$emit("ready");
           } else {
             console.warn(

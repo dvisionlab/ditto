@@ -11,8 +11,8 @@ import * as lt from "larvitar";
 // Tools functionalities
 export const activateTool = (
   tool,
-  options = { mouseButtonMask: 1 },
-  elementIds
+  elementIds,
+  options = { mouseButtonMask: 1 }
 ) => {
   const mouseOptions = { ...tool.options, ...options };
   if (mouseOptions.mouseButtonMask) {
@@ -20,12 +20,12 @@ export const activateTool = (
   }
 };
 
-export const addTools = (elementId, tools, handlers) => {
+export const addTools = (tools, elementId, handlers) => {
   // Add mouse button tools
   tools.forEach(t => {
     lt.addTool(t.name, t.configuration, elementId);
     if (t.defaultActive) {
-      activateTool(t, t.options, [elementId]);
+      activateTool(t, [elementId], t.options);
     }
   });
 
