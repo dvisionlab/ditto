@@ -21,11 +21,6 @@ export const activateTool = (
 };
 
 export const addTools = (elementId, tools, handlers) => {
-  // Add tools keyboard handlers
-  if (handlers) {
-    lt.addMouseKeyHandlers(handlers, [elementId]);
-  }
-
   // Add mouse button tools
   tools.forEach(t => {
     lt.addTool(t.name, t.configuration, elementId);
@@ -33,6 +28,11 @@ export const addTools = (elementId, tools, handlers) => {
       activateTool(t, t.options, [elementId]);
     }
   });
+
+  // Add tools keyboard handlers
+  if (handlers) {
+    lt.addMouseKeyHandlers(handlers, [elementId]);
+  }
 };
 
 export const disableTool = (tool, elements) => {
