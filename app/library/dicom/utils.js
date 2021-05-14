@@ -11,8 +11,8 @@ import * as lt from "larvitar";
 // Tools functionalities
 export const activateTool = (
   tool,
-  options = { mouseButtonMask: 1 },
-  elementIds
+  elementIds,
+  options = { mouseButtonMask: 1 }
 ) => {
   const mouseOptions = { ...tool.options, ...options };
   if (mouseOptions.mouseButtonMask) {
@@ -20,27 +20,35 @@ export const activateTool = (
   }
 };
 
-export const addTools = (elementId, tools, handlers) => {
-  // Add tools keyboard handlers
-  if (handlers) {
-    lt.addMouseKeyHandlers(handlers, [elementId]);
-  }
-
+export const addTools = (tools, elementId, handlers) => {
   // Add mouse button tools
   tools.forEach(t => {
     lt.addTool(t.name, t.configuration, elementId);
     if (t.defaultActive) {
-      activateTool(t, t.options, [elementId]);
+      activateTool(t, [elementId], t.options);
     }
   });
+
+  // Add tools keyboard handlers
+  if (handlers) {
+    lt.addMouseKeyHandlers(handlers, [elementId]);
+  }
 };
 
-export const disableTool = tool => {
-  lt.setToolEnabled(tool.name); // tool not editable but visible
+export const disableTool = (tool, elements) => {
+  lt.setToolEnabled(tool.name, elements); // tool not editable but visible
 };
 
-export const hideTool = tool => {
-  lt.setToolDisabled(tool.name); // tool hidden
+export const editTool = (tool, elements) => {
+  lt.setToolPassive(tool.name, elements); // only existing tools editable
+};
+
+export const hideTool = (tool, elements) => {
+  lt.setToolDisabled(tool.name, elements); // tool hidden
+};
+
+export const showTool = (tool, elements) => {
+  lt.setToolEnabled(tool.name, elements); // tool not editable but visible
 };
 
 // Build data and header functions
@@ -74,6 +82,16 @@ export const deleteViewport = elementId =>
 // Call the Larvitar "disableViewport" function:
 // unrender an image on a html div using cornerstone
 export const disableCanvas = lt.disableViewport;
+
+// Return the cinematic data of a series
+export const getCinematicData = seriesId => {
+  const stack = getSeriesStack(seriesId);
+  if (!stack) {
+    return null;
+  }
+  const { frameDelay, frameTime } = stack;
+  return { frameDelay, frameTime };
+};
 
 // Return series stack stored in larvitar dicom manager
 export const getSeriesStack = seriesId => {
@@ -145,7 +163,7 @@ export const seriesIdToElementId = seriesId =>
   seriesId.toString().replaceAll(".", "_");
 
 // Setup Larvitar
-export const setup = store => {
+export const setup = (store, toolsStyle) => {
   lt.clearImageCache();
 
   if (store) {
@@ -156,6 +174,8 @@ export const setup = store => {
 
   lt.initializeImageLoader();
   lt.registerMultiFrameImageLoader();
+
+  lt.setToolsStyle(toolsStyle);
   lt.initializeCSTools();
 };
 
@@ -165,6 +185,14 @@ export const storeSeriesStack = (seriesId, stack, cache = false) => {
   if (cache) {
     lt.cacheImages(seriesId, stack);
   }
+};
+
+// Use Larvitar to update a series slice
+export const updateSeriesSlice = (elementId, seriesId, sliceId) => {
+  const stack = getSeriesStack(seriesId);
+
+  lt.larvitar_store.set("sliceId", [elementId, sliceId]);
+  lt.updateImage(stack, elementId, sliceId);
 };
 
 // Update viewport actions
