@@ -7,7 +7,7 @@
     @click:outside="() => minimize()"
   >
     <template v-slot:activator="{ on, attrs }">
-      <slot v-bind="{ on, attrs }">
+      <slot v-bind="{ on, attrs, minimizedSeries, uploading }">
         <!-- default slot content -->
         <!-- mobile -->
         <v-list-item v-if="mobile" v-bind="attrs" v-on="on">
