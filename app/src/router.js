@@ -9,6 +9,11 @@ const routes = [
     component: () => import("@/components/Home")
   },
   {
+    path: "/auth",
+    name: "auth",
+    component: () => import("@/examples/auth/Test")
+  },
+  {
     path: "/basic-wireframe",
     name: "basic-wireframe",
     redirect: "/basic-wireframe/home",
