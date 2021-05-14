@@ -33,7 +33,7 @@ import MODULE_NAME from "@/../ditto/MODULE_NAME";
 
 | Module name        | Type                  | Doc                                       |
 | ------------------ | --------------------- | ----------------------------------------- |
-| **auth**           | Vue plugin            |                                           |
+| **auth**           | Vue plugin            | [DOC](./app/library/auth/README.md)       |
 | **dicom**          | Vue plugin            |                                           |
 | **dicomDataTypes** | Components collection |                                           |
 | **fileSystemApi**  | Js library            |                                           |

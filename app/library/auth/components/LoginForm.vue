@@ -52,14 +52,16 @@
 </template>
 
 <script>
-import form from "../../../../form";
+import Form from "../../form/Form";
+import { customizeRules } from "../../form/rules";
+
 if (process.env.NODE_ENV !== "production") {
-  form.customizeRules({ passwordValidationRegex: new RegExp(".*") });
+  customizeRules({ passwordValidationRegex: new RegExp(".*") });
 }
 
 export default {
   name: "LoginForm",
-  components: { DittoForm: form.component },
+  components: { DittoForm: Form },
   props: {
     alertMessage: {
       required: false,

@@ -28,8 +28,10 @@ Vue.$http
 
 Available plugin options:
 
-- **httpRoot**: the base url of _all_ the http requests, default is _/_ (see the [docs](https://github.com/pagekit/vue-resource/blob/develop/docs/config.md) for more information)
-- **addTrailingSlashInterceptor**: whether to add an interceptor that adds a trailing slash _/_ to all http request urls (default is `false` and should be used only until the django/vue router bug is resolved **@simone**)
+| Option                          | Description                                                                                                                                                        | Default |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| **httpRoot**                    | the base url of _all_ the http requests, (see the [docs](https://github.com/pagekit/vue-resource/blob/develop/docs/config.md) for more information)                | `/`     |
+| **addTrailingSlashInterceptor** | whether to add an interceptor that adds a trailing slash `/` to all http request urls, should be used only until the django/vue router bug is resolved **@simone** | `false` |
 
 ```js
 Vue.use(httpPlugin, {
@@ -71,5 +73,6 @@ All these methods return a _Promise_:
 - `post(endpoint, params, data)` computes the request url using the _getUrl_ function and resolves the promise when the http _post_ request receives a response; _data_ is the body of the http request
 - `remove(endpoint, params)` computes the request url using the _getUrl_ function and resolves the promise when the http _delete_ request receives a response
 
-TODO
+## Example code
+
 See the [http examples code](https://github.com/dvisionlab/ditto/tree/examples/app/src/master/http) for more information.
