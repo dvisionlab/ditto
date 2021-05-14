@@ -86,11 +86,13 @@ Vue.use(authPlugin, {
 
 The plugin needs your application _router_ and _store_ objects. The plugin registers a _store submodule_ named _auth_ you can access from your application if you need it. You may need to use the following _getters_:
 
-TODO
+- **isAuth**: is `true` if a user is authenticated
 
 and the following _actions_:
 
-TODO
+- **autoLogin**: logs the user in looking for the needed information in the _localStorage_
+- **login**: logs the user in using the _email_ and _password_ values that che action receives as parameters
+- **logout**: logs the user out
 
 ## Options
 
