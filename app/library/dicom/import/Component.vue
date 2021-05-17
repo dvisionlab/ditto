@@ -159,7 +159,7 @@
         </template>
 
         <!-- Steps customization slots (actually only step-3 is supported) -->
-        <template v-slot:step-3><slot name="step-3"/></template>
+        <template v-slot:step-3><slot name="step-3" /></template>
       </component>
     </div>
   </div>
@@ -260,6 +260,7 @@ export default {
       this.errors = [...this.errors, ...errors];
 
       // TODO test this, new instances added but series is not scrolling
+      // TODO duplications?
       // Check if series are new or merge same series
       series.forEach(s => {
         const index = this.series.findIndex(
