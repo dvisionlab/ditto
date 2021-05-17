@@ -41,7 +41,7 @@
 
     <v-data-table
       v-if="series.length"
-      disable-pagination
+      todo_disable-pagination
       fixed-header
       :group-by="metadata.StudyInstanceUID"
       :headers="headers"

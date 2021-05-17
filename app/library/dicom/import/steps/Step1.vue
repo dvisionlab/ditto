@@ -81,6 +81,7 @@ export default {
 
       // Get DICOM series
       parseFiles(files, this.metadata).then(({ series, errors }) => {
+        console.log("parseFiles", errors);
         allErrors.push(...errors);
         this.loading = false;
         this.$emit("new-series", { errors: allErrors, series });
