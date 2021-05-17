@@ -34,7 +34,7 @@
     </div>
 
     <v-data-table
-      todo_disable-pagination
+      disable-pagination
       fixed-header
       :group-by="metadata.StudyInstanceUID"
       :headers="headers"
