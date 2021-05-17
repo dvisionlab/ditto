@@ -160,7 +160,7 @@
         </template>
 
         <!-- Steps customization slots (actually only step-3 is supported) -->
-        <template v-slot:step-3><slot name="step-3"/></template>
+        <template v-slot:step-3><slot name="step-3" /></template>
       </component>
     </div>
   </div>
@@ -267,7 +267,6 @@ export default {
     onNewSeries({ errors, series }) {
       this.errors = [...this.errors, ...errors];
 
-      // TODO test this, new instances added but series is not scrolling
       // Check if series are new or merge same series
       series.forEach(s => {
         const index = this.series.findIndex(
@@ -277,8 +276,8 @@ export default {
           // merge information
           this.$set(this.series, index, mergeSeries(this.series[index], s));
         } else {
-          this.series.push(s);
-          this.selectedSeries.push({
+          this.$set(this.series, this.series.length, s);
+          this.$set(this.selectedSeries, this.selectedSeries.length, {
             larvitarSeriesInstanceUID: s.larvitarSeriesInstanceUID
           });
         }

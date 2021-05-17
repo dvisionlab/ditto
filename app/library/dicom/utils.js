@@ -126,8 +126,8 @@ export const mergeSeries = (...series) => {
 export const parseFiles = (files, extractMetadata = []) => {
   // Get DICOM series
   return new Promise(resolve => {
-    lt.readFiles(files, (series, errors = []) => {
-      const list = Object.values(series).map(s => {
+    lt.readFiles(files, (series, error) => {
+      const list = Object.values(series || {}).map(s => {
         const meta = s.instances[Object.keys(s.instances)[0]].metadata;
         const stack = {
           ...[].concat(extractMetadata).reduce((result, value) => {
@@ -143,7 +143,7 @@ export const parseFiles = (files, extractMetadata = []) => {
 
         return stack;
       });
-      return resolve({ series: list, errors });
+      return resolve({ series: list, error });
     });
   });
 };

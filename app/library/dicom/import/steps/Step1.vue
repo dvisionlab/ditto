@@ -42,6 +42,21 @@
         <h3 class="primary--text">parsing {{ totalSize }}MB</h3>
       </div>
     </div>
+
+    <v-dialog :value="parsingFailure" max-width="300">
+      <v-card>
+        <v-card-title class="headline warning--text">
+          Parsing error
+        </v-card-title>
+        <v-card-text>{{ parsingFailure }}</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="warning" text @click="parsingFailure = null">
+            Ok
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -49,6 +64,9 @@
 import * as fs from "../../../file-system-api";
 import { parseFiles } from "../../utils";
 import icon from "../drag-and-drop.svg";
+
+const defaultParsingFailureMessage =
+  "Unfortunately none of your files can be loaded: please check your files complies with the DICOM standard format.";
 
 export default {
   name: "DicomImportStep1",
@@ -60,17 +78,19 @@ export default {
     dragging: false,
     icon,
     loading: false,
+    parsingFailure: null,
     totalSize: 0 // total files size in mb
   }),
   methods: {
     async loadSeries(event) {
-      let allErrors = [];
+      let parsingErrors = [];
+      this.parsingFailure = null;
       this.loading = true;
       this.dragging = false;
 
       // Read selected files and folders
       const { files, errors } = await fs.readFiles(event);
-      allErrors.push(...errors);
+      parsingErrors.push(...errors);
 
       // Initialize progress
       const currentSize = (
@@ -80,10 +100,17 @@ export default {
       this.totalSize = this.totalSize + parseFloat(currentSize);
 
       // Get DICOM series
-      parseFiles(files, this.metadata).then(({ series, errors }) => {
-        allErrors.push(...errors);
+      parseFiles(files, this.metadata).then(({ series, error }) => {
         this.loading = false;
-        this.$emit("new-series", { errors: allErrors, series });
+
+        if (error) {
+          // parseFiles error is a string and is a blocking error (no series can be loaded)
+          this.parsingFailure = error;
+        } else if (!series || !series.length) {
+          this.parsingFailure = defaultParsingFailureMessage;
+        } else {
+          this.$emit("new-series", { errors: parsingErrors, series });
+        }
       });
     },
     onDragEnd() {
