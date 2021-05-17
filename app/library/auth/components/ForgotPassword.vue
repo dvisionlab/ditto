@@ -48,11 +48,11 @@
 
 <script>
 import Vue from "vue";
-import form from "../../../../form";
+import Form from "../../form/Form";
 
 export default {
   name: "ForgotPassword",
-  components: { DittoForm: form.component },
+  components: { DittoForm: Form },
   data: () => ({
     loading: false,
     error: null,

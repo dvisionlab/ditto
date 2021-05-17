@@ -41,12 +41,12 @@
 
 <script>
 import Vue from "vue";
-import form from "../../../../form";
+import Form from "../../form/Form";
 import PasswordField from "./PasswordField";
 
 export default {
   name: "ChangePassword",
-  components: { DittoForm: form.component },
+  components: { DittoForm: Form },
   props: {
     token: {},
     uid: {}
