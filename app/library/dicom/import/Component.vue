@@ -147,6 +147,7 @@
         :step="steps[currentStep]"
         :tools="tools"
         @new-series="onNewSeries"
+        @restart="currentStep = 0"
         @select-action="onSelectAction"
         @select-series="onSelectSeries"
       >
@@ -251,10 +252,17 @@ export default {
       }
     },
     onCancel() {
-      // TODO check for closeConfirmation
-      // console.log(this.currentStep);
-      // console.log(this.currentStep.closeConfirmation());
-      this.$emit("cancel");
+      const closeConfirmationFn = this.steps[this.currentStep]
+        .closeConfirmation;
+
+      if (
+        closeConfirmationFn &&
+        !closeConfirmationFn(this.steps[this.currentStep].uploadStatus)
+      ) {
+        this.$emit("minimize");
+      } else {
+        this.$emit("cancel");
+      }
     },
     onNewSeries({ errors, series }) {
       this.errors = [...this.errors, ...errors];

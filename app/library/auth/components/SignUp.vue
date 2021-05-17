@@ -39,11 +39,11 @@
 </template>
 
 <script>
-import form from "../../../../form";
+import Form from "../../form/Form";
 
 export default {
   name: "SignUp",
-  components: { DittoForm: form.component },
+  components: { DittoForm: Form },
   data: () => ({
     error: null,
     loading: false,

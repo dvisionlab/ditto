@@ -14,6 +14,32 @@
         </thead>
         <tbody>
           <tr>
+            <td>auth</td>
+            <td><router-link to="/auth" target="_blank">/auth</router-link></td>
+            <td>
+              <a
+                href="https://github.com/dvisionlab/ditto/blob/master/app/library/auth/README.md"
+                target="_blank"
+              >
+                docs
+              </a>
+            </td>
+          </tr>
+
+          <tr>
+            <td>http</td>
+            <td><router-link to="/http" target="_blank">/http</router-link></td>
+            <td>
+              <a
+                href="https://github.com/dvisionlab/ditto/blob/master/app/library/http/README.md"
+                target="_blank"
+              >
+                docs
+              </a>
+            </td>
+          </tr>
+
+          <tr>
             <td>wireframes</td>
             <td>
               <div>
@@ -30,19 +56,6 @@
             <td>
               <a
                 href="https://github.com/dvisionlab/ditto/blob/master/app/library/wireframes/README.md"
-                target="_blank"
-              >
-                docs
-              </a>
-            </td>
-          </tr>
-
-          <tr>
-            <td>http</td>
-            <td><router-link to="/http" target="_blank">/http</router-link></td>
-            <td>
-              <a
-                href="https://github.com/dvisionlab/ditto/blob/master/app/library/http/README.md"
                 target="_blank"
               >
                 docs

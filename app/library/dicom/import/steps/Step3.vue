@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO manage exit modal before upload ends (minimize or force stop upload -> clearSeriesData) -->
   <div class="text-center">
     <h3 class="text-uppercase ma-auto" :style="{ width: 'fit-content' }">
       <template v-if="step.uploadStatus.loading">
@@ -7,6 +6,8 @@
           selectedSeries.length == 1 ? "" : "s"
         }}
         <v-progress-linear color="warning" indeterminate />
+
+        <!-- TODO force stop upload -> clearSeriesData -->
       </template>
 
       <div
@@ -33,6 +34,17 @@
           </template>
           {{ step.uploadStatus.errors.post }}
         </v-tooltip>
+
+        <!-- TODO clearSeriesData? -->
+        <!-- TODO need to reset imported series -->
+        <!-- <div>
+          <v-btn
+            class="mt-1"
+            @click="$emit('restart')"
+          >
+            Import other exams
+          </v-btn>
+        </div> -->
       </div>
     </h3>
 
