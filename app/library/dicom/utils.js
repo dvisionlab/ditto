@@ -126,7 +126,6 @@ export const mergeSeries = (...series) => {
 export const parseFiles = (files, extractMetadata = []) => {
   // Get DICOM series
   return new Promise(resolve => {
-    lt.resetImageParsing();
     lt.readFiles(files, (series, errors = []) => {
       const list = Object.values(series).map(s => {
         const meta = s.instances[Object.keys(s.instances)[0]].metadata;
