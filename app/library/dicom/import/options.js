@@ -60,8 +60,7 @@ const defaultActions = [
     default: true,
     disabled: false,
     emitter: "dicom-import-open",
-    hint:
-      "you won't be able to access these series again once the browser session will be lost",
+    hint: "you won't be able to access these series again once the browser session will be lost",
     storeStacks: true,
     text: "open viewer without uploading"
   }
@@ -137,7 +136,8 @@ export const getHeaders = options => {
     ...patientMetadata,
     ...studyMetadata,
     ...requiredMetadata,
-    metadataDictionary.SeriesTime
+    metadataDictionary.SeriesTime,
+    "isMultiframe"
   ];
   let headers = computeHeaders(
     defaultMetadata.filter(v => !omit.find(vv => vv == v))
