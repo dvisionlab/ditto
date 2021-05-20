@@ -44,6 +44,7 @@ import { stackMetadata as stackMetadataDict, stackTools } from "../defaults";
 import {
   addTools,
   clearSeriesData,
+  clearSeriesCache,
   deleteViewport,
   disableCanvas,
   getSeriesStack,
@@ -96,6 +97,9 @@ export default {
       // disable larvitar canvas
       disableCanvas(this.$refs.canvas);
       deleteViewport(this.$refs.canvas);
+
+      // clear cache (!!! NOTE: cornerstone should not cache images if not required)
+      clearSeriesCache(this.seriesId);
 
       if (this.clearOnDestroy) {
         clearSeriesData(this.seriesId, this.clearCacheOnDestroy);
