@@ -202,43 +202,77 @@ This components manages the following cases:
 - if you customize the _metadata_ option key the table headers will be automatically computed based on your custom metadata (each metadata will be a table header)
 - if you add the _headers_ key to the _options_ prop with a custom table headers list this component will use your customized list (see the vuetify doc for the headers configuration options)
 
-TODO preview header
-TODO slot headers
-TODO header keys
+In addition to the vuetify configuration options the component supports the following keys:
+
+- **slot**: whether to use a custom slot to render the content of an header cell (you have to provide the slot element: its name will be the value of the _value_ header key)
+- **keys**: the list of stack metadata whose values will be rendered as the content of an header cell, usefull to group a set of information into a single cell (eg for the patient, as already done by the default headers); you can also specify a _keyClass_ (the class that will be applied to each value of the header cell) and a _keyTag_ (the tag of each header cell sub components)
+
+When available the strings components defined in [data-types/dicom](../data-types/dicom/README.vue) will be used to render the values of the headers metadata.
+
+If you provide an header with the string _preview_ for the key _value_ (this is provided by default headers) the component will render the _ditto-dicom-canvas_ component into theser header cells.
+
+**!!!**: to customize the table headers add the _headers_ key to the _options_ prop with your header list. Go to the _usage_ section to see some examples.
 
 ##### Customize the parsed series canvas tools
 
-TODO
+By default this components activates on the preview canvas (if required by the table headers) the tools specified in `stackTools.preview` (see [defaults](./defaults.js)).
 
-##### Customize the getProgressFn
+**!!!**: to customize the tools add the _tools_ key to the _options_ prop with your tools list (_larvitar_ tools format required). Go to the _usage_ section to see some examples.
 
-TODO
+##### Customize the getProgressFn and the getViewportFn
 
-##### Customize the getViewportFn
+See the _ditto-dicom-canvas_ props. Used only if a _preview_ header is available.
 
-TODO
+**!!!**: to customize these functions add the _getProgressFn_ and the _getViewportFn_ keys to the _options_ prop.
 
 #### Slots
 
-| Name | Description | v-bind |
-| ---- | ----------- | ------ |
-
-
-TODO
+| Name                                                                          | Description                                            | v-bind                         |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------ |
+| _value_ key of each header that requires a custom slot (_slot_ key is `true`) | Custom header cell content (see previous explanations) | `{ item: the table row item }` |
+| **step-3**                                                                    | Step 3 extra content                                   | none                           |
 
 #### Events
 
-| Name | Description | Args |
-| ---- | ----------- | ---- |
-
-
-TODO
+| Name                     | Description                              | Args                                                   |
+| ------------------------ | ---------------------------------------- | ------------------------------------------------------ |
+| **cancel**               | the import component should be closed    | none                                                   |
+| **minimize**             | the import component should be minimized | none                                                   |
+| step action emitter name | the user chose an action                 | list of objects of the selected parsed series metadata |
 
 #### Usage
 
-TODO basic usage and customization examples
+See the _ditto-dicom-import-modal_ usage section.
 
 ### ditto-dicom-import-modal
+
+This component is a wrapper for the _ditto-dicom-import_ component: it allows to open the _ditto-dicom-import_ component inside a modal, using a button as modal activator.
+
+It manages the events emitted from the _ditto-dicom-import_ component and eventually shows the minimized status information (eg the number of series parsed, the upload status).
+
+It support both the desktop and mobile visualization modes.
+
+**!!!**: use this component istead then the _ditto-dicom-import_ component directly, eventually replacing the button modal activator with a custom one using the _activator_ slot.
+
+#### Props
+
+| Name | Description | Type | Default |
+| ---- | ----------- | ---- | ------- |
+
+
+#### Slots
+
+| Name                                                                          | Description                                                                                        | v-bind                                      |
+| ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| **activator**                                                                 | the button that activates the modal, with support for desktop and mobile screens                   | `{ on, attrs, minimizedSeries, uploading }` |
+| _value_ key of each header that requires a custom slot (_slot_ key is `true`) | Custom header cell content (see previous explanations); used by the _ditto-dicom-import_ component | `{ item: the table row item }`              |
+| **step-3**                                                                    | Step 3 extra content; used by the _ditto-dicom-import_ component                                   | none                                        |
+
+#### Events
+
+The actions events triggered by the _ditto-dicom-import_ component are redirected from this component to be accessible by your application.
+
+#### Usage
 
 TODO
 
