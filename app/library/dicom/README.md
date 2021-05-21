@@ -179,6 +179,12 @@ Each _action_ is described by an object with the following keys:
 - _storeStacks_: whether to tell _larvitar_ to store the series stacks before emitting the action event
 - _text_: the action title
 
+The default available action emitter names are the following:
+
+- _dicom-import-open_ to open the parsed series in your application viewer
+- _dicom-import-upload_ to upload the parsed series to your application server
+- _dicom-import-upload-and-open_ to upload and open the parsed series
+
 **!!!**: you can customize these steps with an array of objects using the described keys. The values of the keys of the object at index 0 will override the values of the keys at step 0 and so on. The same happens for the _actions_ array. Add the _steps_ key to the _options_ prop with your overrides data. Go to the _usage_ section to see some examples.
 
 ##### Customize the parsed series metadata you want to extract
@@ -256,9 +262,15 @@ It support both the desktop and mobile visualization modes.
 
 #### Props
 
-| Name | Description | Type | Default |
-| ---- | ----------- | ---- | ------- |
-
+| Name               | Description                                                                  | Type    | Default               |
+| ------------------ | ---------------------------------------------------------------------------- | ------- | --------------------- |
+| **activatorClass** | custom activator class                                                       | String  | `undefined`           |
+| **badgeColor**     | color of the activator badge                                                 | String  | `primary`             |
+| **icon**           | the icon of the activator button and shown in the import modal header        | String  | `mdi-upload-multiple` |
+| **iconColor**      | the color of the activator button                                            | String  | `undefined`           |
+| **label**          | the label of the activator button and shown in the import modal header       | String  | `import-exams`        |
+| **mobile**         | whether to render the component using the mobile mode                        | Boolean | `false`               |
+| **options**        | the oprions passed to the _ditto-dicom-import_ component (see previous docs) | Object  | `{}`                  |
 
 #### Slots
 
@@ -274,7 +286,131 @@ The actions events triggered by the _ditto-dicom-import_ component are redirecte
 
 #### Usage
 
-TODO
+Basic usage:
+
+```html
+<ditto-dicom-import-modal @dicom-import-open="openViewer" />
+```
+
+UI changes:
+
+```html
+<ditto-dicom-import-modal
+  badge-color="black"
+  icon="mdi-plus"
+  icon-color="accent"
+  label="load dicom exams"
+  @dicom-import-open="openViewer"
+/>
+```
+
+Customize steps:
+
+```js
+const steps = [
+  // step 1: preserve default options
+  undefined,
+  // step 2: enable first default action and change step description
+  { actions: [{ disabled: false }], text: "custom step description" },
+  // step 3: add upload status data
+  { status: { ... } }
+];
+```
+
+```html
+<ditto-dicom-import-modal
+  :options="{ steps }"
+  @dicom-import-open="openViewer"
+  @dicom-import-upload="uploadData"
+/>
+```
+
+Customize metadata and headers:
+
+```js
+const metadata = ["x00100010", "x00100040", "x0008103e"];
+```
+
+```html
+<ditto-dicom-import-modal
+  :options="{ metadata }"
+  @dicom-import-open="openViewer"
+/>
+```
+
+Customize headers:
+
+- show the preview
+- group patient information using _header.keys_
+
+```js
+const metadata = ["x00100010", "x00100040", "x0008103e"];
+const headers = [
+  { sortable: false, text: "", value: "preview" },
+  {
+    cellClass: "cell-patient",
+    sortable: false,
+    keys: ["x00100010", "x00100040"],
+    text: "patient",
+    value: "patient"
+  },
+  {
+    cellClass: "cell-x0008103e",
+    sortable: true,
+    text: "metadata-x0008103e",
+    value: "x0008103e"
+  }
+];
+```
+
+```html
+<ditto-dicom-import-modal
+  :options="{ headers, metadata }"
+  @dicom-import-open="openViewer"
+/>
+```
+
+Use custom header slots:
+
+```js
+const metadata = ["x00100010", "x00100040", "x0008103e"];
+const headers = [
+  {
+    cellClass: "cell-patient",
+    sortable: false,
+    slot: true,
+    text: "patient",
+    value: "patient"
+  },
+  {
+    cellClass: "cell-x0008103e",
+    sortable: true,
+    slot: true,
+    text: "metadata-x0008103e",
+    value: "x0008103e"
+  }
+];
+```
+
+```html
+<ditto-dicom-import-modal
+  :options="{ headers, metadata }"
+  @dicom-import-open="openViewer"
+>
+  <template v-slot:patient="{ item }">patient custom slot content</template>
+  <template v-slot:x0008103e="{ item }">x0008103e custom slot content</template>
+</ditto-dicom-import-modal>
+```
+
+Customize activator:
+
+```html
+<ditto-dicom-import-modal @dicom-import-open="openViewer">
+  <template v-slot="{ minimizedSeries, on, uploading }">
+    activator custom slot content
+  </template>
+</ditto-dicom-import-modal>
+```
 
 ### ditto-dicom-series-summary
 
@@ -335,34 +471,39 @@ With slot:
 
 ## Utils methods
 
-TODO
+The utils module provides utilities methods based on _larvitar_. **The aim of these methods/wrappers is to group all _larvitar_ functinalities in a single module in order to change only this file on _larvitar_ upgrades that requires api changes.**
 
-- activateTool
-- addTools
-- disableTool
-- editTool
-- hideTool
-- showTool
-- buildData
-- buildHeader
-- clearSeriesData
-- deleteViewport
-- disableCanvas
-- getCinematicData
-- getSeriesStack
-- mergeSeries
-- parseFiles
-- renderSeries
-- resizeViewport
-- seriesIdToElementId
-- setup
-- storeSeriesStack
-- updateSeriesSlice
-- updateViewportProperty
+- _activateTool(tool, elementIds, options = { mouseButtonMask: 1 })_: calls the _larvitar_ _setToolActive_ function
+- _addTools(tools, elementId, handlers)_: calls the _larvitar_ _addTool_ and _addMouseKeyHandlers_ functions, calls _activateTool_ for default active tools
+- _disableTool(tool, elements)_: calls the _larvitar_ _setToolEnabled_ function
+- _editTool(tool, elements)_: calls the _larvitar_ _setToolPassive_ function
+- _hideTool(tool, elements)_: calls the _larvitar_ _setToolDisabled_ function
+- _showTool(tool, elements)_: calls the _larvitar_ _setToolEnabled_ function
+- _buildData(stack)_: wraps the _larvitar_ _buildDataAsync_ function into a promise
+- _buildHeader_: calls the _larvitar_ _buildHeader_ function
+- _clearSeriesCache_: calls the _larvitar_ _clearImageCache_ function
+- _clearSeriesData(seriesId, clearCache = false)_: calls the _larvitar_ _removeSeriesFromLarvitarManager_, _clearImageCache_ and _larvitar_store.removeSeriesIds_ functions
+- _deleteViewport(elementId)_: calls the _larvitar_ _larvitar_store.deleteViewport_ function
+- _disableCanvas_: calls the _larvitar_ _disableViewport_ function
+- _getCinematicData(seriesId)_: reads _frameDelay_ and _frameTime_ from the _larvitar_ stack
+- _getSeriesStack(seriesId)_: reads the series stack from the _larvitar_ manager
+- _mergeSeries(...series)_: merges the instances of a list of series into a single series object if their instance uids matches
+- _parseFiles(files, extractMetadata = [])_: uses _larvitar_ to parse files and get series stacks, extracting the required metadata
+- _renderSeries(elementId, seriesStack)_: calls the _larvitar_ _larvitar_store.addViewport_ and _renderImage_ functions
+- _resizeViewport_: calls the _larvitar_ _resizeViewport_ function
+- _seriesIdToElementId(seriesId)_: replaces dots with underscores to get a valid html element id
+- _setup(store, toolsStyle)_: _larvitar_ initialization
+- _storeSeriesStack(seriesId, stack, cache = false)_: calls the _larvitar_ _populateLarvitarManager_ and eventually _cacheImages_ functions
+- _updateSeriesSlice(elementId, seriesId, sliceId)_: uses _larvitar_ to update a series slice
+- _updateViewportProperty(action, element)_: uses _larvitar_ to update the canvas with one of the available actions: _flip-horizontal_, _flip-vertical_, _invert_, _reset-viewport_
 
 ## DICOM metadata
 
-TODO available as extra module
+A dictionary of the metadata tags used by the dicom plugin. If you need it you can import it into your application as a stand alone module:
+
+```js
+import metadata from "@/../ditto/dicomMetadata";
+```
 
 ## Example code
 
@@ -371,3 +512,5 @@ See the [DICOM examples code](https://github.com/dvisionlab/ditto/tree/examples/
 ## TODO and TOFIX
 
 - modal minimization is lost if the application mounts this component in a page that can be unmounted (eg after a route change)
+- the _larvitar_ _renderSeries_ function should return a promise and the _ditto-dicom-canvas_ component should manage that
+- imported series stacks data should be cleared once uloaded
