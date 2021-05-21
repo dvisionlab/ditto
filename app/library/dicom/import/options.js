@@ -60,7 +60,8 @@ const defaultActions = [
     default: true,
     disabled: false,
     emitter: "dicom-import-open",
-    hint: "you won't be able to access these series again once the browser session will be lost",
+    hint:
+      "you won't be able to access these series again once the browser session will be lost",
     storeStacks: true,
     text: "open viewer without uploading"
   }
@@ -97,8 +98,8 @@ const defaultSteps = [
     label: "upload",
     back: () => false,
     next: () => false,
-    closeConfirmation: uploadStatus => uploadStatus.completed,
-    uploadStatus: null // { loading: false, errors: null, progress: {} }
+    closeConfirmation: status => status.completed,
+    status: null // { completed: false, loading: false, errors: null, progress: {} }
   }
 ];
 
