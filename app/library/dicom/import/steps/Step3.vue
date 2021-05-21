@@ -1,7 +1,7 @@
 <template>
   <div class="text-center">
     <h3 class="text-uppercase ma-auto" :style="{ width: 'fit-content' }">
-      <template v-if="step.uploadStatus.loading">
+      <template v-if="step.status.loading">
         Uploading <b>{{ selectedSeries.length }}</b> exam{{
           selectedSeries.length == 1 ? "" : "s"
         }}
@@ -11,10 +11,10 @@
       </template>
 
       <div
-        v-else-if="step.uploadStatus.completed"
+        v-else-if="step.status.completed"
         :class="[hasErrors ? 'warning--text' : 'success--text']"
       >
-        <template v-if="step.uploadStatus.errors.post">
+        <template v-if="step.status.errors.post">
           upload failed
         </template>
         <template v-else>
@@ -26,13 +26,13 @@
           :value="100"
         />
 
-        <v-tooltip v-if="step.uploadStatus.errors.post" bottom>
+        <v-tooltip v-if="step.status.errors.post" bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="warning" icon v-bind="attrs" v-on="on">
               <v-icon>mdi-alert</v-icon>
             </v-btn>
           </template>
-          {{ step.uploadStatus.errors.post }}
+          {{ step.status.errors.post }}
         </v-tooltip>
 
         <!-- TODO clearSeriesData? -->
@@ -77,7 +77,7 @@
         </div>
 
         <v-tooltip
-          v-if="step.uploadStatus.errors[s.larvitarSeriesInstanceUID]"
+          v-if="step.status.errors[s.larvitarSeriesInstanceUID]"
           bottom
         >
           <template v-slot:activator="{ on, attrs }">
@@ -86,9 +86,7 @@
             </v-btn>
           </template>
           <div
-            v-for="(text, i) in step.uploadStatus.errors[
-              s.larvitarSeriesInstanceUID
-            ]"
+            v-for="(text, i) in step.status.errors[s.larvitarSeriesInstanceUID]"
             :key="i"
           >
             {{ text }}
@@ -121,12 +119,12 @@ export default {
   }),
   computed: {
     hasErrors() {
-      return Object.keys(this.step.uploadStatus.errors).length;
+      return Object.keys(this.step.status.errors).length;
     }
   },
   methods: {
     getProgressPercentage(id) {
-      const progress = this.step.uploadStatus.progress[id];
+      const progress = this.step.status.progress[id];
       if (!progress) {
         return null;
       }

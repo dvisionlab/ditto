@@ -109,14 +109,14 @@ export default {
   },
   methods: {
     minimize() {
-      const upload = this.$refs.content.steps[this.$refs.content.currentStep]
-        .uploadStatus;
-      if (upload) {
-        this.uploading = upload.loading;
+      const status = this.$refs.content.steps[this.$refs.content.currentStep]
+        .status;
+      if (status) {
+        this.uploading = status.loading;
       }
 
       this.minimizedSeries =
-        !upload || upload.loading
+        !status || status.loading
           ? this.$refs.content.selectedSeries.length
           : 0;
 

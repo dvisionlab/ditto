@@ -7,6 +7,7 @@ const defaultOptions = {
   dataTypes: false,
   import: true,
   series: false,
+  store: undefined,
   toolsStyle: undefined,
   utils: false
 };

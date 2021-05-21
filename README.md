@@ -34,7 +34,7 @@ import MODULE_NAME from "@/../ditto/MODULE_NAME";
 | Module name        | Type                  | Doc                                       |
 | ------------------ | --------------------- | ----------------------------------------- |
 | **auth**           | Vue plugin            | [DOC](./app/library/auth/README.md)       |
-| **dicom**          | Vue plugin            |                                           |
+| **dicom**          | Vue plugin            | [DOC](./app/library/dicom/README.md)      |
 | **dicomDataTypes** | Components collection |                                           |
 | **fileSystemApi**  | Js library            |                                           |
 | **form**           | Components collection |                                           |

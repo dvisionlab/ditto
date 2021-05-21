@@ -160,7 +160,7 @@
         </template>
 
         <!-- Steps customization slots (actually only step-3 is supported) -->
-        <template v-slot:step-3><slot name="step-3" /></template>
+        <template v-slot:step-3><slot name="step-3"/></template>
       </component>
     </div>
   </div>
@@ -257,7 +257,7 @@ export default {
 
       if (
         closeConfirmationFn &&
-        !closeConfirmationFn(this.steps[this.currentStep].uploadStatus)
+        !closeConfirmationFn(this.steps[this.currentStep].status)
       ) {
         this.$emit("minimize");
       } else {
