@@ -27,6 +27,21 @@
           </tr>
 
           <tr>
+            <td>dicom</td>
+            <td>
+              <router-link to="/dicom" target="_blank">/dicom</router-link>
+            </td>
+            <td>
+              <a
+                href="https://github.com/dvisionlab/ditto/blob/master/app/library/dicom/README.md"
+                target="_blank"
+              >
+                docs
+              </a>
+            </td>
+          </tr>
+
+          <tr>
             <td>http</td>
             <td><router-link to="/http" target="_blank">/http</router-link></td>
             <td>

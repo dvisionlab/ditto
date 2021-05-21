@@ -56,6 +56,11 @@ const routes = [
     ]
   },
   {
+    path: "/dicom",
+    name: "dicom",
+    component: () => import("@/examples/dicom/Test")
+  },
+  {
     path: "/http",
     name: "http",
     component: () => import("@/examples/http/Test")

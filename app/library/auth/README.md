@@ -1,4 +1,4 @@
-# Auth
+# Auth plugin
 
 A Vue plugin that provides a set of functionalities and components to manage the app authentication automatically.
 

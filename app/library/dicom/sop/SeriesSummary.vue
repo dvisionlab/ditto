@@ -10,7 +10,7 @@
       :series-id="data.larvitarSeriesInstanceUID"
       :show-progress="showProgress"
       :style="{ height: '10em', width: '100%' }"
-      :tools="canvasTools"
+      :tools="tools"
     />
 
     <div class="d-flex">
@@ -51,11 +51,10 @@ export default {
     showCanvas: { default: true, type: Boolean },
     showProgress: { default: false, type: Boolean },
     showThumbnail: { default: false, type: Boolean },
-    tools: { required: false, type: Array }
+    tools: { default: stackTools.preview, type: Array }
   },
   data() {
     return {
-      canvasTools: this.tools || stackTools.preview,
       // TODO allow to customize this
       metadata: ["SeriesDescription"],
       metadataDictionary

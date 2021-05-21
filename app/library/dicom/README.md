@@ -1,4 +1,4 @@
-# DICOM pack
+# DICOM plugin
 
 A Vue plugin that provides a set of functionalities and components to read and render DICOM images and their metadata.
 
@@ -67,11 +67,80 @@ Vue.use(dicomPlugin, dicomPluginOptions);
 
 ### ditto-dicom-canvas
 
-// TODO
+This component renders a series stack into a canvas using _larvitar_.
+
+#### Props
+
+| Name                    | Description                                                                                                                                                   | Type           | Default                                                                             |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ----------------------------------------------------------------------------------- |
+| **clearCacheOnDestroy** | whether to tell _larvitar_ to clear the image cache for the rendered series on component unmount; it works only with _clearOnDestroy_ set to `true`           | Boolean        | `false`                                                                             |
+| **clearOnDestroy**      | whether to tell _larvitar_ to clear the data stored by _larvitar_ for the rendered series on component unmount (see _clearSeriesData_ in [utils](./utils.js)) | Boolean        | `false`                                                                             |
+| **canvasId**            | the id to assign to the canvas element                                                                                                                        | String         | `true`                                                                              |
+| **getProgressFn**       | the function the component should use to get the series loading status; should return a value between 0 and 100                                               | Function       | `(store, seriesId) => (store.state.larvitar.series[seriesId] || {}).progress`       |
+| **getViewportFn**       | the function the component should use to get the viewport object                                                                                              | Function       | `(store, seriesId, canvasId) => store.getters["larvitar/viewport"](canvasId) || {}` |
+| **seriesId**            | the id of the series you want to render; when the stack is not provided by the _stack_ prop this value is used to get the series stack from _larvitar_        | String, Number | `true`                                                                              |
+| **showProgress**        | whether this component shoul show a a loading progress                                                                                                        | Boolean        | `false`                                                                             |
+| **stack**               | the stack of the series you want to render (_larvitar_ stack format is required)                                                                              | Object         | `undefined`                                                                         |
+| **tools**               | the list of the tools you want to activate on this canvas (_larvitar_ tools format is required)                                                               | Array          | `stackTools.default`, see [defaults](./defaults.js)                                 |
+| **toolsHandlers**       | the tools handlers configuration (_larvitar_ tools handlers format is required)                                                                               | Object         | `undefined`                                                                         |
+
+#### Slots
+
+| Name                | Description                                                                                                                     | v-bind                                                      |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| **stack-metadata**  | Allows your application to access the stack metadata; generally used to show static metadata fields over the canvas             | an object with the stack metadata                           |
+| **viewport-data**   | Allows your application to access the viewport data; generally used to show dynamic viewport data over the canvas               | an object with the viewport data                            |
+| **viewport-slider** | Allows your application to access the viewport `sliceId` and `maxSliceId` information, needed to build a stack slider component | `{i: [the current slice id], n: [the series max slide id]}` |
+
+#### Events
+
+| Name      | Description                         | Args ! |
+| --------- | ----------------------------------- | ------ |
+| **ready** | emitted when the series is rendered | none   |
+
+#### Usage
+
+Basic usage:
+
+```html
+<ditto-dicom-canvas canvas-id="main" series-id="1234125" />
+```
+
+With slots:
+
+```html
+<ditto-dicom-canvas :canvas-id="main" :series-id="1234125">
+  <template v-slot:stack-metadata="data"><div>...</div></template>
+  <template v-slot:viewport-data="data"><div>...</div></template>
+  <template v-slot:viewport-slider="{ i, n }"><div>...</div></template>
+</ditto-dicom-canvas>
+```
+
+With events:
+
+```html
+<ditto-dicom-canvas
+  canvas-id="main"
+  series-id="1234125"
+  @ready="onCanvasReady"
+/>
+```
 
 ### ditto-dicom-canvas-data
 
-// TODO
+This component renders a set of common dynamic viewport data (the viewport _size_, _spacing_, _thickness_, _voi_...). Is generally used as slot content of the _stack-metadata_ slot provided by the _ditto-dicom-canvas_ component.
+
+#### Props
+
+| Name     | Description              | Type   |
+| -------- | ------------------------ | ------ |
+| **data** | the viewport data object | Object |
+
+#### Usage
+
+```html
+<ditto-dicom-canvas-data :data="data" />
+```
 
 ### ditto-dicom-import
 
@@ -83,7 +152,60 @@ Vue.use(dicomPlugin, dicomPluginOptions);
 
 ### ditto-dicom-series-summary
 
-// TODO
+This component renders a set of a series stack infromation.
+
+#### Props
+
+| Name                    | Description                                                                                                                                                                                                  | Type    | Default                                             |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- | --------------------------------------------------- |
+| **canvasId**            | the id to assign to the canvas element, when the series canvas is required                                                                                                                                   | String  | `undefined`                                         |
+| **clearCacheOnDestroy** | whether to tell _larvitar_ to clear the image cache for the rendered series on component unmount; it works only with _clearOnDestroy_ set to; used only when the _showCanvas_ prop is `true`                 | Boolean | `true`                                              |
+| **clearOnDestroy**      | whether to tell _larvitar_ to clear the data stored by _larvitar_ for the rendered series on component unmount (see _clearSeriesData_ in [utils](./utils.js); used only when the _showCanvas_ prop is `true` | Boolean | `true`                                              |
+| **data**                | the series stack data (_larvitar_ stack format is required)                                                                                                                                                  | Object  | `undefined`                                         |
+| **showCanvas**          | whether this component should render the series canvas using the _ditto-dicom-canvas_ component                                                                                                              | Boolean | `true`                                              |
+| **showProgress**        | whether this component shoul show a a loading progress; used only when the _showCanvas_ prop is `true`                                                                                                       | Boolean | `false`                                             |
+| **showThumbnail**       | whether this component should render the series thumbnail; the thumbnail should be an image url or a base64 string available at `data.thumbnail`                                                             | Boolean | `false`                                             |
+| **tools**               | the list of the tools you want to activate on this canvas (_larvitar_ tools format is required); used only when the _showCanvas_ prop is `true`                                                              | Array   | `stackTools.preview`, see [defaults](./defaults.js) |
+
+#### Slots
+
+A default slot is available to add your preferred content.
+
+#### Usage
+
+Basic usage:
+
+```html
+<ditto-dicom-series-summary :canvas-id="summary-main" :data="series" />
+```
+
+With series thumbnail instead of canvas:
+
+```html
+<ditto-dicom-series-summary
+  :canvas-id="summary-main"
+  :data="{ ...series, thumbnail: '...' }"
+  show-thumbnail
+/>
+```
+
+Without tools:
+
+```html
+<ditto-dicom-series-summary
+  :canvas-id="summary-main"
+  :data="series"
+  :tools="[]"
+/>
+```
+
+With slot:
+
+```html
+<ditto-dicom-series-summary :canvas-id="summary-main" :data="series">
+  <div>custom content</div>
+</ditto-dicom-series-summary>
+```
 
 ## Utils methods
 
