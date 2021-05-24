@@ -66,6 +66,10 @@ export const buildHeader = lt.buildHeader;
 
 export const clearSeriesCache = lt.clearImageCache;
 
+// Delete and clean the seriesStack object
+export const clearSeriesStack = seriesStack =>
+  lt.clearImageParsing(seriesStack);
+
 // Remove viewport data from larvitar stores
 export const clearSeriesData = (seriesId, clearCache = false) => {
   lt.removeSeriesFromLarvitarManager(seriesId);
