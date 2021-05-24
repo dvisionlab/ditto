@@ -511,7 +511,7 @@ See the [DICOM examples code](https://github.com/dvisionlab/ditto/tree/examples/
 
 ## TODO and TOFIX
 
-- modal minimization is lost if the application mounts this component in a page that can be unmounted (eg after a route change)
+- **!!!** modal minimization is lost if the application mounts this component in a page that can be unmounted (eg after a route change)
 - the _larvitar_ _renderSeries_ function should return a promise and the _ditto-dicom-canvas_ component should manage that
 - imported series stacks data should be cleared once uploaded
 - allow to customize import study row
