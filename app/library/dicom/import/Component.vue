@@ -168,7 +168,7 @@
 
 <script>
 import { getCanvasTools, getHeaders, getMetadata, getSteps } from "./options";
-import { mergeSeries, storeSeriesStack } from "../utils";
+import { mergeSeries, storeSeriesStack, clearSeriesStack } from "../utils";
 import RelativeHeight from "../../relative-height";
 import ModalControllers from "./ModalControllers";
 
@@ -261,6 +261,7 @@ export default {
       ) {
         this.$emit("minimize");
       } else {
+        clearSeriesStack(this.series);
         this.$emit("cancel");
       }
     },
