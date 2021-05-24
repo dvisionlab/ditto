@@ -1,11 +1,15 @@
 <template>
   <v-navigation-drawer
     v-if="$vuetify.breakpoint[mobileBreakpoint]"
-    app
+    absolute
     class="sm-menu"
     clipped
     :dark="dark"
     :stateless="stateless"
+    :style="{
+      height: `calc(100% - ${$vuetify.application.top}px)`,
+      marginTop: `${$vuetify.application.top}px`
+    }"
     :value="value"
     @input="value => $emit('input', value)"
   >

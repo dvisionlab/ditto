@@ -42,6 +42,7 @@
       hide-default-footer
       :items="series"
       item-key="larvitarSeriesInstanceUID"
+      :mobile-breakpoint="0"
       show-select
       :style="{ height: tableHeight }"
       :value="selectedSeries"
