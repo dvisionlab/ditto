@@ -159,7 +159,7 @@ export default {
 
     <!-- named slots -->
     <template v-slot:bar="{ className, ...data }">
-      <router-view name="bar" :class="className" v-bind="data" />
+      <my-bar-component :class="className" v-bind="data" />
     </template>
 
     ...
@@ -189,7 +189,7 @@ Use this option for slots whose content are fixed through all your application r
 
     <!-- named slots -->
     <template v-slot:bar="{ className, ...data }">
-      <my-bar-component :class="className" v-bind="data" />
+      <router-view name="bar" :class="className" v-bind="data" />
     </template>
 
     ...

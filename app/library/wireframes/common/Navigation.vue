@@ -1,5 +1,6 @@
 <template>
   <v-navigation-drawer
+    :absolute="absolute"
     :app="app"
     :clipped="clipped"
     :color="color"
@@ -35,6 +36,8 @@
 export default {
   name: "Navigation",
   props: {
+    // Absolute status of the v-navigation-drawer component
+    absolute: { default: false, type: Boolean },
     // App status of the v-navigation-drawer component
     app: { default: true, type: Boolean },
     // Clipped status of the v-navigation-drawer component
