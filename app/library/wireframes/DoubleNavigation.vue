@@ -57,22 +57,31 @@
     </app-navigation>
 
     <!-- Sizes your content based upon application components -->
-    <v-main>
+    <v-main class="h-100">
       <v-container class="d-flex pa-0" fluid :style="{ height: '100%' }">
         <app-navigation
           v-if="$scopedSlots.nav"
+          :absolute="$vuetify.breakpoint[mobileBreakpoint]"
           :app="false"
           :color="nav.color"
-          :width="nav.width"
+          :width="navVisible ? nav.width : 0"
           v-model="navVisible"
         >
-          <template v-slot="data"
-            ><slot name="nav" v-bind="data"
-          /></template>
+          <template v-slot="data">
+            <slot name="nav" v-bind="data" />
+          </template>
         </app-navigation>
 
         <!-- default slot -->
-        <slot />
+        <div
+          :style="
+            $scopedSlots.nav && !$vuetify.breakpoint[mobileBreakpoint]
+              ? { width: `calc(100% - ${navVisible ? nav.width : 0}px)` }
+              : { width: '100%' }
+          "
+        >
+          <slot />
+        </div>
       </v-container>
     </v-main>
 

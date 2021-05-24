@@ -65,7 +65,7 @@
     </app-navigation>
 
     <!-- main content -->
-    <v-main>
+    <v-main class="h-100">
       <v-container class="h-100 pa-0" fluid>
         <!-- Main content slot -->
         <slot />
