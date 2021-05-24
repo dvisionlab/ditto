@@ -95,7 +95,7 @@ export default {
     fieldsStyle: { required: false, type: Object },
     footerStyle: { required: false, type: Object },
     lazyValidation: { default: true, type: Boolean },
-    loading: { default: true, type: Boolean },
+    loading: { default: false, type: Boolean },
     submitLabel: { default: "submit", type: String },
     value: { default: () => ({}), type: Object }
   },

@@ -25,7 +25,7 @@
       </template>
     </component>
 
-    <component v-if="field.slot" :is="field.slot" />
+    <component v-if="field.slot" :is="field.slot" v-bind="{ field, value }" />
   </div>
 </template>
 
