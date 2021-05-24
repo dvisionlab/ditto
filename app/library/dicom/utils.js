@@ -66,7 +66,7 @@ export const buildHeader = lt.buildHeader;
 
 export const clearSeriesCache = lt.clearImageCache;
 
-// Delete annd clean the seriesStack object
+// Delete and clean the seriesStack object
 export const clearSeriesStack = seriesStack =>
   lt.clearImageParsing(seriesStack);
 
