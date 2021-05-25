@@ -8,6 +8,7 @@
       :clear-cache-on-destroy="clearCacheOnDestroy"
       :clear-on-destroy="clearOnDestroy"
       :series-id="data.larvitarSeriesInstanceUID"
+      :show-multiframe-icon="showMultiframeIcon"
       :show-progress="showProgress"
       :style="{ height: '10em', width: '100%' }"
       :tools="tools"
@@ -49,6 +50,7 @@ export default {
     clearOnDestroy: { default: true, type: Boolean },
     data: { required: true, type: Object },
     showCanvas: { default: true, type: Boolean },
+    showMultiframeIcon: { default: true, type: Boolean },
     showProgress: { default: false, type: Boolean },
     showThumbnail: { default: false, type: Boolean },
     tools: { default: stackTools.preview, type: Array }
