@@ -27,6 +27,19 @@
       :value="progress"
     />
 
+    <v-avatar
+      v-if="
+        showMultiframeIcon &&
+        stackMetadata &&
+        (stackMetadata.series || {}).isMultiframe
+      "
+      color="black"
+      :size="20"
+      :style="{ bottom: 0, position: 'absolute', margin: '5px' }"
+    >
+      <v-icon color="white" small>mdi-layers-triple-outline</v-icon>
+    </v-avatar>
+
     <slot name="stack-metadata" v-bind="stackMetadata"></slot>
     <slot name="viewport-data" v-bind="viewport"></slot>
     <slot
@@ -68,6 +81,7 @@ export default {
     getProgressFn: { default: defaultGetProgressFn, type: Function },
     getViewportFn: { default: defaultGetViewportFn, type: Function },
     seriesId: { required: true, type: [String, Number] },
+    showMultiframeIcon: { default: false, type: Boolean },
     showProgress: { default: false, type: Boolean },
     stack: { required: false, type: Object },
     tools: { default: () => stackTools.default, type: Array },

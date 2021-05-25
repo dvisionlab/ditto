@@ -60,6 +60,7 @@
           :get-viewport-fn="getViewportFn"
           :series-id="s.larvitarSeriesInstanceUID"
           :show-progress="false"
+          show-multiframe-icon
           :stack="
             series.find(
               _s => _s.larvitarSeriesInstanceUID == s.larvitarSeriesInstanceUID
