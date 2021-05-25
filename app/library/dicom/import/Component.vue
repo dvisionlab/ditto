@@ -160,7 +160,7 @@
         </template>
 
         <!-- Steps customization slots (actually only step-3 is supported) -->
-        <template v-slot:step-3><slot name="step-3"/></template>
+        <template v-slot:step-3><slot name="step-3" /></template>
       </component>
     </div>
   </div>
@@ -245,6 +245,15 @@ export default {
 
       this.$emit(this.selectedAction.emitter, emitData);
 
+      // Clear not selected series stacks
+      const unselectedSeries = this.series.filter(
+        s =>
+          !this.selectedSeries.find(
+            v => v.larvitarSeriesInstanceUID == s.larvitarSeriesInstanceUID
+          )
+      );
+      clearSeriesStack(unselectedSeries);
+
       if (this.selectedAction.closeOnEmit) {
         this.$emit("cancel");
       } else {
@@ -252,8 +261,8 @@ export default {
       }
     },
     onCancel() {
-      const closeConfirmationFn = this.steps[this.currentStep]
-        .closeConfirmation;
+      const closeConfirmationFn =
+        this.steps[this.currentStep].closeConfirmation;
 
       if (
         closeConfirmationFn &&
