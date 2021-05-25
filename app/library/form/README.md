@@ -165,7 +165,7 @@ form.customizeRules({ passwordMinLength: 4 });
 
 ## Example code
 
-See the [form examples code](https://github.com/dvisionlab/ditto/tree/examples/app/src/master/form) for more information.
+See the [form examples code](https://github.com/dvisionlab/ditto/tree/master/app/src/examples/form) for more information.
 
 ## TODO
 

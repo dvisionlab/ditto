@@ -75,4 +75,4 @@ All these methods return a _Promise_:
 
 ## Example code
 
-See the [http examples code](https://github.com/dvisionlab/ditto/tree/examples/app/src/master/http) for more information.
+See the [http examples code](https://github.com/dvisionlab/ditto/tree/master/app/src/examples/http) for more information.

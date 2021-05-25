@@ -507,7 +507,7 @@ import metadata from "@/../ditto/dicomMetadata";
 
 ## Example code
 
-See the [DICOM examples code](https://github.com/dvisionlab/ditto/tree/examples/app/src/master/dicom) for more information.
+See the [DICOM examples code](https://github.com/dvisionlab/ditto/tree/master/app/src/examples/dicom) for more information.
 
 ## TODO and TOFIX
 

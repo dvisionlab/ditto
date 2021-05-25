@@ -152,4 +152,4 @@ and its _slots_:
 
 ## Example code
 
-See the [auth examples code](https://github.com/dvisionlab/ditto/tree/examples/app/src/master/auth) for more information.
+See the [auth examples code](https://github.com/dvisionlab/ditto/tree/master/app/src/examples/auth) for more information.

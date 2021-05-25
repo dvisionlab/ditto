@@ -199,4 +199,4 @@ Use this option for slots whose content are fixed through all your application r
 
 Use this option for slots whose content change through your application routes.
 
-See the [wireframes examples code](https://github.com/dvisionlab/ditto/tree/examples/app/src/master/wireframes) for more information.
+See the [wireframes examples code](https://github.com/dvisionlab/ditto/tree/master/app/src/examples/wireframes) for more information.
