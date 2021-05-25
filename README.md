@@ -31,19 +31,19 @@ import MODULE_NAME from "@/../ditto/MODULE_NAME";
 
 ## Available modules
 
-| Module name        | Type                  | Doc                                       |
-| ------------------ | --------------------- | ----------------------------------------- |
-| **auth**           | Vue plugin            | [DOC](./app/library/auth/README.md)       |
-| **dicom**          | Vue plugin            | [DOC](./app/library/dicom/README.md)      |
-| **dicomDataTypes** | Components collection | [DOC](./app/library/data-types/README.md) |
-| **dicomMetadata**  | Js dictionary         | [DOC](./app/library/dicom/README.md)      |
-| **fileSystemApi**  | Js library            |                                           |
-| **form**           | Components collection | [DOC](./app/library/form/README.md)       |
-| **http**           | Vue plugin            | [DOC](./app/library/http/README.md)       |
-| **mobile**         | Vue plugin            |                                           |
-| **relativeHeight** | Vue directive         |                                           |
-| **style**          | Js library            |                                           |
-| **wireframes**     | Components collection | [DOC](./app/library/wireframes/README.md) |
+| Module name        | Type                  | Doc                                            |
+| ------------------ | --------------------- | ---------------------------------------------- |
+| **auth**           | Vue plugin            | [DOC](./app/library/auth/README.md)            |
+| **dicom**          | Vue plugin            | [DOC](./app/library/dicom/README.md)           |
+| **dicomDataTypes** | Components collection | [DOC](./app/library/data-types/README.md)      |
+| **dicomMetadata**  | Js dictionary         | [DOC](./app/library/dicom/README.md)           |
+| **fileSystemApi**  | Js library            | [DOC](./app/library/file-system-api/README.md) |
+| **form**           | Components collection | [DOC](./app/library/form/README.md)            |
+| **http**           | Vue plugin            | [DOC](./app/library/http/README.md)            |
+| **mobile**         | Vue plugin            | [DOC](./app/library/mobile/README.md)          |
+| **relativeHeight** | Vue directive         | [DOC](./app/library/relative-height/README.md) |
+| **style**          | Js library            | [DOC](./app/library/style/README.md)           |
+| **wireframes**     | Components collection | [DOC](./app/library/wireframes/README.md)      |
 
 ## Run the examples
 
