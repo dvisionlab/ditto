@@ -27,6 +27,23 @@
           </tr>
 
           <tr>
+            <td>data types</td>
+            <td>
+              <router-link to="/data-types" target="_blank"
+                >/data-types</router-link
+              >
+            </td>
+            <td>
+              <a
+                href="https://github.com/dvisionlab/ditto/blob/master/app/library/data-types/README.md"
+                target="_blank"
+              >
+                docs
+              </a>
+            </td>
+          </tr>
+
+          <tr>
             <td>dicom</td>
             <td>
               <router-link to="/dicom" target="_blank">/dicom</router-link>

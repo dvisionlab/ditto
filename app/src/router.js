@@ -56,6 +56,11 @@ const routes = [
     ]
   },
   {
+    path: "/data-types",
+    name: "data-types",
+    component: () => import("@/examples/data-types/Test")
+  },
+  {
     path: "/dicom",
     name: "dicom",
     component: () => import("@/examples/dicom/Test")
