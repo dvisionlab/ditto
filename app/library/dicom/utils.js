@@ -54,11 +54,8 @@ export const showTool = (tool, elements) => {
 // Build data and header functions
 export const buildData = stack => {
   return new Promise((resolve, reject) => {
-    try {
-      lt.buildDataAsync(stack, data => resolve(data));
-    } catch (error) {
-      reject(error);
-    }
+    // wait for 30 seconds for garbage collector
+    lt.buildDataAsync(stack, 30, resolve, reject);
   });
 };
 
