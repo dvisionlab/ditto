@@ -167,6 +167,7 @@ export const seriesIdToElementId = seriesId =>
 // Setup Larvitar
 export const setup = (store, toolsStyle) => {
   lt.clearImageCache();
+  lt.resetLarvitarManager();
 
   if (store) {
     lt.initLarvitarStore(store, "larvitar");
