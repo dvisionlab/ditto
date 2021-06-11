@@ -196,6 +196,7 @@ export const updateSeriesSlice = (elementId, seriesId, sliceId) => {
 
   lt.larvitar_store.set("sliceId", [elementId, sliceId]);
   lt.updateImage(stack, elementId, sliceId);
+  lt.updateStackToolState(elementId, sliceId - 1);
 };
 
 // Update viewport actions
