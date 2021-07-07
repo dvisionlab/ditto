@@ -494,7 +494,7 @@ The utils module provides utilities methods based on _larvitar_. **The aim of th
 - _seriesIdToElementId(seriesId)_: replaces dots with underscores to get a valid html element id
 - _setup(store, toolsStyle)_: _larvitar_ initialization
 - _storeSeriesStack(seriesId, stack, cache = false)_: calls the _larvitar_ _populateLarvitarManager_ and eventually _cacheImages_ functions
-- _updateSeriesSlice(elementId, seriesId, sliceId)_: uses _larvitar_ to update a series slice
+- _updateSeriesSlice(elementId, seriesId, sliceId, imageCache)_: uses _larvitar_ to update a series slice
 - _updateViewportProperty(action, element)_: uses _larvitar_ to update the canvas with one of the available actions: _flip-horizontal_, _flip-vertical_, _invert_, _reset-viewport_
 
 ## DICOM metadata
