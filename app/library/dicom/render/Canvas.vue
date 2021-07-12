@@ -30,8 +30,8 @@
     <v-avatar
       v-if="
         showMultiframeIcon &&
-        stackMetadata &&
-        (stackMetadata.series || {}).isMultiframe
+          stackMetadata &&
+          (stackMetadata.series || {}).isMultiframe
       "
       color="black"
       :size="20"

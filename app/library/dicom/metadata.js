@@ -17,5 +17,9 @@ export default {
   StudyDate: "x00080020",
   StudyDescription: "x00081030",
   StudyInstanceUID: "x0020000d",
-  StudyTime: "x00080030"
+  StudyTime: "x00080030",
+  Rows: "x00280010",
+  Cols: "x00280011",
+  BitsAllocated: "x00280100",
+  PixelRepresentation: "x00280103"
 };
