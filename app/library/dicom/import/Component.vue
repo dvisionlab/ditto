@@ -160,7 +160,7 @@
         </template>
 
         <!-- Steps customization slots (actually only step-3 is supported) -->
-        <template v-slot:step-3><slot name="step-3" /></template>
+        <template v-slot:step-3><slot name="step-3"/></template>
       </component>
     </div>
   </div>
@@ -236,11 +236,16 @@ export default {
       }
 
       // Emit action with stacks data
-      const emitData = stacks.map(stack => {
+      let emitData = stacks.map(stack => {
         return this.metadata.reduce((obj, value) => {
           obj[value] = stack[value];
           return obj;
         }, {});
+      });
+
+      emitData = emitData.map((data, index) => {
+        data.seriesInstanceUIDs = Object.keys(stacks[index].instanceUIDs);
+        return data;
       });
 
       this.$emit(this.selectedAction.emitter, emitData);
@@ -261,8 +266,8 @@ export default {
       }
     },
     onCancel() {
-      const closeConfirmationFn =
-        this.steps[this.currentStep].closeConfirmation;
+      const closeConfirmationFn = this.steps[this.currentStep]
+        .closeConfirmation;
 
       if (
         closeConfirmationFn &&
