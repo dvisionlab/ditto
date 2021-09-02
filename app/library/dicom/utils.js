@@ -102,6 +102,15 @@ export const getSeriesStack = seriesId => {
   return stack && Object.keys(stack).length !== 0 ? stack : null;
 };
 
+// update larvitar stack tool state with imageIds
+export const csToolsUpdateImageIds = (elementId, imageIds) => {
+  lt.csToolsUpdateImageIds(elementId, imageIds);
+};
+
+export const setNumberOfSlices = (elementId, numberOfImages) => {
+  lt.larvitar_store.set("maxSliceId", [elementId, numberOfImages]);
+};
+
 // Merge parsed files with previous parsed files if the instance uids matches
 export const mergeSeries = (...series) => {
   if (!series.length) {
@@ -151,10 +160,22 @@ export const parseFiles = (files, extractMetadata = []) => {
   });
 };
 
+// Use Larvitar to parse a single file and get its dicom image object
+export const parseFile = (seriesId, file) => {
+  // Get DICOM image object
+  return new Promise(resolve => {
+    lt.readFile(file, (image, error) => {
+      let imageIds = lt.updateLarvitarManager(image, seriesId)[seriesId]
+        .imageIds;
+      return resolve({ imageIds, error });
+    });
+  });
+};
+
 // Use Larvitar to render a series into a canvas
-export const renderSeries = (elementId, seriesStack) => {
+export const renderSeries = (elementId, seriesStack, params = {}) => {
   lt.larvitar_store.addViewport(elementId);
-  lt.renderImage(seriesStack, elementId);
+  lt.renderImage(seriesStack, elementId, params);
 };
 
 // Call the Larvitar "resizeViewport" function
