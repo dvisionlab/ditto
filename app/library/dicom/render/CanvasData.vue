@@ -23,7 +23,7 @@
       </div>
     </template>
     <div v-if="data.maxSliceId">
-      slice: {{ data.sliceId }}/{{ data.maxSliceId }}
+      slice: {{ data.sliceId + 1 }}/{{ data.maxSliceId }}
     </div>
   </div>
 </template>
