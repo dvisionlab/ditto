@@ -15,9 +15,7 @@ export const activateTool = (
   options = { mouseButtonMask: 1 }
 ) => {
   const mouseOptions = { ...tool.options, ...options };
-  if (mouseOptions.mouseButtonMask) {
-    lt.setToolActive(tool.name, mouseOptions, elementIds);
-  }
+  lt.setToolActive(tool.name, mouseOptions, elementIds);
 };
 
 export const addTools = (tools, elementId, handlers) => {
@@ -218,7 +216,6 @@ export const storeSeriesStack = (seriesId, stack, cache = false) => {
 // Use Larvitar to update a series slice
 export const updateSeriesSlice = (elementId, seriesId, sliceId, imageCache) => {
   const stack = getSeriesStack(seriesId);
-
   lt.larvitar_store.set("sliceId", [elementId, sliceId]);
   lt.updateImage(stack, elementId, sliceId, imageCache);
   lt.updateStackToolState(elementId, sliceId - 1);
