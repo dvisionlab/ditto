@@ -103,11 +103,13 @@ export const getSeriesStack = seriesId => {
 };
 
 // update larvitar stack tool state with imageIds
-export const csToolsUpdateImageIds = (elementId, imageIds) => {
-  lt.csToolsUpdateImageIds(elementId, imageIds);
+export const csToolsUpdateImageIds = (elementId, imageIds, imageId) => {
+  let imageIdIndex = imageIds.indexOf(imageId);
+  lt.csToolsUpdateImageIds(elementId, imageIds, imageIdIndex);
 };
 
-export const setNumberOfSlices = (elementId, numberOfImages) => {
+// update larvitar imageIndex and numberOfSlices in store
+export const setImageIndexes = (elementId, numberOfImages) => {
   lt.larvitar_store.set("maxSliceId", [elementId, numberOfImages]);
 };
 
@@ -165,9 +167,11 @@ export const parseFile = (seriesId, file) => {
   // Get DICOM image object
   return new Promise(resolve => {
     lt.readFile(file, (image, error) => {
-      let imageIds = lt.updateLarvitarManager(image, seriesId)[seriesId]
-        .imageIds;
-      return resolve({ imageIds, error });
+      let manager = lt.updateLarvitarManager(image, seriesId)[seriesId];
+      let imageIds = manager.imageIds;
+      let imageUID = image.metadata.instanceUID;
+      let imageId = manager.instanceUIDs[imageUID];
+      return resolve({ imageIds, imageId, error });
     });
   });
 };
