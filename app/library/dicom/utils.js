@@ -4,6 +4,8 @@
 
 // Dependencies
 import * as lt from "larvitar";
+import { saveAs } from "file-saver";
+import print from "print-js";
 
 // Public methods
 // --------------
@@ -241,6 +243,25 @@ export const updateViewportProperty = (action, element) => {
 
     case "reset-viewport": {
       lt.resetViewports([element]);
+      break;
+    }
+    case "export-viewport": {
+      let canvas = document.getElementById(element).children[1];
+      canvas.toBlob(function (blob) {
+        saveAs(blob, "image.png");
+      });
+      break;
+    }
+
+    case "print-viewport": {
+      let canvas = document.getElementById(element).children[1];
+      canvas.toBlob(function (blob) {
+        print({
+          printable: URL.createObjectURL(blob),
+          type: "image",
+          documentTitle: "DICOM Image"
+        });
+      });
       break;
     }
 
