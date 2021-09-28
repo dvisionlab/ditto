@@ -70,6 +70,7 @@ const defaultGetProgressFn = (store, seriesId) =>
   (store.state.larvitar.series[seriesId] || {}).progress;
 const defaultGetViewportFn = (store, seriesId, canvasId) =>
   store.getters["larvitar/viewport"](canvasId) || {};
+const defaultgetCanvasTypeFn = store => store.state.viewer.currentCanvasType;
 
 export default {
   name: "DicomCanvas",
@@ -80,6 +81,7 @@ export default {
     canvasId: { required: true, type: String },
     getProgressFn: { default: defaultGetProgressFn, type: Function },
     getViewportFn: { default: defaultGetViewportFn, type: Function },
+    getCanvasTypeFn: { default: defaultgetCanvasTypeFn, type: Function },
     seriesId: { required: true, type: [String, Number] },
     showMultiframeIcon: { default: false, type: Boolean },
     showProgress: { default: false, type: Boolean },
@@ -104,6 +106,9 @@ export default {
     },
     viewport() {
       return this.getViewportFn(this.$store, this.seriesId, this.validCanvasId);
+    },
+    canvasType() {
+      return this.getCanvasTypeFn(this.$store);
     }
   },
   methods: {
@@ -114,8 +119,8 @@ export default {
 
       // clear cache (!!! NOTE: cornerstone should not cache images if not required)
       clearSeriesCache(this.seriesId);
-
-      if (this.clearOnDestroy) {
+      // check for canvas type, only remove data if current canvas type is 2D
+      if (this.clearOnDestroy && this.canvasType == 0) {
         clearSeriesData(this.seriesId, this.clearCacheOnDestroy);
       }
     },
@@ -155,10 +160,12 @@ export default {
             );
 
             // render
-            renderSeries(this.validCanvasId, stack);
-            // TODO LT await render series
-            addTools(this.tools, this.validCanvasId, this.toolsHandlers);
-            this.$emit("ready");
+            let self = this;
+            renderSeries(this.validCanvasId, stack).then(function() {
+              // await render series
+              addTools(self.tools, self.validCanvasId, self.toolsHandlers);
+              self.$emit("ready");
+            });
           } else {
             console.warn(
               "Series stack not available for canvas",
