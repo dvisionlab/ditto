@@ -264,13 +264,14 @@ It support both the desktop and mobile visualization modes.
 
 | Name               | Description                                                                  | Type    | Default               |
 | ------------------ | ---------------------------------------------------------------------------- | ------- | --------------------- |
+| **defaultActive**  | default modal behaviour, active or not                                       | Boolean | `false`               |
 | **activatorClass** | custom activator class                                                       | String  | `undefined`           |
 | **badgeColor**     | color of the activator badge                                                 | String  | `primary`             |
 | **icon**           | the icon of the activator button and shown in the import modal header        | String  | `mdi-upload-multiple` |
 | **iconColor**      | the color of the activator button                                            | String  | `undefined`           |
 | **label**          | the label of the activator button and shown in the import modal header       | String  | `import-exams`        |
 | **mobile**         | whether to render the component using the mobile mode                        | Boolean | `false`               |
-| **options**        | the oprions passed to the _ditto-dicom-import_ component (see previous docs) | Object  | `{}`                  |
+| **options**        | the options passed to the _ditto-dicom-import_ component (see previous docs) | Object  | `{}`                  |
 
 #### Slots
 

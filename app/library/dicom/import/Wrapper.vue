@@ -83,6 +83,7 @@ export default {
   name: "DicomImportModal",
   components: { ActivatorContent, DicomImport },
   props: {
+    defaultActive: { default: false, type: Boolean },
     activatorClass: { required: false, type: String },
     badgeColor: { default: "primary", type: String },
     icon: { default: "mdi-upload-multiple", type: String },
@@ -91,8 +92,8 @@ export default {
     mobile: { default: false, type: Boolean },
     options: { default: () => ({}), type: Object }
   },
-  data: () => ({
-    isOpen: false,
+  data: instance => ({
+    isOpen: instance.defaultActive,
     minimizedSeries: 0,
     uploading: false
   }),
