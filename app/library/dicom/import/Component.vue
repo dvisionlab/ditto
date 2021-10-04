@@ -141,6 +141,7 @@
         :get-viewport-fn="getViewportFn"
         :headers="headers"
         :import-errors="errors"
+        :disclaimer="disclaimer"
         :metadata="metadata"
         :series="series"
         :selected-series="selectedSeries"
@@ -167,7 +168,13 @@
 </template>
 
 <script>
-import { getCanvasTools, getHeaders, getMetadata, getSteps } from "./options";
+import {
+  getCanvasTools,
+  getHeaders,
+  getMetadata,
+  getSteps,
+  getDisclaimer
+} from "./options";
 import { mergeSeries, storeSeriesStack, clearSeriesStack } from "../utils";
 import RelativeHeight from "../../relative-height";
 import ModalControllers from "./ModalControllers";
@@ -204,6 +211,7 @@ export default {
       getViewportFn: this.options.getViewportFn,
       headers: headers,
       metadata: getMetadata(this.options),
+      disclaimer: getDisclaimer(this.options),
       series: [],
       selectedSeries: [],
       steps: getSteps(this.options),
