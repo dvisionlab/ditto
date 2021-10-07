@@ -14,6 +14,23 @@
       :id="validCanvasId"
       v-resize:debounce="onResize"
     />
+    <div
+      :style="{
+        height: '85%',
+        width: '20px',
+        position: 'absolute',
+        right: '0'
+      }"
+    >
+      <v-slider
+        v-if="showSlider"
+        class="full-height-slider"
+        vertical
+        v-model="sliderSliceId"
+        min="1"
+        :max="viewport.maxSliceId"
+      ></v-slider>
+    </div>
 
     <div v-if="!error && !isReady" class="ready-status">
       <v-progress-circular class="ma-auto" color="white" indeterminate />
@@ -63,7 +80,8 @@ import {
   getSeriesStack,
   renderSeries,
   resizeViewport,
-  seriesIdToElementId
+  seriesIdToElementId,
+  updateSeriesSlice
 } from "../utils";
 
 const defaultGetProgressFn = (store, seriesId) =>
@@ -87,7 +105,8 @@ export default {
     showProgress: { default: false, type: Boolean },
     stack: { required: false, type: Object },
     tools: { default: () => stackTools.default, type: Array },
-    toolsHandlers: { required: false, type: Object }
+    toolsHandlers: { required: false, type: Object },
+    showSlider: { default: false, type: Boolean }
   },
   data: () => ({
     error: false,
@@ -109,6 +128,24 @@ export default {
     },
     canvasType() {
       return this.getCanvasTypeFn(this.$store);
+    },
+    sliderSliceId: {
+      get() {
+        return (
+          this.getViewportFn(this.$store, this.seriesId, this.validCanvasId)
+            .sliceId + 1
+        );
+      },
+      set(index) {
+        let sliceId = index - 1;
+        if (
+          this.getViewportFn(this.$store, this.seriesId, this.validCanvasId)
+            .sliceId !== undefined &&
+          sliceId >= 0
+        ) {
+          updateSeriesSlice(this.validCanvasId, this.seriesId, sliceId);
+        }
+      }
     }
   },
   methods: {
@@ -187,5 +224,14 @@ export default {
   display: flex;
   width: 100%;
   height: 100%;
+}
+.full-height-slider >>> .v-slider {
+  height: 85%;
+}
+.v-input {
+  height: 100% !important;
+}
+.v-input >>> .v-input__slot {
+  height: 100% !important;
 }
 </style>

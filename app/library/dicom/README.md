@@ -429,6 +429,7 @@ This component renders a set of a series stack infromation.
 | **showProgress**        | whether this component shoul show a a loading progress; used only when the _showCanvas_ prop is `true`                                                                                                       | Boolean | `false`                                             |
 | **showThumbnail**       | whether this component should render the series thumbnail; the thumbnail should be an image url or a base64 string available at `data.thumbnail`                                                             | Boolean | `false`                                             |
 | **tools**               | the list of the tools you want to activate on this canvas (_larvitar_ tools format is required); used only when the _showCanvas_ prop is `true`                                                              | Array   | `stackTools.preview`, see [defaults](./defaults.js) |
+| **showSlider**          | whether this component should render the series slider; the slider allows user to change a series slice manually.                                                                                            | Boolean | `false`                                             |
 
 #### Slots
 
