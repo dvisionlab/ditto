@@ -73,7 +73,6 @@ import resize from "vue-resize-directive";
 import { stackMetadata as stackMetadataDict, stackTools } from "../defaults";
 import {
   addTools,
-  // clearSeriesData,
   clearSeriesCache,
   deleteViewport,
   disableCanvas,
