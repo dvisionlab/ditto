@@ -73,7 +73,6 @@ import resize from "vue-resize-directive";
 import { stackMetadata as stackMetadataDict, stackTools } from "../defaults";
 import {
   addTools,
-  clearSeriesData,
   clearSeriesCache,
   deleteViewport,
   disableCanvas,
@@ -153,13 +152,8 @@ export default {
       // disable larvitar canvas
       disableCanvas(this.$refs.canvas);
       deleteViewport(this.$refs.canvas);
-
       // clear cache (!!! NOTE: cornerstone should not cache images if not required)
       clearSeriesCache(this.seriesId);
-      // check for canvas type, only remove data if current canvas type is 2D
-      if (this.clearOnDestroy && this.canvasType == 0) {
-        clearSeriesData(this.seriesId, this.clearCacheOnDestroy);
-      }
     },
     onResize() {
       resizeViewport(this.validCanvasId);
