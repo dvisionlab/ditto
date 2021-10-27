@@ -32,8 +32,15 @@
       ></v-slider>
     </div>
 
-    <div v-if="!error && !isReady" class="ready-status">
-      <v-progress-circular class="ma-auto" color="white" indeterminate />
+    <div v-if="!error && download !== 100 && showPercentage">
+      <v-progress-circular
+        class="text-center mt-8 mr-8"
+        color="accent"
+        :size="50"
+        :value="lastPercentageStep"
+      >
+        {{ download }}
+      </v-progress-circular>
     </div>
 
     <v-progress-linear
@@ -89,6 +96,8 @@ const defaultGetProgressFn = (store, seriesId) =>
 const defaultGetViewportFn = (store, seriesId, canvasId) =>
   store.getters["larvitar/viewport"](canvasId) || {};
 const defaultgetCanvasTypeFn = store => store.state.viewer.currentCanvasType;
+const defaultGetImageIdsFn = (store, seriesId) =>
+  (store.state.larvitar.series[seriesId] || {}).imageIds;
 
 export default {
   name: "DicomCanvas",
@@ -97,6 +106,7 @@ export default {
     clearCacheOnDestroy: { default: false, type: Boolean },
     clearOnDestroy: { default: false, type: Boolean },
     canvasId: { required: true, type: String },
+    getImageIdsFn: { default: defaultGetImageIdsFn, type: Function },
     getProgressFn: { default: defaultGetProgressFn, type: Function },
     getViewportFn: { default: defaultGetViewportFn, type: Function },
     getCanvasTypeFn: { default: defaultgetCanvasTypeFn, type: Function },
@@ -106,12 +116,14 @@ export default {
     stack: { required: false, type: Object },
     tools: { default: () => stackTools.default, type: Array },
     toolsHandlers: { required: false, type: Object },
-    showSlider: { default: false, type: Boolean }
+    showSlider: { default: false, type: Boolean },
+    showPercentage: { default: false, type: Boolean }
   },
   data: () => ({
     error: false,
     stackMetadata: null,
-    validCanvasId: null
+    validCanvasId: null,
+    lastPercentageStep: 0 // this trick is needed to bypass this vuetify bug: https://github.com/vuetifyjs/vuetify/issues/3268
   }),
   beforeDestroy() {
     this.destroy();
@@ -119,6 +131,16 @@ export default {
   computed: {
     isReady() {
       return this.viewport.ready;
+    },
+    download() {
+      let imageIds = this.getImageIdsFn(this.$store, this.seriesId);
+      let total = this.viewport.maxSliceId;
+
+      if (!imageIds || !imageIds.length || !total || total < imageIds.length) {
+        return 0;
+      } else {
+        return Math.round((100 * imageIds.length) / total);
+      }
     },
     progress() {
       return this.getProgressFn(this.$store, this.seriesId, this.validCanvasId);
@@ -213,18 +235,29 @@ export default {
         }, 0);
       },
       immediate: true
+    },
+    download: {
+      handler() {
+        // when switching serie on a viewport download is 100 at first
+        if (this.lastPercentageStep === 0 && this.download === 100) {
+          return;
+        }
+        if (this.download - this.lastPercentageStep >= 5) {
+          this.lastPercentageStep = this.download;
+        }
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-.ready-status {
+/* .ready-status {
   position: absolute;
   display: flex;
   width: 100%;
   height: 100%;
-}
+} */
 .full-height-slider >>> .v-slider {
   height: 85%;
 }
