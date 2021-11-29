@@ -131,25 +131,23 @@ export const mergeSeries = (...series) => {
 // Use Larvitar to parse files and get series stacks
 export const parseFiles = (files, extractMetadata = []) => {
   // Get DICOM series
-  return new Promise(resolve => {
-    lt.readFiles(files, (series, error) => {
-      const list = Object.values(series || {}).map(s => {
-        const meta = s.instances[Object.keys(s.instances)[0]].metadata;
-        const stack = {
-          ...[].concat(extractMetadata).reduce((result, value) => {
-            result[value] = meta[value];
-            return result;
-          }, {}),
-          ...s
-        };
+  return lt.readFiles(files).then(series => {
+    return Object.values(series || {}).map(s => {
+      const meta = s.instances[Object.keys(s.instances)[0]].metadata;
+      const stack = {
+        ...[].concat(extractMetadata).reduce((result, value) => {
+          result[value] = meta[value];
+          return result;
+        }, {}),
+        ...s
+      };
 
-        stack.larvitarNumberOfSlices = stack.isMultiframe
-          ? stack.numberOfFrames
-          : stack.numberOfImages;
+      stack.larvitarNumberOfSlices = stack.isMultiframe
+        ? stack.numberOfFrames
+        : stack.numberOfImages;
 
-        return stack;
-      });
-      return resolve({ series: list, error });
+      // resolve the promise with this value
+      return stack;
     });
   });
 };
