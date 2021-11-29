@@ -140,11 +140,16 @@ export default {
               {}
             );
 
-            // render
-            renderSeries(this.validCanvasId, stack);
-            // TODO LT await render series
-            addTools(this.tools, this.validCanvasId, this.toolsHandlers);
-            this.$emit("ready");
+            renderSeries(this.validCanvasId, stack)
+              .then(() => {
+                // series rendered
+                addTools(this.tools, this.validCanvasId, this.toolsHandlers);
+                this.$emit("ready");
+              })
+              .catch(error => {
+                console.error(error);
+                this.error = true;
+              });
           } else {
             console.warn(
               "Series stack not available for canvas",

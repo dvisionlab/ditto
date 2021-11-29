@@ -155,7 +155,8 @@ export const parseFiles = (files, extractMetadata = []) => {
 // Use Larvitar to render a series into a canvas
 export const renderSeries = (elementId, seriesStack) => {
   lt.larvitar_store.addViewport(elementId);
-  lt.renderImage(seriesStack, elementId);
+  // renderImage returns a promise which will resolve when image is displayed
+  return lt.renderImage(seriesStack, elementId);
 };
 
 // Call the Larvitar "resizeViewport" function
