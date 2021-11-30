@@ -171,7 +171,7 @@ export const setup = (store, toolsStyle) => {
   lt.clearImageCache();
 
   if (store) {
-    lt.initLarvitarStore(store, "larvitar");
+    lt.initLarvitarStore(store, "larvitar", true);
   } else {
     lt.initLarvitarStore();
   }
