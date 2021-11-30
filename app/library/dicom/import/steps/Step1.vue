@@ -111,9 +111,8 @@ export default {
           }
         })
         .catch(error => {
-          // TODO test this
-          console.log(error);
           // parseFiles error is a string and is a blocking error (no series can be loaded)
+          console.error(error);
           this.parsingFailure = error;
         });
     },
