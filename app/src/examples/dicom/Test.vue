@@ -10,7 +10,7 @@ import vuetify from "../../plugins/vuetify";
 
 import SubApp from "./SubApp";
 import dicomPlugin from "@/../library/dicom/plugin";
-import larvitarStore from "./larvitarStore";
+import { larvitarModule as larvitarStore } from "larvitar";
 
 Vue.use(Vuex);
 Vue.use(VueI18n);
