@@ -171,8 +171,10 @@ export const setup = (store, toolsStyle) => {
   lt.clearImageCache();
 
   if (store) {
+    // use larvitar vuex store and register it in the app store
     lt.initLarvitarStore(store, "larvitar", true);
   } else {
+    // use without vuex
     lt.initLarvitarStore();
   }
 
