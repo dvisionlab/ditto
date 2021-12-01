@@ -30,6 +30,14 @@
     </v-list-item-content>
   </v-list-item>
 
+  <v-list-item v-else-if="!user && mobile">
+    <v-list-item-content>
+      <div class="mt-2">
+        <v-btn block :dark="dark" outlined small @click="login">Log in</v-btn>
+      </div>
+    </v-list-item-content>
+  </v-list-item>
+
   <!-- desktop -->
   <v-menu v-else-if="user" :open-on-hover="openOnHover" tile v-bind="options">
     <template v-slot:activator="{ on, attrs }">
@@ -72,6 +80,40 @@
           Personal settings
         </v-btn>
         <v-btn color="primary" :dark="dark" text @click="logout">Log out</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-menu>
+
+  <v-menu
+    v-else-if="!user && !mobile"
+    :open-on-hover="openOnHover"
+    tile
+    v-bind="options"
+  >
+    <template v-slot:activator="{ on, attrs }">
+      <slot v-bind="{ on, attrs }">
+        <!-- default slot content -->
+        <v-btn
+          :class="activatorClass"
+          height="100%"
+          text
+          v-bind="attrs"
+          v-on="on"
+        >
+          <div class="text-center lh-small">
+            <v-icon :color="iconColor">{{ icon }}</v-icon>
+            <div class="d-flex align-center">
+              <b :class="`${iconColor}--text`">{{ label }}</b>
+              <v-icon :color="iconColor" small>mdi-chevron-down</v-icon>
+            </div>
+          </div>
+        </v-btn>
+      </slot>
+    </template>
+
+    <v-card :dark="dark" flat tile>
+      <v-card-actions>
+        <v-btn color="primary" :dark="dark" text @click="login">Log in</v-btn>
       </v-card-actions>
     </v-card>
   </v-menu>
@@ -127,6 +169,9 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch("auth/logout");
+      this.$router.replace({ name: "login" });
+    },
+    login() {
       this.$router.replace({ name: "login" });
     }
   }

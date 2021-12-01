@@ -34,6 +34,9 @@
           browse files
         </v-btn>
       </div>
+      <div class="mx-auto text-center text-uppercase mt-10">
+        <h4 v-html="disclaimer" class="primary--text"></h4>
+      </div>
     </div>
 
     <div v-else class="d-flex h-100 text-center text-uppercase">
@@ -72,7 +75,8 @@ export default {
   name: "DicomImportStep1",
   props: {
     series: { required: true, type: Array },
-    metadata: { required: false, type: Array }
+    metadata: { required: false, type: Array },
+    disclaimer: { required: false, type: String }
   },
   data: () => ({
     dragging: false,

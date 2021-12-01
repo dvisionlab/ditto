@@ -91,15 +91,18 @@
       </template>
 
       <template v-slot:[`item.preview`]="{ item }">
-        <dicom-canvas
-          :canvas-id="item.larvitarSeriesInstanceUID"
-          :get-progress-fn="getProgressFn"
-          :get-viewport-fn="getViewportFn"
-          :series-id="item.larvitarSeriesInstanceUID"
-          :stack="item"
-          :style="{ width: '10em', height: '10em' }"
-          :tools="tools"
-        />
+        <v-lazy>
+          <dicom-canvas
+            :canvas-id="item.larvitarSeriesInstanceUID"
+            :get-progress-fn="getProgressFn"
+            :get-viewport-fn="getViewportFn"
+            :series-id="item.larvitarSeriesInstanceUID"
+            show-multiframe-icon
+            :stack="item"
+            :style="{ width: '10em', height: '10em' }"
+            :tools="tools"
+          />
+        </v-lazy>
       </template>
 
       <template

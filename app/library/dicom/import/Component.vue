@@ -141,6 +141,7 @@
         :get-viewport-fn="getViewportFn"
         :headers="headers"
         :import-errors="errors"
+        :disclaimer="disclaimer"
         :metadata="metadata"
         :series="series"
         :selected-series="selectedSeries"
@@ -160,14 +161,20 @@
         </template>
 
         <!-- Steps customization slots (actually only step-3 is supported) -->
-        <template v-slot:step-3><slot name="step-3" /></template>
+        <template v-slot:step-3><slot name="step-3"/></template>
       </component>
     </div>
   </div>
 </template>
 
 <script>
-import { getCanvasTools, getHeaders, getMetadata, getSteps } from "./options";
+import {
+  getCanvasTools,
+  getHeaders,
+  getMetadata,
+  getSteps,
+  getDisclaimer
+} from "./options";
 import { mergeSeries, storeSeriesStack, clearSeriesStack } from "../utils";
 import RelativeHeight from "../../relative-height";
 import ModalControllers from "./ModalControllers";
@@ -204,6 +211,7 @@ export default {
       getViewportFn: this.options.getViewportFn,
       headers: headers,
       metadata: getMetadata(this.options),
+      disclaimer: getDisclaimer(this.options),
       series: [],
       selectedSeries: [],
       steps: getSteps(this.options),
@@ -236,11 +244,16 @@ export default {
       }
 
       // Emit action with stacks data
-      const emitData = stacks.map(stack => {
+      let emitData = stacks.map(stack => {
         return this.metadata.reduce((obj, value) => {
           obj[value] = stack[value];
           return obj;
         }, {});
+      });
+
+      emitData = emitData.map((data, index) => {
+        data.seriesInstanceUIDs = Object.keys(stacks[index].instanceUIDs);
+        return data;
       });
 
       this.$emit(this.selectedAction.emitter, emitData);
@@ -261,8 +274,8 @@ export default {
       }
     },
     onCancel() {
-      const closeConfirmationFn =
-        this.steps[this.currentStep].closeConfirmation;
+      const closeConfirmationFn = this.steps[this.currentStep]
+        .closeConfirmation;
 
       if (
         closeConfirmationFn &&

@@ -4,6 +4,8 @@
 
 // Dependencies
 import * as lt from "larvitar";
+import { saveAs } from "file-saver";
+import print from "print-js";
 
 // Public methods
 // --------------
@@ -15,9 +17,7 @@ export const activateTool = (
   options = { mouseButtonMask: 1 }
 ) => {
   const mouseOptions = { ...tool.options, ...options };
-  if (mouseOptions.mouseButtonMask) {
-    lt.setToolActive(tool.name, mouseOptions, elementIds);
-  }
+  lt.setToolActive(tool.name, mouseOptions, elementIds);
 };
 
 export const addTools = (tools, elementId, handlers) => {
@@ -54,11 +54,8 @@ export const showTool = (tool, elements) => {
 // Build data and header functions
 export const buildData = stack => {
   return new Promise((resolve, reject) => {
-    try {
-      lt.buildDataAsync(stack, data => resolve(data));
-    } catch (error) {
-      reject(error);
-    }
+    // wait for 30 seconds for garbage collector
+    lt.buildDataAsync(stack, 30, resolve, reject);
   });
 };
 
@@ -103,6 +100,17 @@ export const getCinematicData = seriesId => {
 export const getSeriesStack = seriesId => {
   const stack = lt.getSeriesDataFromLarvitarManager(seriesId);
   return stack && Object.keys(stack).length !== 0 ? stack : null;
+};
+
+// update larvitar stack tool state with imageIds
+export const csToolsUpdateImageIds = (elementId, imageIds, imageId) => {
+  let imageIdIndex = imageIds.indexOf(imageId);
+  lt.csToolsUpdateImageIds(elementId, imageIds, imageIdIndex);
+};
+
+// update larvitar imageIndex and numberOfSlices in store
+export const setImageIndexes = (elementId, numberOfImages) => {
+  lt.larvitar_store.set("maxSliceId", [elementId, numberOfImages]);
 };
 
 // Merge parsed files with previous parsed files if the instance uids matches
@@ -152,8 +160,22 @@ export const parseFiles = (files, extractMetadata = []) => {
   });
 };
 
+// Use Larvitar to parse a single file and get its dicom image object
+export const parseFile = (seriesId, file) => {
+  // Get DICOM image object
+  return new Promise(resolve => {
+    lt.readFile(file, (image, error) => {
+      let manager = lt.updateLarvitarManager(image, seriesId)[seriesId];
+      let imageIds = manager.imageIds;
+      let imageUID = image.metadata.instanceUID;
+      let imageId = manager.instanceUIDs[imageUID];
+      return resolve({ imageIds, imageId, error });
+    });
+  });
+};
+
 // Use Larvitar to render a series into a canvas
-export const renderSeries = (elementId, seriesStack) => {
+export const renderSeries = (elementId, seriesStack, params = {}) => {
   lt.larvitar_store.addViewport(elementId);
   // renderImage returns a promise which will resolve when image is displayed
   return lt.renderImage(seriesStack, elementId);
@@ -169,6 +191,7 @@ export const seriesIdToElementId = seriesId =>
 // Setup Larvitar
 export const setup = (store, toolsStyle) => {
   lt.clearImageCache();
+  lt.resetLarvitarManager();
 
   if (store) {
     // use larvitar vuex store and register it in the app store
@@ -194,11 +217,11 @@ export const storeSeriesStack = (seriesId, stack, cache = false) => {
 };
 
 // Use Larvitar to update a series slice
-export const updateSeriesSlice = (elementId, seriesId, sliceId) => {
+export const updateSeriesSlice = (elementId, seriesId, sliceId, imageCache) => {
   const stack = getSeriesStack(seriesId);
-
   lt.larvitar_store.set("sliceId", [elementId, sliceId]);
-  lt.updateImage(stack, elementId, sliceId);
+  lt.updateImage(stack, elementId, sliceId, imageCache);
+  lt.updateStackToolState(elementId, sliceId - 1);
 };
 
 // Update viewport actions
@@ -221,6 +244,25 @@ export const updateViewportProperty = (action, element) => {
 
     case "reset-viewport": {
       lt.resetViewports([element]);
+      break;
+    }
+    case "export-viewport": {
+      let canvas = document.getElementById(element).children[1];
+      canvas.toBlob(function (blob) {
+        saveAs(blob, "image.png");
+      });
+      break;
+    }
+
+    case "print-viewport": {
+      let canvas = document.getElementById(element).children[1];
+      canvas.toBlob(function (blob) {
+        print({
+          printable: URL.createObjectURL(blob),
+          type: "image",
+          documentTitle: "DICOM Image"
+        });
+      });
       break;
     }
 

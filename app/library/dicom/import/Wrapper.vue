@@ -4,6 +4,7 @@
     persistent
     width="95wv"
     v-model="visible"
+    :disabled="disabled"
     @click:outside="() => minimize()"
   >
     <template v-slot:activator="{ on, attrs }">
@@ -83,6 +84,8 @@ export default {
   name: "DicomImportModal",
   components: { ActivatorContent, DicomImport },
   props: {
+    disabled: { default: false, type: Boolean },
+    defaultActive: { default: false, type: Boolean },
     activatorClass: { required: false, type: String },
     badgeColor: { default: "primary", type: String },
     icon: { default: "mdi-upload-multiple", type: String },
@@ -91,8 +94,8 @@ export default {
     mobile: { default: false, type: Boolean },
     options: { default: () => ({}), type: Object }
   },
-  data: () => ({
-    isOpen: false,
+  data: instance => ({
+    isOpen: instance.defaultActive,
     minimizedSeries: 0,
     uploading: false
   }),

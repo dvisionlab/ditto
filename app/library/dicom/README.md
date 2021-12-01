@@ -264,13 +264,14 @@ It support both the desktop and mobile visualization modes.
 
 | Name               | Description                                                                  | Type    | Default               |
 | ------------------ | ---------------------------------------------------------------------------- | ------- | --------------------- |
+| **defaultActive**  | default modal behaviour, active or not                                       | Boolean | `false`               |
 | **activatorClass** | custom activator class                                                       | String  | `undefined`           |
 | **badgeColor**     | color of the activator badge                                                 | String  | `primary`             |
 | **icon**           | the icon of the activator button and shown in the import modal header        | String  | `mdi-upload-multiple` |
 | **iconColor**      | the color of the activator button                                            | String  | `undefined`           |
 | **label**          | the label of the activator button and shown in the import modal header       | String  | `import-exams`        |
 | **mobile**         | whether to render the component using the mobile mode                        | Boolean | `false`               |
-| **options**        | the oprions passed to the _ditto-dicom-import_ component (see previous docs) | Object  | `{}`                  |
+| **options**        | the options passed to the _ditto-dicom-import_ component (see previous docs) | Object  | `{}`                  |
 
 #### Slots
 
@@ -428,6 +429,7 @@ This component renders a set of a series stack infromation.
 | **showProgress**        | whether this component shoul show a a loading progress; used only when the _showCanvas_ prop is `true`                                                                                                       | Boolean | `false`                                             |
 | **showThumbnail**       | whether this component should render the series thumbnail; the thumbnail should be an image url or a base64 string available at `data.thumbnail`                                                             | Boolean | `false`                                             |
 | **tools**               | the list of the tools you want to activate on this canvas (_larvitar_ tools format is required); used only when the _showCanvas_ prop is `true`                                                              | Array   | `stackTools.preview`, see [defaults](./defaults.js) |
+| **showSlider**          | whether this component should render the series slider; the slider allows user to change a series slice manually.                                                                                            | Boolean | `false`                                             |
 
 #### Slots
 
@@ -494,7 +496,7 @@ The utils module provides utilities methods based on _larvitar_. **The aim of th
 - _seriesIdToElementId(seriesId)_: replaces dots with underscores to get a valid html element id
 - _setup(store, toolsStyle)_: _larvitar_ initialization
 - _storeSeriesStack(seriesId, stack, cache = false)_: calls the _larvitar_ _populateLarvitarManager_ and eventually _cacheImages_ functions
-- _updateSeriesSlice(elementId, seriesId, sliceId)_: uses _larvitar_ to update a series slice
+- _updateSeriesSlice(elementId, seriesId, sliceId, imageCache)_: uses _larvitar_ to update a series slice
 - _updateViewportProperty(action, element)_: uses _larvitar_ to update the canvas with one of the available actions: _flip-horizontal_, _flip-vertical_, _invert_, _reset-viewport_
 
 ## DICOM metadata

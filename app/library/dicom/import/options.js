@@ -22,6 +22,9 @@ const requiredMetadata = [
   "larvitarSeriesInstanceUID"
 ];
 
+const defaultDisclaimer =
+  "THIS VERSION IS NOT CERTIFIED AS A MEDICAL DEVICE FOR PRIMARY DIAGNOSIS. <br /> THERE ARE NO CERTIFICATIONS. <br /> IT'S POSSIBLE USE IT ONLY AS A REVIEWING AND SCIENTIFIC SOFTWARE, <br /> NOT FOR PRIMARY DIAGNOSTICS.";
+
 const computeHeaders = metadata => {
   return [
     { sortable: false, text: "", value: "preview" },
@@ -120,6 +123,10 @@ export const getMetadata = options => {
   }
 
   return defaultMetadata;
+};
+
+export const getDisclaimer = options => {
+  return options.disclaimer ? options.disclaimer : defaultDisclaimer;
 };
 
 export const getHeaders = options => {
