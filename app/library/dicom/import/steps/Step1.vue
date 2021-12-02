@@ -104,18 +104,21 @@ export default {
       this.totalSize = this.totalSize + parseFloat(currentSize);
 
       // Get DICOM series
-      parseFiles(files, this.metadata).then(({ series, error }) => {
-        this.loading = false;
+      parseFiles(files, this.metadata)
+        .then(series => {
+          this.loading = false;
 
-        if (error) {
+          if (!series || !series.length) {
+            this.parsingFailure = defaultParsingFailureMessage;
+          } else {
+            this.$emit("new-series", { errors: parsingErrors, series });
+          }
+        })
+        .catch(error => {
           // parseFiles error is a string and is a blocking error (no series can be loaded)
+          console.error(error);
           this.parsingFailure = error;
-        } else if (!series || !series.length) {
-          this.parsingFailure = defaultParsingFailureMessage;
-        } else {
-          this.$emit("new-series", { errors: parsingErrors, series });
-        }
-      });
+        });
     },
     onDragEnd() {
       this.dragging = false;

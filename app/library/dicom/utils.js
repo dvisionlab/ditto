@@ -139,25 +139,23 @@ export const mergeSeries = (...series) => {
 // Use Larvitar to parse files and get series stacks
 export const parseFiles = (files, extractMetadata = []) => {
   // Get DICOM series
-  return new Promise(resolve => {
-    lt.readFiles(files, (series, error) => {
-      const list = Object.values(series || {}).map(s => {
-        const meta = s.instances[Object.keys(s.instances)[0]].metadata;
-        const stack = {
-          ...[].concat(extractMetadata).reduce((result, value) => {
-            result[value] = meta[value];
-            return result;
-          }, {}),
-          ...s
-        };
+  return lt.readFiles(files).then(series => {
+    return Object.values(series || {}).map(s => {
+      const meta = s.instances[Object.keys(s.instances)[0]].metadata;
+      const stack = {
+        ...[].concat(extractMetadata).reduce((result, value) => {
+          result[value] = meta[value];
+          return result;
+        }, {}),
+        ...s
+      };
 
-        stack.larvitarNumberOfSlices = stack.isMultiframe
-          ? stack.numberOfFrames
-          : stack.numberOfImages;
+      stack.larvitarNumberOfSlices = stack.isMultiframe
+        ? stack.numberOfFrames
+        : stack.numberOfImages;
 
-        return stack;
-      });
-      return resolve({ series: list, error });
+      // resolve the promise with this value
+      return stack;
     });
   });
 };
@@ -179,11 +177,8 @@ export const parseFile = (seriesId, file) => {
 // Use Larvitar to render a series into a canvas
 export const renderSeries = (elementId, seriesStack, params = {}) => {
   lt.larvitar_store.addViewport(elementId);
-  return new Promise(resolve => {
-    lt.renderImage(seriesStack, elementId, params).then(function() {
-      return resolve();
-    });
-  });
+  // renderImage returns a promise which will resolve when image is displayed
+  return lt.renderImage(seriesStack, elementId);
 };
 
 // Call the Larvitar "resizeViewport" function
@@ -199,8 +194,10 @@ export const setup = (store, toolsStyle) => {
   lt.resetLarvitarManager();
 
   if (store) {
-    lt.initLarvitarStore(store, "larvitar");
+    // use larvitar vuex store and register it in the app store
+    lt.initLarvitarStore(store, "larvitar", true);
   } else {
+    // use without vuex
     lt.initLarvitarStore();
   }
 
@@ -251,7 +248,7 @@ export const updateViewportProperty = (action, element) => {
     }
     case "export-viewport": {
       let canvas = document.getElementById(element).children[1];
-      canvas.toBlob(function(blob) {
+      canvas.toBlob(function (blob) {
         saveAs(blob, "image.png");
       });
       break;
@@ -259,7 +256,7 @@ export const updateViewportProperty = (action, element) => {
 
     case "print-viewport": {
       let canvas = document.getElementById(element).children[1];
-      canvas.toBlob(function(blob) {
+      canvas.toBlob(function (blob) {
         print({
           printable: URL.createObjectURL(blob),
           type: "image",

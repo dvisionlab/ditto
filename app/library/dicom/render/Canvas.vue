@@ -218,13 +218,16 @@ export default {
               {}
             );
 
-            // render
-            let self = this;
-            renderSeries(this.validCanvasId, stack).then(function() {
-              // await render series
-              addTools(self.tools, self.validCanvasId, self.toolsHandlers);
-              self.$emit("ready");
-            });
+            renderSeries(this.validCanvasId, stack)
+              .then(() => {
+                // series rendered
+                addTools(this.tools, this.validCanvasId, this.toolsHandlers);
+                this.$emit("ready");
+              })
+              .catch(error => {
+                console.error(error);
+                this.error = true;
+              });
           } else {
             console.warn(
               "Series stack not available for canvas",

@@ -10,17 +10,11 @@ import vuetify from "../../plugins/vuetify";
 
 import SubApp from "./SubApp";
 import dicomPlugin from "@/../library/dicom/plugin";
-import larvitarStore from "./larvitarStore";
 
 Vue.use(Vuex);
 Vue.use(VueI18n);
 
-const store = new Vuex.Store({
-  modules: {
-    larvitar: larvitarStore
-  }
-});
-
+const store = new Vuex.Store({});
 Vue.use(dicomPlugin, { store });
 
 export default {
