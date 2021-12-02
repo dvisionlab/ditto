@@ -163,14 +163,18 @@ export const parseFiles = (files, extractMetadata = []) => {
 // Use Larvitar to parse a single file and get its dicom image object
 export const parseFile = (seriesId, file) => {
   // Get DICOM image object
-  return new Promise(resolve => {
-    lt.readFile(file, (image, error) => {
-      let manager = lt.updateLarvitarManager(image, seriesId)[seriesId];
-      let imageIds = manager.imageIds;
-      let imageUID = image.metadata.instanceUID;
-      let imageId = manager.instanceUIDs[imageUID];
-      return resolve({ imageIds, imageId, error });
-    });
+  return new Promise((resolve, reject) => {
+    lt.readFile(file)
+      .then(image => {
+        let manager = lt.updateLarvitarManager(image, seriesId)[seriesId];
+        let imageIds = manager.imageIds;
+        let imageUID = image.metadata.instanceUID;
+        let imageId = manager.instanceUIDs[imageUID];
+        return resolve({ imageIds, imageId });
+      })
+      .catch(error => {
+        return reject(error);
+      });
   });
 };
 
@@ -178,7 +182,7 @@ export const parseFile = (seriesId, file) => {
 export const renderSeries = (elementId, seriesStack, params = {}) => {
   lt.larvitar_store.addViewport(elementId);
   // renderImage returns a promise which will resolve when image is displayed
-  return lt.renderImage(seriesStack, elementId);
+  return lt.renderImage(seriesStack, elementId, params);
 };
 
 // Call the Larvitar "resizeViewport" function
@@ -248,7 +252,7 @@ export const updateViewportProperty = (action, element) => {
     }
     case "export-viewport": {
       let canvas = document.getElementById(element).children[1];
-      canvas.toBlob(function (blob) {
+      canvas.toBlob(function(blob) {
         saveAs(blob, "image.png");
       });
       break;
@@ -256,7 +260,7 @@ export const updateViewportProperty = (action, element) => {
 
     case "print-viewport": {
       let canvas = document.getElementById(element).children[1];
-      canvas.toBlob(function (blob) {
+      canvas.toBlob(function(blob) {
         print({
           printable: URL.createObjectURL(blob),
           type: "image",

@@ -491,6 +491,7 @@ The utils module provides utilities methods based on _larvitar_. **The aim of th
 - _getSeriesStack(seriesId)_: reads the series stack from the _larvitar_ manager
 - _mergeSeries(...series)_: merges the instances of a list of series into a single series object if their instance uids matches
 - _parseFiles(files, extractMetadata = [])_: uses _larvitar_ to parse files and get series stacks, extracting the required metadata
+- _parseFile(seriesId, file)_: uses _larvitar_ to parse a single file and get single image stack object
 - _renderSeries(elementId, seriesStack)_: calls the _larvitar_ _larvitar_store.addViewport_ and _renderImage_ functions
 - _resizeViewport_: calls the _larvitar_ _resizeViewport_ function
 - _seriesIdToElementId(seriesId)_: replaces dots with underscores to get a valid html element id
