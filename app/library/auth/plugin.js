@@ -21,7 +21,7 @@ const defaultOptions = {
   logrocket: null,
   // redirect urls for users that...
   redirectAuthUsers: "", // ...are auth but goes on a guest route
-  redirectGuestUsers: "login", // ..are not auth but goes on an auth route
+  redirectGuestUsers: "/login", // ..are not auth but goes on an auth route
   // wrapper component for auth routes
   wrapperComponent: null
 };
