@@ -11,8 +11,8 @@ const defaultOptions = {
   addTrailingSlashInterceptor: false,
   allowPasswordReset: true,
   allowUserRegistration: true,
-  // application path of reserved app section
-  authRoot: "",
+  // application base route
+  baseRoute: "",
   // try to login automatically from /login route
   autoLogin: true,
   // http requests base url

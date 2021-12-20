@@ -15,7 +15,7 @@ export const getRoutes = options => {
   return [
     {
       component: Wrapper,
-      path: `${options.authRoot}/login`,
+      path: `${options.baseRoute}/login`,
       meta: {
         autoLogin: options.autoLogin,
         guest: true
@@ -30,7 +30,7 @@ export const getRoutes = options => {
             ...route.query,
             allowPasswordReset: options.allowPasswordReset,
             allowUserRegistration: options.allowUserRegistration,
-            authRoot: options.authRoot
+            baseRoute: options.baseRoute
           })
         }
       ]
@@ -38,7 +38,7 @@ export const getRoutes = options => {
     options.allowPasswordReset
       ? {
           component: Wrapper,
-          path: `${options.authRoot}/forgot-password`,
+          path: `${options.baseRoute}/forgot-password`,
           meta: { guest: true },
           children: [
             {
@@ -53,7 +53,7 @@ export const getRoutes = options => {
     options.allowPasswordReset
       ? {
           component: Wrapper,
-          path: `${options.authRoot}/reset-password/:uid/:token`,
+          path: `${options.baseRoute}/reset-password/:uid/:token`,
           meta: { guest: true },
           children: [
             {
@@ -69,7 +69,7 @@ export const getRoutes = options => {
     options.allowUserRegistration
       ? {
           component: Wrapper,
-          path: `${options.authRoot}/register`,
+          path: `${options.baseRoute}/register`,
           meta: { guest: true },
           children: [
             {
@@ -104,7 +104,7 @@ export const getBeforeEachGuard = options => {
         next();
       } else {
         // but user is logged in
-        next(`${options.authRoot}/`);
+        next(`${options.baseRoute}/`);
       }
     }
     // auth needed
