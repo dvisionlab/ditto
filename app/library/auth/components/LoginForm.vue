@@ -80,7 +80,7 @@ export default {
       type: Boolean
     },
     baseRoute: {
-      required: true,
+      default: "",
       type: String
     }
   },

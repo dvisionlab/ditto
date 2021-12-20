@@ -104,14 +104,14 @@ export const getBeforeEachGuard = options => {
         next();
       } else {
         // but user is logged in
-        next(`${options.baseRoute}/`);
+        next(`${options.baseRoute}/${options.redirectAuthUsers}`);
       }
     }
     // auth needed
     else if (to.matched.some(record => record.meta.auth)) {
       if (persist.getAccessToken() == null) {
         // but user not logged in
-        next({ name: "login" });
+        next(`${options.baseRoute}/${options.redirectGuestUsers}`);
       } else {
         // and user logged in
         next();

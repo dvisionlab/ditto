@@ -11,14 +11,17 @@ const defaultOptions = {
   addTrailingSlashInterceptor: false,
   allowPasswordReset: true,
   allowUserRegistration: true,
-  // application base route
-  baseRoute: "",
   // try to login automatically from /login route
   autoLogin: true,
+  // application base route
+  baseRoute: "",
   // http requests base url
   httpRoot: "/",
   // log rocket module and custom string
   logrocket: null,
+  // redirect urls for users that...
+  redirectAuthUsers: "", // ...are auth but goes on a guest route
+  redirectGuestUsers: "login", // ..are not auth but goes on an auth route
   // wrapper component for auth routes
   wrapperComponent: null
 };
