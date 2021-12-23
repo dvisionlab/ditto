@@ -104,10 +104,12 @@ Available plugin options:
 | **addTrailingSlashInterceptor** |                                                                                                                                                                                                                        | `false` |
 | **allowPasswordReset**          | whether this plugin should suport password reset                                                                                                                                                                       | `true`  |
 | **allowUserRegistration**       | whether this plugin should suport new users registration                                                                                                                                                               | `true`  |
-| **authRoot**                    | application path of your private application section (= accessible to authenticated users only) as defined in your application routes                                                                                  | ""      |
+| **baseRoute**                   | application base route                                                                                                                                                                                                 | ""      |
 | **autoLogin**                   | whether to let this plugin try to login automatically from the `/login` route (this route is created and managed by this plugin)                                                                                       | `true`  |
 | **httpRoot**                    | http requests base url, used by the ditto [http](../http/README.md) module                                                                                                                                             | `/`     |
 | **logrocket**                   | if you want to activate _logrocket_ this options should be an object like this: `{module: the logrocket module, customString: the logrocket connection string for your app }`                                          | `null`  |
+| **redirectAuthUsers**           | redirect urls for users that are authenticated but goes on a guest route                                                                                                                                               | ""      |
+| **redirectGuestUsers**          | redirect urls for users that are not authenticated but goes on a auth route                                                                                                                                            | `login` |
 | **wrapperComponent**            | Vue component to wrap the default Vue components (login form, registration form...) provided by this plugin; should contain a `<router-view >` tag to render the default auth component                                | `null`  |
 
 Here is a custom configuration example:
@@ -121,7 +123,7 @@ const defaultOptions = {
   addTrailingSlashInterceptor: true,
   allowPasswordReset: false,
   allowUserRegistration: false,
-  authRoot: "/webapp",
+  baseRoute: "/webapp",
   autoLogin: false,
   httpRoot: "/",
   logrocket: { module: logrocket, customString: "asdf" },

@@ -30,7 +30,7 @@ import SubApp from "./SubApp";
 import AuthWrapper from "./Wrapper";
 
 Vue.use(authPlugin, {
-  authRoot: "/auth",
+  baseRoute: "/auth",
   autoLogin: false,
   router,
   store,

@@ -79,8 +79,8 @@ export default {
       default: true,
       type: Boolean
     },
-    authRoot: {
-      required: true,
+    baseRoute: {
+      default: "",
       type: String
     }
   },
@@ -121,7 +121,7 @@ export default {
 
       this.$store
         .dispatch("auth/login", this.form)
-        .then(() => this.$router.replace(`${this.authRoot}/`))
+        .then(() => this.$router.replace(`${this.baseRoute}/`))
         .catch(error => {
           let details = "";
           if (error.body) {
