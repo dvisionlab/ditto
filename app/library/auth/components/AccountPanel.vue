@@ -16,13 +16,13 @@
 
       <div class="mt-2">
         <v-btn
-          v-if="settingsRoute"
+          v-if="settingsRouteName"
           block
           class="mb-1"
           :dark="dark"
           outlined
           small
-          :to="settingsRoute"
+          :to="{ name: settingsRouteName }"
           >Personal settings</v-btn
         >
         <v-btn block :dark="dark" outlined small @click="logout">Log out</v-btn>
@@ -71,11 +71,11 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-btn
-          v-if="settingsRoute"
+          v-if="settingsRouteName"
           color="primary"
           :dark="dark"
           text
-          :to="settingsRoute"
+          :to="{ name: settingsRouteName }"
         >
           Personal settings
         </v-btn>
@@ -129,12 +129,13 @@ export default {
     icon: { default: "mdi-account", type: String },
     label: { default: "account", type: String },
     mobile: { default: false, type: Boolean },
-    settingsRoute: { required: false, type: String },
+    settingsRouteName: { required: false, type: String },
     openOnHover: { default: false, type: Boolean }
   },
   computed: {
     iconColor() {
-      return this.settingsRoute && this.$route.name == this.settingsRoute
+      return this.settingsRouteName &&
+        this.$route.name == this.settingsRouteName
         ? "accent"
         : "inherit";
     },
