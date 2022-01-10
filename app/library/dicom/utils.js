@@ -275,3 +275,13 @@ export const updateViewportProperty = (action, element) => {
     }
   }
 };
+
+// Image presets
+export const getImagePresets = () => lt.getImagePresets();
+
+export const setImagePreset = (viewports, preset) =>
+  lt.setImagePreset(viewports, preset);
+
+export const setImageCustomPreset = (viewports, { wl, ww }) => {
+  lt.setImageCustomPreset(viewports, { wl, ww });
+};
