@@ -16,7 +16,7 @@
           }"
         >
           <v-icon class="pl-3" color="black">{{ icon }}</v-icon>
-          <h3 class="text-uppercase lh-small px-3">{{ label }}</h3>
+          <h3 class="text-uppercase lh-small px-3">{{ $t(label) }}</h3>
         </div>
 
         <v-spacer />
@@ -194,7 +194,7 @@ export default {
   directives: { RelativeHeight },
   props: {
     icon: { default: "mdi-upload-multiple", type: String },
-    label: { default: "import-exams", type: String },
+    label: { default: "dicom-import.import-exams", type: String },
     options: { default: () => ({}), type: Object }
   },
   data() {

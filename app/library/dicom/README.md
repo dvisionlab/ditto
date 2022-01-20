@@ -151,7 +151,7 @@ This component allows a user to select and parse DICOM files, renders a preview 
 | Name        | Description                           | Type   | Default                                        |
 | ----------- | ------------------------------------- | ------ | ---------------------------------------------- |
 | **icon**    | the icon shown in the import modal    | String | `mdi-upload-multiple`                          |
-| **label**   | the label shown in the import modal   | String | `import-exams`                                 |
+| **label**   | the label shown in the import modal   | String | `dicom-import.import-exams`                    |
 | **options** | the import modal customization object | Object | use all default [options](./import/options.js) |
 
 **!!! NOTE**: you can use the **option** prop to customize the behaviour of this component. The options prop values will override the default options you can find at [options](./import/options.js).

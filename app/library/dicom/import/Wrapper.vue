@@ -90,7 +90,7 @@ export default {
     badgeColor: { default: "primary", type: String },
     icon: { default: "mdi-upload-multiple", type: String },
     iconColor: { required: false, type: String },
-    label: { default: "import-exams", type: String },
+    label: { default: "dicom-import.import-exams", type: String },
     mobile: { default: false, type: Boolean },
     options: { default: () => ({}), type: Object }
   },
