@@ -1,5 +1,5 @@
 <template>
-  <component v-if="value !== undefined" :is="tag"
+  <component v-if="value !== undefined && value !== null" :is="tag"
     >{{ value.toFixed(2) }} mm</component
   >
 </template>
