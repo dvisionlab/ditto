@@ -58,13 +58,17 @@
 
     <!-- Sizes your content based upon application components -->
     <v-main class="h-100">
-      <v-container class="d-flex pa-0" fluid :style="{ height: '100%' }">
+      <v-container
+        class="d-flex justify-end pa-0"
+        fluid
+        :style="{ height: '100%' }"
+      >
         <app-navigation
           v-if="$scopedSlots.nav"
-          :absolute="$vuetify.breakpoint[mobileBreakpoint]"
+          absolute
           :app="false"
           :color="nav.color"
-          :width="navVisible ? nav.width : 0"
+          :width="nav.width"
           v-model="navVisible"
         >
           <template v-slot="data">

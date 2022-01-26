@@ -9,6 +9,7 @@
     :mini-variant-width="miniVariantWidth"
     :mobile-breakpoint="mobileBreakpoint"
     :right="right"
+    :style="{ transition: 'none' }"
     :width="width"
     :value="value"
     @input="value => $emit('input', value)"
