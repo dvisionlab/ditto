@@ -32,14 +32,19 @@
       ></v-slider>
     </div>
 
-    <div v-if="!error && download !== 100 && showPercentage">
+    <div v-if="!error && !downloaded && showPercentage">
       <v-progress-circular
         class="text-center mt-8 mr-8"
         color="accent"
         :size="50"
         :value="lastPercentageStep"
+        :indeterminate="serieDownloadPercentage == 100"
       >
-        {{ download }}
+        {{
+          serieDownloadPercentage == 100
+            ? "loading masks"
+            : serieDownloadPercentage
+        }}
       </v-progress-circular>
     </div>
 
@@ -117,7 +122,8 @@ export default {
     tools: { default: () => stackTools.default, type: Array },
     toolsHandlers: { required: false, type: Object },
     showSlider: { default: false, type: Boolean },
-    showPercentage: { default: false, type: Boolean }
+    showPercentage: { default: false, type: Boolean },
+    downloaded: { default: true, type: Boolean }
   },
   data: () => ({
     error: false,
@@ -132,7 +138,7 @@ export default {
     isReady() {
       return this.viewport.ready;
     },
-    download() {
+    serieDownloadPercentage() {
       let imageIds = this.getImageIdsFn(this.$store, this.seriesId);
       let total = this.viewport.maxSliceId;
 
@@ -239,14 +245,17 @@ export default {
       },
       immediate: true
     },
-    download: {
+    serieDownloadPercentage: {
       handler() {
-        // when switching serie on a viewport download is 100 at first
-        if (this.lastPercentageStep === 0 && this.download === 100) {
+        // when switching serie on a viewport serieDownloadPercentage is 100 at first
+        if (
+          this.lastPercentageStep === 0 &&
+          this.serieDownloadPercentage === 100
+        ) {
           return;
         }
-        if (this.download - this.lastPercentageStep >= 5) {
-          this.lastPercentageStep = this.download;
+        if (this.serieDownloadPercentage - this.lastPercentageStep >= 5) {
+          this.lastPercentageStep = this.serieDownloadPercentage;
         }
       }
     }
