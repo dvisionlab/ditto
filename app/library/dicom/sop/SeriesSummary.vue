@@ -1,11 +1,7 @@
 <template>
   <div>
     <!-- thumbnail or dicom canvas -->
-    <thumbnail-string
-      v-if="showThumbnail"
-      :value="data.thumbnail"
-      :base64="data.base64"
-    />
+    <thumbnail-string v-if="showThumbnail" :value="data.thumbnail" />
     <v-lazy v-else-if="showCanvas">
       <dicom-canvas
         :canvas-id="canvasId || data.larvitarSeriesInstanceUID"
