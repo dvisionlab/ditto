@@ -3,7 +3,7 @@
     v-if="value"
     alt="Missing series preview"
     class="d-flex"
-    :src="value"
+    :src="base64 ? 'data:image/png;base64,' + value : value"
     :style="{ width }"
   />
 </template>
@@ -14,6 +14,11 @@ export default {
     value: {
       required: false,
       type: String
+    },
+    base64: {
+      required: false,
+      type: Boolean,
+      default: false
     },
     width: {
       default: "6em",
