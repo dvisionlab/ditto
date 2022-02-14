@@ -6,6 +6,7 @@ const defaultOptions = {
   canvas: true,
   dataTypes: false,
   import: true,
+  multiframe: true,
   series: false,
   store: undefined,
   toolsStyle: undefined,
@@ -44,10 +45,17 @@ export default async (Vue, options) => {
     Vue.component("ditto-dicom-import-modal", () => import("./import/Wrapper"));
   }
 
+  // multiframe components
+  if (options.multiframe) {
+    Vue.component("ditto-dicom-cinematic-tool", () =>
+      import("./multiframe/CinematicTool")
+    );
+  }
+
   // series components
   if (options.series) {
     Vue.component("ditto-dicom-series-summary", () =>
-      import("./sop/SeriesSummary.vue")
+      import("./sop/SeriesSummary")
     );
   }
 
