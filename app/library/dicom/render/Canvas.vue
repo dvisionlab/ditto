@@ -15,24 +15,15 @@
       v-resize:debounce="onResize"
     />
 
-    <div v-if="!error && download !== 100 && showPercentage">
-      <v-progress-circular
-        class="text-center mt-8 mr-8"
-        color="accent"
-        :size="50"
-        :value="lastPercentageStep"
-      >
-        {{ download }}
-      </v-progress-circular>
-    </div>
-
-    <v-progress-linear
+    <slot
       v-if="showProgress && progress !== 100"
-      absolute
-      bottom
-      :height="5"
-      :value="progress"
-    />
+      name="progress"
+      v-bind:i="viewport.sliceId"
+      v-bind:n="viewport.maxSliceId"
+    >
+      <!-- default progress -->
+      <v-progress-linear absolute bottom :height="5" :value="progress" />
+    </slot>
 
     <v-avatar
       v-if="
@@ -126,32 +117,20 @@ export default {
     seriesId: { required: true, type: [String, Number] },
     showMultiframeIcon: { default: false, type: Boolean },
     showProgress: { default: false, type: Boolean },
+    showSlider: { default: false, type: Boolean },
     stack: { required: false, type: Object },
     tools: { default: () => stackTools.default, type: Array },
-    toolsHandlers: { required: false, type: Object },
-    showSlider: { default: false, type: Boolean },
-    showPercentage: { default: false, type: Boolean }
+    toolsHandlers: { required: false, type: Object }
   },
   data: () => ({
     error: false,
     stackMetadata: null,
-    validCanvasId: null,
-    lastPercentageStep: 0 // this trick is needed to bypass this vuetify bug: https://github.com/vuetifyjs/vuetify/issues/3268
+    validCanvasId: null
   }),
   beforeDestroy() {
     this.destroy();
   },
   computed: {
-    download() {
-      let imageIds = this.getImageIdsFn(this.$store, this.seriesId);
-      let total = this.viewport.maxSliceId;
-
-      if (!imageIds || !imageIds.length || !total || total < imageIds.length) {
-        return 0;
-      } else {
-        return Math.round((100 * imageIds.length) / total);
-      }
-    },
     progress() {
       return this.getProgressFn(this.$store, this.seriesId, this.validCanvasId);
     },
@@ -194,17 +173,6 @@ export default {
         this.validCanvasId = seriesIdToElementId(this.canvasId);
       },
       immediate: true
-    },
-    download: {
-      handler() {
-        // when switching serie on a viewport download is 100 at first
-        if (this.lastPercentageStep === 0 && this.download === 100) {
-          return;
-        }
-        if (this.download - this.lastPercentageStep >= 5) {
-          this.lastPercentageStep = this.download;
-        }
-      }
     },
     seriesId: {
       handler() {
