@@ -185,6 +185,13 @@ export const renderSeries = (elementId, seriesStack, params = {}) => {
   return lt.renderImage(seriesStack, elementId, params);
 };
 
+// Reset Larvitar
+export const reset = () => {
+  lt.clearImageCache();
+  lt.resetLarvitarManager();
+  lt.larvitar_store.resetSeriesIds();
+};
+
 // Call the Larvitar "resizeViewport" function
 export const resizeViewport = elementId => lt.resizeViewport(elementId);
 

@@ -420,7 +420,7 @@ Customize activator:
 
 ### ditto-dicom-series-summary
 
-This component renders a set of a series stack infromation.
+This component renders a set of a series stack information.
 
 #### Props
 
