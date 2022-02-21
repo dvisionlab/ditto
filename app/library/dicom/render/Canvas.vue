@@ -101,8 +101,6 @@ const defaultGetProgressFn = (store, seriesId) =>
   (store.state.larvitar.series[seriesId] || {}).progress;
 const defaultGetViewportFn = (store, seriesId, canvasId) =>
   store.getters["larvitar/viewport"](canvasId) || {};
-const defaultGetImageIdsFn = (store, seriesId) =>
-  (store.state.larvitar.series[seriesId] || {}).imageIds;
 
 export default {
   name: "DicomCanvas",
@@ -111,7 +109,6 @@ export default {
     clearCacheOnDestroy: { default: false, type: Boolean },
     clearOnDestroy: { default: false, type: Boolean },
     canvasId: { required: true, type: String },
-    getImageIdsFn: { default: defaultGetImageIdsFn, type: Function },
     getProgressFn: { default: defaultGetProgressFn, type: Function },
     getViewportFn: { default: defaultGetViewportFn, type: Function },
     seriesId: { required: true, type: [String, Number] },

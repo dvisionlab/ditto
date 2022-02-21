@@ -8,7 +8,7 @@
     <v-list-item-content>
       <v-list-item-title>
         <b class="text-capitalize">{{ user.first_name }}</b>
-        &nbsp;
+        <span>&nbsp;</span>
         <b class="text-capitalize">{{ user.last_name }}</b>
       </v-list-item-title>
 
@@ -64,7 +64,7 @@
     <v-card :dark="dark" flat tile>
       <v-card-title class="d-inline-block">
         <span class="text-capitalize">{{ user.first_name }}</span>
-        &nbsp;
+        <span>&nbsp;</span>
         <span class="text-capitalize">{{ user.last_name }}</span>
       </v-card-title>
       <v-card-subtitle>{{ user.email }}</v-card-subtitle>
@@ -120,17 +120,25 @@
 </template>
 
 <script>
+const defaultGetUserFn = _this => _this.$store.state.auth.user;
+
 export default {
   name: "AccountPanel",
   props: {
     activatorClass: { required: false, type: String },
     dark: { default: false, type: Boolean },
     direction: { required: false, type: String },
+    getUserFn: { default: defaultGetUserFn, type: Function },
     icon: { default: "mdi-account", type: String },
     label: { default: "account", type: String },
     mobile: { default: false, type: Boolean },
     settingsRouteName: { required: false, type: String },
     openOnHover: { default: false, type: Boolean }
+  },
+  data() {
+    return {
+      user: this.getUserFn(this)
+    };
   },
   computed: {
     iconColor() {
@@ -162,9 +170,6 @@ export default {
       }
 
       return result;
-    },
-    user() {
-      return this.$store.state.auth.user;
     }
   },
   methods: {
