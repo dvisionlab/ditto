@@ -11,7 +11,12 @@
       <slot v-bind="{ on, attrs, minimizedSeries, uploading }">
         <!-- default slot content -->
         <!-- mobile -->
-        <v-list-item v-if="mobile" v-bind="attrs" v-on="on">
+        <v-list-item
+          v-if="mobile"
+          :disabled="disabled"
+          v-bind="attrs"
+          v-on="on"
+        >
           <v-list-item-icon>
             <activator-content
               :badge-color="badgeColor"
@@ -30,6 +35,7 @@
         <v-btn
           v-else
           :class="activatorClass"
+          :disabled="disabled"
           height="100%"
           text
           v-bind="attrs"
