@@ -217,6 +217,20 @@ export default {
         }, 0);
       },
       immediate: true
+    },
+    serieDownloadPercentage: {
+      handler() {
+        // when switching serie on a viewport serieDownloadPercentage is 100 at first
+        if (
+          this.lastPercentageStep === 0 &&
+          this.serieDownloadPercentage === 100
+        ) {
+          return;
+        }
+        if (this.serieDownloadPercentage - this.lastPercentageStep >= 5) {
+          this.lastPercentageStep = this.serieDownloadPercentage;
+        }
+      }
     }
   }
 };
