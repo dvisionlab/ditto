@@ -26,11 +26,7 @@
     </slot>
 
     <v-avatar
-      v-if="
-        showMultiframeIcon &&
-          stackMetadata &&
-          (stackMetadata.series || {}).isMultiframe
-      "
+      v-if="showMultiframeIcon && viewport.isMultiframe"
       color="black"
       :size="20"
       :style="{ bottom: 0, position: 'absolute', margin: '5px' }"
@@ -44,12 +40,9 @@
     <slot name="viewport-data" v-bind="viewport"></slot>
 
     <slot
-      v-if="stackMetadata"
       name="multiframe"
       v-bind:canvas-id="validCanvasId"
-      v-bind:value="
-        stackMetadata.series ? stackMetadata.series.isMultiframe : false
-      "
+      v-bind:value="viewport.isMultiframe"
     ></slot>
 
     <slot
