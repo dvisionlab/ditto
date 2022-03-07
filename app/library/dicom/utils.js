@@ -78,6 +78,10 @@ export const clearSeriesData = (seriesId, clearCache = false) => {
   lt.larvitar_store.removeSeriesIds(seriesId);
 };
 
+export const getViewport = elementId => {
+  return lt.larvitar_store.get("viewports")[elementId];
+};
+
 // Remove a viewport from the larvitar store
 export const deleteViewport = elementId =>
   lt.larvitar_store.deleteViewport(elementId);
