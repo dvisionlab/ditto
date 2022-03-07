@@ -144,7 +144,7 @@ export default {
   watch: {
     seriesId: {
       handler(id) {
-        const cinematic = this.$ditto.dicom.getCinematicData(id);
+        const cinematic = this.$ditto.dicom.getCinematicData(id) || {};
         this.updateFrameTime(cinematic.frameTime || DEFAULT_FRAME_TIME, false);
       },
       immediate: true
