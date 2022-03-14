@@ -110,6 +110,7 @@ export default {
           );
 
           this.intervalId = setInterval(() => {
+            // sliceId between min and max
             viewport.sliceId =
               viewport.sliceId == viewport.maxSliceId
                 ? viewport.minSliceId

@@ -128,6 +128,7 @@ export default {
       return this.getViewportFn(this.$store, this.seriesId, this.validCanvasId);
     },
     sliderSliceId: {
+      // sliderSliceId is between 1 and N while sliceId is between 0 and n-1
       get() {
         return this.viewport.sliceId + 1;
       },

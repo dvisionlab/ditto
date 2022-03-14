@@ -233,10 +233,11 @@ export const storeSeriesStack = (seriesId, stack, cache = false) => {
 
 // Use Larvitar to update a series slice
 export const updateSeriesSlice = (elementId, seriesId, sliceId, imageCache) => {
+  // sliceId must be between 0 and n-1
   const stack = getSeriesStack(seriesId);
   lt.larvitar_store.set("sliceId", [elementId, sliceId]);
   lt.updateImage(stack, elementId, sliceId, imageCache);
-  lt.updateStackToolState(elementId, sliceId - 1);
+  lt.updateStackToolState(elementId, sliceId);
 };
 
 // Update viewport actions
