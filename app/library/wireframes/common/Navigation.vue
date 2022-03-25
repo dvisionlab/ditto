@@ -18,19 +18,17 @@
     <slot v-bind:dark="dark" />
 
     <template v-if="collapsable" v-slot:append>
-      <slot name="append">
-        <v-divider />
+      <v-divider />
 
-        <div class="d-flex">
-          <v-spacer />
+      <div class="d-flex">
+        <v-spacer />
 
-          <v-btn class="toggler" text @click="$emit('input', !value)">
-            <v-icon :dark="dark">{{
-              `mdi-chevron-${right ? "right" : "left"}`
-            }}</v-icon>
-          </v-btn>
-        </div>
-      </slot>
+        <v-btn class="toggler" text @click="$emit('input', !value)">
+          <v-icon :dark="dark">{{
+            `mdi-chevron-${right ? "right" : "left"}`
+          }}</v-icon>
+        </v-btn>
+      </div>
     </template>
   </v-navigation-drawer>
 </template>

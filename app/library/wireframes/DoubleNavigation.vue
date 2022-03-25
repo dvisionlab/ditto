@@ -47,6 +47,7 @@
       v-if="$scopedSlots.navRight"
       :clipped="true"
       :color="navRight.color"
+      :collapsable="navRight.collapsable"
       :dark="navRight.dark"
       :mobile-breakpoint="mobileBreakpoint"
       :right="true"
@@ -68,6 +69,7 @@
           absolute
           :app="false"
           :color="nav.color"
+          :collapsable="nav.collapsable"
           :width="nav.width"
           v-model="navVisible"
         >

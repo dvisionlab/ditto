@@ -36,6 +36,7 @@
     <app-navigation
       v-if="$scopedSlots.navLeft && navLeft.visible !== false"
       :color="navLeft.color"
+      :collapsable="navLeft.collapsable"
       :dark="navLeft.dark"
       :mobile-breakpoint="mobileBreakpoint"
       :width="navLeft.width"
@@ -52,6 +53,7 @@
       v-if="$scopedSlots.navRight && navRight.visible !== false"
       :clipped="true"
       :color="navRight.color"
+      :collapsable="navRight.collapsable"
       :dark="navRight.dark"
       :mobile-breakpoint="mobileBreakpoint"
       :right="true"
