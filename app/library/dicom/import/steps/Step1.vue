@@ -106,8 +106,6 @@ export default {
       // Get DICOM series
       parseFiles(files, this.metadata)
         .then(series => {
-          this.loading = false;
-
           if (!series || !series.length) {
             this.parsingFailure = defaultParsingFailureMessage;
           } else {
@@ -117,8 +115,10 @@ export default {
         .catch(error => {
           // parseFiles error is a string and is a blocking error (no series can be loaded)
           console.error(error);
-          this.parsingFailure = error;
-        });
+          this.parsingFailure =
+            typeof error == "string" ? error : defaultParsingFailureMessage;
+        })
+        .finally(() => (this.loading = false));
     },
     onDragEnd() {
       this.dragging = false;

@@ -12,14 +12,23 @@
 
       <div v-else-if="step.status.completed">
         <template v-if="allErrors">uoload failed</template>
-        <template v-else>
-          upload completed {{ hasErrors ? "with errors" : "" }}
-        </template>
-
+        <template v-else>upload completed</template>
         <v-progress-linear
           :color="!hasErrors ? 'success' : 'black'"
           :value="100"
         />
+
+        <div class="text-lowercase pt-2">
+          <div v-if="getProgressCounters().success">
+            {{ getProgressCounters().success }} exams loaded
+          </div>
+          <div v-if="getProgressCounters().partial">
+            {{ getProgressCounters().partial }} exams loaded with errors
+          </div>
+          <div v-if="getProgressCounters().error">
+            {{ getProgressCounters().error }} exams upload failed
+          </div>
+        </div>
 
         <!-- TODO clearSeriesData? -->
         <!-- TODO need to reset imported series -->
@@ -130,16 +139,23 @@ export default {
   }),
   computed: {
     allErrors() {
-      return (
-        Object.keys(this.step.status.errors).length ==
-        Object.keys(this.step.status.progress).length
-      );
+      const p = this.step.status.progress;
+      return Object.keys(p).filter(k => !p[k]).length == Object.keys(p).length;
     },
     hasErrors() {
       return !!Object.keys(this.step.status.errors).length;
     }
   },
   methods: {
+    getProgressCounters() {
+      const p = this.step.status.progress;
+      const keys = Object.keys(p);
+      return {
+        error: keys.filter(k => !p[k]).length,
+        partial: keys.filter(k => p[k] && p[k][0] !== p[k][1]).length,
+        success: keys.filter(k => p[k] && p[k][0] == p[k][1]).length
+      };
+    },
     getProgressPercentage(id) {
       const progress = this.step.status.progress[id];
       if (!progress) {

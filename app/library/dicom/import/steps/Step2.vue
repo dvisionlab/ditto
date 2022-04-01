@@ -33,6 +33,7 @@
       </v-alert>
     </div>
 
+    <!-- TODO show parsing woarnings/errors related to parsed series -->
     <v-data-table
       disable-pagination
       fixed-header
