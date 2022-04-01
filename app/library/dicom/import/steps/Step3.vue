@@ -10,30 +10,16 @@
         <!-- TODO force stop upload -> clearSeriesData -->
       </template>
 
-      <div
-        v-else-if="step.status.completed"
-        :class="[hasErrors ? 'warning--text' : 'success--text']"
-      >
-        <template v-if="step.status.errors.post">
-          upload failed
-        </template>
+      <div v-else-if="step.status.completed">
+        <template v-if="allErrors">uoload failed</template>
         <template v-else>
           upload completed {{ hasErrors ? "with errors" : "" }}
         </template>
 
         <v-progress-linear
-          :color="hasErrors ? 'warning' : 'success'"
+          :color="!hasErrors ? 'success' : 'black'"
           :value="100"
         />
-
-        <v-tooltip v-if="step.status.errors.post" bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn color="warning" icon v-bind="attrs" v-on="on">
-              <v-icon>mdi-alert</v-icon>
-            </v-btn>
-          </template>
-          {{ step.status.errors.post }}
-        </v-tooltip>
 
         <!-- TODO clearSeriesData? -->
         <!-- TODO need to reset imported series -->
@@ -70,19 +56,27 @@
           :tools="tools"
         />
 
-        <div v-if="getProgressPercentage(s.larvitarSeriesInstanceUID) !== null">
-          <v-progress-linear
-            color="warning"
-            :value="getProgressPercentage(s.larvitarSeriesInstanceUID)"
-          />
-        </div>
+        <v-progress-linear
+          :color="
+            step.status.errors[s.larvitarSeriesInstanceUID]
+              ? 'error'
+              : getProgressPercentage(s.larvitarSeriesInstanceUID) == null
+              ? 'black'
+              : 'success'
+          "
+          :value="
+            step.status.errors[s.larvitarSeriesInstanceUID]
+              ? 100
+              : getProgressPercentage(s.larvitarSeriesInstanceUID)
+          "
+        />
 
         <v-tooltip
           v-if="step.status.errors[s.larvitarSeriesInstanceUID]"
           bottom
         >
           <template v-slot:activator="{ on, attrs }">
-            <v-btn color="warning" icon v-bind="attrs" v-on="on">
+            <v-btn color="error" icon v-bind="attrs" v-on="on">
               <v-icon>mdi-alert</v-icon>
             </v-btn>
           </template>
@@ -93,6 +87,22 @@
             {{ text }}
           </div>
         </v-tooltip>
+        <v-icon
+          v-else-if="getProgressPercentage(s.larvitarSeriesInstanceUID) == 100"
+          class="py-2"
+          color="success"
+        >
+          mdi-check
+        </v-icon>
+        <div
+          v-else-if="getProgressPercentage(s.larvitarSeriesInstanceUID) == null"
+          class="py-2"
+        >
+          pending
+        </div>
+        <div v-else class="py-2">
+          {{ getProgressPercentage(s.larvitarSeriesInstanceUID) }} %
+        </div>
       </div>
     </div>
 
@@ -119,8 +129,14 @@ export default {
     metadata: metadataDictionary
   }),
   computed: {
+    allErrors() {
+      return (
+        Object.keys(this.step.status.errors).length ==
+        Object.keys(this.step.status.progress).length
+      );
+    },
     hasErrors() {
-      return Object.keys(this.step.status.errors).length;
+      return !!Object.keys(this.step.status.errors).length;
     }
   },
   methods: {
@@ -130,8 +146,7 @@ export default {
         return null;
       }
 
-      const value = ((100 * progress[0]) / progress[1]).toFixed(0);
-      return value == 100 ? null : value;
+      return ((100 * progress[0]) / progress[1]).toFixed(0);
     }
   }
 };
