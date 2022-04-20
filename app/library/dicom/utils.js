@@ -154,9 +154,13 @@ export const parseFiles = (files, extractMetadata = []) => {
         ...s
       };
 
-      stack.larvitarNumberOfSlices = stack.isMultiframe
-        ? stack.numberOfFrames
-        : stack.numberOfSlices;
+      if (stack.isMultiframe) {
+        stack.larvitarNumberOfSlices = stack.numberOfFrames;
+      } else {
+        stack.larvitarNumberOfSlices = stack.numberOfSlices
+          ? stack.numberOfSlices
+          : stack.numberOfImages;
+      }
 
       // resolve the promise with this value
       return stack;
