@@ -30,6 +30,11 @@
           </div>
         </div>
 
+        <!-- generic error message -->
+        <div v-if="step.status.errors.generic">
+          {{ step.status.errors.generic }}
+        </div>
+
         <!-- TODO clearSeriesData? -->
         <!-- TODO need to reset imported series -->
         <!-- <div>
