@@ -33,13 +33,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import { stackTools } from "../defaults";
 import metadataDictionary from "../metadata";
 import dicomDataTypes from "../../data-types/dicom";
-import DicomCanvas from "../render/Canvas";
+import DicomCanvas from "../render/Canvas.vue";
 
-export default {
+export default Vue.extend({
   name: "SeriesSummary",
   components: {
     ...dicomDataTypes,
@@ -66,8 +67,8 @@ export default {
   methods: {
     getComponentName(field) {
       const name = `${field}-string`;
-      return this.$options.components[name] ? name : null;
+      return this.$options.components![name] ? name : null;
     }
   }
-};
+});
 </script>

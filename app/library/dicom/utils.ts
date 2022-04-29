@@ -125,7 +125,9 @@ export const mergeSeries = (...series) => {
 
   let instances = {};
   series.forEach(s => {
-    let allIds = Object.values(instances).map(v => v.metadata.instanceUID);
+    let allIds = Object.values(instances).map(
+      (v: any) => v.metadata.instanceUID
+    );
     Object.keys(s.instances).forEach(key => {
       if (!allIds.find(v => v == s.instances[key].metadata.instanceUID)) {
         instances[key] = s.instances[key];
@@ -144,14 +146,14 @@ export const mergeSeries = (...series) => {
 export const parseFiles = (files, extractMetadata = []) => {
   // Get DICOM series
   return lt.readFiles(files).then(series => {
-    return Object.values(series || {}).map(s => {
-      const meta = s.instances[Object.keys(s.instances)[0]].metadata;
-      const stack = {
-        ...[].concat(extractMetadata).reduce((result, value) => {
+    return Object.values(series || {}).map((s: any) => {
+      const meta: any = s.instances[Object.keys(s.instances)[0]].metadata;
+      const stack: any = {
+        ...[].concat(extractMetadata).reduce((result: any, value) => {
           result[value] = meta[value];
           return result;
         }, {}),
-        ...s
+        ...(s as object)
       };
 
       if (stack.isMultiframe) {
@@ -267,16 +269,20 @@ export const updateViewportProperty = (action, element) => {
       break;
     }
     case "export-viewport": {
-      let canvas = document.getElementById(element).children[1];
-      canvas.toBlob(function(blob) {
+      let canvas = <HTMLCanvasElement>(
+        document.getElementById(element)!.children[1]
+      );
+      canvas.toBlob((blob: any) => {
         saveAs(blob, "image.png");
       });
       break;
     }
 
     case "print-viewport": {
-      let canvas = document.getElementById(element).children[1];
-      canvas.toBlob(function(blob) {
+      let canvas = <HTMLCanvasElement>(
+        document.getElementById(element)!.children[1]
+      );
+      canvas.toBlob(function (blob) {
         print({
           printable: URL.createObjectURL(blob),
           type: "image",

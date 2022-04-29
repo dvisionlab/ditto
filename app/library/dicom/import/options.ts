@@ -63,8 +63,7 @@ const defaultActions = [
     default: true,
     disabled: false,
     emitter: "dicom-import-open",
-    hint:
-      "you won't be able to access these series again once the browser session will be lost",
+    hint: "you won't be able to access these series again once the browser session will be lost",
     storeStacks: true,
     text: "open viewer without uploading"
   }
@@ -73,14 +72,14 @@ const defaultActions = [
 // Default import steps configuration
 const defaultSteps = [
   {
-    component: () => import("./steps/Step1"),
+    component: () => import("./steps/Step1.vue"),
     label: "import-files",
     back: () => false,
     next: series => series.length > 0
   },
   {
     actions: defaultActions,
-    component: () => import("./steps/Step2"),
+    component: () => import("./steps/Step2.vue"),
     label: "select-series",
     back: () => true,
     next: () => false
@@ -97,7 +96,7 @@ const defaultSteps = [
         text: "open viewer"
       }
     ],
-    component: () => import("./steps/Step3"),
+    component: () => import("./steps/Step3.vue"),
     label: "upload",
     back: () => false,
     next: () => false,
@@ -174,13 +173,15 @@ export const getHeaders = options => {
   return headers;
 };
 
-export const getSteps = (options = {}) => {
+export const getSteps = (options: any = {}) => {
   let steps = [...defaultSteps];
   if (options.steps) {
     options.steps.forEach((step, i) => {
       if (step) {
         if (step.actions && steps[i].actions) {
-          step.actions = steps[i].actions.map((a, j) => ({
+          (steps[i].actions as Array<any>).map(() => {});
+
+          step.actions = (steps[i].actions as Array<any>).map((a, j) => ({
             ...a,
             ...step.actions[j]
           }));

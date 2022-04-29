@@ -21,9 +21,10 @@ export default async (Vue, options) => {
 
   // canvas component
   if (options.canvas) {
-    Vue.component("ditto-dicom-canvas", () => import("./render/Canvas"));
-    Vue.component("ditto-dicom-canvas-data", () =>
-      import("./render/CanvasData")
+    Vue.component("ditto-dicom-canvas", () => import("./render/Canvas.vue"));
+    Vue.component(
+      "ditto-dicom-canvas-data",
+      () => import("./render/CanvasData.vue")
     );
   }
 
@@ -41,21 +42,26 @@ export default async (Vue, options) => {
 
   // import component
   if (options.import) {
-    Vue.component("ditto-dicom-import", () => import("./import/Component"));
-    Vue.component("ditto-dicom-import-modal", () => import("./import/Wrapper"));
+    Vue.component("ditto-dicom-import", () => import("./import/Component.vue"));
+    Vue.component(
+      "ditto-dicom-import-modal",
+      () => import("./import/Wrapper.vue")
+    );
   }
 
   // multiframe components
   if (options.multiframe) {
-    Vue.component("ditto-dicom-cinematic-tool", () =>
-      import("./multiframe/CinematicTool")
+    Vue.component(
+      "ditto-dicom-cinematic-tool",
+      () => import("./multiframe/CinematicTool.vue")
     );
   }
 
   // series components
   if (options.series) {
-    Vue.component("ditto-dicom-series-summary", () =>
-      import("./sop/SeriesSummary")
+    Vue.component(
+      "ditto-dicom-series-summary",
+      () => import("./sop/SeriesSummary.vue")
     );
   }
 

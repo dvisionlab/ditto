@@ -1,7 +1,9 @@
-export default {
+import Vue from "vue";
+
+export default Vue.extend({
   created() {
     if (this.$vuetify) {
-      import("./vuetifyViewportStyle.css");
+      import("./vuetifyViewportStyle.module.css");
     }
   },
   mounted() {
@@ -22,4 +24,4 @@ export default {
       document.documentElement.style.setProperty("--vh", `${vh}px`);
     }
   }
-};
+});

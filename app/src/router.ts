@@ -6,25 +6,25 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: () => import("@/components/Home")
+    component: () => import("@/components/Home.vue")
   },
   {
     path: "/auth",
     name: "auth",
-    component: () => import("@/examples/auth/Test")
+    component: () => import("@/examples/auth/Test.vue")
   },
   {
     path: "/basic-wireframe",
     name: "basic-wireframe",
     redirect: "/basic-wireframe/home",
-    component: () => import("@/examples/wireframes/basic/Root"),
+    component: () => import("@/examples/wireframes/basic/Root.vue"),
     children: [
       {
         name: "basic-wireframe-home",
         path: "home",
         components: {
           default: { template: "<div>Home</div>" },
-          navLeft: () => import("@/examples/wireframes/basic/HomeNavLeft")
+          navLeft: () => import("@/examples/wireframes/basic/HomeNavLeft.vue")
         }
       },
       {
@@ -32,7 +32,7 @@ const routes = [
         path: "other",
         components: {
           default: { template: "<div>Other</div>" },
-          navLeft: () => import("@/examples/wireframes/basic/OtherNavLeft")
+          navLeft: () => import("@/examples/wireframes/basic/OtherNavLeft.vue")
         }
       }
     ]
@@ -41,7 +41,7 @@ const routes = [
     path: "/double-navigation-wireframe",
     name: "double-navigation-wireframe",
     redirect: "/double-navigation-wireframe/home",
-    component: () => import("@/examples/wireframes/double-navigation/Root"),
+    component: () => import("@/examples/wireframes/double-navigation/Root.vue"),
     children: [
       {
         name: "double-navigation-wireframe-home",
@@ -58,22 +58,22 @@ const routes = [
   {
     path: "/data-types",
     name: "data-types",
-    component: () => import("@/examples/data-types/Test")
+    component: () => import("@/examples/data-types/Test.vue")
   },
   {
     path: "/dicom",
     name: "dicom",
-    component: () => import("@/examples/dicom/Test")
+    component: () => import("@/examples/dicom/Test.vue")
   },
   {
     path: "/form",
     name: "form",
-    component: () => import("@/examples/form/Test")
+    component: () => import("@/examples/form/Test.vue")
   },
   {
     path: "/http",
     name: "http",
-    component: () => import("@/examples/http/Test")
+    component: () => import("@/examples/http/Test.vue")
   }
 ];
 

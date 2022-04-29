@@ -1,7 +1,7 @@
 // Dependencies
 import persist from "./persist";
-import LoginForm from "./components/LoginForm";
-import AuthWrapper from "./components/Wrapper";
+import LoginForm from "./components/LoginForm.vue";
+import AuthWrapper from "./components/Wrapper.vue";
 
 // Local variables
 let alreadyAutoLoggedIn = false;
@@ -45,7 +45,7 @@ export const getRoutes = options => {
               path: "",
               name: "forgot-password",
               meta: { guest: true },
-              component: () => import("./components/ForgotPassword")
+              component: () => import("./components/ForgotPassword.vue")
             }
           ]
         }
@@ -60,7 +60,7 @@ export const getRoutes = options => {
               path: "",
               name: "reset-password",
               meta: { guest: true },
-              component: () => import("./components/ChangePassword"),
+              component: () => import("./components/ChangePassword.vue"),
               props: true
             }
           ]
@@ -76,7 +76,7 @@ export const getRoutes = options => {
               path: "",
               name: "register",
               meta: { guest: true },
-              component: () => import("./components/SignUp") // TODO
+              component: () => import("./components/SignUp.vue") // TODO
             }
           ]
         }
@@ -88,7 +88,7 @@ export const getRoutes = options => {
 export const getBeforeEachGuard = options => {
   // meta.guest = true ==> solo utenti non autenticati
   // meta.auth = true ==> solo utenti autenticati
-  return async function(to, from, next) {
+  return async function (to, from, next) {
     if (
       alreadyAutoLoggedIn == false &&
       to.matched.some(record => record.meta.autoLogin)

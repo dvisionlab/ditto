@@ -3,7 +3,7 @@
 export default {
   getAccessToken: () => localStorage.getItem("access-token"),
   getRefreshToken: () => localStorage.getItem("refresh-token"),
-  getUser: () => JSON.parse(localStorage.getItem("user")),
+  getUser: () => JSON.parse(<string>localStorage.getItem("user")),
   reset: () => {
     localStorage.removeItem("access-token");
     localStorage.removeItem("refresh-token");

@@ -97,8 +97,9 @@ export default {
 
     // Register components
     if (options.accountPanelComponent) {
-      Vue.component("ditto-auth-account-panel", () =>
-        import("./components/AccountPanel")
+      Vue.component(
+        "ditto-auth-account-panel",
+        () => import("./components/AccountPanel.vue")
       );
     }
 

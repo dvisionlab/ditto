@@ -2,10 +2,10 @@
 
 const components = {
   date: {
-    string: () => import("./date/String")
+    string: () => import("./date/String.vue")
   },
   time: {
-    string: () => import("./time/String")
+    string: () => import("./time/String.vue")
   }
 };
 

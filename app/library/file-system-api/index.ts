@@ -7,7 +7,7 @@ async function readDirectory(item, allEntries) {
   if (item.isDirectory) {
     const directoryReader = item.createReader();
 
-    await new Promise(resolve => {
+    await new Promise<void>(resolve => {
       // Call the directoryReader.readEntries() until no more results are returned
       const readEntries = () => {
         directoryReader.readEntries(async entries => {
@@ -33,7 +33,7 @@ async function readDirectory(item, allEntries) {
 // Public functions
 
 export async function readFiles(event) {
-  let entries = [];
+  let entries: any[] = [];
 
   // if directory support is available
   if (event.dataTransfer && event.dataTransfer.items) {
@@ -57,11 +57,11 @@ export async function readFiles(event) {
   }
 
   // Convert entries into files
-  let files = [],
-    errors = [];
+  let files: File[] = [];
+  let errors: any[] = [];
   await Promise.all(
     entries.map(async entry => {
-      return await new Promise(resolve => {
+      return await new Promise<void>(resolve => {
         entry.file(
           file => {
             files.push(file);

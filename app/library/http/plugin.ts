@@ -1,6 +1,7 @@
 // Dependencies
 import Vue from "vue";
 import VueResource from "vue-resource";
+import { InstallParams, Options } from "./types";
 
 // Local variables
 const TIMEOUT_STATUS = 0;
@@ -13,10 +14,7 @@ const REQUEST_OPTIONS = {
 // ---------
 
 // Generate random string
-const getRandomString = () =>
-  Math.random()
-    .toString(36)
-    .substring(2);
+const getRandomString = () => Math.random().toString(36).substring(2);
 
 // Append params to endpoint
 const getUrl = (endpoint, params, useRandomString = true) => {
@@ -92,19 +90,22 @@ const remove = (endpoint, params) => {
 
 // Plugin
 export default {
-  async install(Vue, { extensions, options = {} } = {}) {
+  async install(Vue, params: InstallParams) {
+    const extensions = params.extensions;
+    const options = params.options;
+
     // Register vue-resource
     Vue.use(VueResource);
 
     // Setup
-    if (options.httpRoot) {
+    if (options?.httpRoot) {
       setRoot(options.httpRoot);
     }
 
     // Register interceptors
     addTimeoutInterceptor();
 
-    if (options.addTrailingSlashInterceptor) {
+    if (options?.addTrailingSlashInterceptor) {
       addTrailingSlashInterceptor();
     }
 

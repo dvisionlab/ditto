@@ -111,7 +111,7 @@ const addAuthorizationInterceptor = ({
   writeAccessToken
 }) => {
   // Register the refresh token interceptor (https://laracasts.com/discuss/channels/vue/jwt-auth-with-vue-resource-interceptor)
-  Vue.http.interceptors.push((request, next) => {
+  Vue.http.interceptors.push((request: any, next: any) => {
     if (skipAuthorizationInterceptor(request.url)) {
       return;
     }
@@ -119,7 +119,7 @@ const addAuthorizationInterceptor = ({
     // Add jwt to all requests
     request.headers.set("Authorization", "Bearer " + readAccessToken());
 
-    next(response => {
+    next((response: any) => {
       // Update token
       if (response.headers["Authorization"]) {
         var token = response.headers["Authorization"];
