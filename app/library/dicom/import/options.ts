@@ -146,12 +146,12 @@ export const getHeaders = options => {
     metadataDictionary.SeriesTime,
     "isMultiframe"
   ];
-  let headers = computeHeaders(
+  const headers = computeHeaders(
     defaultMetadata.filter(v => !omit.find(vv => vv == v))
   );
 
   // Merge date and time
-  let seriesDateHeader = headers.find(
+  const seriesDateHeader = headers.find(
     h => h.value == metadataDictionary.SeriesDate
   );
   seriesDateHeader.keys = [
@@ -174,7 +174,7 @@ export const getHeaders = options => {
 };
 
 export const getSteps = (options: any = {}) => {
-  let steps = [...defaultSteps];
+  const steps = [...defaultSteps];
   if (options.steps) {
     options.steps.forEach((step, i) => {
       if (step) {

@@ -1,7 +1,7 @@
 // Dependencies
 import persist from "./persist";
 import LoginForm from "./components/LoginForm.vue";
-import AuthWrapper from "./components/Wrapper.vue";
+import AuthWrapper from "./components/AuthWrapper.vue";
 
 // Local variables
 let alreadyAutoLoggedIn = false;

@@ -48,7 +48,7 @@
 
 <script>
 import Vue from "vue";
-import Form from "../../form/Form";
+import Form from "../../form/Form.vue";
 
 export default {
   name: "ForgotPassword",

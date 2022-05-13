@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import Form from "../../form/Form";
+import Form from "../../form/Form.vue";
 import { customizeRules } from "../../form/rules";
 
 if (process.env.NODE_ENV !== "production") {

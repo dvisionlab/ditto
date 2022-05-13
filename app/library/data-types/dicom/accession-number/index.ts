@@ -1,3 +1,3 @@
 export default {
-  string: () => import("./String.vue")
+  string: () => import("./DataTypeString.vue")
 };

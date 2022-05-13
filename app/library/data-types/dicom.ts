@@ -10,11 +10,11 @@ import sliceThicknessComponents from "./dicom/slice-thickness";
 import thumbnailComponents from "./dicom/thumbnail";
 
 const genericDateComponents = {
-  string: () => import("./date/String.vue")
+  string: () => import("./date/DataTypeString.vue")
 };
 
 const genericTimeComponents = {
-  string: () => import("./time/String.vue")
+  string: () => import("./time/DataTypeString.vue")
 };
 
 const components = {

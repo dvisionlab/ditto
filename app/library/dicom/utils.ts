@@ -4,7 +4,7 @@
 
 // Dependencies
 import * as lt from "larvitar";
-import { saveAs } from "file-saver";
+import * as FileSaver from "file-saver";
 import print from "print-js";
 
 // Public methods
@@ -17,7 +17,7 @@ export const activateTool = (
   options = { mouseButtonMask: 1 }
 ) => {
   const mouseOptions = { ...tool.options, ...options };
-  lt.setToolActive(tool.name, mouseOptions, elementIds);
+  lt.setToolActive(tool.name, mouseOptions, elementIds, false);
 };
 
 export const addTools = (tools, elementId, handlers) => {
@@ -108,7 +108,7 @@ export const getSeriesStack = seriesId => {
 
 // update larvitar stack tool state with imageIds
 export const csToolsUpdateImageIds = (elementId, imageIds, imageId) => {
-  let imageIdIndex = imageIds.indexOf(imageId);
+  const imageIdIndex = imageIds.indexOf(imageId);
   lt.csToolsUpdateImageIds(elementId, imageIds, imageIdIndex);
 };
 
@@ -123,9 +123,9 @@ export const mergeSeries = (...series) => {
     return series;
   }
 
-  let instances = {};
+  const instances = {};
   series.forEach(s => {
-    let allIds = Object.values(instances).map(
+    const allIds = Object.values(instances).map(
       (v: any) => v.metadata.instanceUID
     );
     Object.keys(s.instances).forEach(key => {
@@ -176,10 +176,10 @@ export const parseFile = (seriesId, file) => {
   return new Promise((resolve, reject) => {
     lt.readFile(file)
       .then(image => {
-        let manager = lt.updateLarvitarManager(image, seriesId)[seriesId];
-        let imageIds = manager.imageIds;
-        let imageUID = image.metadata.instanceUID;
-        let imageId = manager.instanceUIDs[imageUID];
+        const manager = lt.updateLarvitarManager(image, seriesId)[seriesId];
+        const imageIds = manager.imageIds;
+        const imageUID = image.metadata.instanceUID;
+        const imageId = manager.instanceUIDs[imageUID];
         return resolve({ imageIds, imageId });
       })
       .catch(error => {
@@ -197,7 +197,7 @@ export const renderSeries = (elementId, seriesStack, params = {}) => {
 
 // Reset Larvitar
 export const reset = () => {
-  lt.clearImageCache();
+  lt.clearImageCache(null);
   lt.resetLarvitarManager();
   lt.larvitar_store.resetSeriesIds();
 };
@@ -211,7 +211,7 @@ export const seriesIdToElementId = seriesId =>
 
 // Setup Larvitar
 export const setup = (store, toolsStyle) => {
-  lt.clearImageCache();
+  lt.clearImageCache(null);
   lt.resetLarvitarManager();
 
   if (store) {
@@ -219,14 +219,14 @@ export const setup = (store, toolsStyle) => {
     lt.initLarvitarStore(store, "larvitar", true);
   } else {
     // use without vuex
-    lt.initLarvitarStore();
+    lt.initLarvitarStore(null, null, null);
   }
 
-  lt.initializeImageLoader();
+  lt.initializeImageLoader(null);
   lt.registerMultiFrameImageLoader();
 
   lt.setToolsStyle(toolsStyle);
-  lt.initializeCSTools();
+  lt.initializeCSTools(null, null);
 };
 
 // Call the Larvitar "populateLarvitarManager" function
@@ -269,17 +269,17 @@ export const updateViewportProperty = (action, element) => {
       break;
     }
     case "export-viewport": {
-      let canvas = <HTMLCanvasElement>(
+      const canvas = <HTMLCanvasElement>(
         document.getElementById(element)!.children[1]
       );
       canvas.toBlob((blob: any) => {
-        saveAs(blob, "image.png");
+        FileSaver.saveAs(blob, "image.png");
       });
       break;
     }
 
     case "print-viewport": {
-      let canvas = <HTMLCanvasElement>(
+      const canvas = <HTMLCanvasElement>(
         document.getElementById(element)!.children[1]
       );
       canvas.toBlob(function (blob) {

@@ -21,7 +21,7 @@ const getQueryStringParams = query => {
     ? (/^[?#]/.test(query) ? query.slice(1) : query)
         .split("&")
         .reduce((params, param) => {
-          let [key, value] = param.split("=");
+          const [key, value] = param.split("=");
           params[key] = value
             ? decodeURIComponent(value.replace(/\+/g, " "))
             : "";
@@ -80,7 +80,7 @@ const verifyToken = (access, refresh) => {
 
 // Create a user and send activation email
 const createUser = (firstname, lastname, email, password) => {
-  let data = {
+  const data = {
     email,
     firstname,
     lastname,
@@ -122,8 +122,7 @@ const addAuthorizationInterceptor = ({
     next((response: any) => {
       // Update token
       if (response.headers["Authorization"]) {
-        var token = response.headers["Authorization"];
-        writeAccessToken(token);
+        writeAccessToken(response.headers["Authorization"]);
       }
 
       // Check for expired token response and if expired refresh token and resubmit original request,

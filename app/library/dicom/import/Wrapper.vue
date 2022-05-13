@@ -77,14 +77,14 @@
       </template>
 
       <!-- Steps customization slots (actually only step-3 is supported) -->
-      <template v-slot:step-3><slot name="step-3"/></template>
+      <template v-slot:step-3><slot name="step-3" /></template>
     </dicom-import>
   </v-dialog>
 </template>
 
 <script>
 import DicomImport from "./Component";
-import ActivatorContent from "./Activator";
+import ActivatorContent from "./ImportActivator";
 
 export default {
   name: "DicomImportModal",
@@ -118,8 +118,8 @@ export default {
   },
   methods: {
     minimize() {
-      const status = this.$refs.content.steps[this.$refs.content.currentStep]
-        .status;
+      const status =
+        this.$refs.content.steps[this.$refs.content.currentStep].status;
       if (status) {
         this.uploading = status.loading;
       }

@@ -35,7 +35,7 @@
 
 <script>
 export default {
-  name: "Navigation",
+  name: "AppNavigation",
   props: {
     // Absolute status of the v-navigation-drawer component
     absolute: { default: false, type: Boolean },

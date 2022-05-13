@@ -161,7 +161,7 @@
         </template>
 
         <!-- Steps customization slots (actually only step-3 is supported) -->
-        <template v-slot:step-3><slot name="step-3"/></template>
+        <template v-slot:step-3><slot name="step-3" /></template>
       </component>
     </div>
   </div>
@@ -220,7 +220,7 @@ export default {
   },
   computed: {
     actions() {
-      return this.steps[this.currentStep].actions;
+      return this.steps[this.currentStep]?.actions;
     }
   },
   methods: {
@@ -274,8 +274,8 @@ export default {
       }
     },
     onCancel() {
-      const closeConfirmationFn = this.steps[this.currentStep]
-        .closeConfirmation;
+      const closeConfirmationFn =
+        this.steps[this.currentStep].closeConfirmation;
 
       if (
         closeConfirmationFn &&

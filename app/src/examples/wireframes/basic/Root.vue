@@ -37,8 +37,12 @@
 </template>
 
 <script>
-import AppBar from "./Bar";
+import AppBar from "./HomeBar";
 import BasicWireframe from "@/../library/wireframes/Basic";
+
+import Vue from "vue";
+import VueI18n from "vue-i18n";
+Vue.use(VueI18n);
 
 const options = {
   bar: {

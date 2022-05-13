@@ -57,8 +57,8 @@ export async function readFiles(event) {
   }
 
   // Convert entries into files
-  let files: File[] = [];
-  let errors: any[] = [];
+  const files: File[] = [];
+  const errors: any[] = [];
   await Promise.all(
     entries.map(async entry => {
       return await new Promise<void>(resolve => {

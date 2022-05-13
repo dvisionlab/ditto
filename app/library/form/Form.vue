@@ -20,9 +20,10 @@
                 :key="ii"
                 :dirty="dirty"
                 :field="field"
+                :formValue="value"
                 :loading="loading"
                 :style="fieldsStyle"
-                v-model="value"
+                v-model="localValue[field.key]"
                 @icon-click="field => $emit('icon-click', field)"
               ></form-field>
             </v-card-text>
@@ -35,9 +36,10 @@
           class="flex-item"
           :dirty="dirty"
           :field="field"
+          :formValue="value"
           :loading="loading"
           :style="fieldsStyle"
-          v-model="value"
+          v-model="localValue[field.key]"
           @icon-click="field => $emit('icon-click', field)"
         ></form-field>
       </template>
@@ -62,7 +64,7 @@
 </template>
 
 <script>
-import FormField from "./Field";
+import FormField from "./FormField";
 
 // Example field structure:
 // let fields = [
@@ -86,9 +88,8 @@ import FormField from "./Field";
 // ]
 
 // TODO support types: boolean, date
-
 export default {
-  name: "Form",
+  name: "GenericForm",
   components: { FormField },
   props: {
     fields: { required: true, type: Array },
@@ -99,11 +100,20 @@ export default {
     submitLabel: { default: "submit", type: String },
     value: { default: () => ({}), type: Object }
   },
-
   data: () => ({
     dirty: false,
     valid: true
   }),
+  computed: {
+    localValue: {
+      get: function () {
+        return this.value;
+      },
+      set: function (value) {
+        this.$emit("input", value);
+      }
+    }
+  },
   methods: {
     submit() {
       // activate rules

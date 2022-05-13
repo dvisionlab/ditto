@@ -1,7 +1,7 @@
 // Dependencies
 import Vue from "vue";
 import VueResource from "vue-resource";
-import { InstallParams, Options } from "./types";
+import { InstallParams } from "./types";
 
 // Local variables
 const TIMEOUT_STATUS = 0;
@@ -33,14 +33,15 @@ const getUrl = (endpoint, params, useRandomString = true) => {
 
 // Customization functions
 // -----------------------
-const addHeader = (key, value) => (Vue.http.headers.common[key] = value);
+const addHeader = (key, value) =>
+  ((Vue as any).http.headers.common[key] = value);
 
-const setRoot = url => (Vue.http.options.root = url);
+const setRoot = url => ((Vue as any).http.options.root = url);
 
 // Interceptors
 // ------------
 const addTimeoutInterceptor = () => {
-  Vue.http.interceptors.push(() => {
+  (Vue as any).http.interceptors.push(() => {
     // return response callback
     return response => {
       switch (response.status) {
@@ -54,7 +55,7 @@ const addTimeoutInterceptor = () => {
 };
 
 const addTrailingSlashInterceptor = () => {
-  Vue.http.interceptors.push(request => {
+  (Vue as any).http.interceptors.push(request => {
     const [url, params] = request.url.split("?");
     request.url = url.replace(/\/?$/, "/");
     if (params) {
@@ -67,32 +68,34 @@ const addTrailingSlashInterceptor = () => {
 // --------
 
 const get = (endpoint, params) => {
-  let url = getUrl(endpoint, params);
-  return Vue.http.get(url, REQUEST_OPTIONS).then(response => response.json());
+  const url = getUrl(endpoint, params);
+  return (Vue as any).http
+    .get(url, REQUEST_OPTIONS)
+    .then(response => response.json());
 };
 
 const patch = (endpoint, params, data) => {
-  let url = getUrl(endpoint, params, false);
-  return Vue.http.patch(url, data, REQUEST_OPTIONS);
+  const url = getUrl(endpoint, params, false);
+  return (Vue as any).http.patch(url, data, REQUEST_OPTIONS);
 };
 
 // POST request
 const post = (endpoint, params, data) => {
-  let url = getUrl(endpoint, params, false);
-  return Vue.http.post(url, data, REQUEST_OPTIONS);
+  const url = getUrl(endpoint, params, false);
+  return (Vue as any).http.post(url, data, REQUEST_OPTIONS);
 };
 
 // DELETE requests
 const remove = (endpoint, params) => {
-  let url = getUrl(endpoint, params, false);
-  return Vue.http.delete(url, REQUEST_OPTIONS);
+  const url = getUrl(endpoint, params, false);
+  return (Vue as any).http.delete(url, REQUEST_OPTIONS);
 };
 
 // Plugin
 export default {
   async install(Vue, params: InstallParams) {
-    const extensions = params.extensions;
-    const options = params.options;
+    const extensions = params?.extensions;
+    const options = params?.options;
 
     // Register vue-resource
     Vue.use(VueResource);

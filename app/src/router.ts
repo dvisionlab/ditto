@@ -6,12 +6,12 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: () => import("@/components/Home.vue")
+    component: () => import("@/components/AppHome.vue")
   },
   {
     path: "/auth",
     name: "auth",
-    component: () => import("@/examples/auth/Test.vue")
+    component: () => import("@/examples/auth/AuthTest.vue")
   },
   {
     path: "/basic-wireframe",
@@ -58,22 +58,22 @@ const routes = [
   {
     path: "/data-types",
     name: "data-types",
-    component: () => import("@/examples/data-types/Test.vue")
+    component: () => import("@/examples/data-types/DataTypesTest.vue")
   },
   {
     path: "/dicom",
     name: "dicom",
-    component: () => import("@/examples/dicom/Test.vue")
+    component: () => import("@/examples/dicom/DicomTest.vue")
   },
   {
     path: "/form",
     name: "form",
-    component: () => import("@/examples/form/Test.vue")
+    component: () => import("@/examples/form/FormTest.vue")
   },
   {
     path: "/http",
     name: "http",
-    component: () => import("@/examples/http/Test.vue")
+    component: () => import("@/examples/http/HttpTest.vue")
   }
 ];
 
