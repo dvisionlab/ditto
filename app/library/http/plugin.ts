@@ -1,7 +1,7 @@
 // Dependencies
 import Vue from "vue";
 import VueResource from "vue-resource";
-import { InstallParams } from "./types";
+import { InstallParams, DittoHttp } from "./types";
 
 // Local variables
 const TIMEOUT_STATUS = 0;
@@ -14,14 +14,18 @@ const REQUEST_OPTIONS = {
 // ---------
 
 // Generate random string
-const getRandomString = () => Math.random().toString(36).substring(2);
+const getRandomString = (): string => Math.random().toString(36).substring(2);
 
 // Append params to endpoint
-const getUrl = (endpoint, params, useRandomString = true) => {
+const getUrl = (
+  endpoint: string,
+  params: { [key: string]: any } = {},
+  useRandomString = true
+): string => {
   // Generate random string to prevent request result caching in IE
   const allParams = useRandomString
-    ? { ...(params || {}), r: getRandomString() }
-    : params || {};
+    ? { ...params, r: getRandomString() }
+    : params;
 
   let url = endpoint;
   Object.keys(allParams).forEach((key, i) => {
@@ -33,15 +37,18 @@ const getUrl = (endpoint, params, useRandomString = true) => {
 
 // Customization functions
 // -----------------------
-const addHeader = (key, value) =>
-  ((Vue as any).http.headers.common[key] = value);
+const addHeader = (key: string, value: string | number): void => {
+  Vue.http.headers.common[key] = value;
+};
 
-const setRoot = url => ((Vue as any).http.options.root = url);
+const setRoot = (url: string): void => {
+  Vue.http.options.root = url;
+};
 
 // Interceptors
 // ------------
-const addTimeoutInterceptor = () => {
-  (Vue as any).http.interceptors.push(() => {
+const addTimeoutInterceptor = (): void => {
+  Vue.http.interceptors.push(() => {
     // return response callback
     return response => {
       switch (response.status) {
@@ -54,8 +61,8 @@ const addTimeoutInterceptor = () => {
   });
 };
 
-const addTrailingSlashInterceptor = () => {
-  (Vue as any).http.interceptors.push(request => {
+const addTrailingSlashInterceptor = (): void => {
+  Vue.http.interceptors.push(request => {
     const [url, params] = request.url.split("?");
     request.url = url.replace(/\/?$/, "/");
     if (params) {
@@ -67,33 +74,45 @@ const addTrailingSlashInterceptor = () => {
 // Requests
 // --------
 
-const get = (endpoint, params) => {
+const get = (
+  endpoint: string,
+  params: { [key: string]: any }
+): Promise<object> => {
   const url = getUrl(endpoint, params);
-  return (Vue as any).http
-    .get(url, REQUEST_OPTIONS)
-    .then(response => response.json());
+  return Vue.http.get(url, REQUEST_OPTIONS).then(response => response.json());
 };
 
-const patch = (endpoint, params, data) => {
+const patch = (
+  endpoint: string,
+  params: { [key: string]: any },
+  data: unknown
+): Promise<void> => {
   const url = getUrl(endpoint, params, false);
-  return (Vue as any).http.patch(url, data, REQUEST_OPTIONS);
+  return Vue.http.patch(url, data, REQUEST_OPTIONS);
 };
 
 // POST request
-const post = (endpoint, params, data) => {
+const post = (
+  endpoint: string,
+  params: { [key: string]: any },
+  data: unknown
+): Promise<void> => {
   const url = getUrl(endpoint, params, false);
-  return (Vue as any).http.post(url, data, REQUEST_OPTIONS);
+  return Vue.http.post(url, data, REQUEST_OPTIONS);
 };
 
 // DELETE requests
-const remove = (endpoint, params) => {
+const remove = (
+  endpoint: string,
+  params: { [key: string]: any }
+): Promise<void> => {
   const url = getUrl(endpoint, params, false);
-  return (Vue as any).http.delete(url, REQUEST_OPTIONS);
+  return Vue.http.delete(url, REQUEST_OPTIONS);
 };
 
 // Plugin
 export default {
-  async install(Vue, params: InstallParams) {
+  async install(Vue, params: InstallParams): Promise<void> {
     const extensions = params?.extensions;
     const options = params?.options;
 
@@ -121,7 +140,7 @@ export default {
       post,
       remove,
       setRoot
-    };
+    } as DittoHttp;
 
     // Finally, install http plugin extension
     if (extensions) {

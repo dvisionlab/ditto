@@ -113,13 +113,13 @@
   </wireframe-wrapper>
 </template>
 
-<script>
+<script lang="ts">
 import Common from "./common/mixin";
 
-const AppBar = () => import("./common/Bar");
-const AppNavigation = () => import("./common/Navigation");
-const MobileTopMenu = () => import("./common/MobileTopMenu");
-const NavigationToggler = () => import("./common/NavigationToggler");
+const AppBar = () => import("./common/Bar.vue");
+const AppNavigation = () => import("./common/Navigation.vue");
+const MobileTopMenu = () => import("./common/MobileTopMenu.vue");
+const NavigationToggler = () => import("./common/NavigationToggler.vue");
 
 // Basic wireframe component.
 // Available slots:

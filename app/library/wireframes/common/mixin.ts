@@ -1,4 +1,4 @@
-import WireframeWrapper from "./Wrapper";
+import WireframeWrapper from "./Wrapper.vue";
 
 export default {
   components: { WireframeWrapper },
@@ -17,7 +17,7 @@ export default {
     };
   },
   computed: {
-    navTogglerStyle() {
+    navTogglerStyle(): { height: string; top: string } {
       return {
         height: `calc(calc(var(--vh, 1vh) * 100) - ${this.$vuetify.application.top}px)`,
         top: `${this.$vuetify.application.top}px`

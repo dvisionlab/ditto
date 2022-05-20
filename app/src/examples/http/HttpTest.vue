@@ -16,10 +16,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from "vue";
 import httpPlugin from "@/../library/http/plugin";
-Vue.use(httpPlugin);
+import { InstallParams } from "@/../library/http/types";
+
+const params: InstallParams = { options: {} };
+Vue.use(httpPlugin, params);
 
 export default {
   data: () => ({
@@ -30,7 +33,6 @@ export default {
   mounted() {
     // get request to a test server
     this.$http.get(this.url).then(response => (this.data = response.data));
-
     // get request failure test
     this.$http
       .get("fakeurl", { a: 1, b: 2 })

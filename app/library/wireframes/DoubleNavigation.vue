@@ -13,7 +13,7 @@
       :mobile-menu-visible="mobileMenuVisible"
       @toggle-mobile-menu="mobileMenuVisible = !mobileMenuVisible"
     >
-      <template v-slot="data"><slot name="bar" v-bind="data"/></template>
+      <template v-slot="data"><slot name="bar" v-bind="data" /></template>
     </app-bar>
 
     <!-- mobile top menu -->
@@ -23,7 +23,7 @@
       :steteless="bar.stateless"
       v-model="mobileMenuVisible"
     >
-      <template v-slot="data"><slot name="bar" v-bind="data"/></template>
+      <template v-slot="data"><slot name="bar" v-bind="data" /></template>
     </mobile-top-menu>
 
     <!-- left navigation drawer -->
@@ -39,7 +39,7 @@
       :width="navLeft.width"
       v-model="navLeftVisible"
     >
-      <template v-slot="data"><slot name="navLeft" v-bind="data"/></template>
+      <template v-slot="data"><slot name="navLeft" v-bind="data" /></template>
     </app-navigation>
 
     <!-- right navigation drawer -->
@@ -54,7 +54,7 @@
       :width="navRight.width"
       v-model="navRightVisible"
     >
-      <template v-slot="data"><slot name="navRight" v-bind="data"/></template>
+      <template v-slot="data"><slot name="navRight" v-bind="data" /></template>
     </app-navigation>
 
     <!-- Sizes your content based upon application components -->
@@ -125,13 +125,13 @@
   </wireframe-wrapper>
 </template>
 
-<script>
+<script lang="ts">
 import Common from "./common/mixin";
 
-const AppBar = () => import("./common/Bar");
-const AppNavigation = () => import("./common/Navigation");
-const MobileTopMenu = () => import("./common/MobileTopMenu");
-const NavigationToggler = () => import("./common/NavigationToggler");
+const AppBar = () => import("./common/Bar.vue");
+const AppNavigation = () => import("./common/Navigation.vue");
+const MobileTopMenu = () => import("./common/MobileTopMenu.vue");
+const NavigationToggler = () => import("./common/NavigationToggler.vue");
 
 export default {
   name: "BasicWireframe",

@@ -1,9 +1,11 @@
 import Vue from "vue";
+import { DittoHttp } from "../library/http/types";
 
 declare module "vue/types/vue" {
-  interface VueConstructor {
-    http: any;
-    $http: any;
+  // Global properties can be declared
+  // on the `VueConstructor` interface
+  interface VueConstructor<Vue> {
+    $http: DittoHttp;
   }
 }
 

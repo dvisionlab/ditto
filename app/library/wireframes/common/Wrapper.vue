@@ -16,7 +16,7 @@
   </v-app>
 </template>
 
-<script>
+<script lang="ts">
 // !!! Wrapper is recommended for apps that use ditto auth
 export default {
   name: "WireframeWrapper"
