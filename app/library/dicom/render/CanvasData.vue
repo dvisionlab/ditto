@@ -25,7 +25,7 @@
     <div v-if="data.maxSliceId">
       <div v-if="data.isTimeserie">
         slice: {{ Math.ceil((data.sliceId + 1) / (data.maxTimeId + 1)) }}/{{
-          (data.maxSliceId + 1) / (data.maxTimeId + 1) + 1
+          (data.maxSliceId + 1) / (data.maxTimeId + 1)
         }}
       </div>
       <div v-else>slice: {{ data.sliceId + 1 }}/{{ data.maxSliceId + 1 }}</div>
