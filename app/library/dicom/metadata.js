@@ -21,5 +21,6 @@ export default {
   Rows: "x00280010",
   Cols: "x00280011",
   BitsAllocated: "x00280100",
-  PixelRepresentation: "x00280103"
+  PixelRepresentation: "x00280103",
+  NumberOfTemporalPositions: "x00200105"
 };
