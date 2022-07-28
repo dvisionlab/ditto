@@ -63,7 +63,7 @@
       >
         <v-slider
           class="full-height-slider"
-          min="1"
+          :min="viewport.minSliceId"
           :max="viewport.maxSliceId"
           vertical
           v-model="sliderSliceId"
@@ -128,15 +128,11 @@ export default {
       return this.getViewportFn(this.$store, this.seriesId, this.validCanvasId);
     },
     sliderSliceId: {
-      // sliderSliceId is between 1 and N while sliceId is between 0 and n-1
       get() {
-        return this.viewport.sliceId + 1;
+        return this.viewport.sliceId;
       },
       set(index) {
-        let sliceId = index - 1;
-        if (this.viewport.sliceId !== undefined && sliceId >= 0) {
-          updateSeriesSlice(this.validCanvasId, this.seriesId, sliceId);
-        }
+        updateSeriesSlice(this.validCanvasId, this.seriesId, index);
       }
     }
   },
@@ -234,6 +230,7 @@ export default {
   width: 100%;
   height: 100%;
 } */
+
 .full-height-slider >>> .v-slider {
   height: 85%;
 }
