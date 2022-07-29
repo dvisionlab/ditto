@@ -28,8 +28,10 @@ export const stackMetadata = {
     // Larvitar tags
     "larvitarSeriesInstanceUID",
     "larvitarNumberOfSlices",
+    "numberOfTemporalPositions",
     // Larvitar info
-    "isMultiframe"
+    "isMultiframe",
+    "is4D"
   ]
 };
 
