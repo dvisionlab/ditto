@@ -113,6 +113,7 @@ export default {
     toolsHandlers: { required: false, type: Object }
   },
   data: () => ({
+    isReady: false,
     error: false,
     stackMetadata: null,
     validCanvasId: null
@@ -132,7 +133,9 @@ export default {
         return this.viewport.sliceId;
       },
       set(index) {
-        updateSeriesSlice(this.validCanvasId, this.seriesId, index);
+        if (this.isReady) {
+          updateSeriesSlice(this.validCanvasId, this.seriesId, index);
+        }
       }
     }
   },
@@ -188,6 +191,8 @@ export default {
               .then(() => {
                 // series rendered
                 addTools(this.tools, this.validCanvasId, this.toolsHandlers);
+
+                this.isReady = true;
                 this.$emit("ready");
               })
               .catch(error => {
