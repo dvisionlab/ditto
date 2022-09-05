@@ -78,6 +78,7 @@ import resize from "vue-resize-directive";
 
 import { stackMetadata as stackMetadataDict, stackTools } from "../defaults";
 import {
+  addMouseKeyHandlers,
   addTools,
   clearSeriesData,
   clearSeriesCache,
@@ -151,9 +152,13 @@ export default {
       if (this.clearOnDestroy) {
         clearSeriesData(this.seriesId, this.clearCacheOnDestroy);
       }
+
+      this.isReady = false;
     },
     onResize() {
-      resizeViewport(this.validCanvasId);
+      if (this.isReady) {
+        resizeViewport(this.validCanvasId);
+      }
     }
   },
   watch: {
@@ -191,6 +196,9 @@ export default {
               .then(() => {
                 // series rendered
                 addTools(this.tools, this.validCanvasId, this.toolsHandlers);
+                if (this.toolsHandlers) {
+                  addMouseKeyHandlers(this.toolsHandlers);
+                }
 
                 this.isReady = true;
                 this.$emit("ready");
