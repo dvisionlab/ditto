@@ -20,20 +20,21 @@ export const activateTool = (
   lt.setToolActive(tool.name, mouseOptions, elementIds);
 };
 
-export const addTools = (tools, elementId, handlers) => {
-  // Add mouse button tools
+// Add mouse button tools
+export const addTools = (tools, elementId) => {
   tools.forEach(t => {
     lt.addTool(t.name, t.configuration, elementId);
     if (t.defaultActive) {
       activateTool(t, [elementId], t.options);
     }
   });
-
-  // Add tools keyboard handlers
-  if (handlers) {
-    lt.addMouseKeyHandlers(handlers, [elementId]);
-  }
 };
+
+// Add tools keyboard handlers
+export const addMouseKeyHandlers = lt.addMouseKeyHandlers;
+
+// Remove tools keyboard handlers
+export const removeMouseKeyHandlers = lt.removeMouseKeyHandlers;
 
 export const disableTool = (tool, elements) => {
   lt.setToolEnabled(tool.name, elements); // tool not editable but visible
