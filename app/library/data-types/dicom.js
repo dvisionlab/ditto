@@ -19,6 +19,8 @@ const genericTimeComponents = {
 
 const components = {
   [metadata.AccessionNumber]: accessionNumberComponents,
+  [metadata.AcquisitionDate]: genericDateComponents,
+  [metadata.AcquisitionTime]: genericTimeComponents,
   [metadata.Modality]: modalityComponents,
   [metadata.PatientBirthDate]: genericDateComponents,
   [metadata.PatientID]: patientIdComponents,

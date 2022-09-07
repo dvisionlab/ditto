@@ -2,6 +2,8 @@
 
 export default {
   AccessionNumber: "x00080050",
+  AcquisitionDate: "x00080022",
+  AcquisitionTime: "x00080032",
   Modality: "x00080060",
   ModalitiesInStudy: "x00080061",
   PatientBirthDate: "x00100030",

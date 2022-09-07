@@ -52,19 +52,16 @@
       </slot>
     </template>
 
-    <dicom-import
+    <dicom-import-pacs
       v-if="isOpen || minimizedSeries"
       :icon="icon"
       :label="label"
       :options="options"
       ref="content"
       @cancel="isOpen = false"
-      @dicom-import-open="data => $emit('dicom-import-open', data)"
-      @dicom-import-upload="data => $emit('dicom-import-upload', data)"
-      @dicom-import-upload-and-open="
-        data => $emit('dicom-import-upload-and-open', data)
-      "
       @minimize="minimize"
+      @pacs-retrieve-complete="onComplete"
+      @pacs-retrieve-open="data => $emit('pacs-retrieve-open', data)"
     >
       <!-- Add a slot for each header item that requires it (component customization) -->
       <template
@@ -73,33 +70,29 @@
       >
         <slot v-bind:item="item" :name="h.value" />
       </template>
-
-      <!-- Steps customization slots (actually only step-3 is supported) -->
-      <template v-slot:step-3><slot name="step-3"/></template>
-    </dicom-import>
+    </dicom-import-pacs>
   </v-dialog>
 </template>
 
 <script>
-import DicomImport from "./Component";
-import ActivatorContent from "./Activator";
+import DicomImportPacs from "./Component";
+import ActivatorContent from "../../import/Activator";
 
 export default {
   name: "DicomImportModal",
-  components: { ActivatorContent, DicomImport },
+  components: { ActivatorContent, DicomImportPacs },
   props: {
     disabled: { default: false, type: Boolean },
-    defaultActive: { default: false, type: Boolean },
     activatorClass: { required: false, type: String },
     badgeColor: { default: "primary", type: String },
-    icon: { default: "mdi-upload-multiple", type: String },
+    icon: { default: "mdi-server", type: String },
     iconColor: { required: false, type: String },
-    label: { default: "dicom-import.import-exams", type: String },
+    label: { default: "pacs-import.query-retrieve", type: String },
     mobile: { default: false, type: Boolean },
     options: { default: () => ({}), type: Object }
   },
-  data: instance => ({
-    isOpen: instance.defaultActive,
+  data: () => ({
+    isOpen: false,
     minimizedSeries: 0,
     uploading: false
   }),
@@ -118,16 +111,19 @@ export default {
     minimize() {
       const status = this.$refs.content.steps[this.$refs.content.currentStep]
         .status;
+
       if (status) {
         this.uploading = status.loading;
       }
 
       this.minimizedSeries =
-        !status || status.loading
-          ? this.$refs.content.selectedSeries.length
-          : 0;
+        !status || status.loading ? this.$refs.content.selectedData.length : 0;
 
       this.isOpen = false;
+    },
+    onComplete(data) {
+      this.minimizedSeries = 0;
+      this.$emit("pacs-retrieve-complete", data);
     }
   }
 };
