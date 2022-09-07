@@ -71,12 +71,14 @@
         <td :class="`cell-${metadata.StudyDate}`">
           <component
             :is="getComponentName(metadata.StudyDate)"
+            :dicom="true"
             tag="span"
             :value="items[0][metadata.StudyDate]"
           />
           <component
             class="ml-1"
             :is="getComponentName(metadata.StudyTime)"
+            :dicom="true"
             tag="span"
             :value="items[0][metadata.StudyTime]"
           />
@@ -121,6 +123,7 @@
               :class="h.keyClass"
               :key="key"
               :is="getComponentName(key)"
+              :dicom="true"
               :tag="h.keyTag"
               :value="item[key]"
             />
@@ -134,6 +137,7 @@
             :key="h.value"
             v-if="getComponentName(h.value)"
             :is="getComponentName(h.value)"
+            :dicom="true"
             :value="item[h.value]"
           />
           <div v-else :key="h.value">{{ item[h.value] }}</div>

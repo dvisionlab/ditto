@@ -20,6 +20,7 @@
         v-if="getComponentName(h.value)"
         :key="`${h.value}.component`"
         :is="getComponentName(h.value)"
+        :dicom="true"
         :value="item[h.value]"
       />
       <div v-else :key="h.value">{{ item[h.value] }}</div>
