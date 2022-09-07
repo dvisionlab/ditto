@@ -321,9 +321,15 @@ export default {
       }
 
       if (event.value) {
-        this.selectedSeries.push({
-          larvitarSeriesInstanceUID: event.item.larvitarSeriesInstanceUID
-        });
+        const found = this.selectedSeries.find(
+          v =>
+            v.larvitarSeriesInstanceUID === event.item.larvitarSeriesInstanceUID
+        );
+        if (!found) {
+          this.selectedSeries.push({
+            larvitarSeriesInstanceUID: event.item.larvitarSeriesInstanceUID
+          });
+        }
       } else {
         this.selectedSeries = this.selectedSeries.filter(
           v =>

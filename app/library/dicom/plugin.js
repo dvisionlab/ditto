@@ -7,6 +7,7 @@ const defaultOptions = {
   dataTypes: false,
   import: true,
   multiframe: true,
+  pacs: false,
   series: false,
   store: undefined,
   toolsStyle: undefined,
@@ -49,6 +50,16 @@ export default async (Vue, options) => {
   if (options.multiframe) {
     Vue.component("ditto-dicom-cinematic-tool", () =>
       import("./multiframe/CinematicTool")
+    );
+  }
+
+  // pacs component
+  if (options.pacs) {
+    Vue.component("ditto-dicom-pacs-import", () =>
+      import("./pacs/import/Component")
+    );
+    Vue.component("ditto-dicom-pacs-import-modal", () =>
+      import("./pacs/import/Wrapper")
     );
   }
 

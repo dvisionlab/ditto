@@ -17,8 +17,9 @@ export default {
   computed: {
     dateString() {
       if (isNaN(Date.parse(this.value))) {
-        return null;
+        return this.value;
       }
+      // TODO try other common formats
       return new Date(this.value).toLocaleDateString();
     }
   }
