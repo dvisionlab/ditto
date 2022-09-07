@@ -20,7 +20,6 @@
           <v-list-item-icon>
             <activator-content
               :badge-color="badgeColor"
-              class="text-center lh-small"
               :icon="icon"
               :icon-color="iconColor"
               :minimized-series="minimizedSeries"
@@ -43,7 +42,6 @@
         >
           <activator-content
             :badge-color="badgeColor"
-            class="text-center lh-small"
             :icon="icon"
             :icon-color="iconColor"
             :label="label"

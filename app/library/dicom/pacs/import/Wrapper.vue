@@ -8,7 +8,7 @@
     @click:outside="() => minimize()"
   >
     <template v-slot:activator="{ on, attrs }">
-      <slot v-bind="{ on, attrs, minimizedQueryResults, uploading }">
+      <slot v-bind="{ on, attrs, minimizedSeries, uploading }">
         <!-- default slot content -->
         <!-- mobile -->
         <v-list-item
@@ -20,10 +20,9 @@
           <v-list-item-icon>
             <activator-content
               :badge-color="badgeColor"
-              class="text-center lh-small"
               :icon="icon"
               :icon-color="iconColor"
-              :minimized-series="minimizedQueryResults"
+              :minimized-series="minimizedSeries"
             />
           </v-list-item-icon>
           <v-list-item-content>
@@ -43,26 +42,25 @@
         >
           <activator-content
             :badge-color="badgeColor"
-            class="text-center lh-small"
             :icon="icon"
             :icon-color="iconColor"
             :label="label"
             :loading="uploading"
-            :minimized-series="minimizedQueryResults"
+            :minimized-series="minimizedSeries"
           />
         </v-btn>
       </slot>
     </template>
 
     <dicom-import-pacs
-      v-if="isOpen || minimizedQueryResults"
+      v-if="isOpen || minimizedSeries"
       :icon="icon"
       :label="label"
       :options="options"
       ref="content"
       @cancel="isOpen = false"
       @minimize="minimize"
-      @pacs-retrieve-complete="data => $emit('pacs-retrieve-complete', data)"
+      @pacs-retrieve-complete="onComplete"
       @pacs-retrieve-open="data => $emit('pacs-retrieve-open', data)"
     >
       <!-- Add a slot for each header item that requires it (component customization) -->
@@ -95,7 +93,7 @@ export default {
   },
   data: () => ({
     isOpen: false,
-    minimizedQueryResults: 0,
+    minimizedSeries: 0,
     uploading: false
   }),
   computed: {
@@ -104,7 +102,7 @@ export default {
         return this.isOpen;
       },
       set(value) {
-        this.minimizedQueryResults = 0;
+        this.minimizedSeries = 0;
         this.isOpen = value;
       }
     }
@@ -113,14 +111,19 @@ export default {
     minimize() {
       const status = this.$refs.content.steps[this.$refs.content.currentStep]
         .status;
+
       if (status) {
         this.uploading = status.loading;
       }
 
-      this.minimizedQueryResults =
+      this.minimizedSeries =
         !status || status.loading ? this.$refs.content.selectedData.length : 0;
 
       this.isOpen = false;
+    },
+    onComplete(data) {
+      this.minimizedSeries = 0;
+      this.$emit("pacs-retrieve-complete", data);
     }
   }
 };
