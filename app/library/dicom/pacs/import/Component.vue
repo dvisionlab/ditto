@@ -234,7 +234,7 @@ export default {
 
         try {
           const retrieveFn = this.options.api.retrieve;
-          await retrieveFn(this.selectedModality.aet, retrieveItem);
+          await retrieveFn(this.selectedModality, retrieveItem);
           this.$set(
             step.status.progress,
             retrieveItem[this.queryResultsKey],
@@ -260,7 +260,7 @@ export default {
 
       try {
         const echoFn = this.options.api.echo;
-        await echoFn(this.selectedModality.aet);
+        await echoFn(this.selectedModality);
       } catch (error) {
         this.steps[this.currentStep].status.loading = false;
         this.steps[
@@ -272,10 +272,7 @@ export default {
       let qData, qError;
       try {
         const queryFn = this.options.api.query;
-        qData = await queryFn(
-          this.selectedModality.aet,
-          this.queryParametersForm
-        );
+        qData = await queryFn(this.selectedModality, this.queryParametersForm);
       } catch (error) {
         qError = `${error.status} - ${error.statusText}`;
         this.steps[this.currentStep].status.error = qError;
