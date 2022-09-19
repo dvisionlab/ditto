@@ -135,6 +135,7 @@ export default {
       data: [],
       queryParametersForm: {},
       queryResultsKey: getQueryResultsKey(this.options),
+      retrievedData: [],
       selectedData: [],
       selectedModality: null,
       steps: getSteps()
@@ -159,11 +160,7 @@ export default {
         }
 
         case 2: {
-          const status = this.steps[this.currentStep].status;
-          const retrievedData = this.selectedData.filter(
-            d => status.progress[d[this.queryResultsKey]] === 100
-          );
-          this.$emit("pacs-retrieve-open", retrievedData);
+          this.$emit("pacs-retrieve-open", this.retrievedData);
           this.$emit("cancel");
           break;
         }
@@ -225,7 +222,7 @@ export default {
         if (!queue.length) {
           step.status.completed = true;
           step.status.loading = false;
-          this.$emit("pacs-retrieve-complete", this.selectedData);
+          this.$emit("pacs-retrieve-complete", this.retrievedData);
           return;
         }
 
@@ -234,7 +231,12 @@ export default {
 
         try {
           const retrieveFn = this.options.api.retrieve;
-          await retrieveFn(this.selectedModality, retrieveItem);
+          const retrievedStudy = await retrieveFn(
+            this.selectedModality,
+            retrieveItem
+          );
+          this.retrievedData.push(retrievedStudy);
+
           this.$set(
             step.status.progress,
             retrieveItem[this.queryResultsKey],
@@ -245,7 +247,7 @@ export default {
           this.$set(
             step.status.errors,
             retrieveItem[this.queryResultsKey],
-            `${error.status} - ${error.statusText}`
+            `Retrieve failed: ${error}`
           );
         } finally {
           next();
@@ -263,9 +265,7 @@ export default {
         await echoFn(this.selectedModality);
       } catch (error) {
         this.steps[this.currentStep].status.loading = false;
-        this.steps[
-          this.currentStep
-        ].status.error = `Echo failed for modality: ${this.selectedModality.tag}.`;
+        this.steps[this.currentStep].status.error = `Echo failed: ${error}.`;
         return;
       }
 
@@ -274,7 +274,7 @@ export default {
         const queryFn = this.options.api.query;
         qData = await queryFn(this.selectedModality, this.queryParametersForm);
       } catch (error) {
-        qError = `${error.status} - ${error.statusText}`;
+        qError = `Query failed: ${error}.`;
         this.steps[this.currentStep].status.error = qError;
       } finally {
         this.steps[this.currentStep].status.loading = false;
