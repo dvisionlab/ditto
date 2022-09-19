@@ -54,18 +54,32 @@
       <!-- default slider -->
       <div
         :style="{
-          height: '85%',
+          height: '75%',
           width: '30px',
           position: 'absolute',
           top: '30px',
           right: '0'
         }"
       >
-        <v-slider
-          class="full-height-slider"
+        <vue-slider
+          contained
+          direction="btt"
+          :duration="0.25"
+          height="100%"
           :min="viewport.minSliceId"
           :max="viewport.maxSliceId"
-          vertical
+          :processStyle="{
+            backgroundColor: 'var(--v-accent-base)',
+            borderRadius: '3px'
+          }"
+          tooltip="active"
+          :tooltip-formatter="val => val + 1"
+          :tooltip-style="{
+            backgroundColor: 'var(--v-accent-base)',
+            borderColor: 'var(--v-accent-base)',
+            color: 'black'
+          }"
+          width="8px"
           v-model="sliderSliceId"
         />
       </div>
@@ -75,6 +89,8 @@
 
 <script>
 import resize from "vue-resize-directive";
+import VueSlider from "vue-slider-component";
+import "vue-slider-component/theme/default.css";
 
 import { stackMetadata as stackMetadataDict, stackTools } from "../defaults";
 import {
@@ -99,6 +115,7 @@ const defaultGetViewportFn = (store, seriesId, canvasId) =>
 export default {
   name: "DicomCanvas",
   directives: { resize },
+  components: { VueSlider },
   props: {
     clearCacheOnDestroy: { default: false, type: Boolean },
     clearOnDestroy: { default: false, type: Boolean },
@@ -244,9 +261,6 @@ export default {
   height: 100%;
 } */
 
-.full-height-slider >>> .v-slider {
-  height: 85%;
-}
 .v-input {
   height: 100% !important;
 }
