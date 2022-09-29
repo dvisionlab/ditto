@@ -190,8 +190,10 @@ export const parseFile = (seriesId, file) => {
 // Use Larvitar to render a series into a canvas
 export const renderSeries = (elementId, seriesStack, params = {}) => {
   lt.larvitar_store.addViewport(elementId);
-  // renderImage returns a promise which will resolve when image is displayed
-  return lt.renderImage(seriesStack, elementId, params);
+  // render returns a promise which will resolve when image is displayed
+  return seriesStack.isPDF
+    ? lt.renderDICOMPDF(seriesStack, elementId)
+    : lt.renderImage(seriesStack, elementId, params);
 };
 
 // Reset Larvitar

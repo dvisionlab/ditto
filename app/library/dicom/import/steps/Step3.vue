@@ -11,7 +11,7 @@
       </template>
 
       <div v-else-if="step.status.completed">
-        <template v-if="allErrors">uoload failed</template>
+        <template v-if="allErrors">upload failed</template>
         <template v-else>upload completed</template>
         <v-progress-linear
           :color="!hasErrors ? 'success' : 'black'"

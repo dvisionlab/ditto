@@ -1,5 +1,5 @@
 <template>
-  <div class="text-uppercase">
+  <div v-if="data.isPDF == false" class="text-uppercase">
     <div>size: [{{ data.rows || 0 }} x {{ data.cols || 0 }}]</div>
     <div v-if="data.spacing_x && data.spacing_y">
       spacing: [{{ data.spacing_x.toFixed(2) }} x
