@@ -55,9 +55,11 @@
 import Form from "../../form/Form";
 import { customizeRules } from "../../form/rules";
 
-if (process.env.NODE_ENV !== "production") {
-  customizeRules({ passwordValidationRegex: new RegExp(".*") });
-}
+// skip email/password default validation
+customizeRules({
+  emailValidationRegex: new RegExp(".*"),
+  passwordValidationRegex: new RegExp(".*")
+});
 
 export default {
   name: "LoginForm",
