@@ -4,14 +4,14 @@
       :fields="fields"
       :fields-style="{ 'flex-basis': '100%' }"
       :loading="loading"
-      submit-label="reset-password"
+      :submit-label="$t('auth.reset-password')"
       :footer-style="{ 'flex-direction': 'row-reverse' }"
       v-model="form"
       @submit="submit"
     >
       <template v-slot:header>
         <h2 class="text-uppercase primary--text my-4">
-          {{ $t("reset-password") }}
+          {{ $t("auth.reset-password") }}
         </h2>
         <p class="ma-0 mb-4">
           Please enter your email address. You will receive a link to create a
@@ -49,6 +49,12 @@
 <script>
 import Vue from "vue";
 import Form from "../../form/Form";
+import { customizeRules } from "../../form/rules";
+
+// skip email default validation
+customizeRules({
+  emailValidationRegex: new RegExp(".*")
+});
 
 export default {
   name: "ForgotPassword",
