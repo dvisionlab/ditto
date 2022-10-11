@@ -270,7 +270,8 @@ export const updateViewportProperty = (action, element) => {
       break;
     }
     case "export-viewport": {
-      let canvas = document.getElementById(element).children[1];
+      const htmlTag = `#${element} canvas`;
+      let canvas = document.querySelector(htmlTag);
       canvas.toBlob(function(blob) {
         saveAs(blob, "image.png");
       });
@@ -278,7 +279,8 @@ export const updateViewportProperty = (action, element) => {
     }
 
     case "print-viewport": {
-      let canvas = document.getElementById(element).children[1];
+      const htmlTag = `#${element} canvas`;
+      let canvas = document.querySelector(htmlTag);
       canvas.toBlob(function(blob) {
         print({
           printable: URL.createObjectURL(blob),
