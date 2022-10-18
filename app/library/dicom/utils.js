@@ -157,12 +157,14 @@ export const parseFiles = (files, extractMetadata = []) => {
 
       if (stack.isMultiframe) {
         stack.larvitarNumberOfSlices = stack.numberOfFrames;
+      } else if (stack.is4D) {
+        stack.larvitarNumberOfSlices =
+          stack.imageIds.length / stack.numberOfTemporalPositions;
       } else {
         stack.larvitarNumberOfSlices = stack.numberOfSlices
           ? stack.numberOfSlices
           : stack.numberOfImages;
       }
-
       // resolve the promise with this value
       return stack;
     });
