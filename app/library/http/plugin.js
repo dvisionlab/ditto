@@ -6,7 +6,7 @@ import VueResource from "vue-resource";
 const TIMEOUT_STATUS = 0;
 const TIMEOUT_STATUS_MESSAGE = "http_response_timeout";
 const REQUEST_OPTIONS = {
-  timeout: process.env.NODE_ENV == "development" ? 0 : 1000 * 5
+  timeout: process.env.NODE_ENV == "development" ? 0 : 1000 * 180
 };
 
 // Utilities
