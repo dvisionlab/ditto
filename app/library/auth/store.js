@@ -36,8 +36,11 @@ export default options => ({
 
               const user = persist.getUser();
               commit("update", { key: "user", value: user });
-
+              
+              console.log("onLoginSuccess");  
+              console.log(options.onLoginSuccess);  
               if (options.onLoginSuccess) {
+              
                 options.onLoginSuccess(user);
               }
 
@@ -73,7 +76,10 @@ export default options => ({
                 });
                 commit("update", { key: "user", value: user });
                 persist.setUser(user);
-
+                
+                console.log("onLoginSuccess");  
+                console.log(options.onLoginSuccess);  
+              
                 if (options.onLoginSuccess) {
                   options.onLoginSuccess(user);
                 }
