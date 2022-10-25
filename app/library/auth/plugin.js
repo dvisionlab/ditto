@@ -70,12 +70,14 @@ export default {
     };
 
     // Setup logrocket
-    if (options.logrocket && process.env.NODE_ENV == "production") {
+    if (options.logrocket) {
       options.logrocket.module.init(options.logrocket.customString);
+      options.oldOnLoginSuccess = options.onLoginSuccess;
       options.onLoginSuccess = user => {
+        if (options.oldOnLoginSuccess){
+          options.oldOnLoginSuccess(user);
+        }
         options.logrocket.module.identify(user.id, user);
-        console.log("log rocket");
-        console.log(user);
       }
     }
 
