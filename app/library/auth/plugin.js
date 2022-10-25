@@ -72,8 +72,13 @@ export default {
     // Setup logrocket
     if (options.logrocket && process.env.NODE_ENV == "production") {
       options.logrocket.module.init(options.logrocket.customString);
-      options.onLoginSuccess = user =>
+      options.oldOnLoginSuccess = options.onLoginSuccess;
+      options.onLoginSuccess = user => {
+        if (options.oldOnLoginSuccess){
+          options.oldOnLoginSuccess(user);
+        }
         options.logrocket.module.identify(user.id, user);
+      }
     }
 
     // Register http plugin with auth extension
