@@ -70,12 +70,12 @@
                     @click="selectedAction = item"
                   >
                     <v-list-item-content>
-                      <v-list-item-title class="text-uppercase">{{
-                        item.text
-                      }}</v-list-item-title>
-                      <v-list-item-subtitle :style="{ whiteSpace: 'normal' }">{{
-                        item.hint
-                      }}</v-list-item-subtitle>
+                      <v-list-item-title class="text-uppercase">
+                        {{ item.text }}
+                      </v-list-item-title>
+                      <v-list-item-subtitle :style="{ whiteSpace: 'normal' }">
+                        {{ item.hint }}
+                      </v-list-item-subtitle>
                     </v-list-item-content>
                   </v-list-item>
                 </v-list>

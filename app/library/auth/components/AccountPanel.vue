@@ -122,6 +122,10 @@
 <script>
 const defaultGetUserFn = _this => _this.$store.state.auth.user;
 const defaultLoginFn = _this => _this.$router.replace({ name: "login" });
+const defaultLogoutFn = _this => {
+  _this.$store.dispatch("auth/logout");
+  _this.$router.replace({ name: "login" });
+};
 
 export default {
   name: "AccountPanel",
@@ -133,6 +137,7 @@ export default {
     icon: { default: "mdi-account", type: String },
     label: { default: "account", type: String },
     loginFn: { default: defaultLoginFn, type: Function },
+    logoutFn: { default: defaultLogoutFn, type: Function },
     mobile: { default: false, type: Boolean },
     settingsRouteName: { required: false, type: String },
     openOnHover: { default: false, type: Boolean }
@@ -176,8 +181,7 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.dispatch("auth/logout");
-      this.$router.replace({ name: "login" });
+      this.logoutFn(this);
     },
     login() {
       this.loginFn(this);
