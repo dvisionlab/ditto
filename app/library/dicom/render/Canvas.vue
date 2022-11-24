@@ -57,7 +57,7 @@
           height: '75%',
           width: '30px',
           position: 'absolute',
-          top: '30px',
+          top: '12.5%',
           right: '0'
         }"
       >
