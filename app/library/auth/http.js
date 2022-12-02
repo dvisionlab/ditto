@@ -135,7 +135,7 @@ const addAuthorizationInterceptor = ({
         if (requestParams.alreadyRefreshed) {
           forceLogout(response.statusText);
         } else {
-          refreshToken(readRefreshToken())
+          return refreshToken(readRefreshToken())
             .then(token => {
               // Store refreshed token
               writeAccessToken(token);
@@ -145,7 +145,8 @@ const addAuthorizationInterceptor = ({
                 ...requestParams,
                 alreadyRefreshed: true
               });
-              Vue.http(request).then(data => data);
+
+              return Vue.http(request); //.then(data => data);
             })
             .catch(error => {
               forceLogout(error.statusText);
