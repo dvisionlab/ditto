@@ -64,7 +64,7 @@ const defaultActions = [
     disabled: false,
     emitter: "dicom-import-open",
     hint:
-      "you won't be able to access these series again once the browser session will be lost",
+      "you won't be able to access these series again once the browser session is closed",
     storeStacks: true,
     text: "open viewer without uploading"
   }
