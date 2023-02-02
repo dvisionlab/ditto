@@ -61,11 +61,11 @@
 </template>
 
 <script>
-import form from "@/../ditto/form";
+import Form from "../../../../form/Form";
 
 export default {
   name: "DicomImportStep1",
-  components: { DittoForm: form.component },
+  components: { DittoForm: Form },
   props: {
     disclaimer: { required: true, type: String },
     form: { required: true, type: Object },
