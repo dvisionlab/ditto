@@ -5,6 +5,7 @@
     :horizontal="horizontal"
     :push-other-panes="pushOtherPanes"
     :size="layout.size"
+    @resized="e => $emit('resized', e)"
   >
     <pane
       v-for="(pane, i) in layout.panes"
