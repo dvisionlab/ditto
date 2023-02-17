@@ -18,7 +18,7 @@
           :hint="value ? `${value.aet}, ${value.host}:${value.port}` : null"
           :items="modalities.results"
           item-text="tag"
-          item-value="aet"
+          item-value="tag"
           label="Remote PACS"
           persistent-hint
           required
