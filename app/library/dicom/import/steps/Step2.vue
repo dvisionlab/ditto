@@ -108,7 +108,7 @@
         </v-lazy>
       </template>
 
-      <template v-slot:[`item.anonymized`]="{ item }">
+      <template v-if="allowAnonymization" v-slot:[`item.anonymized`]="{ item }">
         <v-simple-checkbox class="text-center" v-model="item.anonymized" />
       </template>
 
@@ -165,6 +165,7 @@ export default {
   components: { ...dicomDataTypes, DicomCanvas },
   directives: { RelativeHeight },
   props: {
+    allowAnonymization: { default: false, type: Boolean },
     getProgressFn: { required: false, type: Function },
     getViewportFn: { required: false, type: Function },
     headers: { required: true, type: Array },

@@ -137,6 +137,7 @@
       <component
         :is="`import-step-${currentStep + 1}`"
         class="h-100"
+        :allow-anonymization="options.allowAnonymization"
         :get-progress-fn="getProgressFn"
         :get-viewport-fn="getViewportFn"
         :headers="headers"
@@ -237,12 +238,14 @@ export default {
         )
       );
 
-      stacks = stacks.map(stack => {
-        if (stack.anonymized) {
-          return anonymizeSeriesStack(stack, this.metadata);
-        }
-        return stack;
-      });
+      if (this.options.allowAnonymization) {
+        stacks = stacks.map(stack => {
+          if (stack.anonymized) {
+            return anonymizeSeriesStack(stack, this.metadata);
+          }
+          return stack;
+        });
+      }
 
       // Store series stack in larvitar
       if (this.selectedAction.storeStacks) {

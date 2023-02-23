@@ -29,7 +29,7 @@ const computeHeaders = (metadata, allowAnonymization) => {
   const list = [{ sortable: false, text: "", value: "preview" }];
 
   if (allowAnonymization) {
-    list.push({ sortable: false, text: "anonymized", value: "anonymized" });
+    list.push({ sortable: false, text: "anonymize", value: "anonymized" });
   }
 
   return [
