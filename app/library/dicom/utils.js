@@ -33,6 +33,21 @@ export const addTools = (tools, elementId) => {
 // Add tools keyboard handlers
 export const addMouseKeyHandlers = lt.addMouseKeyHandlers;
 
+// Anonymize series
+export const anonymizeSeriesStack = (stack, extractMetadata = []) => {
+  let anonymizedStack = lt.anonymize(stack);
+
+  const meta =
+    anonymizedStack.instances[Object.keys(anonymizedStack.instances)[0]]
+      .metadata;
+  const anonymizedStackMeta = extractMetadata.reduce((result, k) => {
+    result[k] = meta[k];
+    return result;
+  }, {});
+
+  return { ...anonymizedStack, ...anonymizedStackMeta };
+};
+
 // Remove tools keyboard handlers
 export const removeMouseKeyHandlers = lt.removeMouseKeyHandlers;
 

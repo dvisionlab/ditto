@@ -25,9 +25,15 @@ const requiredMetadata = [
 const defaultDisclaimer =
   "THIS VERSION IS NOT CERTIFIED AS A MEDICAL DEVICE FOR PRIMARY DIAGNOSIS. <br /> THERE ARE NO CERTIFICATIONS. <br /> IT'S POSSIBLE USE IT ONLY AS A REVIEWING AND SCIENTIFIC SOFTWARE, <br /> NOT FOR PRIMARY DIAGNOSTICS.";
 
-const computeHeaders = metadata => {
+const computeHeaders = (metadata, allowAnonymization) => {
+  const list = [{ sortable: false, text: "", value: "preview" }];
+
+  if (allowAnonymization) {
+    list.push({ sortable: false, text: "anonymized", value: "anonymized" });
+  }
+
   return [
-    { sortable: false, text: "", value: "preview" },
+    ...list,
     ...metadata.map(value => ({
       cellClass: `cell-${value}`,
       sortable: true,
@@ -136,7 +142,8 @@ export const getHeaders = options => {
 
   if (options.metadata) {
     return computeHeaders(
-      options.metadata.filter(v => !studyMetadata.find(vv => vv == v))
+      options.metadata.filter(v => !studyMetadata.find(vv => vv == v)),
+      options.allowAnonymization
     );
   }
 
@@ -148,7 +155,8 @@ export const getHeaders = options => {
     "isMultiframe"
   ];
   let headers = computeHeaders(
-    defaultMetadata.filter(v => !omit.find(vv => vv == v))
+    defaultMetadata.filter(v => !omit.find(vv => vv == v)),
+    options.allowAnonymization
   );
 
   // Merge date and time
