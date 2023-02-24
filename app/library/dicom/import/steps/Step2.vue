@@ -33,7 +33,7 @@
       </v-alert>
     </div>
 
-    <!-- TODO show parsing woarnings/errors related to parsed series -->
+    <!-- TODO show parsing warnings/errors related to parsed series -->
     <v-data-table
       disable-pagination
       fixed-header
@@ -108,8 +108,14 @@
         </v-lazy>
       </template>
 
+      <template v-if="allowAnonymization" v-slot:[`item.anonymized`]="{ item }">
+        <v-simple-checkbox class="text-center" v-model="item.anonymized" />
+      </template>
+
       <template
-        v-for="h in headers.filter(({ value }) => value !== 'preview')"
+        v-for="h in headers.filter(
+          ({ value }) => value !== 'preview' && value !== 'anonymized'
+        )"
         v-slot:[`item.${h.value}`]="{ item }"
       >
         <!-- Add a slot for each header item that requires it (component customization) -->
@@ -159,6 +165,7 @@ export default {
   components: { ...dicomDataTypes, DicomCanvas },
   directives: { RelativeHeight },
   props: {
+    allowAnonymization: { default: false, type: Boolean },
     getProgressFn: { required: false, type: Function },
     getViewportFn: { required: false, type: Function },
     headers: { required: true, type: Array },

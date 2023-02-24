@@ -137,6 +137,7 @@
       <component
         :is="`import-step-${currentStep + 1}`"
         class="h-100"
+        :allow-anonymization="options.allowAnonymization"
         :get-progress-fn="getProgressFn"
         :get-viewport-fn="getViewportFn"
         :headers="headers"
@@ -175,7 +176,12 @@ import {
   getSteps,
   getDisclaimer
 } from "./options";
-import { mergeSeries, storeSeriesStack, clearSeriesStack } from "../utils";
+import {
+  anonymizeSeriesStack,
+  mergeSeries,
+  storeSeriesStack,
+  clearSeriesStack
+} from "../utils";
 import RelativeHeight from "../../relative-height";
 import ModalControllers from "./ModalControllers";
 
@@ -226,11 +232,20 @@ export default {
   methods: {
     onAction() {
       // List of selected stacks
-      const stacks = this.selectedSeries.map(v =>
+      let stacks = this.selectedSeries.map(v =>
         this.series.find(
           s => s.larvitarSeriesInstanceUID == v.larvitarSeriesInstanceUID
         )
       );
+
+      if (this.options.allowAnonymization) {
+        stacks = stacks.map(stack => {
+          if (stack.anonymized) {
+            return anonymizeSeriesStack(stack, this.metadata);
+          }
+          return stack;
+        });
+      }
 
       // Store series stack in larvitar
       if (this.selectedAction.storeStacks) {
