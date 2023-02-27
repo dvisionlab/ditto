@@ -10,6 +10,7 @@ export default {
   PatientID: "x00100020",
   PatientName: "x00100010",
   PatientSex: "x00100040",
+  PixelSpacing: "x00280030",
   SliceThickness: "x00180050",
   SeriesDate: "x00080021",
   SeriesDescription: "x0008103e",
