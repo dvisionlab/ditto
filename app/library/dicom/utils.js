@@ -167,6 +167,12 @@ export const getCinematicData = seriesId => {
   return { frameDelay, frameTime };
 };
 
+// Returns an array of metadata objects:
+// tag: the metadata tag e.g. (0010,0010)
+// name: the metadata name in a human readable format e.g. PatientName
+// value: the metadata value e.g. Mario^Rossi
+export const getImageMetadata = lt.getImageMetadata;
+
 // Return series stack stored in larvitar dicom manager
 export const getSeriesStack = seriesId => {
   const stack = lt.getSeriesDataFromLarvitarManager(seriesId);
