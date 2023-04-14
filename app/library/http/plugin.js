@@ -84,6 +84,12 @@ const post = (endpoint, params, data) => {
   return Vue.http.post(url, data, REQUEST_OPTIONS);
 };
 
+// PUT request
+const put = (endpoint, params, data) => {
+  let url = getUrl(endpoint, params, false);
+  return Vue.http.put(url, data, REQUEST_OPTIONS);
+};
+
 // DELETE requests
 const remove = (endpoint, params) => {
   let url = getUrl(endpoint, params, false);
@@ -115,6 +121,7 @@ export default {
       getUrl,
       patch,
       post,
+      put,
       remove,
       setRoot
     };
