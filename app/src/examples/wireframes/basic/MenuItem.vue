@@ -47,7 +47,7 @@
         v-model="selectedActionIndex"
       >
         <template v-for="(action, index) in actions">
-          <v-tooltip :key="index" bottom :nudge-bottom="-5" :open-delay="500">
+          <v-tooltip :key="index" bottom :nudge-bottom="-5">
             <template v-slot:activator="{ on, attrs }">
               <v-btn class="ma-0" :value="index" v-bind="attrs" v-on="on">
                 <template v-if="action.icon">

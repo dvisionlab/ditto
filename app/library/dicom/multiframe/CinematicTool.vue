@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-tooltip bottom :nudge-bottom="-5" :open-delay="800">
+    <v-tooltip bottom :nudge-bottom="-5">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
           class="ma-0"
