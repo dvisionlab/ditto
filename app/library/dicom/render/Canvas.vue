@@ -5,7 +5,7 @@
     @contextmenu.prevent
   >
     <v-icon v-if="error" class="ma-auto" dark>
-      mdi-alert-decagram-outline
+      mdi-alert-decagram
     </v-icon>
     <div
       v-else
