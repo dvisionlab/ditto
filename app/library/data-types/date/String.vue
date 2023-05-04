@@ -16,7 +16,7 @@ export default {
       if (this.dicom) {
         // dicom date format: YYYYMMDD
         const pattern = /(\d{4})(\d{2})(\d{2})/;
-        date = new Date(this.value.replace(pattern, "$3-$2-$1"));
+        date = new Date(this.value.replace(pattern, "$2-$3-$1"));
       } else {
         date = new Date(this.value);
       }

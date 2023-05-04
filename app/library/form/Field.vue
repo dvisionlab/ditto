@@ -4,7 +4,6 @@
       :is="getComponentName(field)"
       :append-icon="field.appendIcon"
       :autofocus="field.autofocus"
-      :class="{ 'mt-1': field.component }"
       :clearable="field.clearable"
       :disabled="
         loading || (field.disabled ? field.disabled(field, value) : false)

@@ -91,7 +91,10 @@ const defaultQueryParameters = [
     ],
     clearable: true
   },
-  { value: "AcquisitionDate", type: "date" },
+  {
+    value: "AcquisitionDate",
+    component: () => import("./InputAcquisitionDate")
+  },
   {
     value: "AcquisitionTime",
     type: "time",

@@ -34,9 +34,9 @@ import dicomDataTypes from "../../../../data-types/dicom";
 import metadataDictionary from "../../../metadata";
 
 const customSlotMetadata = [
-  "PatientName",
-  "ReferringPhysicianName",
-  "NameOfPhysiciansReadingStudy",
+  // "PatientName",
+  // "ReferringPhysicianName",
+  // "NameOfPhysiciansReadingStudy",
   "PatientSex",
   "PatientBirthDate",
   "AcquisitionDate",
