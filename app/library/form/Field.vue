@@ -16,6 +16,7 @@
       :required="required"
       :rules="dirty ? getRules(field) : undefined"
       :type="field.type"
+      v-mask="field.vMask"
       v-model="value[field.key]"
       @icon-click="() => $emit('icon-click', field)"
     >
