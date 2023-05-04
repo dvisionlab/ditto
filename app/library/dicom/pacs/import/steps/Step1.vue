@@ -76,7 +76,8 @@ export default {
   },
   data() {
     return {
-      fields: this.headers.map(({ value }) => ({
+      fields: this.headers.map(({ value, ...f }) => ({
+        ...f,
         key: value,
         label: this.$t(`pacs-import.metadata-${value}`)
       }))

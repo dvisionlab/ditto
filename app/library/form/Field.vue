@@ -1,18 +1,22 @@
 <template>
   <div>
     <component
+      :is="getComponentName(field)"
       :append-icon="field.appendIcon"
       :autofocus="field.autofocus"
       :class="{ 'mt-1': field.component }"
-      :is="getComponentName(field)"
+      :clearable="field.clearable"
       :disabled="
         loading || (field.disabled ? field.disabled(field, value) : false)
       "
       :hint="field.hint"
+      :items="field.items"
       :label="field.label"
+      :placeholder="field.placeholder"
       :required="required"
       :rules="dirty ? getRules(field) : undefined"
       :type="field.type"
+      v-mask="field.vMask"
       v-model="value[field.key]"
       @icon-click="() => $emit('icon-click', field)"
     >
@@ -31,11 +35,13 @@
 
 <script>
 import { rules } from "./rules";
-import { VTextField } from "vuetify/lib";
+import { VTextField, VSelect } from "vuetify/lib";
+import { VueMaskDirective } from "v-mask";
 
 export default {
   name: "Field",
-  components: { VTextField },
+  components: { VTextField, VSelect },
+  directives: { mask: VueMaskDirective },
   props: {
     dirty: { default: false, type: Boolean },
     field: { required: true, type: Object },
@@ -59,6 +65,11 @@ export default {
       switch (field.type) {
         case "boolean": {
           name = "v-checkbox";
+          break;
+        }
+
+        case "select": {
+          name = "v-select";
           break;
         }
 

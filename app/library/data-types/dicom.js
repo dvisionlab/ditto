@@ -25,6 +25,8 @@ const components = {
   [metadata.PatientBirthDate]: genericDateComponents,
   [metadata.PatientID]: patientIdComponents,
   [metadata.PatientName]: patientNameComponents,
+  [metadata.NameOfPhysiciansReadingStudy]: patientNameComponents,
+  [metadata.ReferringPhysicianName]: patientNameComponents,
   [metadata.PatientSex]: patientSexComponents,
   [metadata.StudyDate]: genericDateComponents,
   [metadata.StudyTime]: genericTimeComponents,
