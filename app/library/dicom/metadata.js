@@ -25,5 +25,7 @@ export default {
   Cols: "x00280011",
   BitsAllocated: "x00280100",
   PixelRepresentation: "x00280103",
-  NumberOfTemporalPositions: "x00200105"
+  NumberOfTemporalPositions: "x00200105",
+  ReferringPhysicianName: "x00080090",
+  NameOfPhysiciansReadingStudy: "x00081060"
 };

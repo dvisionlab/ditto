@@ -1,16 +1,105 @@
 const defaultQueryParameters = [
-  "PatientID",
-  "PatientName",
-  "PatientBirthDate",
-  "PatientSex",
-  "AccessionNumber",
-  "StudyDescription",
-  "Modality",
-  "AcquisitionDate",
-  "AcquisitionTime",
-  "ReferringPhysicianName",
-  "NameOfPhysiciansReadingStudy",
-  "InstitutionName"
+  { value: "PatientID" },
+  { value: "PatientName" },
+  { value: "PatientBirthDate", type: "date" },
+  {
+    value: "PatientSex",
+    type: "select",
+    items: [
+      { text: "Male", value: "M" },
+      { text: "Female", value: "F" },
+      { text: "Other", value: "O" }
+    ],
+    clearable: true
+  },
+  { value: "AccessionNumber" },
+  { value: "StudyDescription" },
+  {
+    value: "Modality",
+    type: "select",
+    items: [
+      "AR",
+      "ASMT",
+      "AU",
+      "BDUS",
+      "BI",
+      "BMD",
+      "CR",
+      "CT",
+      "CTPROTOCOL",
+      "DG",
+      "DOC",
+      "DX",
+      "ECG",
+      "EPS",
+      "ES",
+      "FID",
+      "GM",
+      "HC",
+      "HD",
+      "IO",
+      "IOL",
+      "IVOCT",
+      "IVUS",
+      "KER",
+      "KO",
+      "LEN",
+      "LS",
+      "MG",
+      "MR",
+      "M3D",
+      "NM",
+      "OAM",
+      "OCT",
+      "OP",
+      "OPM",
+      "OPT",
+      "OPTBSV",
+      "OPTENF",
+      "OPV",
+      "OSS",
+      "OT",
+      "PLAN",
+      "PR",
+      "PT",
+      "PX",
+      "REG",
+      "RESP",
+      "RF",
+      "RG",
+      "RTDOSE",
+      "RTIMAGE",
+      "RTINTENT",
+      "RTPLAN",
+      "RTRAD",
+      "RTRECORD",
+      "RTSEGANN",
+      "RTSTRUCT",
+      "RWV",
+      "SEG",
+      "SM",
+      "SMR",
+      "SR",
+      "SRF",
+      "STAIN",
+      "TEXTUREMAP",
+      "TG",
+      "US",
+      "VA",
+      "XA",
+      "XC"
+    ],
+    clearable: true
+  },
+  { value: "AcquisitionDate", type: "date" },
+  {
+    value: "AcquisitionTime",
+    type: "time",
+    hint: "since this time to midnight"
+  },
+  { value: "ReferringPhysicianName" },
+  { value: "NameOfPhysiciansReadingStudy" },
+  { value: "InstitutionName" }
 ];
 
 const defaultQueryResultsKey = "index";
@@ -45,11 +134,11 @@ const defaultSteps = [
 ];
 
 const getHeaders = () =>
-  defaultQueryParameters.map(value => ({
-    cellClass: `cell-${value}`,
+  defaultQueryParameters.map(p => ({
+    cellClass: `cell-${p.value}`,
     sortable: true,
-    text: `metadata-${value}`,
-    value
+    text: `metadata-${p.value}`,
+    ...p
   }));
 
 const getQueryResultsKey = options =>
@@ -58,4 +147,3 @@ const getQueryResultsKey = options =>
 const getSteps = () => [...defaultSteps];
 
 export { getHeaders, getQueryResultsKey, getSteps };
-

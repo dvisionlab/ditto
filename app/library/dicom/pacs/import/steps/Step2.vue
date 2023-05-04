@@ -35,6 +35,8 @@ import metadataDictionary from "../../../metadata";
 
 const customSlotMetadata = [
   "PatientName",
+  "ReferringPhysicianName",
+  "NameOfPhysiciansReadingStudy",
   "PatientSex",
   "PatientBirthDate",
   "AcquisitionDate",
