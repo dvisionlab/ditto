@@ -3,12 +3,10 @@
     <v-select
       :disabled="disabled"
       :items="options"
+      :label="label"
       :value="selectedOption"
       @change="onChangeOption"
     >
-      <template v-slot:label>
-        <span class="text-capitalize">{{ label }}</span>
-      </template>
     </v-select>
     <v-text-field
       :disabled="disabled || selectedOption !== 'custom'"

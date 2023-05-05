@@ -21,10 +21,6 @@
       <template slot="append">
         <v-icon v-if="field.appendIcon" small>{{ field.appendIcon }}</v-icon>
       </template>
-
-      <template v-slot:label>
-        <span class="text-capitalize">{{ field.label }}</span>
-      </template>
     </component>
 
     <component v-if="field.slot" :is="field.slot" v-bind="{ field, value }" />
@@ -98,3 +94,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+::v-deep .v-label {
+  text-transform: capitalize;
+}
+</style>
