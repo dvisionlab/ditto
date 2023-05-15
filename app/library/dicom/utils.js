@@ -375,11 +375,12 @@ export const setImageCustomPreset = (viewports, { wl, ww }) => {
   lt.setImageCustomPreset(viewports, { wl, ww });
 };
 
-export const watchStore = cb => lt.store.addStoreListener(cb);
-export const unwatchStore = () => lt.store.removeStoreListener();
+// Expose store listeners
+export const watchStore = lt.store.addStoreListener;
+export const unwatchStore = lt.store.removeStoreListener;
 
-export const watchViewportStore = (viewportId, cb) =>
-  lt.store.addViewportListener(viewportId, cb);
+export const watchViewportStore = lt.store.addViewportListener;
+export const unwatchViewportStore = lt.store.removeViewportListener;
 
-export const unwatchViewportStore = viewportId =>
-  lt.store.removeViewportListener(viewportId);
+export const watchSeriesStore = lt.store.addSeriesListener;
+export const unwatchSeriesStore = lt.store.removeSeriesListener;

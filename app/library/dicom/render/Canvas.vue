@@ -149,13 +149,7 @@ export default {
   computed: {
     progress() {
       // TODO need store watcher
-      const p = this.getProgressFn(
-        this.$store,
-        this.seriesId,
-        this.validCanvasId
-      );
-      console.log(p);
-      return p;
+      return this.getProgressFn(this.$store, this.seriesId, this.validCanvasId);
     },
     viewport() {
       return (
