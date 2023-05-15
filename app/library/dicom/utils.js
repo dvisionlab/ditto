@@ -142,7 +142,7 @@ export const clearSeriesData = (seriesId, clearCache = false) => {
     lt.clearImageCache(seriesId);
   }
 
-  lt.store.removeSeriesIds(seriesId);
+  lt.store.removeSeriesId(seriesId);
 };
 
 // Extract series and viewport objects from larvitar store
@@ -375,4 +375,11 @@ export const setImageCustomPreset = (viewports, { wl, ww }) => {
   lt.setImageCustomPreset(viewports, { wl, ww });
 };
 
-export const watchStore = cb => lt.store.watch(cb);
+export const watchStore = cb => lt.store.addStoreListener(cb);
+export const unwatchStore = () => lt.store.removeStoreListener();
+
+export const watchViewportStore = (viewportId, cb) =>
+  lt.store.addViewportListener(viewportId, cb);
+
+export const unwatchViewportStore = viewportId =>
+  lt.store.removeViewportListener(viewportId);

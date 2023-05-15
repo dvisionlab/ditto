@@ -67,7 +67,7 @@
           :duration="0.25"
           height="100%"
           :min="viewport.minSliceId"
-          :max="viewportMaxSlideId"
+          :max="viewport.maxSliceId"
           :processStyle="{
             backgroundColor: 'var(--v-accent-base)',
             borderRadius: '3px'
@@ -107,13 +107,12 @@ import {
   resizeViewport,
   seriesIdToElementId,
   updateSeriesSlice,
-  watchStore
+  watchViewportStore,
+  unwatchViewportStore
 } from "../utils";
 
 const defaultGetProgressFn = (store, seriesId) =>
   (getSeries(seriesId) || {}).progress;
-const defaultGetViewportFn = (store, seriesId, canvasId) =>
-  getViewport(canvasId) || {};
 
 export default {
   name: "DicomCanvas",
@@ -124,7 +123,7 @@ export default {
     clearOnDestroy: { default: false, type: Boolean },
     canvasId: { required: true, type: String },
     getProgressFn: { default: defaultGetProgressFn, type: Function },
-    getViewportFn: { default: defaultGetViewportFn, type: Function },
+    getViewportFn: { required: false, type: Function },
     seriesId: { required: true, type: [String, Number] },
     showMultiframeIcon: { default: false, type: Boolean },
     showProgress: { default: false, type: Boolean },
@@ -136,35 +135,38 @@ export default {
   data: () => ({
     isReady: false,
     error: false,
+    ltViewport: null,
     stackMetadata: null,
-    validCanvasId: null,
-    viewportSliceId: null,
-    viewportMaxSlideId: null,
-    viewportMinSlideId: null
+    validCanvasId: null
   }),
-  mounted() {
-    // TODO specific watcher
-    watchStore(data => {
-      // console.log(data.viewports[this.validCanvasId].maxSliceId);
-      // console.log(data.viewports[this.validCanvasId].sliceId);
-      this.viewportMaxSlideId = data.viewports[this.validCanvasId].maxSliceId;
-      this.viewportMinSlideId = data.viewports[this.validCanvasId].minSliceId;
-      this.viewportSliceId = data.viewports[this.validCanvasId].sliceId;
-    });
-  },
   beforeDestroy() {
+    if (!this.getViewportFn) {
+      unwatchViewportStore(this.validCanvasId);
+    }
+
     this.destroy();
   },
   computed: {
     progress() {
-      return this.getProgressFn(this.$store, this.seriesId, this.validCanvasId);
+      // TODO need store watcher
+      const p = this.getProgressFn(
+        this.$store,
+        this.seriesId,
+        this.validCanvasId
+      );
+      console.log(p);
+      return p;
     },
     viewport() {
-      return this.getViewportFn(this.$store, this.seriesId, this.validCanvasId);
+      return (
+        (this.getViewportFn
+          ? this.getViewportFn(this.$store, this.seriesId, this.validCanvasId)
+          : this.ltViewport) || {}
+      );
     },
     sliderSliceId: {
       get() {
-        return this.viewportSliceId;
+        return this.viewport.sliceId;
       },
       set(index) {
         if (this.isReady) {
@@ -188,6 +190,18 @@ export default {
 
       this.isReady = false;
     },
+    initViewportData(viewportId, prevViewportId) {
+      // init viewport data and start listening
+      if (!this.getViewportFn) {
+        if (prevViewportId) {
+          // TODO test this
+          unwatchViewportStore(prevViewportId);
+        }
+
+        this.ltViewport = getViewport(viewportId);
+        watchViewportStore(viewportId, data => (this.ltViewport = data));
+      }
+    },
     onResize() {
       if (this.isReady) {
         resizeViewport(this.validCanvasId);
@@ -196,9 +210,15 @@ export default {
   },
   watch: {
     canvasId: {
-      handler() {
+      handler(canvasId, prevCanvasId) {
         // Compute valid element id (dots not allowed)
-        this.validCanvasId = seriesIdToElementId(this.canvasId);
+        this.validCanvasId = seriesIdToElementId(canvasId);
+        // init viewport data and start listening for changes
+
+        this.initViewportData(
+          this.validCanvasId,
+          prevCanvasId ? seriesIdToElementId(prevCanvasId) : undefined
+        );
       },
       immediate: true
     },
