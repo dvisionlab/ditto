@@ -67,7 +67,7 @@
           :duration="0.25"
           height="100%"
           :min="viewport.minSliceId"
-          :max="viewport.maxSliceId"
+          :max="viewportMaxSlideId"
           :processStyle="{
             backgroundColor: 'var(--v-accent-base)',
             borderRadius: '3px'
@@ -100,17 +100,20 @@ import {
   clearSeriesCache,
   deleteViewport,
   disableCanvas,
+  getSeries,
   getSeriesStack,
+  getViewport,
   renderSeries,
   resizeViewport,
   seriesIdToElementId,
-  updateSeriesSlice
+  updateSeriesSlice,
+  watchStore
 } from "../utils";
 
 const defaultGetProgressFn = (store, seriesId) =>
-  (store.state.larvitar.series[seriesId] || {}).progress;
+  (getSeries(seriesId) || {}).progress;
 const defaultGetViewportFn = (store, seriesId, canvasId) =>
-  store.getters["larvitar/viewport"](canvasId) || {};
+  getViewport(canvasId) || {};
 
 export default {
   name: "DicomCanvas",
@@ -134,8 +137,21 @@ export default {
     isReady: false,
     error: false,
     stackMetadata: null,
-    validCanvasId: null
+    validCanvasId: null,
+    viewportSliceId: null,
+    viewportMaxSlideId: null,
+    viewportMinSlideId: null
   }),
+  mounted() {
+    // TODO specific watcher
+    watchStore(data => {
+      // console.log(data.viewports[this.validCanvasId].maxSliceId);
+      // console.log(data.viewports[this.validCanvasId].sliceId);
+      this.viewportMaxSlideId = data.viewports[this.validCanvasId].maxSliceId;
+      this.viewportMinSlideId = data.viewports[this.validCanvasId].minSliceId;
+      this.viewportSliceId = data.viewports[this.validCanvasId].sliceId;
+    });
+  },
   beforeDestroy() {
     this.destroy();
   },
@@ -148,7 +164,7 @@ export default {
     },
     sliderSliceId: {
       get() {
-        return this.viewport.sliceId;
+        return this.viewportSliceId;
       },
       set(index) {
         if (this.isReady) {

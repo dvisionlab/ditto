@@ -56,11 +56,12 @@
 
 <script>
 import CinematicSlider from "./CinematicSlider";
+import { getViewport } from "../utils";
 
 const DEFAULT_FRAME_TIME = 100;
 
 const defaultGetViewportFn = (store, seriesId, canvasId) =>
-  store.getters["larvitar/viewport"](canvasId) || {};
+  getViewport(canvasId) || {};
 
 export default {
   name: "CinematicTool",

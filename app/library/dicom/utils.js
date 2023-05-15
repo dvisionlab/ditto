@@ -3,7 +3,7 @@
 // -----------------------------------
 
 // Dependencies
-import * as lt from "larvitar";
+import * as lt from "larvitar/dist/larvitar";
 import { saveAs } from "file-saver";
 import print from "print-js";
 
@@ -142,16 +142,15 @@ export const clearSeriesData = (seriesId, clearCache = false) => {
     lt.clearImageCache(seriesId);
   }
 
-  lt.larvitar_store.removeSeriesIds(seriesId);
+  lt.store.removeSeriesIds(seriesId);
 };
 
-export const getViewport = elementId => {
-  return lt.larvitar_store.get("viewports")[elementId];
-};
+// Extract series and viewport objects from larvitar store
+export const getSeries = seriesId => lt.store.get(["series", seriesId]);
+export const getViewport = elementId => lt.store.get(["viewports", elementId]);
 
 // Remove a viewport from the larvitar store
-export const deleteViewport = elementId =>
-  lt.larvitar_store.deleteViewport(elementId);
+export const deleteViewport = elementId => lt.store.deleteViewport(elementId);
 
 // Call the Larvitar "disableViewport" function:
 // unrender an image on a html div using cornerstone
@@ -187,7 +186,7 @@ export const csToolsUpdateImageIds = (elementId, imageIds, imageId) => {
 
 // update larvitar imageIndex and numberOfSlices in store
 export const setImageIndexes = (elementId, numberOfImages) => {
-  lt.larvitar_store.set("maxSliceId", [elementId, numberOfImages]);
+  lt.store.setMaxSliceId(elementId, numberOfImages);
 };
 
 // Merge parsed files with previous parsed files if the instance uids matches
@@ -263,7 +262,7 @@ export const parseFile = (seriesId, file) => {
 
 // Use Larvitar to render a series into a canvas
 export const renderSeries = (elementId, seriesStack, params = {}) => {
-  lt.larvitar_store.addViewport(elementId);
+  lt.store.addViewport(elementId);
   // render returns a promise which will resolve when image is displayed
   return seriesStack.isPDF
     ? lt.renderDICOMPDF(seriesStack, elementId)
@@ -274,7 +273,8 @@ export const renderSeries = (elementId, seriesStack, params = {}) => {
 export const reset = () => {
   lt.clearImageCache();
   lt.resetLarvitarManager();
-  lt.larvitar_store.resetSeriesIds();
+  console.log(lt.store);
+  // lt.store.resetSeriesIds();
 };
 
 // Call the Larvitar "resizeViewport" function
@@ -289,13 +289,7 @@ export const setup = (store, toolsStyle) => {
   lt.clearImageCache();
   lt.resetLarvitarManager();
 
-  if (store) {
-    // use larvitar vuex store and register it in the app store
-    lt.initLarvitarStore(store, "larvitar", true);
-  } else {
-    // use without vuex
-    lt.initLarvitarStore();
-  }
+  lt.store.initialize();
 
   lt.initializeImageLoader();
   lt.registerMultiFrameImageLoader();
@@ -316,7 +310,7 @@ export const storeSeriesStack = (seriesId, stack, cache = false) => {
 export const updateSeriesSlice = (elementId, seriesId, sliceId, imageCache) => {
   // sliceId must be between 0 and n-1
   const stack = getSeriesStack(seriesId);
-  lt.larvitar_store.set("sliceId", [elementId, sliceId]);
+  lt.store.setSliceId(elementId, sliceId);
   lt.updateImage(stack, elementId, sliceId, imageCache);
   lt.updateStackToolState(elementId, sliceId);
 };
@@ -380,3 +374,5 @@ export const setImagePreset = (viewports, preset) =>
 export const setImageCustomPreset = (viewports, { wl, ww }) => {
   lt.setImageCustomPreset(viewports, { wl, ww });
 };
+
+export const watchStore = cb => lt.store.watch(cb);
