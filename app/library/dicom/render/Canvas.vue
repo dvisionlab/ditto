@@ -48,8 +48,8 @@
     <slot
       v-if="showSlider"
       name="viewport-slider"
-      v-bind:i="viewport.sliceId"
-      v-bind:n="viewport.maxSliceId"
+      v-bind:i="( viewport.sliceId + 1 ) / (viewport.maxTimeId + 1)"
+      v-bind:n="(( viewport.maxSliceId +1 )  / (viewport.maxTimeId + 1)) - 1"
     >
       <!-- default slider -->
       <div
@@ -67,7 +67,7 @@
           :duration="0.25"
           height="100%"
           :min="viewport.minSliceId"
-          :max="viewport.maxSliceId"
+          :max="((viewport.maxSliceId +1 )  / (viewport.maxTimeId + 1)) - 1"
           :processStyle="{
             backgroundColor: 'var(--v-accent-base)',
             borderRadius: '3px'
@@ -81,6 +81,45 @@
           }"
           width="8px"
           v-model="sliderSliceId"
+        />
+      </div>
+    </slot>
+    <!--time frame slider for 4D exam -->>
+    <slot
+      v-if="showSlider && viewport.isTimeserie"
+      name="viewport-frame-slider"
+      v-bind:i="viewport.timeId"
+      v-bind:n="viewport.maxTimeId"
+    >
+      <!-- default slider -->
+      <div
+        :style="{
+          height: '30px',
+          width: '75%',
+          position: 'absolute',
+          bottom: '2%',
+          right: '0'
+        }"
+      >
+        <vue-slider
+          contained
+          :duration="0.25"
+          height="8px"
+          :min="viewport.minTimeId"
+          :max="viewport.maxTimeId"
+          :processStyle="{
+            backgroundColor: 'var(--v-accent-base)',
+            borderRadius: '3px'
+          }"
+          tooltip="active"
+          :tooltip-formatter="val => val + 1"
+          :tooltip-style="{
+            backgroundColor: 'var(--v-accent-base)',
+            borderColor: 'var(--v-accent-base)',
+            color: 'black'
+          }"
+          width="80%"
+          v-model="sliderFrameId"
         />
       </div>
     </slot>
@@ -104,7 +143,9 @@ import {
   renderSeries,
   resizeViewport,
   seriesIdToElementId,
-  updateSeriesSlice
+  updateSeriesSlice,
+  // setTimeFrame,
+  get4DSliceIndex
 } from "../utils";
 
 const defaultGetProgressFn = (store, seriesId) =>
@@ -126,6 +167,7 @@ export default {
     showMultiframeIcon: { default: false, type: Boolean },
     showProgress: { default: false, type: Boolean },
     showSlider: { default: false, type: Boolean },
+    // showFrameSlider: { default: false, type: Boolean },
     stack: { required: false, type: Object },
     tools: { default: () => stackTools.default, type: Array },
     toolsHandlers: { required: false, type: Object }
@@ -134,7 +176,7 @@ export default {
     isReady: false,
     error: false,
     stackMetadata: null,
-    validCanvasId: null
+    validCanvasId: null,
   }),
   beforeDestroy() {
     this.destroy();
@@ -148,13 +190,39 @@ export default {
     },
     sliderSliceId: {
       get() {
+        if (this.viewport.maxTimeId > 0 ) {
+          console.log('getting sliceid', Math.floor((this.viewport.sliceId) / (this.viewport.maxTimeId + 1)));
+          return Math.floor((this.viewport.sliceId) / (this.viewport.maxTimeId + 1));
+        }
         return this.viewport.sliceId;
       },
       set(index) {
         if (this.isReady) {
-          updateSeriesSlice(this.validCanvasId, this.seriesId, index);
+          if (this.viewport.maxTimeId > 0 ) {
+            const stackIndex = get4DSliceIndex(this.viewport.timeId, index, this.viewport.maxTimeId + 1);
+            console.log('frame ', this.viewport.timeId )
+            console.log('index ', index);
+            console.log( 'calculate stack correct index = ', stackIndex);
+            updateSeriesSlice(this.validCanvasId, this.seriesId, stackIndex);
+          } else {
+            updateSeriesSlice(this.validCanvasId, this.seriesId, index);
+          }
         }
       }
+    },
+    sliderFrameId: {
+      get() {
+        return this.viewport.timeId;
+      },
+      set(index) {
+        if (this.isReady) {
+          const sliceNumber = Math.floor((this.viewport.sliceId) / (this.viewport.maxTimeId + 1));
+          const stackIndex = get4DSliceIndex( index,sliceNumber, this.viewport.maxTimeId + 1);
+          console.log( 'calculate stack correct index = ', stackIndex);
+          // setTimeFrame(this.validCanvasId,index);
+          updateSeriesSlice(this.validCanvasId, this.seriesId, stackIndex);
+        }
+      } 
     }
   },
   methods: {
