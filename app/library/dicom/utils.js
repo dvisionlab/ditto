@@ -380,3 +380,8 @@ export const setImagePreset = (viewports, preset) =>
 export const setImageCustomPreset = (viewports, { wl, ww }) => {
   lt.setImageCustomPreset(viewports, { wl, ww });
 };
+
+// calculate 4d slice
+export const get4DSliceIndex = (frameNumber, sliceNumber, totFrames) => {
+  return sliceNumber*totFrames + frameNumber; 
+};
