@@ -54,14 +54,15 @@
       <!-- default slider -->
       <div
         :style="{
-          height: '75%',
+          height: '97%',
           width: '30px',
           position: 'absolute',
-          top: '12.5%',
+          down: '0px',
+          top: '10px',
           right: '0'
         }"
       >
-        <vue-slider
+      <vue-slider
           contained
           direction="btt"
           :duration="0.25"
@@ -70,7 +71,7 @@
           :max="((viewport.maxSliceId +1 )  / (viewport.maxTimeId + 1)) - 1"
           :processStyle="{
             backgroundColor: 'var(--v-accent-base)',
-            borderRadius: '3px'
+            borderRadius: '1px'
           }"
           tooltip="active"
           :tooltip-formatter="val => val + 1"
@@ -79,9 +80,13 @@
             borderColor: 'var(--v-accent-base)',
             color: 'black'
           }"
-          width="8px"
+          width="5px"
           v-model="sliderSliceId"
-        />
+        >
+        <template v-slot:dot="{ value, focus }">
+          <div :class="['custom-dot-v', { focus }]"></div>
+        </template>
+      </vue-slider>
       </div>
     </slot>
     <!--time frame slider for 4D exam -->>
@@ -97,19 +102,19 @@
           height: '30px',
           width: '75%',
           position: 'absolute',
-          bottom: '2%',
+          bottom: '0',
           right: '0'
         }"
       >
         <vue-slider
           contained
           :duration="0.25"
-          height="8px"
+          height="5px"
           :min="viewport.minTimeId"
           :max="viewport.maxTimeId"
           :processStyle="{
             backgroundColor: 'var(--v-accent-base)',
-            borderRadius: '3px'
+            borderRadius: '1px'
           }"
           tooltip="active"
           :tooltip-formatter="val => val + 1"
@@ -120,7 +125,11 @@
           }"
           width="80%"
           v-model="sliderFrameId"
-        />
+        >
+        <template v-slot:dot="{ value, focus }">
+          <div :class="['custom-dot-h', { focus }]"></div>
+        </template>
+      </vue-slider>
       </div>
     </slot>
   </div>
@@ -167,7 +176,6 @@ export default {
     showMultiframeIcon: { default: false, type: Boolean },
     showProgress: { default: false, type: Boolean },
     showSlider: { default: false, type: Boolean },
-    // showFrameSlider: { default: false, type: Boolean },
     stack: { required: false, type: Object },
     tools: { default: () => stackTools.default, type: Array },
     toolsHandlers: { required: false, type: Object }
@@ -335,4 +343,34 @@ export default {
 .v-input >>> .v-input__slot {
   height: 100% !important;
 }
+.custom-dot-h {
+    width: 50%;
+    height: 80%;
+    border-radius: 0;
+    background-color: white;
+    transition: all .3s;
+  }
+  .custom-dot:hover {
+    /*transform: rotateZ(45deg);*/
+  }
+  .custom-dot-h.focus {
+    width: 70%;
+    height: 100%;
+    border-radius: 0%;
+  }
+.custom-dot-v {
+    width: 80%;
+    height: 50%;
+    border-radius: 0;
+    background-color: white;
+    transition: all .3s;
+  }
+  .custom-dot:hover {
+    /*transform: rotateZ(45deg);*/
+  }
+  .custom-dot-v.focus {
+    width: 100%;
+    height: 70%; 
+    border-radius: 0%;
+  }
 </style>
