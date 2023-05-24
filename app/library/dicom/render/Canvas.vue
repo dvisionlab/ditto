@@ -55,7 +55,7 @@
       <div
         :style="{
           height: '97%',
-          width: '30px',
+          width: '20px',
           position: 'absolute',
           down: '0px',
           top: '10px',
@@ -91,7 +91,7 @@
     </slot>
     <!--time frame slider for 4D exam -->>
     <slot
-      v-if="showSlider && viewport.isTimeserie"
+      v-if="showSlider && stackMetadata?.series.is4D"
       name="viewport-frame-slider"
       v-bind:i="viewport.timeId"
       v-bind:n="viewport.maxTimeId"
@@ -99,11 +99,11 @@
       <!-- default slider -->
       <div
         :style="{
-          height: '30px',
+          height: '20px',
           width: '75%',
           position: 'absolute',
           bottom: '0',
-          right: '0'
+          margin: '0 12.5%'
         }"
       >
         <vue-slider
@@ -123,7 +123,7 @@
             borderColor: 'var(--v-accent-base)',
             color: 'black'
           }"
-          width="80%"
+          width="100%"
           v-model="sliderFrameId"
         >
         <template v-slot:dot="{ value, focus }">
@@ -344,7 +344,7 @@ export default {
   height: 100% !important;
 }
 .custom-dot-h {
-    width: 50%;
+    width: 70%;
     height: 80%;
     border-radius: 0;
     background-color: white;
@@ -360,7 +360,7 @@ export default {
   }
 .custom-dot-v {
     width: 80%;
-    height: 50%;
+    height: 70%;
     border-radius: 0;
     background-color: white;
     transition: all .3s;
