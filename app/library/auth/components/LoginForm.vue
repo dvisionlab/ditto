@@ -9,9 +9,11 @@
       @submit="submit"
     >
       <template v-slot:header>
-        <h2 class="text-uppercase primary--text my-4">
-          {{ $t("login") }}
-        </h2>
+        <div v-if="title !== ''">
+          <h2 class="text-uppercase primary--text my-4">
+            {{ $t(title) }}
+          </h2>
+        </div>
 
         <div>
           <template v-if="alertMessage || error">
@@ -83,6 +85,10 @@ export default {
     },
     baseRoute: {
       default: "",
+      type: String
+    },
+    title: {
+      default: 'login',
       type: String
     }
   },

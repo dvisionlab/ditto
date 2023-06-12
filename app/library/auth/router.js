@@ -30,6 +30,7 @@ export const getRoutes = options => {
             ...route.query,
             allowPasswordReset: options.allowPasswordReset,
             allowUserRegistration: options.allowUserRegistration,
+            title: "",
             baseRoute: options.baseRoute
           })
         }
