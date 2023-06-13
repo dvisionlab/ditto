@@ -120,14 +120,12 @@
           </v-btn>
         </div>
       </div>
-
       <v-divider :class="{ 'px-2': !$vuetify.breakpoint.smAndDown }" vertical />
-
-      <modal-controllers
-        class="flex-shrink-0 align-self-center"
-        @cancel="onCancel"
-        @minimize="$emit('minimize')"
-      />
+        <modal-controllers v-if="modal"
+          class="flex-shrink-0 align-self-center"
+          @cancel="onCancel"
+          @minimize="$emit('minimize')"
+        />
     </div>
 
     <div
@@ -201,7 +199,8 @@ export default {
   props: {
     icon: { default: "mdi-upload-multiple", type: String },
     label: { default: "dicom-import.import-exams", type: String },
-    options: { default: () => ({}), type: Object }
+    options: { default: () => ({}), type: Object },
+    modal: { default: false, type: Boolean}
   },
   data() {
     const headers = getHeaders(this.options).map(h => ({
@@ -304,7 +303,8 @@ export default {
     },
     onNewSeries({ errors, series }) {
       this.errors = [...this.errors, ...errors];
-
+      this.$emit('new-series-loaded');
+      console.log('new series loaded');
       // Check if series are new or merge same series
       series.forEach(s => {
         const index = this.series.findIndex(
