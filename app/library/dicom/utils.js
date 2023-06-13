@@ -6,6 +6,7 @@
 import * as lt from "larvitar";
 import { saveAs } from "file-saver";
 import print from "print-js";
+import Vue from 'vue';
 
 // Private methods
 // ---------------
@@ -291,7 +292,7 @@ export const setup = (store, toolsStyle) => {
 
   if (store) {
     // use larvitar vuex store and register it in the app store
-    lt.initLarvitarStore(store, "larvitar", true);
+    lt.initLarvitarStore(store, "larvitar", true, Vue);
   } else {
     // use without vuex
     lt.initLarvitarStore();
