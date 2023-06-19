@@ -288,7 +288,30 @@ export default {
             renderSeries(this.validCanvasId, stack)
               .then(() => {
                 // series rendered
-                addTools(this.tools, this.validCanvasId, this.toolsHandlers);
+               
+                console.log(this.tools);
+                // add 4D wheelslider to handle 4D series
+                if (this.stackMetadata.series.is4D) {
+                  // remove StackScrollMouseWheel from this.tools
+                  const tools = this.tools.filter(t => t.name !== "StackScrollMouseWheel");
+                  const mouseWheel4DScrollSlice = {
+                    name: 'Slice4DScrollMouseWheel',
+                    defaultActive: true,
+                    configuration: {
+                      configuration: { loop: false,allowSkipping: false,invert: false, framesNumber: 97 }
+                    },
+                    mixins: ["enabledOrDisabledBinaryTool"]
+                  };
+                  // add mouseWheel4DScrollSlice to tools
+                  tools.push(mouseWheel4DScrollSlice);
+                  // add tools 
+                  addTools(tools, this.validCanvasId, this.toolsHandlers);
+                  console.log("pass here");
+                  console.log(this.stackMetadata.series);
+                  console.log(( this.viewport.maxTimeId + 1));
+                } else {
+                  addTools(this.tools, this.validCanvasId, this.toolsHandlers);
+                }
                 if (this.toolsHandlers) {
                   addMouseKeyHandlers(this.toolsHandlers);
                 }
