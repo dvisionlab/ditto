@@ -25,7 +25,7 @@
 <script>
 import fieldsProps from "../../../form/fieldsProps";
 
-// AcquisitionDate should be a select between:
+// StudyDate should be a select between:
 // any date → ““
 // today → “yyyymmdd-yyyymmdd” where yyyymmdd are year, month and day of today
 // yesterday →  “yyyymmdd-yyyymmdd” where yyyymmdd are year, month and day of yesterday
@@ -63,7 +63,7 @@ const todayMinusYears = years => {
 const format = date => date.toISOString().split("T")[0];
 
 export default {
-  name: "InputAcquisitionDate",
+  name: "InputStudyDate",
   props: fieldsProps,
   data() {
     return {
