@@ -92,11 +92,11 @@ const defaultQueryParameters = [
     clearable: true
   },
   {
-    value: "AcquisitionDate",
-    component: () => import("./InputAcquisitionDate")
+    value: "StudyDate",
+    component: () => import("./InputStudyDate")
   },
   {
-    value: "AcquisitionTime",
+    value: "StudyTime",
     type: "time",
     hint: "since this time to midnight"
   },
