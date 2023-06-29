@@ -1,6 +1,7 @@
 <template>
   <div class="mx-auto">
     <ditto-form
+      :dark="dark"
       :fields="fields"
       :fields-style="{ 'flex-basis': '100%' }"
       :loading="loading"
@@ -90,6 +91,10 @@ export default {
     title: {
       default: 'login',
       type: String
+    },
+    dark: {
+      type: Boolean,
+      default: false,
     }
   },
   data: () => ({

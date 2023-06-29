@@ -1,6 +1,6 @@
 <template>
   <div class="step-wrapper">
-    <div class="step-header d-flex" v-relative-height="'contentHeight'">
+    <div  v-if="steps[currentStep].actions" :class="{ 'dark-header': dark }" class="step-header d-flex" v-relative-height="'contentHeight'">
       <div
         class="d-flex flex-wrap flex-grow-1 align-center"
         :class="{
@@ -15,7 +15,7 @@
             'py-2': $vuetify.breakpoint.smAndDown
           }"
         >
-          <v-icon class="pl-3" color="black">{{ icon }}</v-icon>
+          <v-icon :dark="dark" class="pl-3" color="black">{{ icon }}</v-icon>
           <h3 class="text-uppercase lh-small px-3">{{ $t(label) }}</h3>
         </div>
 
@@ -29,51 +29,54 @@
           }"
         >
           <v-btn
+            :dark="dark"
             class="d-none d-sm-flex"
             :disabled="!steps[currentStep].back()"
             text
             @click="currentStep--"
           >
-            <v-icon>mdi-chevron-left</v-icon>
+            <v-icon :dark="dark">mdi-chevron-left</v-icon>
             <span class="pr-2">back</span>
           </v-btn>
 
           <div v-if="steps[currentStep].actions" class="d-flex">
             <!-- multiple actions -->
             <template v-if="steps[currentStep].actions.length > 1">
-              <v-menu max-width="295px" offset-y>
+              <v-menu :dark="dark" max-width="295px" offset-y>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
+                    :dark="dark"
                     class="primary--text"
                     :elevation="0"
                     v-bind="attrs"
                     v-on="on"
                   >
-                    <v-icon v-if="$vuetify.breakpoint.smAndDown">
+                    <v-icon :dark="dark" v-if="$vuetify.breakpoint.smAndDown">
                       mdi-dots-horizontal
                     </v-icon>
                     <span v-else>{{
                       selectedAction ? selectedAction.text : "---"
                     }}</span>
-                    <v-icon>mdi-chevron-down</v-icon>
+                    <v-icon :dark="dark" >mdi-chevron-down</v-icon>
                   </v-btn>
                 </template>
-                <v-list>
+                <v-list :dark="dark">
                   <v-list-item
                     v-for="(item, i) in steps[currentStep].actions"
                     :key="i"
                     :class="{
                       'selected-action': item.emitter == selectedAction.emitter
                     }"
+                    :dark="dark"
                     :disabled="item.disabled"
                     link
                     @click="selectedAction = item"
                   >
-                    <v-list-item-content>
-                      <v-list-item-title class="text-uppercase">
+                    <v-list-item-content :dark="dark">
+                      <v-list-item-title :dark="dark" class="text-uppercase">
                         {{ item.text }}
                       </v-list-item-title>
-                      <v-list-item-subtitle :style="{ whiteSpace: 'normal' }">
+                      <v-list-item-subtitle :dark="dark" :style="{ whiteSpace: 'normal' }">
                         {{ item.hint }}
                       </v-list-item-subtitle>
                     </v-list-item-content>
@@ -81,13 +84,14 @@
                 </v-list>
               </v-menu>
               <v-btn
+                :dark="dark"
                 color="primary"
                 :disabled="selectedSeries.length <= 0 || !selectedAction"
                 :elevation="0"
                 @click="onAction"
               >
                 <span class="pl-2">confirm</span>
-                <v-icon>mdi-chevron-right</v-icon>
+                <v-icon :dark="dark">mdi-chevron-right</v-icon>
               </v-btn>
             </template>
 
@@ -135,6 +139,7 @@
       <component
         :is="`import-step-${currentStep + 1}`"
         class="h-100"
+        :dark="dark"
         :allow-anonymization="options.allowAnonymization"
         :get-progress-fn="getProgressFn"
         :get-viewport-fn="getViewportFn"
@@ -200,7 +205,8 @@ export default {
     icon: { default: "mdi-upload-multiple", type: String },
     label: { default: "dicom-import.import-exams", type: String },
     options: { default: () => ({}), type: Object },
-    modal: { default: false, type: Boolean}
+    modal: { default: false, type: Boolean},
+    dark: {default: false, type: Boolean},
   },
   data() {
     const headers = getHeaders(this.options).map(h => ({
@@ -367,6 +373,9 @@ export default {
 <style lang="scss" scoped>
 $min-header-height: 5.5em;
 
+.dark-header {
+  background-color: #1E1E1E;
+}
 .selected-action {
   background: rgba(var(--v-primary-rgb), 0.12);
 }

@@ -15,6 +15,7 @@
       :required="required"
       :rules="dirty ? getRules(field) : undefined"
       :type="field.type"
+      :dark="dark"
       v-model="value[field.key]"
       @icon-click="() => $emit('icon-click', field)"
     >
@@ -35,6 +36,7 @@ export default {
   name: "Field",
   components: { VTextField, VSelect },
   props: {
+    dark: {default: false, type: Boolean },
     dirty: { default: false, type: Boolean },
     field: { required: true, type: Object },
     loading: { default: false, type: Boolean },

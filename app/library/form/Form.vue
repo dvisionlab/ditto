@@ -10,7 +10,7 @@
     <div class="d-flex flex-wrap" :style="{ margin: '0 -1em' }">
       <template v-for="(field, i) in fields">
         <div v-if="field.group" :key="`group-${i}`" class="flex-item">
-          <v-card class="mt-1" outlined>
+          <v-card :dark="dark" class="mt-1" outlined>
             <v-card-title class="text-uppercase">{{
               field.group
             }}</v-card-title>
@@ -34,6 +34,7 @@
           :key="i"
           class="flex-item"
           :dirty="dirty"
+          :dark="dark"
           :field="field"
           :loading="loading"
           :style="fieldsStyle"
@@ -45,6 +46,7 @@
 
     <div class="d-flex flex-wrap align-center mt-4" :style="footerStyle">
       <v-btn
+        :dark="dark"
         class="flex-grow-1"
         color="primary"
         :disabled="loading || !valid"
@@ -97,7 +99,8 @@ export default {
     lazyValidation: { default: true, type: Boolean },
     loading: { default: false, type: Boolean },
     submitLabel: { default: "submit", type: String },
-    value: { default: () => ({}), type: Object }
+    value: { default: () => ({}), type: Object },
+    dark: { default: false, type: Boolean }
   },
 
   data: () => ({

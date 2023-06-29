@@ -8,6 +8,7 @@
     >
       <v-alert
         border="left"
+        :dark="dark"
         class="ma-0"
         icon="mdi-alert-circle"
         type="error"
@@ -17,12 +18,12 @@
           Some errors occured while parsing your DICOM files.
         </h3>
         <div v-if="importErrors.length">
-          <v-btn
+          <v-btn :dark="dark"
             color="red lighten-2"
             text
             @click="showErrorDetails = !showErrorDetails"
           >
-            <v-icon>mdi-chevron-{{ showErrorDetails ? "up" : "down" }}</v-icon>
+            <v-icon :dark="dark">mdi-chevron-{{ showErrorDetails ? "up" : "down" }}</v-icon>
             {{ showErrorDetails ? "hide" : "show" }} errors details
           </v-btn>
 
@@ -35,6 +36,7 @@
 
     <!-- TODO show parsing warnings/errors related to parsed series -->
     <v-data-table
+      :dark="dark"
       disable-pagination
       fixed-header
       :group-by="metadata.StudyInstanceUID"
@@ -166,6 +168,7 @@ export default {
   directives: { RelativeHeight },
   props: {
     allowAnonymization: { default: false, type: Boolean },
+    dark: { default: false, type: Boolean},
     getProgressFn: { required: false, type: Function },
     getViewportFn: { required: false, type: Function },
     headers: { required: true, type: Array },
