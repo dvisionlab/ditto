@@ -19,6 +19,7 @@
         :layout="pane"
         :parent-id="`${parentId}${i}`"
         :push-other-panes="pushOtherPanes"
+        @resized="e => $emit('resized', e)"
       >
         <!-- Recursively pass down scoped slot -->
         <template v-slot="{ pane }">
