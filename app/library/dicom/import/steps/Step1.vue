@@ -35,13 +35,14 @@
       />
 
       
-      <div :class="{ 'white--text': dark}" class="mx-auto text-center text-uppercase mt-10">
+      <div v-if="ddisclaimer && disclaimer !== ''" :class="{ 'white--text': dark}" class="mx-auto text-center text-uppercase mt-10">
         <h4 v-html="disclaimer" class="primary--text"></h4>
       </div>
       <div class="text-center">
         <v-btn :dark="dark" 
           class="flex-grow-1"
           x-large
+          block
           color="primary" @click="$refs.inputFile.click()">
           browse files
         </v-btn>
