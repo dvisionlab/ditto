@@ -48,8 +48,8 @@
     <slot
       v-if="showSlider"
       name="viewport-slider"
-      v-bind:i="( viewport.sliceId + 1 ) / (viewport.maxTimeId + 1)"
-      v-bind:n="(( viewport.maxSliceId +1 )  / (viewport.maxTimeId + 1)) - 1"
+      v-bind:i="(viewport.sliceId + 1) / (viewport.maxTimeId + 1)"
+      v-bind:n="(viewport.maxSliceId + 1) / (viewport.maxTimeId + 1) - 1"
     >
       <!-- default slider -->
       <div
@@ -62,13 +62,13 @@
           right: '0'
         }"
       >
-      <vue-slider
+        <vue-slider
           contained
           direction="btt"
           :duration="0.25"
           height="100%"
           :min="viewport.minSliceId"
-          :max="((viewport.maxSliceId +1 )  / (viewport.maxTimeId + 1)) - 1"
+          :max="(viewport.maxSliceId + 1) / (viewport.maxTimeId + 1) - 1"
           :processStyle="{
             backgroundColor: 'var(--v-accent-base)',
             borderRadius: '1px'
@@ -83,13 +83,13 @@
           width="5px"
           v-model="sliderSliceId"
         >
-        <template v-slot:dot="{ value, focus }">
-          <div :class="['custom-dot-v', { focus }]"></div>
-        </template>
-      </vue-slider>
+          <template v-slot:dot="{ value, focus }">
+            <div :class="['custom-dot-v', { focus }]"></div>
+          </template>
+        </vue-slider>
       </div>
     </slot>
-    <!--time frame slider for 4D exam -->>
+    <!--time frame slider for 4D exam -->
     <slot
       v-if="showSlider && stackMetadata?.series.is4D"
       name="viewport-frame-slider"
@@ -126,10 +126,10 @@
           width="100%"
           v-model="sliderFrameId"
         >
-        <template v-slot:dot="{ value, focus }">
-          <div :class="['custom-dot-h', { focus }]"></div>
-        </template>
-      </vue-slider>
+          <template v-slot:dot="{ value, focus }">
+            <div :class="['custom-dot-h', { focus }]"></div>
+          </template>
+        </vue-slider>
       </div>
     </slot>
   </div>
@@ -184,7 +184,7 @@ export default {
     isReady: false,
     error: false,
     stackMetadata: null,
-    validCanvasId: null,
+    validCanvasId: null
   }),
   beforeDestroy() {
     this.destroy();
@@ -198,19 +198,21 @@ export default {
     },
     sliderSliceId: {
       get() {
-        if (this.viewport.maxTimeId > 0 ) {
-          console.log('getting sliceid', Math.floor((this.viewport.sliceId) / (this.viewport.maxTimeId + 1)));
-          return Math.floor((this.viewport.sliceId) / (this.viewport.maxTimeId + 1));
+        if (this.viewport.maxTimeId > 0) {
+          return Math.floor(
+            this.viewport.sliceId / (this.viewport.maxTimeId + 1)
+          );
         }
         return this.viewport.sliceId;
       },
       set(index) {
         if (this.isReady) {
-          if (this.viewport.maxTimeId > 0 ) {
-            const stackIndex = get4DSliceIndex(this.viewport.timeId, index, this.viewport.maxTimeId + 1);
-            console.log('frame ', this.viewport.timeId )
-            console.log('index ', index);
-            console.log( 'calculate stack correct index = ', stackIndex);
+          if (this.viewport.maxTimeId > 0) {
+            const stackIndex = get4DSliceIndex(
+              this.viewport.timeId,
+              index,
+              this.viewport.maxTimeId + 1
+            );
             updateSeriesSlice(this.validCanvasId, this.seriesId, stackIndex);
           } else {
             updateSeriesSlice(this.validCanvasId, this.seriesId, index);
@@ -224,13 +226,19 @@ export default {
       },
       set(index) {
         if (this.isReady) {
-          const sliceNumber = Math.floor((this.viewport.sliceId) / (this.viewport.maxTimeId + 1));
-          const stackIndex = get4DSliceIndex( index,sliceNumber, this.viewport.maxTimeId + 1);
-          console.log( 'calculate stack correct index = ', stackIndex);
+          const sliceNumber = Math.floor(
+            this.viewport.sliceId / (this.viewport.maxTimeId + 1)
+          );
+          const stackIndex = get4DSliceIndex(
+            index,
+            sliceNumber,
+            this.viewport.maxTimeId + 1
+          );
+          console.log("calculate stack correct index = ", stackIndex);
           // setTimeFrame(this.validCanvasId,index);
           updateSeriesSlice(this.validCanvasId, this.seriesId, stackIndex);
         }
-      } 
+      }
     }
   },
   methods: {
@@ -344,33 +352,33 @@ export default {
   height: 100% !important;
 }
 .custom-dot-h {
-    width: 70%;
-    height: 80%;
-    border-radius: 0;
-    background-color: white;
-    transition: all .3s;
-  }
-  .custom-dot:hover {
-    /*transform: rotateZ(45deg);*/
-  }
-  .custom-dot-h.focus {
-    width: 70%;
-    height: 100%;
-    border-radius: 0%;
-  }
+  width: 70%;
+  height: 80%;
+  border-radius: 0;
+  background-color: white;
+  transition: all 0.3s;
+}
+.custom-dot:hover {
+  /*transform: rotateZ(45deg);*/
+}
+.custom-dot-h.focus {
+  width: 70%;
+  height: 100%;
+  border-radius: 0%;
+}
 .custom-dot-v {
-    width: 80%;
-    height: 70%;
-    border-radius: 0;
-    background-color: white;
-    transition: all .3s;
-  }
-  .custom-dot:hover {
-    /*transform: rotateZ(45deg);*/
-  }
-  .custom-dot-v.focus {
-    width: 100%;
-    height: 70%; 
-    border-radius: 0%;
-  }
+  width: 80%;
+  height: 70%;
+  border-radius: 0;
+  background-color: white;
+  transition: all 0.3s;
+}
+.custom-dot:hover {
+  /*transform: rotateZ(45deg);*/
+}
+.custom-dot-v.focus {
+  width: 100%;
+  height: 70%;
+  border-radius: 0%;
+}
 </style>

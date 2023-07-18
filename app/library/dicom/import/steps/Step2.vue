@@ -37,6 +37,7 @@
     <!-- TODO show parsing warnings/errors related to parsed series -->
     <v-data-table
       :dark="dark"
+      dense
       disable-pagination
       fixed-header
       :group-by="metadata.StudyInstanceUID"
@@ -104,7 +105,7 @@
             :series-id="item.larvitarSeriesInstanceUID"
             show-multiframe-icon
             :stack="item"
-            :style="{ width: '10em', height: '10em' }"
+            :style="{ width: '8em', height: '8em' }"
             :tools="tools"
           />
         </v-lazy>
