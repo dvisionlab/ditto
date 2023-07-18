@@ -1,6 +1,11 @@
 <template>
   <div class="step-wrapper">
-    <div  v-if="steps[currentStep].actions" :class="{ 'dark-header': dark }" class="step-header d-flex" v-relative-height="'contentHeight'">
+    <div
+      v-if="steps[currentStep].actions"
+      :class="{ 'dark-header': dark }"
+      class="step-header d-flex"
+      v-relative-height="'contentHeight'"
+    >
       <div
         class="d-flex flex-wrap flex-grow-1 align-center"
         :class="{
@@ -39,7 +44,7 @@
             <span class="pr-2">back</span>
           </v-btn>
 
-          <div v-if="steps[currentStep].actions" class="d-flex">
+          <div class="d-flex">
             <!-- multiple actions -->
             <template v-if="steps[currentStep].actions.length > 1">
               <v-menu :dark="dark" max-width="295px" offset-y>
@@ -57,7 +62,7 @@
                     <span v-else>{{
                       selectedAction ? selectedAction.text : "---"
                     }}</span>
-                    <v-icon :dark="dark" >mdi-chevron-down</v-icon>
+                    <v-icon :dark="dark">mdi-chevron-down</v-icon>
                   </v-btn>
                 </template>
                 <v-list :dark="dark">
@@ -76,7 +81,10 @@
                       <v-list-item-title :dark="dark" class="text-uppercase">
                         {{ item.text }}
                       </v-list-item-title>
-                      <v-list-item-subtitle :dark="dark" :style="{ whiteSpace: 'normal' }">
+                      <v-list-item-subtitle
+                        :dark="dark"
+                        :style="{ whiteSpace: 'normal' }"
+                      >
                         {{ item.hint }}
                       </v-list-item-subtitle>
                     </v-list-item-content>
@@ -112,7 +120,6 @@
           </div>
 
           <v-btn
-            v-else
             color="primary"
             :disabled="!steps[currentStep].next(series)"
             @click="currentStep++"
@@ -125,11 +132,12 @@
         </div>
       </div>
       <v-divider :class="{ 'px-2': !$vuetify.breakpoint.smAndDown }" vertical />
-        <modal-controllers v-if="modal"
-          class="flex-shrink-0 align-self-center"
-          @cancel="onCancel"
-          @minimize="$emit('minimize')"
-        />
+      <modal-controllers
+        v-if="modal"
+        class="flex-shrink-0 align-self-center"
+        @cancel="onCancel"
+        @minimize="$emit('minimize')"
+      />
     </div>
 
     <div
@@ -205,8 +213,8 @@ export default {
     icon: { default: "mdi-upload-multiple", type: String },
     label: { default: "dicom-import.import-exams", type: String },
     options: { default: () => ({}), type: Object },
-    modal: { default: false, type: Boolean},
-    dark: {default: false, type: Boolean},
+    modal: { default: false, type: Boolean },
+    dark: { default: false, type: Boolean }
   },
   data() {
     const headers = getHeaders(this.options).map(h => ({
@@ -309,8 +317,7 @@ export default {
     },
     onNewSeries({ errors, series }) {
       this.errors = [...this.errors, ...errors];
-      this.$emit('new-series-loaded');
-      console.log('new series loaded');
+      this.$emit("new-series-loaded");
       // Check if series are new or merge same series
       series.forEach(s => {
         const index = this.series.findIndex(
@@ -374,7 +381,7 @@ export default {
 $min-header-height: 5.5em;
 
 .dark-header {
-  background-color: #1E1E1E;
+  background-color: #1e1e1e;
 }
 .selected-action {
   background: rgba(var(--v-primary-rgb), 0.12);
