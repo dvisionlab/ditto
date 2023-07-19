@@ -4,6 +4,7 @@
 
 // Dependencies
 import * as lt from "larvitar";
+import Vue from "vue";
 import { saveAs } from "file-saver";
 import print from "print-js";
 
@@ -291,7 +292,7 @@ export const setup = (store, toolsStyle) => {
 
   if (store) {
     // use larvitar vuex store and register it in the app store
-    lt.initLarvitarStore(store, "larvitar", true);
+    lt.initLarvitarStore(store, "larvitar", true, Vue);
   } else {
     // use without vuex
     lt.initLarvitarStore();
@@ -383,7 +384,7 @@ export const setImageCustomPreset = (viewports, { wl, ww }) => {
 
 // calculate 4d slice
 export const get4DSliceIndex = (frameNumber, sliceNumber, totFrames) => {
-  return sliceNumber*totFrames + frameNumber; 
+  return sliceNumber * totFrames + frameNumber;
 };
 export const setTimeFrame = (elementId, frameNumber) => {
   lt.larvitar_store.set("timeId", [elementId, frameNumber]);
