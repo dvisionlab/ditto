@@ -1,5 +1,5 @@
 <template>
-  <div class="p-relative">
+  <div>
     <img
       v-if="value"
       alt="Missing series preview"
