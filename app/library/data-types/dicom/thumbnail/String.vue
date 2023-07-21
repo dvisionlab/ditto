@@ -1,22 +1,24 @@
 <template>
-  <div>
+  <div class="p-relative">
     <img
       v-if="value"
       alt="Missing series preview"
-      class="relative d-flex"
+      class="d-flex"
       :src="base64 ? 'data:image/png;base64,' + value : value"
       :style="{ width, position: 'relative' }"
     />
-    <v-tooltip dark v-if="warningIcon" :text="warningMessage">
-      <template v-slot:activator="{ props }">
+    <v-tooltip dark v-if="warningIcon" right>
+      <template v-slot:activator="{ on, attrs }">
         <v-icon
           dark
-          v-bind="props"
+          v-bind="attrs"
+          v-on="on"
           :style="{ position: 'absolute', bottom: '0' }"
         >
           {{ warningIcon }}
         </v-icon>
       </template>
+      <span>{{ warningMessage }}</span>
     </v-tooltip>
   </div>
 </template>
