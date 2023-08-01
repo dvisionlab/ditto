@@ -33,7 +33,11 @@
         width="100%"
         :src="icon"
       />
-
+      <div :class="{ 'white--text': dark}" class="mx-auto text-center text-uppercase">
+        <h3 >to open the free viewer</h3>
+        <!--<div class="line-wraps"><span>or</span></div>-->
+        
+      </div>
       
       <div v-if="disclaimer && disclaimer !== ''" :class="{ 'white--text': dark}" class="mx-auto text-center text-uppercase mt-10">
         <h4 v-html="disclaimer" class="primary--text"></h4>
