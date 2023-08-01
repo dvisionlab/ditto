@@ -40,11 +40,14 @@
       </template>
 
       <template v-slot:footer>
-        <div class="mt-6 text-right" :style="{ 'flex-basis': '100%' }">
-          <div v-if="allowPasswordReset">
+        <div class="d-flex justify-space-between mt-6" :style="{ 'flex-basis': '100%' }">
+          <div class="" v-if="allowPasswordReset">
+            <a  href="http://demo.dicom.vision"><b>DEMO</b></a>
+          </div>
+          <div class="" v-if="allowPasswordReset">
             <a @click="resetPassword"><b>Forgot Password?</b></a>
           </div>
-          <div v-if="allowUserRegistration">
+          <div class="" v-if="allowUserRegistration">
             New here?
             <a @click="register">Sign up</a>.
           </div>
@@ -111,6 +114,7 @@ export default {
       },
       {
         // appendIcon: "mdi-lock",
+        component: 'PasswordField',
         label: "password",
         key: "password",
         required: () => true,

@@ -31,10 +31,11 @@
 <script>
 import { rules } from "./rules";
 import { VTextField, VSelect } from "vuetify/lib";
+import PasswordField from '../auth/components/PasswordField.vue'; 
 
 export default {
   name: "Field",
-  components: { VTextField, VSelect },
+  components: { VTextField, VSelect,PasswordField },
   props: {
     dark: {default: false, type: Boolean },
     dirty: { default: false, type: Boolean },

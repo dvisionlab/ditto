@@ -1,22 +1,20 @@
 <template>
   <v-text-field
+    :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
+    :type="showPass ? 'text' : 'password'"
     :autofocus="autofocus"
     :disabled="disabled"
     :required="required"
     :rules="rules"
-    :type="type"
     :value="value"
+    :dark="dark"
+    :label="label"
+    @click:append="showPass = !showPass"
     @input="event => $emit('input', event)"
   >
-    <template slot="append">
-      <v-icon v-if="appendIcon" small @click="$emit('icon-click')">{{
-        appendIcon
-      }}</v-icon>
-    </template>
-
-    <template v-slot:label>
+    <!--<template v-slot:label>
       <span class="text-capitalize">{{ label }}</span>
-    </template>
+    </template>-->
   </v-text-field>
 </template>
 
@@ -31,7 +29,13 @@ export default {
     required: { default: false, type: Boolean },
     rules: { required: false, type: Array },
     type: { required: true, type: String },
+    dark: { required: false, default: false, type: Boolean },
     value: { required: false, type: String }
+  },
+  data: function() {
+    return {
+        showPass: false,
+      };
   }
 };
 </script>
