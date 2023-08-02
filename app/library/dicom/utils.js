@@ -151,6 +151,10 @@ export const getViewport = elementId => {
 };
 
 // Remove a viewport from the larvitar store
+export const addViewport = elementId =>
+  lt.larvitar_store.addViewport(elementId);
+
+// Remove a viewport from the larvitar store
 export const deleteViewport = elementId =>
   lt.larvitar_store.deleteViewport(elementId);
 
@@ -264,7 +268,6 @@ export const parseFile = (seriesId, file) => {
 
 // Use Larvitar to render a series into a canvas
 export const renderSeries = (elementId, seriesStack, params = {}) => {
-  lt.larvitar_store.addViewport(elementId);
   // render returns a promise which will resolve when image is displayed
   return seriesStack.isPDF
     ? lt.renderDICOMPDF(seriesStack, elementId)

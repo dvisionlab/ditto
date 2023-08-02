@@ -146,6 +146,7 @@ import {
   addTools,
   clearSeriesData,
   clearSeriesCache,
+  addViewport,
   deleteViewport,
   disableCanvas,
   getSeriesStack,
@@ -267,6 +268,8 @@ export default {
       handler() {
         // Compute valid element id (dots not allowed)
         this.validCanvasId = seriesIdToElementId(this.canvasId);
+        console.log("addVIewport", this.validCanvasId);
+        addViewport(this.validCanvasId);
       },
       immediate: true
     },
