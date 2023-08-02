@@ -42,11 +42,17 @@ export const getRoutes = options => {
           component: Wrapper,
           path: `${options.baseRoute}/forgot-password`,
           meta: { guest: true },
+          props: () => ({
+            dark: true
+          }),
           children: [
             {
               path: "",
               name: "forgot-password",
               meta: { guest: true },
+              props: () => ({
+                dark: true
+              }),
               component: () => import("./components/ForgotPassword")
             }
           ]
