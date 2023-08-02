@@ -1,6 +1,8 @@
 <template>
   <div class="mx-auto">
+    {{ dark }}
     <ditto-form
+      :dark="dark"
       :fields="fields"
       :fields-style="{ 'flex-basis': '100%' }"
       :loading="loading"
@@ -58,6 +60,9 @@ customizeRules({
 
 export default {
   name: "ForgotPassword",
+  props: {
+    dark: { default: false, type: Boolean }
+  },
   components: { DittoForm: Form },
   data: () => ({
     loading: false,
