@@ -102,7 +102,16 @@ const defaultQueryParameters = [
   },
   { value: "ReferringPhysicianName" },
   { value: "NameOfPhysiciansReadingStudy" },
-  { value: "InstitutionName" }
+  { value: "InstitutionName" },
+  {
+    value: "QueryLevel",
+    type: "select",
+    items: [
+      { text: "Study", value: "Study" },
+      { text: "Series", value: "Series" }
+    ],
+    clearable: true
+  }
 ];
 
 const defaultQueryResultsKey = "index";
