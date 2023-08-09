@@ -112,7 +112,10 @@ export default {
         .then(() => {
           this.$router.replace({
             name: "login",
-            query: { alertMessage: "change-password-success" }
+            query: {
+              alertMessage:
+                "Your password has succefully been changed. You can now use your new credentials to access dicom vision app "
+            }
           });
         })
         .catch(error => {

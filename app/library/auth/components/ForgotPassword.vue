@@ -1,6 +1,5 @@
 <template>
   <div class="mx-auto">
-    {{ dark }}
     <ditto-form
       :dark="dark"
       :fields="fields"
@@ -15,7 +14,7 @@
         <h2 class="text-uppercase primary--text my-4">
           {{ $t("auth.reset-password") }}
         </h2>
-        <p class="ma-0 mb-4">
+        <p class="ma-0 mb-4 text-left" :style="{ lineHeight: 1.25 }">
           Please enter your email address. You will receive a link to create a
           new password via email.
         </p>
@@ -95,7 +94,8 @@ export default {
             name: "login",
             query: {
               // TODO translation: An email with password reset instructions has been sent to your email address.
-              alertMessage: "send-forgot-password-email-success",
+              alertMessage:
+                "We are proceding your request and an email with password reset instructions has been sent to your address ",
               email: this.form.email
             }
           });
