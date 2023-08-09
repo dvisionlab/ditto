@@ -225,10 +225,8 @@ export default {
           this.$emit("pacs-retrieve-complete", this.retrievedData);
           return;
         }
-
         const retrieveItem = queue.shift();
         this.$set(step.status.progress, retrieveItem[this.queryResultsKey], 0);
-
         try {
           const retrieveFn = this.options.api.retrieve;
           const retrievedStudy = await retrieveFn(
@@ -236,18 +234,16 @@ export default {
             retrieveItem
           );
           this.retrievedData.push(retrievedStudy);
-
           this.$set(
             step.status.progress,
             retrieveItem[this.queryResultsKey],
             100
           );
-        } catch (error) {
-          // console.log(error);
+        } catch (errorResponse) {
           this.$set(
             step.status.errors,
             retrieveItem[this.queryResultsKey],
-            `Retrieve failed: ${error}`
+            `Retrieve failed: ${errorResponse.statusText} (${errorResponse.status}): ${errorResponse.bodyText}`
           );
         } finally {
           next();
