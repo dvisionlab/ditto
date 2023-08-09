@@ -1,6 +1,7 @@
 <template>
   <div class="mx-auto">
     <ditto-form
+      :dark="dark"
       :fields="fields"
       :fields-style="{ 'flex-basis': '100%' }"
       :loading="loading"
@@ -48,6 +49,7 @@ export default {
   name: "ChangePassword",
   components: { DittoForm: Form },
   props: {
+    dark: { default: true, type: Boolean },
     token: {},
     uid: {}
   },
@@ -68,8 +70,8 @@ export default {
       ];
       return [
         {
-          appendIcon: this.hiddenPassword ? "mdi-eye-off" : "mdi-eye",
-          autofocus: true,
+          auappendIcon: this.hiddenPassword ? "mdi-eye-off" : "mdi-eye",
+          tofocus: true,
           component: PasswordField,
           label: "password",
           key: "password",
