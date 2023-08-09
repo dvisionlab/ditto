@@ -20,7 +20,12 @@
         </p>
 
         <div>
-          <v-alert v-if="error" dense outlined type="error">
+          <v-alert
+            v-if="error"
+            outlined
+            type="error"
+            :style="{ lineHeight: 1.25 }"
+          >
             <span v-html="error" />
           </v-alert>
 

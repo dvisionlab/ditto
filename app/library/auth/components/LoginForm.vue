@@ -24,6 +24,7 @@
               dense
               dismissible
               outlined
+              :style="{ lineHeight: 1.25 }"
               :type="alertType"
               @input="dismissAlert"
             >
@@ -40,9 +41,12 @@
       </template>
 
       <template v-slot:footer>
-        <div class="d-flex justify-space-between mt-6" :style="{ 'flex-basis': '100%' }">
+        <div
+          class="d-flex justify-space-between mt-6"
+          :style="{ 'flex-basis': '100%' }"
+        >
           <div class="" v-if="allowPasswordReset">
-            <a  href="http://demo.dicom.vision"><b>DEMO</b></a>
+            <a href="http://demo.dicom.vision"><b>DEMO</b></a>
           </div>
           <div class="" v-if="allowPasswordReset">
             <a @click="resetPassword"><b>Forgot Password?</b></a>
@@ -92,12 +96,12 @@ export default {
       type: String
     },
     title: {
-      default: 'login',
+      default: "login",
       type: String
     },
     dark: {
       type: Boolean,
-      default: false,
+      default: false
     }
   },
   data: () => ({
@@ -114,7 +118,7 @@ export default {
       },
       {
         // appendIcon: "mdi-lock",
-        component: 'PasswordField',
+        component: "PasswordField",
         label: "password",
         key: "password",
         required: () => true,

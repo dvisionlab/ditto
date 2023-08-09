@@ -5,7 +5,7 @@
       :fields="fields"
       :fields-style="{ 'flex-basis': '100%' }"
       :loading="loading"
-      submit-label="change-password"
+      submit-label="change password"
       :footer-style="{ 'flex-direction': 'row-reverse' }"
       v-model="form"
       @icon-click="onFieldClick"
@@ -13,12 +13,17 @@
     >
       <template v-slot:header>
         <h2 class="text-uppercase primary--text my-4">
-          {{ $t("change-password") }}
+          {{ $t("change password") }}
         </h2>
         <p class="ma-0 mb-4">Please enter a new password.</p>
 
         <div>
-          <v-alert v-if="error" dense outlined type="error">
+          <v-alert
+            v-if="error"
+            outlined
+            type="error"
+            :style="{ lineHeight: 1.25 }"
+          >
             <span v-html="error" />
           </v-alert>
 
@@ -70,8 +75,8 @@ export default {
       ];
       return [
         {
-          auappendIcon: this.hiddenPassword ? "mdi-eye-off" : "mdi-eye",
-          tofocus: true,
+          appendIcon: this.hiddenPassword ? "mdi-eye-off" : "mdi-eye",
+          autofocus: true,
           component: PasswordField,
           label: "password",
           key: "password",
@@ -80,11 +85,13 @@ export default {
         },
         {
           // appendIcon: "mdi-lock",
+          appendIcon: this.hiddenPassword ? "mdi-eye-off" : "mdi-eye",
+          component: PasswordField,
           label: "confirm password",
           key: "confirmPassword",
           required: () => true,
           rules: passwordConfirmationRules,
-          type: "password"
+          type: this.hiddenPassword ? "password" : "text"
         }
       ];
     },
@@ -116,7 +123,7 @@ export default {
             name: "login",
             query: {
               alertMessage:
-                "Your password has succefully been changed. You can now use your new credentials to access dicom vision app "
+                "Your password has succefully been changed. You can now use your new credentials to access DICOM Vision app "
             }
           });
         })
@@ -124,13 +131,11 @@ export default {
           let details = "";
           if (error.body.new_password || error.body.re_new_password) {
             if (error.body.new_password) {
-              details += `${this.$t("new_password")}:<br />`;
               details += error.body.new_password.join("<br />");
             }
 
             if (error.body.re_new_password) {
               error.body.new_password ? (details += "<br /><br />") : null;
-              details += `${this.$t("re_new_password")}:<br />`;
               details += error.body.re_new_password.join("<br />");
             }
           } else {
