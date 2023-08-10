@@ -12,15 +12,17 @@
       v-if="!loading"
       class="d-flex flex-column justify-center dropzone pa-4"
       :class="{ dragging, 'primary--text': dragging, black: dark }"
-     
       @drop.prevent.stop="loadSeries"
       @dragover.prevent.stop="onDragOver"
       @dragend="onDragEnd"
       @dragleave="onDragEnd"
-    ><div :class="{ 'white--text': dark}" class="mx-auto text-center text-uppercase">
-        <h3 >drop files and folders here</h3>
+    >
+      <div
+        :class="{ 'white--text': dark }"
+        class="mx-auto text-center text-uppercase"
+      >
+        <h3>drop files and folders here</h3>
         <!--<div class="line-wraps"><span>or</span></div>-->
-        
       </div>
       <v-img
         :dark="dark"
@@ -33,31 +35,42 @@
         width="100%"
         :src="icon"
       />
-      <div :class="{ 'white--text': dark}" class="mx-auto text-center text-uppercase">
-        <h3 >to open the free viewer</h3>
+      <div
+        v-if="!modal"
+        :class="{ 'white--text': dark }"
+        class="mx-auto text-center text-uppercase"
+      >
+        <h3>to open the free viewer</h3>
         <!--<div class="line-wraps"><span>or</span></div>-->
-        
       </div>
-      
-      <div v-if="disclaimer && disclaimer !== ''" :class="{ 'white--text': dark}" class="mx-auto text-center text-uppercase mt-10">
+
+      <div
+        v-if="disclaimer && disclaimer !== ''"
+        :class="{ 'white--text': dark }"
+        class="mx-auto text-center text-uppercase mt-10"
+      >
         <h4 v-html="disclaimer" class="primary--text"></h4>
       </div>
       <div class="text-center">
-        <v-btn :dark="dark" 
+        <v-btn
+          :dark="dark"
           class="flex-grow-1"
           x-large
           block
-          color="primary" @click="$refs.inputFile.click()">
+          color="primary"
+          @click="$refs.inputFile.click()"
+        >
           browse files
         </v-btn>
       </div>
-      
     </div>
-    
+
     <div v-else class="d-flex h-100 text-center text-uppercase">
       <div class="ma-auto">
         <v-progress-linear indeterminate color="primary" />
-        <h3 class="primary--text" :class="{ 'white--text': dark}">parsing {{ totalSize }}MB</h3>
+        <h3 class="primary--text" :class="{ 'white--text': dark }">
+          parsing {{ totalSize }}MB
+        </h3>
       </div>
     </div>
 
@@ -69,7 +82,12 @@
         <v-card-text>{{ parsingFailure }}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn :dark="dark" color="warning" text @click="parsingFailure = null">
+          <v-btn
+            :dark="dark"
+            color="warning"
+            text
+            @click="parsingFailure = null"
+          >
             Ok
           </v-btn>
         </v-card-actions>
@@ -92,7 +110,8 @@ export default {
     series: { required: true, type: Array },
     metadata: { required: false, type: Array },
     disclaimer: { required: false, type: String },
-    dark: { default: false, type: Boolean}
+    dark: { default: false, type: Boolean },
+    modal: { default: true, type: Boolean }
   },
   data: () => ({
     dragging: false,
@@ -148,7 +167,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .dark-icon {
   filter: invert(100%);
 }

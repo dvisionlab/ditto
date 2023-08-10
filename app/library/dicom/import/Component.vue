@@ -148,6 +148,7 @@
         :is="`import-step-${currentStep + 1}`"
         class="h-100"
         :dark="dark"
+        :modal="modal"
         :allow-anonymization="options.allowAnonymization"
         :get-progress-fn="getProgressFn"
         :get-viewport-fn="getViewportFn"
