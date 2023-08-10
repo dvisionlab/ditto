@@ -14,6 +14,7 @@ const defaultQueryParameters = [
   },
   { value: "AccessionNumber" },
   { value: "StudyDescription" },
+  { value: "SeriesDescription" },
   {
     value: "Modality",
     type: "select",
