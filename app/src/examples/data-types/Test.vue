@@ -58,7 +58,7 @@ import dicomDataTypes from "@/../library/data-types/dicom";
 export default {
   components: {
     ...dataTypes,
-    ...dicomDataTypes
-  }
+    ...dicomDataTypes,
+  },
 };
 </script>

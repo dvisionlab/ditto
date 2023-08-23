@@ -16,7 +16,7 @@ import fieldsProps from "@/../library/form/fieldsProps";
 const form = {
   component: Form,
   customizeRules,
-  fieldsProps
+  fieldsProps,
 };
 
 // Customize rules
@@ -24,12 +24,12 @@ form.customizeRules({ passwordMinLength: 4 });
 
 const CustomField = {
   props: form.fieldsProps,
-  template: `<div class="pa-4 secondary white--text">I'm a custom field COMPONENT! {{ $props }}</div>`
+  template: `<div class="pa-4 secondary white--text">I'm a custom field COMPONENT! {{ $props }}</div>`,
 };
 
 const CustomSlot = {
   props: form.fieldsProps,
-  template: `<div class="pa-4 secondary white--text">I'm a custom field SLOT! {{ $props }}</div>`
+  template: `<div class="pa-4 secondary white--text">I'm a custom field SLOT! {{ $props }}</div>`,
 };
 
 export default {
@@ -41,23 +41,23 @@ export default {
         label: "text",
         key: "text",
         required: false,
-        type: "text"
+        type: "text",
       },
       {
         label: "number",
         key: "number",
-        rules: [v => v > 10 || "> 10"],
-        type: "number"
+        rules: [(v) => v > 10 || "> 10"],
+        type: "number",
       },
       {
         component: CustomField,
         label: "custom field",
-        key: "component"
+        key: "component",
       },
       {
         slot: CustomSlot,
         label: "field with slot",
-        key: "slot"
+        key: "slot",
       },
       {
         group: "login group",
@@ -68,23 +68,23 @@ export default {
             label: "email",
             key: "email",
             required: () => true,
-            type: "email"
+            type: "email",
           },
           {
             label: "password",
             key: "password",
             required: () => true,
-            type: "password"
-          }
-        ]
-      }
+            type: "password",
+          },
+        ],
+      },
     ],
-    form: { text: "precompiled text", component: "custom value" }
+    form: { text: "precompiled text", component: "custom value" },
   }),
   methods: {
     submit() {
       console.log("Form submit", this.form);
-    }
-  }
+    },
+  },
 };
 </script>

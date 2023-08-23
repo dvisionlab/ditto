@@ -22,23 +22,23 @@ const options = {
     dark: true,
     dense: true,
     mobileMenuComponent: {
-      template: "<div>Mobile menu</div>"
-    }
+      template: "<div>Mobile menu</div>",
+    },
   },
   footer: { dark: true, height: 80 },
   nav: { color: "blue", width: 300 },
   navLeft: { color: "orange", width: 50 },
   navRight: { color: "purple", dark: true, width: 200 },
-  mobileBreakpoint: "xs" // default: xs
+  mobileBreakpoint: "xs", // default: xs
 };
 
 export default {
   name: "DoubleNavigationWireframeExample",
   components: {
-    DoubleNavigationWireframe
+    DoubleNavigationWireframe,
   },
   data: () => ({
-    options
-  })
+    options,
+  }),
 };
 </script>

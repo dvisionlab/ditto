@@ -68,15 +68,15 @@
 export default {
   props: {
     dark: { default: false, type: Boolean },
-    mobile: { default: false, type: Boolean }
+    mobile: { default: false, type: Boolean },
   },
   data: () => ({
     actions: [
       { name: "a1", icon: "mdi-alarm-plus" },
       { name: "a2", icon: "mdi-alarm-off" },
-      { name: "a3", icon: "mdi-alarm-snooze" }
+      { name: "a3", icon: "mdi-alarm-snooze" },
     ],
-    selectedActionIndex: 0
-  })
+    selectedActionIndex: 0,
+  }),
 };
 </script>

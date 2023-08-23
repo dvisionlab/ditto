@@ -25,17 +25,17 @@ export default {
   data: () => ({
     error: null,
     data: null,
-    url: "http://headers.jsontest.com/"
+    url: "http://headers.jsontest.com/",
   }),
   mounted() {
     // get request to a test server
-    this.$http.get(this.url).then(response => (this.data = response.data));
+    this.$http.get(this.url).then((response) => (this.data = response.data));
 
     // get request failure test
     this.$http
       .get("fakeurl", { a: 1, b: 2 })
-      .then(response => console.log(response))
-      .catch(error => (this.error = error));
-  }
+      .then((response) => console.log(response))
+      .catch((error) => (this.error = error));
+  },
 };
 </script>

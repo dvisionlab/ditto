@@ -23,8 +23,8 @@ export default {
       store,
       vuetify,
       i18n: new VueI18n(),
-      render: h => h(SubApp)
+      render: (h) => h(SubApp),
     }).$mount("#dicomApp");
-  }
+  },
 };
 </script>

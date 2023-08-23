@@ -45,7 +45,7 @@ const steps = [
   // step 1: preserve default options
   undefined,
   // step 2: enable first default action
-  { actions: [{ disabled: false }] }
+  { actions: [{ disabled: false }] },
 ];
 const metadata = ["x00100010", "x00100040", "x0008103e"];
 const headers = [
@@ -55,22 +55,22 @@ const headers = [
     sortable: false,
     slot: true,
     text: "patient",
-    value: "patient"
+    value: "patient",
   },
   {
     cellClass: "cell-x0008103e",
     sortable: true,
     slot: true,
     text: "metadata-x0008103e",
-    value: "x0008103e"
-  }
+    value: "x0008103e",
+  },
 ];
 
 export default {
   data: () => ({
     headers,
     metadata,
-    steps
+    steps,
   }),
   methods: {
     openViewer(data) {
@@ -78,8 +78,8 @@ export default {
     },
     uploadData(data) {
       console.log("open viewer", data);
-    }
-  }
+    },
+  },
 };
 </script>
 

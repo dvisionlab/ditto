@@ -4,6 +4,6 @@
 
 <script>
 export default {
-  props: { dark: { default: false, type: Boolean } }
+  props: { dark: { default: false, type: Boolean } },
 };
 </script>

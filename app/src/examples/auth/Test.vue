@@ -9,6 +9,10 @@ import VueRouter from "vue-router";
 import VueI18n from "vue-i18n";
 import vuetify from "../../plugins/vuetify";
 
+import authPlugin from "@/../library/auth/plugin";
+import SubApp from "./SubApp";
+import AuthWrapper from "./Wrapper";
+
 Vue.use(Vuex);
 Vue.use(VueRouter);
 Vue.use(VueI18n);
@@ -20,21 +24,17 @@ const router = new VueRouter({
       path: "/",
       name: "main",
       component: () => import("./MainPage"),
-      meta: { auth: true }
-    }
-  ]
+      meta: { auth: true },
+    },
+  ],
 });
-
-import authPlugin from "@/../library/auth/plugin";
-import SubApp from "./SubApp";
-import AuthWrapper from "./Wrapper";
 
 Vue.use(authPlugin, {
   baseRoute: "/auth",
   autoLogin: false,
   router,
   store,
-  wrapperComponent: AuthWrapper
+  wrapperComponent: AuthWrapper,
 });
 
 export default {
@@ -44,8 +44,8 @@ export default {
       store,
       vuetify,
       i18n: new VueI18n(),
-      render: h => h(SubApp)
+      render: (h) => h(SubApp),
     }).$mount("#authApp");
-  }
+  },
 };
 </script>

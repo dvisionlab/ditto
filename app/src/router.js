@@ -6,12 +6,12 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: () => import("@/components/Home")
+    component: () => import("@/components/Home"),
   },
   {
     path: "/auth",
     name: "auth",
-    component: () => import("@/examples/auth/Test")
+    component: () => import("@/examples/auth/Test"),
   },
   {
     path: "/basic-wireframe",
@@ -24,18 +24,18 @@ const routes = [
         path: "home",
         components: {
           default: { template: "<div>Home</div>" },
-          navLeft: () => import("@/examples/wireframes/basic/HomeNavLeft")
-        }
+          navLeft: () => import("@/examples/wireframes/basic/HomeNavLeft"),
+        },
       },
       {
         name: "basic-wireframe-other",
         path: "other",
         components: {
           default: { template: "<div>Other</div>" },
-          navLeft: () => import("@/examples/wireframes/basic/OtherNavLeft")
-        }
-      }
-    ]
+          navLeft: () => import("@/examples/wireframes/basic/OtherNavLeft"),
+        },
+      },
+    ],
   },
   {
     path: "/double-navigation-wireframe",
@@ -46,40 +46,40 @@ const routes = [
       {
         name: "double-navigation-wireframe-home",
         path: "home",
-        component: { template: "<div>Home</div>" }
+        component: { template: "<div>Home</div>" },
       },
       {
         name: "double-navigation-wireframe-other",
         path: "other",
-        component: { template: "<div>Other</div>" }
-      }
-    ]
+        component: { template: "<div>Other</div>" },
+      },
+    ],
   },
   {
     path: "/data-types",
     name: "data-types",
-    component: () => import("@/examples/data-types/Test")
+    component: () => import("@/examples/data-types/Test"),
   },
   {
     path: "/dicom",
     name: "dicom",
-    component: () => import("@/examples/dicom/Test")
+    component: () => import("@/examples/dicom/Test"),
   },
   {
     path: "/form",
     name: "form",
-    component: () => import("@/examples/form/Test")
+    component: () => import("@/examples/form/Test"),
   },
   {
     path: "/http",
     name: "http",
-    component: () => import("@/examples/http/Test")
-  }
+    component: () => import("@/examples/http/Test"),
+  },
 ];
 
 const router = new VueRouter({
   mode: "history",
-  routes
+  routes,
 });
 
 export default router;

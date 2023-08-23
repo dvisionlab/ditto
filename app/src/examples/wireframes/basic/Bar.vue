@@ -2,7 +2,7 @@
   <div
     :class="{
       'd-flex align-center h-100': !mobile,
-      'mobile-menu-content': mobile
+      'mobile-menu-content': mobile,
     }"
   >
     <div class="mr-1">>>LOGO>></div>
@@ -29,11 +29,11 @@ export default {
   components: { MenuItem },
   props: {
     dark: { default: false, type: Boolean },
-    mobile: { default: false, type: Boolean }
+    mobile: { default: false, type: Boolean },
   },
   beforeMount() {
     Vue.use(dicomPlugin, { store: this.$store });
-  }
+  },
 };
 </script>
 
