@@ -4,9 +4,7 @@
     :style="{ position: 'relative' }"
     @contextmenu.prevent
   >
-    <v-icon v-if="error" class="ma-auto" dark>
-      mdi-alert-decagram
-    </v-icon>
+    <v-icon v-if="error" class="ma-auto" dark> mdi-alert-decagram </v-icon>
     <div
       v-else
       class="w-100 h-100"
@@ -83,7 +81,7 @@
           width="5px"
           v-model="sliderSliceId"
         >
-          <template v-slot:dot="{ value, focus }">
+          <template v-slot:dot="{ /* eslint-disable */ value, focus }">
             <div :class="['custom-dot-v', { focus }]"></div>
           </template>
         </vue-slider>
@@ -126,7 +124,7 @@
           width="100%"
           v-model="sliderFrameId"
         >
-          <template v-slot:dot="{ value, focus }">
+          <template v-slot:dot="{ /* eslint-disable */ value, focus }">
             <div :class="['custom-dot-h', { focus }]"></div>
           </template>
         </vue-slider>
