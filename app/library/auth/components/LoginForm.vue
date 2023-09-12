@@ -46,7 +46,7 @@
           :style="{ 'flex-basis': '100%' }"
         >
           <div class="" v-if="allowPasswordReset">
-            <a href="http://demo.dicom.vision"><b>DEMO</b></a>
+            <a @click="demoRequest"><b>DEMO</b></a>
           </div>
           <div class="" v-if="allowPasswordReset">
             <a @click="resetPassword"><b>Forgot Password?</b></a>
@@ -174,6 +174,9 @@ export default {
       this.$router.replace({
         name: "register"
       });
+    },
+    demoRequest() {
+      this.$emit("request-demo");
     },
     resetPassword() {
       this.$router.replace({
