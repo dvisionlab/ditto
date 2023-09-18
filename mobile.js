@@ -1,5 +1,5 @@
 // Import/export mobile modules
-
+/* eslint-disable */
 import * as fullscreenUtils from "./app/library/mobile/fullscreen";
 import viewportMixin from "./app/library/mobile/viewportMixin";
 
