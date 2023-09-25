@@ -108,6 +108,7 @@
               v-else
               color="primary"
               :elevation="0"
+              :disabled="steps[currentStep].actions[0].disabled"
               @click="onSelectAction(steps[currentStep].actions[0])"
             >
               <div class="d-block">

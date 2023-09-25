@@ -184,6 +184,7 @@ export const getHeaders = options => {
 
 export const getSteps = (options = {}) => {
   let steps = [...defaultSteps];
+
   if (options.steps) {
     options.steps.forEach((step, i) => {
       if (step) {
@@ -198,5 +199,6 @@ export const getSteps = (options = {}) => {
       }
     });
   }
+  console.log(steps);
   return steps;
 };
