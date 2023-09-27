@@ -31,7 +31,8 @@ export const stackMetadata = {
     "numberOfTemporalPositions",
     // Larvitar info
     "isMultiframe",
-    "is4D"
+    "is4D",
+    "anonymized"
   ]
 };
 

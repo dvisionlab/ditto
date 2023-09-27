@@ -174,7 +174,7 @@
         </template>
 
         <!-- Steps customization slots (actually only step-3 is supported) -->
-        <template v-slot:step-3><slot name="step-3"/></template>
+        <template v-slot:step-3><slot name="step-3" /></template>
       </component>
     </div>
   </div>
@@ -188,12 +188,7 @@ import {
   getSteps,
   getDisclaimer
 } from "./options";
-import {
-  anonymizeSeriesStack,
-  mergeSeries,
-  storeSeriesStack,
-  clearSeriesStack
-} from "../utils";
+import { mergeSeries, storeSeriesStack, clearSeriesStack } from "../utils";
 import RelativeHeight from "../../relative-height";
 import ModalControllers from "./ModalControllers";
 
@@ -252,15 +247,6 @@ export default {
         )
       );
 
-      if (this.options.allowAnonymization) {
-        stacks = stacks.map(stack => {
-          if (stack.anonymized) {
-            return anonymizeSeriesStack(stack, this.metadata);
-          }
-          return stack;
-        });
-      }
-
       // Store series stack in larvitar
       if (this.selectedAction.storeStacks) {
         stacks.forEach(stack =>
@@ -279,12 +265,10 @@ export default {
           return obj;
         }, {});
       });
-
       emitData = emitData.map((data, index) => {
         data.seriesInstanceUIDs = Object.keys(stacks[index].instanceUIDs);
         return data;
       });
-
       this.$emit(this.selectedAction.emitter, emitData);
 
       // Clear not selected series stacks
@@ -303,8 +287,8 @@ export default {
       }
     },
     onCancel() {
-      const closeConfirmationFn = this.steps[this.currentStep]
-        .closeConfirmation;
+      const closeConfirmationFn =
+        this.steps[this.currentStep].closeConfirmation;
 
       if (
         closeConfirmationFn &&
