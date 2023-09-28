@@ -199,6 +199,5 @@ export const getSteps = (options = {}) => {
       }
     });
   }
-  console.log(steps);
   return steps;
 };
