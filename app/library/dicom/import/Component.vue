@@ -6,139 +6,146 @@
       class="step-header d-flex"
       v-relative-height="'contentHeight'"
     >
-      <div
-        class="d-flex flex-wrap flex-grow-1 align-center"
-        :class="{
-          'py-2': $vuetify.breakpoint.smAndDown
-        }"
-        :style="{ overflow: 'auto' }"
-      >
-        <!-- title -->
+      <template>
         <div
-          class="d-flex align-center"
+          class="d-flex flex-wrap flex-grow-1 align-center"
           :class="{
             'py-2': $vuetify.breakpoint.smAndDown
           }"
+          :style="{ overflow: 'auto' }"
         >
-          <v-icon :dark="dark" class="pl-3" color="black">{{ icon }}</v-icon>
-          <h3 class="text-uppercase lh-small px-3">{{ $t(label) }}</h3>
-        </div>
-
-        <v-spacer />
-
-        <!-- buttons -->
-        <div
-          class="d-flex"
-          :class="{
-            'px-2': $vuetify.breakpoint.smAndDown
-          }"
-        >
-          <v-btn
-            :dark="dark"
-            class="d-none d-sm-flex"
-            :disabled="!steps[currentStep].back()"
-            text
-            @click="currentStep--"
+          <!-- title -->
+          <div
+            class="d-flex align-center"
+            :class="{
+              'py-2': $vuetify.breakpoint.smAndDown
+            }"
           >
-            <v-icon :dark="dark">mdi-chevron-left</v-icon>
-            <span class="pr-2">back</span>
-          </v-btn>
-
-          <div class="d-flex">
-            <!-- multiple actions -->
-            <template v-if="steps[currentStep].actions.length > 1">
-              <v-menu :dark="dark" max-width="295px" offset-y>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    :dark="dark"
-                    class="primary--text"
-                    :elevation="0"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    <v-icon :dark="dark" v-if="$vuetify.breakpoint.smAndDown">
-                      mdi-dots-horizontal
-                    </v-icon>
-                    <span v-else>{{
-                      selectedAction ? selectedAction.text : "---"
-                    }}</span>
-                    <v-icon :dark="dark">mdi-chevron-down</v-icon>
-                  </v-btn>
-                </template>
-                <v-list :dark="dark">
-                  <v-list-item
-                    v-for="(item, i) in steps[currentStep].actions"
-                    :key="i"
-                    :class="{
-                      'selected-action': item.emitter == selectedAction.emitter
-                    }"
-                    :dark="dark"
-                    :disabled="item.disabled"
-                    link
-                    @click="selectedAction = item"
-                  >
-                    <v-list-item-content :dark="dark">
-                      <v-list-item-title :dark="dark" class="text-uppercase">
-                        {{ item.text }}
-                      </v-list-item-title>
-                      <v-list-item-subtitle
-                        :dark="dark"
-                        :style="{ whiteSpace: 'normal' }"
-                      >
-                        {{ item.hint }}
-                      </v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-              <v-btn
-                :dark="dark"
-                color="primary"
-                :disabled="selectedSeries.length <= 0 || !selectedAction"
-                :elevation="0"
-                @click="onAction"
-              >
-                <span class="pl-2">confirm</span>
-                <v-icon :dark="dark">mdi-chevron-right</v-icon>
-              </v-btn>
-            </template>
-
-            <!-- single action -->
-            <v-btn
-              v-else
-              color="primary"
-              :elevation="0"
-              :disabled="steps[currentStep].actions[0].disabled"
-              @click="onSelectAction(steps[currentStep].actions[0])"
-            >
-              <div class="d-block">
-                {{ steps[currentStep].actions[0].text }}
-                <div class="font-weight-light text-lowercase grey--text">
-                  {{ steps[currentStep].actions[0].hint }}
-                </div>
-              </div>
-            </v-btn>
+            <v-icon :dark="dark" class="pl-3" color="black">{{ icon }}</v-icon>
+            <h3 class="text-uppercase lh-small px-3">{{ $t(label) }}</h3>
           </div>
 
-          <v-btn
-            color="primary"
-            :disabled="!steps[currentStep].next(series)"
-            @click="currentStep++"
+          <v-spacer />
+
+          <!-- buttons -->
+          <div
+            class="d-flex"
+            :class="{
+              'px-2': $vuetify.breakpoint.smAndDown
+            }"
           >
-            {{ series.length }} exam{{ series.length == 1 ? "" : "s" }} detected
-            <v-icon v-if="steps[currentStep].next(series)"
-              >mdi-chevron-right</v-icon
+            <v-btn
+              :dark="dark"
+              class="d-none d-sm-flex"
+              :disabled="!steps[currentStep].back()"
+              text
+              @click="currentStep--"
             >
-          </v-btn>
+              <v-icon :dark="dark">mdi-chevron-left</v-icon>
+              <span class="pr-2">back</span>
+            </v-btn>
+
+            <div class="d-flex">
+              <!-- multiple actions -->
+              <template v-if="steps[currentStep].actions.length > 1">
+                <v-menu :dark="dark" max-width="295px" offset-y>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      :dark="dark"
+                      class="primary--text"
+                      :elevation="0"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      <v-icon :dark="dark" v-if="$vuetify.breakpoint.smAndDown">
+                        mdi-dots-horizontal
+                      </v-icon>
+                      <span v-else>{{
+                        selectedAction ? selectedAction.text : "---"
+                      }}</span>
+                      <v-icon :dark="dark">mdi-chevron-down</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list :dark="dark">
+                    <v-list-item
+                      v-for="(item, i) in steps[currentStep].actions"
+                      :key="i"
+                      :class="{
+                        'selected-action':
+                          item.emitter == selectedAction.emitter
+                      }"
+                      :dark="dark"
+                      :disabled="item.disabled"
+                      link
+                      @click="selectedAction = item"
+                    >
+                      <v-list-item-content :dark="dark">
+                        <v-list-item-title :dark="dark" class="text-uppercase">
+                          {{ item.text }}
+                        </v-list-item-title>
+                        <v-list-item-subtitle
+                          :dark="dark"
+                          :style="{ whiteSpace: 'normal' }"
+                        >
+                          {{ item.hint }}
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+                <v-btn
+                  :dark="dark"
+                  color="primary"
+                  :disabled="selectedSeries.length <= 0 || !selectedAction"
+                  :elevation="0"
+                  @click="onAction"
+                >
+                  <span class="pl-2">confirm</span>
+                  <v-icon :dark="dark">mdi-chevron-right</v-icon>
+                </v-btn>
+              </template>
+
+              <!-- single action -->
+              <v-btn
+                v-else
+                color="primary"
+                :elevation="0"
+                :disabled="steps[currentStep].actions[0].disabled"
+                @click="onSelectAction(steps[currentStep].actions[0])"
+              >
+                <div class="d-block">
+                  {{ steps[currentStep].actions[0].text }}
+                  <div class="font-weight-light text-lowercase grey--text">
+                    {{ steps[currentStep].actions[0].hint }}
+                  </div>
+                </div>
+              </v-btn>
+            </div>
+
+            <v-btn
+              color="primary"
+              :disabled="!steps[currentStep].next(series)"
+              @click="currentStep++"
+            >
+              {{ series.length }} exam{{ series.length == 1 ? "" : "s" }}
+              detected
+              <v-icon v-if="steps[currentStep].next(series)"
+                >mdi-chevron-right</v-icon
+              >
+            </v-btn>
+          </div>
         </div>
-      </div>
-      <v-divider :class="{ 'px-2': !$vuetify.breakpoint.smAndDown }" vertical />
-      <modal-controllers
-        v-if="modal"
-        class="flex-shrink-0 align-self-center"
-        @cancel="onCancel"
-        @minimize="$emit('minimize')"
-      />
+        <v-divider
+          :class="{ 'px-2': !$vuetify.breakpoint.smAndDown }"
+          vertical
+        />
+        <modal-controllers
+          v-if="modal"
+          class="flex-shrink-0 align-self-center"
+          @cancel="onCancel"
+          @minimize="$emit('minimize')"
+        />
+      </template>
     </div>
 
     <div
