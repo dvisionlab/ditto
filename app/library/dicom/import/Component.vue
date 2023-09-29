@@ -1,6 +1,7 @@
 <template>
   <div class="step-wrapper">
     <div
+      v-if="steps[currentStep].actions"
       :class="{ 'dark-header': dark }"
       class="step-header d-flex"
       v-relative-height="'contentHeight'"
@@ -44,7 +45,7 @@
               <span class="pr-2">back</span>
             </v-btn>
 
-            <div v-if="steps[currentStep].actions" class="d-flex">
+            <div class="d-flex">
               <!-- multiple actions -->
               <template v-if="steps[currentStep].actions.length > 1">
                 <v-menu :dark="dark" max-width="295px" offset-y>
