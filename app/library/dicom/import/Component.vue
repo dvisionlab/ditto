@@ -1,7 +1,7 @@
 <template>
   <div class="step-wrapper">
     <div
-      v-if="steps[currentStep].actions"
+      v-if="steps[currentStep].actions || modal"
       :class="{ 'dark-header': dark }"
       class="step-header d-flex"
       v-relative-height="'contentHeight'"
@@ -45,7 +45,7 @@
               <span class="pr-2">back</span>
             </v-btn>
 
-            <div class="d-flex">
+            <div v-if="steps[currentStep].actions" class="d-flex">
               <!-- multiple actions -->
               <template v-if="steps[currentStep].actions.length > 1">
                 <v-menu :dark="dark" max-width="295px" offset-y>
