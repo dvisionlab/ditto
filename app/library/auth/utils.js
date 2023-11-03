@@ -1,4 +1,6 @@
 export const skipAuthorizationInterceptorUrls = [
+  "api/shared-link",
+  "api/get_token",
   "auth/jwt",
   "auth/users/activation",
   "auth/users/resend_activation",
