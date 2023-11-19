@@ -14,6 +14,7 @@ const defaultQueryParameters = [
   },
   { value: "AccessionNumber" },
   { value: "StudyDescription" },
+  { value: "SeriesDescription" },
   {
     value: "Modality",
     type: "select",
@@ -92,17 +93,26 @@ const defaultQueryParameters = [
     clearable: true
   },
   {
-    value: "AcquisitionDate",
-    component: () => import("./InputAcquisitionDate")
+    value: "StudyDate",
+    component: () => import("./InputStudyDate")
   },
   {
-    value: "AcquisitionTime",
+    value: "StudyTime",
     type: "time",
     hint: "since this time to midnight"
   },
   { value: "ReferringPhysicianName" },
   { value: "NameOfPhysiciansReadingStudy" },
-  { value: "InstitutionName" }
+  { value: "InstitutionName" },
+  {
+    value: "QueryLevel",
+    type: "select",
+    items: [
+      { text: "Study", value: "Study" },
+      { text: "Series", value: "Series" }
+    ],
+    clearable: true
+  }
 ];
 
 const defaultQueryResultsKey = "index";

@@ -4,6 +4,7 @@
 
 // Dependencies
 import * as lt from "larvitar/dist/larvitar";
+import Vue from "vue";
 import { saveAs } from "file-saver";
 import print from "print-js";
 
@@ -290,7 +291,6 @@ export const setup = (store, toolsStyle) => {
   lt.resetLarvitarManager();
 
   lt.store.initialize();
-
   lt.initializeImageLoader();
   lt.registerMultiFrameImageLoader();
 
@@ -384,3 +384,10 @@ export const unwatchViewportStore = lt.store.removeViewportListener;
 
 export const watchSeriesStore = lt.store.addSeriesListener;
 export const unwatchSeriesStore = lt.store.removeSeriesListener;
+
+export const get4DSliceIndex = (frameNumber, sliceNumber, totFrames) => {
+  return sliceNumber * totFrames + frameNumber;
+};
+export const setTimeFrame = (elementId, frameNumber) => {
+  lt.larvitar_store.set("timeId", [elementId, frameNumber]);
+};

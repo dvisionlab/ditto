@@ -39,8 +39,8 @@ const customSlotMetadata = [
   // "NameOfPhysiciansReadingStudy",
   "PatientSex",
   "PatientBirthDate",
-  "AcquisitionDate",
-  "AcquisitionTime"
+  "StudyDate",
+  "StudyTime"
 ];
 
 export default {

@@ -19,7 +19,8 @@ const defaultMetadata = [
 
 const requiredMetadata = [
   metadataDictionary.StudyInstanceUID,
-  "larvitarSeriesInstanceUID"
+  "larvitarSeriesInstanceUID",
+  "anonymized"
 ];
 
 const defaultDisclaimer =
@@ -69,8 +70,7 @@ const defaultActions = [
     default: true,
     disabled: false,
     emitter: "dicom-import-open",
-    hint:
-      "you won't be able to access these series again once the browser session is closed",
+    hint: "you won't be able to access these series again once the browser session is closed",
     storeStacks: true,
     text: "open viewer without uploading"
   }
@@ -92,17 +92,6 @@ const defaultSteps = [
     next: () => false
   },
   {
-    actions: [
-      {
-        cacheStacks: false,
-        closeOnEmit: true,
-        disabled: false,
-        emitter: "dicom-import-open",
-        // hint: "upload will continue in background",
-        storeStacks: true,
-        text: "open viewer"
-      }
-    ],
     component: () => import("./steps/Step3"),
     label: "upload",
     back: () => false,
@@ -184,6 +173,7 @@ export const getHeaders = options => {
 
 export const getSteps = (options = {}) => {
   let steps = [...defaultSteps];
+
   if (options.steps) {
     options.steps.forEach((step, i) => {
       if (step) {

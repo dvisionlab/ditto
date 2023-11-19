@@ -15,6 +15,7 @@
       :required="required"
       :rules="dirty ? getRules(field) : undefined"
       :type="field.type"
+      :dark="dark"
       v-model="value[field.key]"
       @icon-click="() => $emit('icon-click', field)"
     >
@@ -30,11 +31,13 @@
 <script>
 import { rules } from "./rules";
 import { VTextField, VSelect } from "vuetify/lib";
+import PasswordField from '../auth/components/PasswordField.vue'; 
 
 export default {
   name: "Field",
-  components: { VTextField, VSelect },
+  components: { VTextField, VSelect,PasswordField },
   props: {
+    dark: {default: false, type: Boolean },
     dirty: { default: false, type: Boolean },
     field: { required: true, type: Object },
     loading: { default: false, type: Boolean },

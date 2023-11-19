@@ -73,7 +73,7 @@
       <component
         :is="`import-step-${currentStep + 1}`"
         class="h-100"
-        :headers="headers"
+        :headers="getFields()"
         :disclaimer="disclaimer"
         :data="data"
         :form="queryParametersForm"
@@ -145,6 +145,8 @@ export default {
     onAction() {
       switch (this.currentStep) {
         case 0: {
+          this.selectedData = [];
+
           const aetForm = this.$refs.step && this.$refs.step.$refs.aetForm;
           const isValid = aetForm && aetForm.validate();
           if (isValid) {
@@ -170,8 +172,8 @@ export default {
       }
     },
     onCancel() {
-      const closeConfirmationFn = this.steps[this.currentStep]
-        .closeConfirmation;
+      const closeConfirmationFn =
+        this.steps[this.currentStep].closeConfirmation;
 
       if (
         closeConfirmationFn &&
@@ -225,10 +227,8 @@ export default {
           this.$emit("pacs-retrieve-complete", this.retrievedData);
           return;
         }
-
         const retrieveItem = queue.shift();
         this.$set(step.status.progress, retrieveItem[this.queryResultsKey], 0);
-
         try {
           const retrieveFn = this.options.api.retrieve;
           const retrievedStudy = await retrieveFn(
@@ -236,18 +236,16 @@ export default {
             retrieveItem
           );
           this.retrievedData.push(retrievedStudy);
-
           this.$set(
             step.status.progress,
             retrieveItem[this.queryResultsKey],
             100
           );
-        } catch (error) {
-          // console.log(error);
+        } catch (errorResponse) {
           this.$set(
             step.status.errors,
             retrieveItem[this.queryResultsKey],
-            `Retrieve failed: ${error}`
+            `Retrieve failed: ${errorResponse.statusText} (${errorResponse.status}): ${errorResponse.bodyText}`
           );
         } finally {
           next();
@@ -287,6 +285,33 @@ export default {
           this.steps[this.currentStep].status.error = "No query results";
         }
       }
+    },
+    getFields() {
+      // Second step on result table
+      if (this.currentStep === 1) {
+        const fieldsStep2 = getHeaders().map(h => ({
+          ...h,
+          text: h.text ? this.$t(`pacs-import.${h.text}`) : h.text
+        }));
+        // Removes query level from table headers
+        const queryLevelIdx = fieldsStep2.findIndex(
+          h => h.text == "Query Level"
+        );
+        if (queryLevelIdx >= 0) {
+          fieldsStep2.splice(queryLevelIdx, 1);
+        }
+        // Removes series description table header if Pacs Query is by study
+        if (this.queryParametersForm.QueryLevel !== "Series") {
+          const seriesDescrIdx = fieldsStep2.findIndex(
+            h => h.text == "series description"
+          );
+          if (seriesDescrIdx >= 0) {
+            fieldsStep2.splice(seriesDescrIdx, 1);
+          }
+        }
+        return fieldsStep2;
+      }
+      return this.headers;
     }
   }
 };

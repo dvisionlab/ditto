@@ -1,6 +1,7 @@
 <template>
   <div class="mx-auto">
     <ditto-form
+      :dark="dark"
       :fields="fields"
       :fields-style="{ 'flex-basis': '100%' }"
       :loading="loading"
@@ -13,13 +14,18 @@
         <h2 class="text-uppercase primary--text my-4">
           {{ $t("auth.reset-password") }}
         </h2>
-        <p class="ma-0 mb-4">
+        <p class="ma-0 mb-4 text-left" :style="{ lineHeight: 1.25 }">
           Please enter your email address. You will receive a link to create a
           new password via email.
         </p>
 
         <div>
-          <v-alert v-if="error" dense outlined type="error">
+          <v-alert
+            v-if="error"
+            outlined
+            type="error"
+            :style="{ lineHeight: 1.25 }"
+          >
             <span v-html="error" />
           </v-alert>
 
@@ -58,6 +64,9 @@ customizeRules({
 
 export default {
   name: "ForgotPassword",
+  props: {
+    dark: { default: false, type: Boolean }
+  },
   components: { DittoForm: Form },
   data: () => ({
     loading: false,
@@ -90,7 +99,8 @@ export default {
             name: "login",
             query: {
               // TODO translation: An email with password reset instructions has been sent to your email address.
-              alertMessage: "send-forgot-password-email-success",
+              alertMessage:
+                "We are proceding your request and an email with password reset instructions has been sent to your address ",
               email: this.form.email
             }
           });

@@ -1,6 +1,7 @@
 <template>
   <div class="mx-auto">
     <ditto-form
+      :dark="dark"
       :fields="fields"
       :fields-style="{ 'flex-basis': '100%' }"
       :loading="loading"
@@ -9,9 +10,11 @@
       @submit="submit"
     >
       <template v-slot:header>
-        <h2 class="text-uppercase primary--text my-4">
-          {{ $t("login") }}
-        </h2>
+        <div v-if="title !== ''">
+          <h2 class="text-uppercase primary--text my-4">
+            {{ $t(title) }}
+          </h2>
+        </div>
 
         <div>
           <template v-if="alertMessage || error">
@@ -21,6 +24,7 @@
               dense
               dismissible
               outlined
+              :style="{ lineHeight: 1.25 }"
               :type="alertType"
               @input="dismissAlert"
             >
@@ -37,11 +41,17 @@
       </template>
 
       <template v-slot:footer>
-        <div class="mt-6 text-right" :style="{ 'flex-basis': '100%' }">
-          <div v-if="allowPasswordReset">
+        <div
+          class="d-flex justify-space-between mt-6"
+          :style="{ 'flex-basis': '100%' }"
+        >
+          <div class="" v-if="allowPasswordReset">
+            <a @click="demoRequest"><b>DEMO</b></a>
+          </div>
+          <div class="" v-if="allowPasswordReset">
             <a @click="resetPassword"><b>Forgot Password?</b></a>
           </div>
-          <div v-if="allowUserRegistration">
+          <div class="" v-if="allowUserRegistration">
             New here?
             <a @click="register">Sign up</a>.
           </div>
@@ -84,6 +94,14 @@ export default {
     baseRoute: {
       default: "",
       type: String
+    },
+    title: {
+      default: "login",
+      type: String
+    },
+    dark: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
@@ -100,6 +118,7 @@ export default {
       },
       {
         // appendIcon: "mdi-lock",
+        component: "PasswordField",
         label: "password",
         key: "password",
         required: () => true,
@@ -155,6 +174,9 @@ export default {
       this.$router.replace({
         name: "register"
       });
+    },
+    demoRequest() {
+      this.$emit("request-demo");
     },
     resetPassword() {
       this.$router.replace({

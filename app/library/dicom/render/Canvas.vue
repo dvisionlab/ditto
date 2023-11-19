@@ -4,9 +4,7 @@
     :style="{ position: 'relative' }"
     @contextmenu.prevent
   >
-    <v-icon v-if="error" class="ma-auto" dark>
-      mdi-alert-decagram
-    </v-icon>
+    <v-icon v-if="error" class="ma-auto" dark> mdi-alert-decagram </v-icon>
     <div
       v-else
       class="w-100 h-100"
@@ -48,16 +46,17 @@
     <slot
       v-if="showSlider"
       name="viewport-slider"
-      v-bind:i="viewport.sliceId"
-      v-bind:n="viewport.maxSliceId"
+      v-bind:i="(viewport.sliceId + 1) / (viewport.maxTimeId + 1)"
+      v-bind:n="(viewport.maxSliceId + 1) / (viewport.maxTimeId + 1) - 1"
     >
       <!-- default slider -->
       <div
         :style="{
-          height: '75%',
-          width: '30px',
+          height: '97%',
+          width: '20px',
           position: 'absolute',
-          top: '12.5%',
+          down: '0px',
+          top: '10px',
           right: '0'
         }"
       >
@@ -67,10 +66,10 @@
           :duration="0.25"
           height="100%"
           :min="viewport.minSliceId"
-          :max="viewport.maxSliceId"
+          :max="(viewport.maxSliceId + 1) / (viewport.maxTimeId + 1) - 1"
           :processStyle="{
             backgroundColor: 'var(--v-accent-base)',
-            borderRadius: '3px'
+            borderRadius: '1px'
           }"
           tooltip="active"
           :tooltip-formatter="val => val + 1"
@@ -79,9 +78,56 @@
             borderColor: 'var(--v-accent-base)',
             color: 'black'
           }"
-          width="8px"
+          width="5px"
           v-model="sliderSliceId"
-        />
+        >
+          <template v-slot:dot="{ /* eslint-disable */ value, focus }">
+            <div :class="['custom-dot-v', { focus }]"></div>
+          </template>
+        </vue-slider>
+      </div>
+    </slot>
+    <!--time frame slider for 4D exam -->
+    <slot
+      v-if="showSlider && stackMetadata?.series.is4D"
+      name="viewport-frame-slider"
+      v-bind:i="viewport.timeId"
+      v-bind:n="viewport.maxTimeId"
+    >
+      <!-- default slider -->
+      <div
+        :style="{
+          height: '20px',
+          width: '75%',
+          position: 'absolute',
+          bottom: '0',
+          margin: '0 12.5%'
+        }"
+      >
+        <vue-slider
+          contained
+          :duration="0.25"
+          height="5px"
+          :min="viewport.minTimeId"
+          :max="viewport.maxTimeId"
+          :processStyle="{
+            backgroundColor: 'var(--v-accent-base)',
+            borderRadius: '1px'
+          }"
+          tooltip="active"
+          :tooltip-formatter="val => val + 1"
+          :tooltip-style="{
+            backgroundColor: 'var(--v-accent-base)',
+            borderColor: 'var(--v-accent-base)',
+            color: 'black'
+          }"
+          width="100%"
+          v-model="sliderFrameId"
+        >
+          <template v-slot:dot="{ /* eslint-disable */ value, focus }">
+            <div :class="['custom-dot-h', { focus }]"></div>
+          </template>
+        </vue-slider>
       </div>
     </slot>
   </div>
@@ -109,6 +155,8 @@ import {
   updateSeriesSlice,
   watchViewportStore,
   unwatchViewportStore
+  // setTimeFrame,
+  get4DSliceIndex
 } from "../utils";
 
 const defaultGetProgressFn = (store, seriesId) =>
@@ -160,11 +208,45 @@ export default {
     },
     sliderSliceId: {
       get() {
+        if (this.viewport.maxTimeId > 0) {
+          return Math.floor(
+            this.viewport.sliceId / (this.viewport.maxTimeId + 1)
+          );
+        }
         return this.viewport.sliceId;
       },
       set(index) {
         if (this.isReady) {
-          updateSeriesSlice(this.validCanvasId, this.seriesId, index);
+          if (this.viewport.maxTimeId > 0) {
+            const stackIndex = get4DSliceIndex(
+              this.viewport.timeId,
+              index,
+              this.viewport.maxTimeId + 1
+            );
+            updateSeriesSlice(this.validCanvasId, this.seriesId, stackIndex);
+          } else {
+            updateSeriesSlice(this.validCanvasId, this.seriesId, index);
+          }
+        }
+      }
+    },
+    sliderFrameId: {
+      get() {
+        return this.viewport.timeId;
+      },
+      set(index) {
+        if (this.isReady) {
+          const sliceNumber = Math.floor(
+            this.viewport.sliceId / (this.viewport.maxTimeId + 1)
+          );
+          const stackIndex = get4DSliceIndex(
+            index,
+            sliceNumber,
+            this.viewport.maxTimeId + 1
+          );
+          console.log("calculate stack correct index = ", stackIndex);
+          // setTimeFrame(this.validCanvasId,index);
+          updateSeriesSlice(this.validCanvasId, this.seriesId, stackIndex);
         }
       }
     }
@@ -296,5 +378,35 @@ export default {
 }
 .v-input >>> .v-input__slot {
   height: 100% !important;
+}
+.custom-dot-h {
+  width: 70%;
+  height: 80%;
+  border-radius: 0;
+  background-color: white;
+  transition: all 0.3s;
+}
+.custom-dot:hover {
+  /*transform: rotateZ(45deg);*/
+}
+.custom-dot-h.focus {
+  width: 70%;
+  height: 100%;
+  border-radius: 0%;
+}
+.custom-dot-v {
+  width: 80%;
+  height: 70%;
+  border-radius: 0;
+  background-color: white;
+  transition: all 0.3s;
+}
+.custom-dot:hover {
+  /*transform: rotateZ(45deg);*/
+}
+.custom-dot-v.focus {
+  width: 100%;
+  height: 70%;
+  border-radius: 0%;
 }
 </style>

@@ -57,6 +57,7 @@
       :icon="icon"
       :label="label"
       :options="options"
+      :modal="true"
       ref="content"
       @cancel="isOpen = false"
       @dicom-import-open="data => $emit('dicom-import-open', data)"

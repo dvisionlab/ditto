@@ -1,133 +1,151 @@
 <template>
   <div class="step-wrapper">
-    <div class="step-header d-flex" v-relative-height="'contentHeight'">
-      <div
-        class="d-flex flex-wrap flex-grow-1 align-center"
-        :class="{
-          'py-2': $vuetify.breakpoint.smAndDown
-        }"
-        :style="{ overflow: 'auto' }"
-      >
-        <!-- title -->
+    <div
+      v-if="steps[currentStep].actions || modal"
+      :class="{ 'dark-header': dark }"
+      class="step-header d-flex"
+      v-relative-height="'contentHeight'"
+    >
+      <template>
         <div
-          class="d-flex align-center"
+          class="d-flex flex-wrap flex-grow-1 align-center"
           :class="{
             'py-2': $vuetify.breakpoint.smAndDown
           }"
+          :style="{ overflow: 'auto' }"
         >
-          <v-icon class="pl-3" color="black">{{ icon }}</v-icon>
-          <h3 class="text-uppercase lh-small px-3">{{ $t(label) }}</h3>
-        </div>
-
-        <v-spacer />
-
-        <!-- buttons -->
-        <div
-          class="d-flex"
-          :class="{
-            'px-2': $vuetify.breakpoint.smAndDown
-          }"
-        >
-          <v-btn
-            class="d-none d-sm-flex"
-            :disabled="!steps[currentStep].back()"
-            text
-            @click="currentStep--"
+          <!-- title -->
+          <div
+            class="d-flex align-center"
+            :class="{
+              'py-2': $vuetify.breakpoint.smAndDown
+            }"
           >
-            <v-icon>mdi-chevron-left</v-icon>
-            <span class="pr-2">back</span>
-          </v-btn>
-
-          <div v-if="steps[currentStep].actions" class="d-flex">
-            <!-- multiple actions -->
-            <template v-if="steps[currentStep].actions.length > 1">
-              <v-menu max-width="295px" offset-y>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    class="primary--text"
-                    :elevation="0"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    <v-icon v-if="$vuetify.breakpoint.smAndDown">
-                      mdi-dots-horizontal
-                    </v-icon>
-                    <span v-else>{{
-                      selectedAction ? selectedAction.text : "---"
-                    }}</span>
-                    <v-icon>mdi-chevron-down</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item
-                    v-for="(item, i) in steps[currentStep].actions"
-                    :key="i"
-                    :class="{
-                      'selected-action': item.emitter == selectedAction.emitter
-                    }"
-                    :disabled="item.disabled"
-                    link
-                    @click="selectedAction = item"
-                  >
-                    <v-list-item-content>
-                      <v-list-item-title class="text-uppercase">
-                        {{ item.text }}
-                      </v-list-item-title>
-                      <v-list-item-subtitle :style="{ whiteSpace: 'normal' }">
-                        {{ item.hint }}
-                      </v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-              <v-btn
-                color="primary"
-                :disabled="selectedSeries.length <= 0 || !selectedAction"
-                :elevation="0"
-                @click="onAction"
-              >
-                <span class="pl-2">confirm</span>
-                <v-icon>mdi-chevron-right</v-icon>
-              </v-btn>
-            </template>
-
-            <!-- single action -->
-            <v-btn
-              v-else
-              color="primary"
-              :elevation="0"
-              @click="onSelectAction(steps[currentStep].actions[0])"
-            >
-              <div class="d-block">
-                {{ steps[currentStep].actions[0].text }}
-                <div class="font-weight-light text-lowercase grey--text">
-                  {{ steps[currentStep].actions[0].hint }}
-                </div>
-              </div>
-            </v-btn>
+            <v-icon :dark="dark" class="pl-3" color="black">{{ icon }}</v-icon>
+            <h3 class="text-uppercase lh-small px-3">{{ $t(label) }}</h3>
           </div>
 
-          <v-btn
-            v-else
-            color="primary"
-            :disabled="!steps[currentStep].next(series)"
-            @click="currentStep++"
+          <v-spacer />
+
+          <!-- buttons -->
+          <div
+            class="d-flex"
+            :class="{
+              'px-2': $vuetify.breakpoint.smAndDown
+            }"
           >
-            {{ series.length }} exam{{ series.length == 1 ? "" : "s" }} detected
-            <v-icon v-if="steps[currentStep].next(series)"
-              >mdi-chevron-right</v-icon
+            <v-btn
+              :dark="dark"
+              class="d-none d-sm-flex"
+              :disabled="!steps[currentStep].back()"
+              text
+              @click="currentStep--"
             >
-          </v-btn>
+              <v-icon :dark="dark">mdi-chevron-left</v-icon>
+              <span class="pr-2">back</span>
+            </v-btn>
+
+            <div v-if="steps[currentStep].actions" class="d-flex">
+              <!-- multiple actions -->
+              <template v-if="steps[currentStep].actions.length > 1">
+                <v-menu :dark="dark" max-width="295px" offset-y>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      :dark="dark"
+                      class="primary--text"
+                      :elevation="0"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      <v-icon :dark="dark" v-if="$vuetify.breakpoint.smAndDown">
+                        mdi-dots-horizontal
+                      </v-icon>
+                      <span v-else>{{
+                        selectedAction ? selectedAction.text : "---"
+                      }}</span>
+                      <v-icon :dark="dark">mdi-chevron-down</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list :dark="dark">
+                    <v-list-item
+                      v-for="(item, i) in steps[currentStep].actions"
+                      :key="i"
+                      :class="{
+                        'selected-action':
+                          item.emitter == selectedAction.emitter
+                      }"
+                      :dark="dark"
+                      :disabled="item.disabled"
+                      link
+                      @click="selectedAction = item"
+                    >
+                      <v-list-item-content :dark="dark">
+                        <v-list-item-title :dark="dark" class="text-uppercase">
+                          {{ item.text }}
+                        </v-list-item-title>
+                        <v-list-item-subtitle
+                          :dark="dark"
+                          :style="{ whiteSpace: 'normal' }"
+                        >
+                          {{ item.hint }}
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+                <v-btn
+                  :dark="dark"
+                  color="primary"
+                  :disabled="selectedSeries.length <= 0 || !selectedAction"
+                  :elevation="0"
+                  @click="onAction"
+                >
+                  <span class="pl-2">confirm</span>
+                  <v-icon :dark="dark">mdi-chevron-right</v-icon>
+                </v-btn>
+              </template>
+
+              <!-- single action -->
+              <v-btn
+                v-else
+                color="primary"
+                :elevation="0"
+                :disabled="steps[currentStep].actions[0].disabled"
+                @click="onSelectAction(steps[currentStep].actions[0])"
+              >
+                <div class="d-block">
+                  {{ steps[currentStep].actions[0].text }}
+                  <div class="font-weight-light text-lowercase grey--text">
+                    {{ steps[currentStep].actions[0].hint }}
+                  </div>
+                </div>
+              </v-btn>
+            </div>
+
+            <v-btn
+              color="primary"
+              :disabled="!steps[currentStep].next(series)"
+              @click="currentStep++"
+            >
+              {{ series.length }} exam{{ series.length == 1 ? "" : "s" }}
+              detected
+              <v-icon v-if="steps[currentStep].next(series)"
+                >mdi-chevron-right</v-icon
+              >
+            </v-btn>
+          </div>
         </div>
-      </div>
-
-      <v-divider :class="{ 'px-2': !$vuetify.breakpoint.smAndDown }" vertical />
-
-      <modal-controllers
-        class="flex-shrink-0 align-self-center"
-        @cancel="onCancel"
-        @minimize="$emit('minimize')"
-      />
+        <v-divider
+          :class="{ 'px-2': !$vuetify.breakpoint.smAndDown }"
+          vertical
+        />
+        <modal-controllers
+          v-if="modal"
+          class="flex-shrink-0 align-self-center"
+          @cancel="onCancel"
+          @minimize="$emit('minimize')"
+        />
+      </template>
     </div>
 
     <div
@@ -137,6 +155,8 @@
       <component
         :is="`import-step-${currentStep + 1}`"
         class="h-100"
+        :dark="dark"
+        :modal="modal"
         :allow-anonymization="options.allowAnonymization"
         :get-progress-fn="getProgressFn"
         :get-viewport-fn="getViewportFn"
@@ -162,7 +182,7 @@
         </template>
 
         <!-- Steps customization slots (actually only step-3 is supported) -->
-        <template v-slot:step-3><slot name="step-3"/></template>
+        <template v-slot:step-3><slot name="step-3" /></template>
       </component>
     </div>
   </div>
@@ -176,12 +196,7 @@ import {
   getSteps,
   getDisclaimer
 } from "./options";
-import {
-  anonymizeSeriesStack,
-  mergeSeries,
-  storeSeriesStack,
-  clearSeriesStack
-} from "../utils";
+import { mergeSeries, storeSeriesStack, clearSeriesStack } from "../utils";
 import RelativeHeight from "../../relative-height";
 import ModalControllers from "./ModalControllers";
 
@@ -201,7 +216,9 @@ export default {
   props: {
     icon: { default: "mdi-upload-multiple", type: String },
     label: { default: "dicom-import.import-exams", type: String },
-    options: { default: () => ({}), type: Object }
+    options: { default: () => ({}), type: Object },
+    modal: { default: false, type: Boolean },
+    dark: { default: false, type: Boolean }
   },
   data() {
     const headers = getHeaders(this.options).map(h => ({
@@ -238,15 +255,6 @@ export default {
         )
       );
 
-      if (this.options.allowAnonymization) {
-        stacks = stacks.map(stack => {
-          if (stack.anonymized) {
-            return anonymizeSeriesStack(stack, this.metadata);
-          }
-          return stack;
-        });
-      }
-
       // Store series stack in larvitar
       if (this.selectedAction.storeStacks) {
         stacks.forEach(stack =>
@@ -265,12 +273,10 @@ export default {
           return obj;
         }, {});
       });
-
       emitData = emitData.map((data, index) => {
         data.seriesInstanceUIDs = Object.keys(stacks[index].instanceUIDs);
         return data;
       });
-
       this.$emit(this.selectedAction.emitter, emitData);
 
       // Clear not selected series stacks
@@ -289,8 +295,8 @@ export default {
       }
     },
     onCancel() {
-      const closeConfirmationFn = this.steps[this.currentStep]
-        .closeConfirmation;
+      const closeConfirmationFn =
+        this.steps[this.currentStep].closeConfirmation;
 
       if (
         closeConfirmationFn &&
@@ -304,7 +310,7 @@ export default {
     },
     onNewSeries({ errors, series }) {
       this.errors = [...this.errors, ...errors];
-
+      this.$emit("new-series-loaded");
       // Check if series are new or merge same series
       series.forEach(s => {
         const index = this.series.findIndex(
@@ -367,6 +373,9 @@ export default {
 <style lang="scss" scoped>
 $min-header-height: 5.5em;
 
+.dark-header {
+  background-color: #1e1e1e;
+}
 .selected-action {
   background: rgba(var(--v-primary-rgb), 0.12);
 }
