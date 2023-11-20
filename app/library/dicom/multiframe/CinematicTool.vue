@@ -62,7 +62,7 @@ const DEFAULT_FRAME_TIME = 100;
 
 const defaultGetViewportFn = (store, seriesId, canvasId) =>
   getViewport(canvasId) || {};
-
+F;
 export default {
   name: "CinematicTool",
   components: { CinematicSlider },

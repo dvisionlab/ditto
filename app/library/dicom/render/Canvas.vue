@@ -154,7 +154,7 @@ import {
   seriesIdToElementId,
   updateSeriesSlice,
   watchViewportStore,
-  unwatchViewportStore
+  unwatchViewportStore,
   // setTimeFrame,
   get4DSliceIndex
 } from "../utils";
