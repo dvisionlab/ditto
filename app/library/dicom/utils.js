@@ -4,7 +4,6 @@
 
 // Dependencies
 import * as lt from "larvitar/dist/larvitar";
-import Vue from "vue";
 import { saveAs } from "file-saver";
 import print from "print-js";
 
@@ -340,7 +339,7 @@ export const updateViewportProperty = (action, element) => {
     case "export-viewport": {
       const htmlTag = `#${element} canvas`;
       let canvas = document.querySelector(htmlTag);
-      canvas.toBlob(function(blob) {
+      canvas.toBlob(function (blob) {
         saveAs(blob, "image.png");
       });
       break;
@@ -349,7 +348,7 @@ export const updateViewportProperty = (action, element) => {
     case "print-viewport": {
       const htmlTag = `#${element} canvas`;
       let canvas = document.querySelector(htmlTag);
-      canvas.toBlob(function(blob) {
+      canvas.toBlob(function (blob) {
         print({
           printable: URL.createObjectURL(blob),
           type: "image",
