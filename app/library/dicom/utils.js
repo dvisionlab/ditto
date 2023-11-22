@@ -388,5 +388,5 @@ export const get4DSliceIndex = (frameNumber, sliceNumber, totFrames) => {
   return sliceNumber * totFrames + frameNumber;
 };
 export const setTimeFrame = (elementId, frameNumber) => {
-  lt.larvitar_store.set("timeId", [elementId, frameNumber]);
+  lt.store.set("timeId", [elementId, frameNumber]);
 };
