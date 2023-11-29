@@ -217,6 +217,22 @@ export const parseFiles = (files, extractMetadata = []) => {
   // Get DICOM series
   return lt.readFiles(files).then(series => {
     return Object.values(series || {}).map(s => {
+      const seriesId = s.seriesUID;
+      console.log(s);
+      if (s.isMultiframe) {
+        lt.buildMultiFrameImage(seriesId, s);
+        console.log(s);
+        const meta = s.instances[Object.keys(s.instances)[0]].metadata;
+        const stack = {
+          ...[].concat(extractMetadata).reduce((result, value) => {
+            result[value] = meta[value];
+            return result;
+          }, {}),
+          ...s
+        };
+        stack.larvitarNumberOfSlices = stack.numberOfFrames;
+        return stack;
+      }
       const meta = s.instances[Object.keys(s.instances)[0]].metadata;
       const stack = {
         ...[].concat(extractMetadata).reduce((result, value) => {
@@ -226,9 +242,7 @@ export const parseFiles = (files, extractMetadata = []) => {
         ...s
       };
 
-      if (stack.isMultiframe) {
-        stack.larvitarNumberOfSlices = stack.numberOfFrames;
-      } else if (stack.is4D) {
+      if (stack.is4D) {
         stack.larvitarNumberOfSlices =
           stack.imageIds.length / stack.numberOfTemporalPositions;
       } else {
@@ -339,7 +353,7 @@ export const updateViewportProperty = (action, element) => {
     case "export-viewport": {
       const htmlTag = `#${element} canvas`;
       let canvas = document.querySelector(htmlTag);
-      canvas.toBlob(function (blob) {
+      canvas.toBlob(function(blob) {
         saveAs(blob, "image.png");
       });
       break;
@@ -348,7 +362,7 @@ export const updateViewportProperty = (action, element) => {
     case "print-viewport": {
       const htmlTag = `#${element} canvas`;
       let canvas = document.querySelector(htmlTag);
-      canvas.toBlob(function (blob) {
+      canvas.toBlob(function(blob) {
         print({
           printable: URL.createObjectURL(blob),
           type: "image",
