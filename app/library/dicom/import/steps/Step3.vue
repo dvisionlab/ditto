@@ -50,7 +50,7 @@
 
     <div class="d-flex flex-wrap justify-center mt-3">
       <div
-        v-for="s in selectedSeries"
+        v-for="(s, i) in selectedSeries"
         :key="s.larvitarSeriesInstanceUID"
         class="ma-1"
       >
@@ -72,21 +72,26 @@
 
         <v-progress-linear
           :color="
-            step.status.errors[s.larvitarSeriesInstanceUID]
+            step.status.errors[s.larvitarSeriesInstanceUID] ||
+            step.status.errors[i]
               ? 'error'
               : getProgressPercentage(s.larvitarSeriesInstanceUID) == null
               ? 'black'
               : 'success'
           "
           :value="
-            step.status.errors[s.larvitarSeriesInstanceUID]
+            step.status.errors[s.larvitarSeriesInstanceUID] ||
+            step.status.errors[i]
               ? 100
               : getProgressPercentage(s.larvitarSeriesInstanceUID)
           "
         />
 
         <v-tooltip
-          v-if="step.status.errors[s.larvitarSeriesInstanceUID]"
+          v-if="
+            step.status.errors[i] ||
+            step.status.errors[s.larvitarSeriesInstanceUID]
+          "
           bottom
         >
           <template v-slot:activator="{ on, attrs }">
