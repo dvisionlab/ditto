@@ -217,9 +217,9 @@ export const parseFiles = (files, extractMetadata = []) => {
   // Get DICOM series
   return lt.readFiles(files).then(series => {
     return Object.values(series || {}).map(s => {
-      const seriesId = s.seriesUID;
       console.log(s);
       if (s.isMultiframe) {
+        const seriesId = s.larvitarSeriesInstanceUID;
         lt.buildMultiFrameImage(seriesId, s);
         console.log(s);
         const meta = s.instances[Object.keys(s.instances)[0]].metadata;
