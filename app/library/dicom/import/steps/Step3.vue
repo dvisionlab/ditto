@@ -100,10 +100,13 @@
             </v-btn>
           </template>
           <div
-            v-for="(text, i) in step.status.errors[s.larvitarSeriesInstanceUID]"
-            :key="i"
+            v-for="(text, idx) in getErrorsStrings(
+              s.larvitarSeriesInstanceUID,
+              i
+            )"
+            :key="idx"
           >
-            {{ text }}
+            {{ getErrorText(text) }}
           </div>
         </v-tooltip>
         <v-icon
@@ -166,6 +169,9 @@ export default {
         success: keys.filter(k => p[k] && p[k][0] == p[k][1]).length
       };
     },
+    getErrorsStrings(id, index) {
+      return this.step.status.errors[id] || this.step.status.errors[index];
+    },
     getProgressPercentage(id) {
       const progress = this.step.status.progress[id];
       if (!progress) {
@@ -173,6 +179,15 @@ export default {
       }
 
       return ((100 * progress[0]) / progress[1]).toFixed(0);
+    },
+    getErrorText(text) {
+      if (text) {
+        if (text !== "") {
+          return text;
+        }
+        return "failure: No valid series found";
+      }
+      return null;
     }
   }
 };
