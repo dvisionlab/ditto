@@ -172,10 +172,19 @@ export const getCinematicData = seriesId => {
 // value: the metadata value e.g. Mario^Rossi
 export const getImageMetadata = lt.getImageMetadata;
 
-export const getFrameMetadata = (seriesID, frameNumber = 0) => {
-  console.log(seriesID);
+export const getFrameMetadata = (seriesID, elementId, instance) => {
+  const viewport = getViewport(elementId);
+  const sliceId = viewport.sliceId;
+
   const stack = getSeriesStack(seriesID);
-  console.log(stack);
+  if (stack && stack.instanceUIDs) {
+    const frameId = stack.instanceUIDs[instance] + "?frame=" + sliceId;
+    if (stack.instances[frameId]) {
+      return stack.instances[frameId].metadata;
+    }
+  }
+  console.debug("not valid stack found for seriesId");
+  return null;
 };
 
 // Return series stack stored in larvitar dicom manager
