@@ -182,9 +182,11 @@ export default {
     },
     getErrorText(text) {
       if (text) {
+        /*
         if (text !== "") {
           return text;
         }
+        */
         return "failure: No valid series found";
       }
       return null;
