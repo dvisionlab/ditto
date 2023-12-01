@@ -172,6 +172,12 @@ export const getCinematicData = seriesId => {
 // value: the metadata value e.g. Mario^Rossi
 export const getImageMetadata = lt.getImageMetadata;
 
+export const getFrameMetadata = (seriesID, frameNumber = 0) => {
+  console.log(seriesID);
+  const stack = getSeriesStack(seriesID);
+  console.log(stack);
+};
+
 // Return series stack stored in larvitar dicom manager
 export const getSeriesStack = seriesId => {
   const stack = lt.getSeriesDataFromLarvitarManager(seriesId);
