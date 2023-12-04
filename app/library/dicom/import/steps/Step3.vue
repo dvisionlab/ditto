@@ -50,7 +50,7 @@
 
     <div class="d-flex flex-wrap justify-center mt-3">
       <div
-        v-for="s in selectedSeries"
+        v-for="(s, i) in selectedSeries"
         :key="s.larvitarSeriesInstanceUID"
         class="ma-1"
       >
@@ -72,21 +72,26 @@
 
         <v-progress-linear
           :color="
-            step.status.errors[s.larvitarSeriesInstanceUID]
+            step.status.errors[s.larvitarSeriesInstanceUID] ||
+            step.status.errors[i]
               ? 'error'
               : getProgressPercentage(s.larvitarSeriesInstanceUID) == null
               ? 'black'
               : 'success'
           "
           :value="
-            step.status.errors[s.larvitarSeriesInstanceUID]
+            step.status.errors[s.larvitarSeriesInstanceUID] ||
+            step.status.errors[i]
               ? 100
               : getProgressPercentage(s.larvitarSeriesInstanceUID)
           "
         />
 
         <v-tooltip
-          v-if="step.status.errors[s.larvitarSeriesInstanceUID]"
+          v-if="
+            step.status.errors[i] ||
+            step.status.errors[s.larvitarSeriesInstanceUID]
+          "
           bottom
         >
           <template v-slot:activator="{ on, attrs }">
@@ -95,10 +100,13 @@
             </v-btn>
           </template>
           <div
-            v-for="(text, i) in step.status.errors[s.larvitarSeriesInstanceUID]"
-            :key="i"
+            v-for="(text, idx) in getErrorsStrings(
+              s.larvitarSeriesInstanceUID,
+              i
+            )"
+            :key="idx"
           >
-            {{ text }}
+            {{ getErrorText(text) }}
           </div>
         </v-tooltip>
         <v-icon
@@ -161,6 +169,9 @@ export default {
         success: keys.filter(k => p[k] && p[k][0] == p[k][1]).length
       };
     },
+    getErrorsStrings(id, index) {
+      return this.step.status.errors[id] || this.step.status.errors[index];
+    },
     getProgressPercentage(id) {
       const progress = this.step.status.progress[id];
       if (!progress) {
@@ -168,6 +179,17 @@ export default {
       }
 
       return ((100 * progress[0]) / progress[1]).toFixed(0);
+    },
+    getErrorText(text) {
+      if (text) {
+        /*
+        if (text !== "") {
+          return text;
+        }
+        */
+        return "failure: No valid series found";
+      }
+      return null;
     }
   }
 };
