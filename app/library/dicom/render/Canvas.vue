@@ -146,19 +146,21 @@ import {
   clearSeriesCache,
   deleteViewport,
   disableCanvas,
+  getSeries,
   getSeriesStack,
+  getViewport,
   renderSeries,
   resizeViewport,
   seriesIdToElementId,
   updateSeriesSlice,
+  watchViewportStore,
+  unwatchViewportStore,
   // setTimeFrame,
   get4DSliceIndex
 } from "../utils";
 
 const defaultGetProgressFn = (store, seriesId) =>
-  (store.state.larvitar.series[seriesId] || {}).progress;
-const defaultGetViewportFn = (store, seriesId, canvasId) =>
-  store.getters["larvitar/viewport"](canvasId) || {};
+  (getSeries(seriesId) || {}).progress;
 
 export default {
   name: "DicomCanvas",
@@ -169,7 +171,7 @@ export default {
     clearOnDestroy: { default: false, type: Boolean },
     canvasId: { required: true, type: String },
     getProgressFn: { default: defaultGetProgressFn, type: Function },
-    getViewportFn: { default: defaultGetViewportFn, type: Function },
+    getViewportFn: { required: false, type: Function },
     seriesId: { required: true, type: [String, Number] },
     showMultiframeIcon: { default: false, type: Boolean },
     showProgress: { default: false, type: Boolean },
@@ -181,18 +183,28 @@ export default {
   data: () => ({
     isReady: false,
     error: false,
+    ltViewport: null,
     stackMetadata: null,
     validCanvasId: null
   }),
   beforeDestroy() {
+    if (!this.getViewportFn) {
+      unwatchViewportStore(this.validCanvasId);
+    }
+
     this.destroy();
   },
   computed: {
     progress() {
+      // TODO need store watcher
       return this.getProgressFn(this.$store, this.seriesId, this.validCanvasId);
     },
     viewport() {
-      return this.getViewportFn(this.$store, this.seriesId, this.validCanvasId);
+      return (
+        (this.getViewportFn
+          ? this.getViewportFn(this.$store, this.seriesId, this.validCanvasId)
+          : this.ltViewport) || {}
+      );
     },
     sliderSliceId: {
       get() {
@@ -254,6 +266,18 @@ export default {
 
       this.isReady = false;
     },
+    initViewportData(viewportId, prevViewportId) {
+      // init viewport data and start listening
+      if (!this.getViewportFn) {
+        if (prevViewportId) {
+          // TODO test this
+          unwatchViewportStore(prevViewportId);
+        }
+
+        this.ltViewport = getViewport(viewportId);
+        watchViewportStore(viewportId, data => (this.ltViewport = data));
+      }
+    },
     onResize() {
       if (this.isReady) {
         resizeViewport(this.validCanvasId);
@@ -262,9 +286,15 @@ export default {
   },
   watch: {
     canvasId: {
-      handler() {
+      handler(canvasId, prevCanvasId) {
         // Compute valid element id (dots not allowed)
-        this.validCanvasId = seriesIdToElementId(this.canvasId);
+        this.validCanvasId = seriesIdToElementId(canvasId);
+        // init viewport data and start listening for changes
+
+        this.initViewportData(
+          this.validCanvasId,
+          prevCanvasId ? seriesIdToElementId(prevCanvasId) : undefined
+        );
       },
       immediate: true
     },
