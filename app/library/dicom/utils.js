@@ -290,12 +290,13 @@ export const parseFile = (seriesId, file) => {
 };
 
 // Use Larvitar to render a series into a canvas
-export const renderSeries = (elementId, seriesStack, params = {}) => {
+export const renderSeries = async (elementId, seriesStack, params = {}) => {
   lt.store.addViewport(elementId);
   // render returns a promise which will resolve when image is displayed
+  await lt.cacheImages(seriesStack);
   return seriesStack.isPDF
-    ? lt.renderDICOMPDF(seriesStack, elementId)
-    : lt.renderImage(seriesStack, elementId, params);
+    ? await lt.renderDICOMPDF(seriesStack, elementId)
+    : await lt.renderImage(seriesStack, elementId, params);
 };
 
 // Reset Larvitar
@@ -368,7 +369,7 @@ export const updateViewportProperty = (action, element) => {
     case "export-viewport": {
       const htmlTag = `#${element} canvas`;
       let canvas = document.querySelector(htmlTag);
-      canvas.toBlob(function(blob) {
+      canvas.toBlob(function (blob) {
         saveAs(blob, "image.png");
       });
       break;
@@ -377,7 +378,7 @@ export const updateViewportProperty = (action, element) => {
     case "print-viewport": {
       const htmlTag = `#${element} canvas`;
       let canvas = document.querySelector(htmlTag);
-      canvas.toBlob(function(blob) {
+      canvas.toBlob(function (blob) {
         print({
           printable: URL.createObjectURL(blob),
           type: "image",
