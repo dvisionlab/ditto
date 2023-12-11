@@ -63,7 +63,7 @@
         <vue-slider
           contained
           direction="btt"
-          :duration="0.25"
+          :duration="viewport.isMultiframe ? 0.05 : 0.25"
           height="100%"
           :min="viewport.minSliceId"
           :max="(viewport.maxSliceId + 1) / (viewport.maxTimeId + 1) - 1"
@@ -79,6 +79,7 @@
             color: 'black'
           }"
           width="5px"
+          ref="slider"
           v-model="sliderSliceId"
         >
           <template v-slot:dot="{ /* eslint-disable */ value, focus }">
@@ -209,9 +210,19 @@ export default {
     sliderSliceId: {
       get() {
         if (this.viewport.maxTimeId > 0) {
+          console.log("slice id ");
+          console.log(
+            Math.floor(this.viewport.sliceId / (this.viewport.maxTimeId + 1))
+          );
           return Math.floor(
             this.viewport.sliceId / (this.viewport.maxTimeId + 1)
           );
+        }
+        console.log("slice id nor multiframe ");
+        console.log(this.viewport.sliceId);
+        if (this.$refs.slider) {
+          console.log(this.$refs.slider.getValue());
+          console.log(this.$refs.slider.getIndex());
         }
         return this.viewport.sliceId;
       },
