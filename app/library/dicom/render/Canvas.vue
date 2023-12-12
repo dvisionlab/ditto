@@ -211,19 +211,9 @@ export default {
     sliderSliceId: {
       get() {
         if (this.viewport.maxTimeId > 0) {
-          console.log("slice id ");
-          console.log(
-            Math.floor(this.viewport.sliceId / (this.viewport.maxTimeId + 1))
-          );
           return Math.floor(
             this.viewport.sliceId / (this.viewport.maxTimeId + 1)
           );
-        }
-        console.log("slice id nor multiframe ");
-        console.log(this.viewport.sliceId);
-        if (this.$refs.slider) {
-          console.log(this.$refs.slider.getValue());
-          console.log(this.$refs.slider.getIndex());
         }
         return this.viewport.sliceId;
       },
@@ -256,7 +246,6 @@ export default {
             sliceNumber,
             this.viewport.maxTimeId + 1
           );
-          console.log("calculate stack correct index = ", stackIndex);
           // setTimeFrame(this.validCanvasId,index);
           updateSeriesSlice(this.validCanvasId, this.seriesId, stackIndex);
         }
