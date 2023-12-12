@@ -80,6 +80,7 @@
           }"
           width="5px"
           ref="slider"
+          silent
           v-model="sliderSliceId"
         >
           <template v-slot:dot="{ /* eslint-disable */ value, focus }">
