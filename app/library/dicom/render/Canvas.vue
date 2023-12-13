@@ -60,13 +60,18 @@
           right: '0'
         }"
       >
+        <!--TODO disable silent if debug-->
         <vue-slider
           contained
           direction="btt"
-          :duration="viewport.isMultiframe ? 0.05 : 0.25"
+          :duration="viewport.isMultiframe ? 0.01 : 0.25"
           height="100%"
           :min="viewport.minSliceId"
-          :max="(viewport.maxSliceId + 1) / (viewport.maxTimeId + 1) - 1"
+          :max="
+            viewport.maxTimeId
+              ? (viewport.maxSliceId + 1) / (viewport.maxTimeId + 1) - 1
+              : viewport.maxSliceId
+          "
           :processStyle="{
             backgroundColor: 'var(--v-accent-base)',
             borderRadius: '1px'
@@ -80,7 +85,6 @@
           }"
           width="5px"
           ref="slider"
-          silent
           v-model="sliderSliceId"
         >
           <template v-slot:dot="{ /* eslint-disable */ value, focus }">

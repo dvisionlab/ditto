@@ -76,7 +76,7 @@ export default {
       intervalId: null,
       frameTime: DEFAULT_FRAME_TIME,
       sliderOptions: {
-        min: 10,
+        min: 25,
         max: 1000,
         step: 5
       }
