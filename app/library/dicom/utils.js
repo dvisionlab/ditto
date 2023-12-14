@@ -234,7 +234,7 @@ export const parseFiles = (files, extractMetadata = []) => {
     return Object.values(series || {}).map(s => {
       console.log(s);
       if (s.isMultiframe) {
-        const seriesId = s.larvitarSeriesInstanceUID;
+        const seriesId = s.seriesUID;
         lt.buildMultiFrameImage(seriesId, s);
         console.log(s);
         const meta = s.instances[Object.keys(s.instances)[0]].metadata;
@@ -369,7 +369,7 @@ export const updateViewportProperty = (action, element) => {
     case "export-viewport": {
       const htmlTag = `#${element} canvas`;
       let canvas = document.querySelector(htmlTag);
-      canvas.toBlob(function (blob) {
+      canvas.toBlob(function(blob) {
         saveAs(blob, "image.png");
       });
       break;
@@ -378,7 +378,7 @@ export const updateViewportProperty = (action, element) => {
     case "print-viewport": {
       const htmlTag = `#${element} canvas`;
       let canvas = document.querySelector(htmlTag);
-      canvas.toBlob(function (blob) {
+      canvas.toBlob(function(blob) {
         print({
           printable: URL.createObjectURL(blob),
           type: "image",
