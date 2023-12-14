@@ -136,7 +136,7 @@ export default {
     updateFrameTime(value, restart = true) {
       if (this.sliderOptions.min <= value && value <= this.sliderOptions.max) {
         this.frameTime = value;
-
+        this.$emit("frame-time-update", value);
         if (restart) {
           this.restart();
         }

@@ -63,7 +63,7 @@
         <vue-slider
           contained
           direction="btt"
-          :duration="viewport.isMultiframe ? 0.01 : 0.25"
+          :duration="duration"
           height="100%"
           :min="viewport.minSliceId"
           :max="
@@ -183,7 +183,8 @@ export default {
     showSlider: { default: false, type: Boolean },
     stack: { required: false, type: Object },
     tools: { default: () => stackTools.default, type: Array },
-    toolsHandlers: { required: false, type: Object }
+    toolsHandlers: { required: false, type: Object },
+    timeFrame: { required: false, type: Number }
   },
   data: () => ({
     isReady: false,
@@ -210,6 +211,17 @@ export default {
           ? this.getViewportFn(this.$store, this.seriesId, this.validCanvasId)
           : this.ltViewport) || {}
       );
+    },
+    duration() {
+      // slider lag from input changes
+      if (!this.viewport.isMultiframe) {
+        return 0.25;
+      } else if (!this.timeFrame) {
+        return 0.1;
+      } else if (this.timeFrame < 50) {
+        return 0.01;
+      }
+      return 0.15;
     },
     sliderSliceId: {
       get() {
