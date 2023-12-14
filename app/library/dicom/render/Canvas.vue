@@ -60,7 +60,6 @@
           right: '0'
         }"
       >
-        <!--TODO disable silent if debug-->
         <vue-slider
           contained
           direction="btt"
