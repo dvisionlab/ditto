@@ -25,7 +25,7 @@
     </v-tooltip>
 
     <!-- frame time selector -->
-    <v-menu :nudge-bottom="3" open-on-hover offset-y bottom>
+    <v-menu :nudge-bottom="3" open-on-hover close-delay="1000" offset-y bottom>
       <template v-slot:activator="{ on, attrs }">
         <v-btn
           class="ma-0 px-2 text-lowercase"
