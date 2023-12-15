@@ -25,7 +25,7 @@
     </v-tooltip>
 
     <!-- frame time selector -->
-    <v-menu :nudge-bottom="3" open-on-hover offset-y bottom>
+    <v-menu :nudge-bottom="3" open-on-hover close-delay="1000" offset-y bottom>
       <template v-slot:activator="{ on, attrs }">
         <v-btn
           class="ma-0 px-2 text-lowercase"
@@ -76,7 +76,7 @@ export default {
       intervalId: null,
       frameTime: DEFAULT_FRAME_TIME,
       sliderOptions: {
-        min: 10,
+        min: 25,
         max: 1000,
         step: 5
       }
@@ -136,7 +136,7 @@ export default {
     updateFrameTime(value, restart = true) {
       if (this.sliderOptions.min <= value && value <= this.sliderOptions.max) {
         this.frameTime = value;
-
+        this.$emit("frame-time-update", value);
         if (restart) {
           this.restart();
         }

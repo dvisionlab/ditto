@@ -63,10 +63,14 @@
         <vue-slider
           contained
           direction="btt"
-          :duration="0.25"
+          :duration="duration"
           height="100%"
           :min="viewport.minSliceId"
-          :max="(viewport.maxSliceId + 1) / (viewport.maxTimeId + 1) - 1"
+          :max="
+            viewport.maxTimeId
+              ? (viewport.maxSliceId + 1) / (viewport.maxTimeId + 1) - 1
+              : viewport.maxSliceId
+          "
           :processStyle="{
             backgroundColor: 'var(--v-accent-base)',
             borderRadius: '1px'
@@ -79,6 +83,7 @@
             color: 'black'
           }"
           width="5px"
+          ref="slider"
           v-model="sliderSliceId"
         >
           <template v-slot:dot="{ /* eslint-disable */ value, focus }">
@@ -178,7 +183,8 @@ export default {
     showSlider: { default: false, type: Boolean },
     stack: { required: false, type: Object },
     tools: { default: () => stackTools.default, type: Array },
-    toolsHandlers: { required: false, type: Object }
+    toolsHandlers: { required: false, type: Object },
+    timeFrame: { required: false, type: Number }
   },
   data: () => ({
     isReady: false,
@@ -205,6 +211,17 @@ export default {
           ? this.getViewportFn(this.$store, this.seriesId, this.validCanvasId)
           : this.ltViewport) || {}
       );
+    },
+    duration() {
+      // slider lag from input changes
+      if (!this.viewport.isMultiframe) {
+        return 0.25;
+      } else if (!this.timeFrame) {
+        return 0.1;
+      } else if (this.timeFrame < 50) {
+        return 0.01;
+      }
+      return 0.15;
     },
     sliderSliceId: {
       get() {
@@ -244,7 +261,6 @@ export default {
             sliceNumber,
             this.viewport.maxTimeId + 1
           );
-          console.log("calculate stack correct index = ", stackIndex);
           // setTimeFrame(this.validCanvasId,index);
           updateSeriesSlice(this.validCanvasId, this.seriesId, stackIndex);
         }
