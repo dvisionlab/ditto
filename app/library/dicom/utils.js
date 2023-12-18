@@ -234,7 +234,7 @@ export const parseFiles = (files, extractMetadata = []) => {
     return Object.values(series || {}).map(s => {
       console.log(s);
       if (s.isMultiframe) {
-        const seriesId = s.seriesUID;
+        const seriesId = s.larvitarSeriesInstanceUID;
         lt.buildMultiFrameImage(seriesId, s);
         console.log(s);
         const meta = s.instances[Object.keys(s.instances)[0]].metadata;
