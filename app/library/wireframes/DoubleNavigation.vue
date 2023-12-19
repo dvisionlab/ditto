@@ -67,6 +67,7 @@
         <app-navigation
           v-if="$scopedSlots.nav"
           absolute
+          :dark="nav.dark"
           :app="false"
           :color="nav.color"
           :collapsable="nav.collapsable"
