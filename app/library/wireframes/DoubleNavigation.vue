@@ -4,7 +4,7 @@
     <app-bar
       v-if="$scopedSlots.bar"
       :color="bar.color"
-      :dark="bar.dark"
+      :dark="bar.dark || dark"
       :dense="bar.dense"
       :height="bar.height"
       :left="false"
@@ -18,7 +18,7 @@
 
     <!-- mobile top menu -->
     <mobile-top-menu
-      :dark="bar.dark"
+      :dark="bar.dark || dark"
       :mobile-breakpoint="mobileBreakpoint"
       :steteless="bar.stateless"
       v-model="mobileMenuVisible"
@@ -30,9 +30,9 @@
     <app-navigation
       v-if="$scopedSlots.navLeft"
       :clipped="false"
-      :color="navLeft.color"
+      :color="dark ? '' : navLeft.color"
       :collapsable="false"
-      :dark="navLeft.dark"
+      :dark="navLeft.dark || dark"
       mini-variant
       :mini-variant-width="navLeft.width"
       :mobile-breakpoint="mobileBreakpoint"
@@ -48,7 +48,7 @@
       :clipped="true"
       :color="navRight.color"
       :collapsable="navRight.collapsable"
-      :dark="navRight.dark"
+      :dark="navRight.dark || dark"
       :mobile-breakpoint="mobileBreakpoint"
       :right="true"
       :width="navRight.width"
@@ -67,7 +67,7 @@
         <app-navigation
           v-if="$scopedSlots.nav"
           absolute
-          :dark="nav.dark"
+          :dark="nav.dark || dark"
           :app="false"
           :color="nav.color"
           :collapsable="nav.collapsable"
@@ -95,7 +95,7 @@
     <v-footer
       v-if="$scopedSlots.footer"
       app
-      :dark="footer.dark"
+      :dark="footer.dark || dark"
       :height="footer.height"
       inset
     >
@@ -139,7 +139,8 @@ export default {
   mixins: [Common],
   components: { AppBar, AppNavigation, MobileTopMenu, NavigationToggler },
   props: {
-    nav: { default: () => ({}), type: Object }
+    nav: { default: () => ({}), type: Object },
+    dark: { default: false, type: Boolean }
   },
   data() {
     return {
