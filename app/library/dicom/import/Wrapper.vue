@@ -4,6 +4,7 @@
     persistent
     width="95wv"
     v-model="visible"
+    :dark="dark"
     :disabled="disabled"
     @click:outside="() => minimize()"
   >
@@ -59,6 +60,7 @@
       :options="options"
       :modal="true"
       ref="content"
+      :dark="dark"
       @cancel="isOpen = false"
       @dicom-import-open="data => $emit('dicom-import-open', data)"
       @dicom-import-upload="data => $emit('dicom-import-upload', data)"
@@ -89,6 +91,7 @@ export default {
   name: "DicomImportModal",
   components: { ActivatorContent, DicomImport },
   props: {
+    dark: { default: false, type: Boolean },
     disabled: { default: false, type: Boolean },
     defaultActive: { default: false, type: Boolean },
     activatorClass: { required: false, type: String },

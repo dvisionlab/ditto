@@ -21,7 +21,12 @@
               'py-2': $vuetify.breakpoint.smAndDown
             }"
           >
-            <v-icon :dark="dark" class="pl-3" color="black">{{ icon }}</v-icon>
+            <v-icon
+              :dark="dark"
+              class="pl-3"
+              :color="dark ? 'white' : 'black'"
+              >{{ icon }}</v-icon
+            >
             <h3 class="text-uppercase lh-small px-3">{{ $t(label) }}</h3>
           </div>
 
@@ -182,7 +187,7 @@
         </template>
 
         <!-- Steps customization slots (actually only step-3 is supported) -->
-        <template v-slot:step-3><slot name="step-3" /></template>
+        <template v-slot:step-3><slot name="step-3"/></template>
       </component>
     </div>
   </div>
@@ -295,8 +300,8 @@ export default {
       }
     },
     onCancel() {
-      const closeConfirmationFn =
-        this.steps[this.currentStep].closeConfirmation;
+      const closeConfirmationFn = this.steps[this.currentStep]
+        .closeConfirmation;
 
       if (
         closeConfirmationFn &&
@@ -375,6 +380,7 @@ $min-header-height: 5.5em;
 
 .dark-header {
   background-color: #1e1e1e;
+  color: white;
 }
 .selected-action {
   background: rgba(var(--v-primary-rgb), 0.12);
