@@ -11,7 +11,12 @@
     <div
       v-if="!loading"
       class="d-flex flex-column justify-center dropzone pa-4"
-      :class="{ dragging, 'primary--text': dragging, black: dark }"
+      :class="{
+        dragging,
+        'primary--text': dragging,
+        black: dark && !modal,
+        'dark-header': dark && modal
+      }"
       @drop.prevent.stop="loadSeries"
       @dragover.prevent.stop="onDragOver"
       @dragend="onDragEnd"
@@ -170,7 +175,9 @@ export default {
 .dark-icon {
   filter: invert(100%);
 }
-
+.dark-drop {
+  background-color: #1e1e1e;
+}
 .dropzone {
   height: 100%;
   width: 100%;
@@ -187,7 +194,10 @@ export default {
     }
   }
 }
-
+.dark-header {
+  background-color: #1e1e1e;
+  border: 0.5em solid white;
+}
 .line-wraps {
   border-bottom: 1px solid var(--v-black-base);
   line-height: 0.1em;
