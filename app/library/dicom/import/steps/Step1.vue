@@ -200,7 +200,7 @@ export default {
 }
 .dark-header {
   background-color: #1e1e1e;
-  border: 0.5em solid white;
+  border: 0.5em solid var(--v-primary-base);
 }
 .line-wraps {
   border-bottom: 1px solid var(--v-black-base);
