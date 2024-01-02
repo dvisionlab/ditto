@@ -70,7 +70,11 @@
       </div>
     </div>
 
-    <div v-else class="d-flex h-100 text-center text-uppercase">
+    <div
+      v-else
+      class="d-flex h-100 text-center text-uppercase"
+      :class="{ 'dark-header': dark }"
+    >
       <div class="ma-auto">
         <v-progress-linear indeterminate color="primary" />
         <h3 class="primary--text" :class="{ 'white--text': dark }">
