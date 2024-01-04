@@ -11,6 +11,9 @@
       :hint="field.hint"
       :items="field.items"
       :label="field.label"
+      :menuProps="
+        getComponentName(field) === 'v-select' ? { dark: dark } : null
+      "
       :placeholder="field.placeholder"
       :required="required"
       :rules="dirty ? getRules(field) : undefined"
@@ -24,20 +27,25 @@
       </template>
     </component>
 
-    <component v-if="field.slot" :is="field.slot" v-bind="{ field, value }" />
+    <component
+      v-if="field.slot"
+      :dark="dark"
+      :is="field.slot"
+      v-bind="{ field, value }"
+    />
   </div>
 </template>
 
 <script>
 import { rules } from "./rules";
 import { VTextField, VSelect } from "vuetify/lib";
-import PasswordField from '../auth/components/PasswordField.vue'; 
+import PasswordField from "../auth/components/PasswordField.vue";
 
 export default {
   name: "Field",
-  components: { VTextField, VSelect,PasswordField },
+  components: { VTextField, VSelect, PasswordField },
   props: {
-    dark: {default: false, type: Boolean },
+    dark: { default: false, type: Boolean },
     dirty: { default: false, type: Boolean },
     field: { required: true, type: Object },
     loading: { default: false, type: Boolean },

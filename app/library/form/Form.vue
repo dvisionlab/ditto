@@ -19,6 +19,7 @@
               <form-field
                 v-for="(field, ii) in field.list"
                 :key="ii"
+                :dark="dark"
                 :dirty="dirty"
                 :field="field"
                 :loading="loading"
