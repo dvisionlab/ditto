@@ -2,6 +2,7 @@
   <v-form
     :lazy-validation="lazyValidation"
     ref="form"
+    :dark="dark"
     v-model="valid"
     @submit.prevent="submit"
   >

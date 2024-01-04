@@ -1,10 +1,15 @@
 <template>
   <div class="step-wrapper">
-    <div class="step-header d-flex" v-relative-height="'contentHeight'">
+    <div
+      class="step-header d-flex"
+      :class="{ 'dark-header': dark }"
+      v-relative-height="'contentHeight'"
+    >
       <div
         class="d-flex flex-wrap flex-grow-1 align-center"
         :class="{
-          'py-2': $vuetify.breakpoint.smAndDown
+          'py-2': $vuetify.breakpoint.smAndDown,
+          'dark-header': dark
         }"
         :style="{ overflow: 'auto' }"
       >
@@ -15,7 +20,9 @@
             'py-2': $vuetify.breakpoint.smAndDown
           }"
         >
-          <v-icon class="pl-3" color="black">{{ icon }}</v-icon>
+          <v-icon class="pl-3" :color="dark ? 'white' : 'black'">{{
+            icon
+          }}</v-icon>
           <h3 class="text-uppercase lh-small px-3">{{ $t(label) }}</h3>
         </div>
 
@@ -29,6 +36,7 @@
           }"
         >
           <v-btn
+            :dark="dark"
             class="d-none d-sm-flex"
             :disabled="!steps[currentStep].back(steps[currentStep].status)"
             text
@@ -41,6 +49,7 @@
           <v-btn
             v-if="steps[currentStep].action"
             color="primary"
+            :dark="dark"
             :disabled="
               steps[currentStep].action.disabled(
                 selectedData,
@@ -50,16 +59,21 @@
             @click="onAction()"
           >
             {{ steps[currentStep].action.text }}
-            <v-icon v-if="steps[currentStep].next(data)">
+            <v-icon :dark="dark" v-if="steps[currentStep].next(data)">
               mdi-chevron-right
             </v-icon>
           </v-btn>
         </div>
       </div>
 
-      <v-divider :class="{ 'px-2': !$vuetify.breakpoint.smAndDown }" vertical />
+      <v-divider
+        :dark="dark"
+        :class="{ 'px-2': !$vuetify.breakpoint.smAndDown }"
+        vertical
+      />
 
       <modal-controllers
+        :dark="dark"
         class="flex-shrink-0 align-self-center"
         @cancel="onCancel"
         @minimize="$emit('minimize')"
@@ -68,7 +82,7 @@
 
     <div
       :class="['step-content', `step-${currentStep + 1}`]"
-      :style="{ height: contentHeight }"
+      :style="{ height: contentHeight, backgroundColor: dark ? '#1e1e1e' : '' }"
     >
       <component
         :is="`import-step-${currentStep + 1}`"
@@ -76,6 +90,7 @@
         :headers="getFields()"
         :disclaimer="disclaimer"
         :data="data"
+        :dark="dark"
         :form="queryParametersForm"
         :modalities="options.modalities"
         :query-results-key="queryResultsKey"
@@ -119,7 +134,8 @@ export default {
   props: {
     icon: { default: "mdi-upload-multiple", type: String },
     label: { default: "pacs-import.query-retrieve", type: String },
-    options: { default: () => ({}), type: Object }
+    options: { default: () => ({}), type: Object },
+    dark: { default: false, type: Boolean }
   },
   data() {
     const headers = getHeaders().map(h => ({
@@ -172,8 +188,8 @@ export default {
       }
     },
     onCancel() {
-      const closeConfirmationFn =
-        this.steps[this.currentStep].closeConfirmation;
+      const closeConfirmationFn = this.steps[this.currentStep]
+        .closeConfirmation;
 
       if (
         closeConfirmationFn &&
@@ -320,6 +336,10 @@ export default {
 <style lang="scss" scoped>
 $min-header-height: 5.5em;
 
+.dark-header {
+  background-color: #1e1e1e;
+  color: white;
+}
 .step-wrapper {
   height: 80vh; /* Fallback for browsers that do not support Custom Properties */
   height: calc(var(--vh, 1vh) * 80);

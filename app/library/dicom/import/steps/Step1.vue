@@ -11,7 +11,12 @@
     <div
       v-if="!loading"
       class="d-flex flex-column justify-center dropzone pa-4"
-      :class="{ dragging, 'primary--text': dragging, black: dark }"
+      :class="{
+        dragging,
+        'primary--text': dragging,
+        black: dark && !modal,
+        'dark-header': dark && modal
+      }"
       @drop.prevent.stop="loadSeries"
       @dragover.prevent.stop="onDragOver"
       @dragend="onDragEnd"
@@ -65,7 +70,11 @@
       </div>
     </div>
 
-    <div v-else class="d-flex h-100 text-center text-uppercase">
+    <div
+      v-else
+      class="d-flex h-100 text-center text-uppercase"
+      :class="{ 'dark-header': dark }"
+    >
       <div class="ma-auto">
         <v-progress-linear indeterminate color="primary" />
         <h3 class="primary--text" :class="{ 'white--text': dark }">
@@ -170,7 +179,9 @@ export default {
 .dark-icon {
   filter: invert(100%);
 }
-
+.dark-drop {
+  background-color: #1e1e1e;
+}
 .dropzone {
   height: 100%;
   width: 100%;
@@ -187,7 +198,10 @@ export default {
     }
   }
 }
-
+.dark-header {
+  background-color: #1e1e1e;
+  border: 0.5em solid var(--v-primary-base);
+}
 .line-wraps {
   border-bottom: 1px solid var(--v-black-base);
   line-height: 0.1em;

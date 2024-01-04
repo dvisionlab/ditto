@@ -1,6 +1,12 @@
 <template>
   <div>
-    <v-alert v-if="modalities.error" class="ma-4" outlined type="error">
+    <v-alert
+      :dark="dark"
+      v-if="modalities.error"
+      class="ma-4"
+      outlined
+      type="error"
+    >
       An error occured while retrieving PACS modalities.
     </v-alert>
 
@@ -13,7 +19,7 @@
       </div>
 
       <!-- select aet -->
-      <v-form class="mb-2" ref="aetForm">
+      <v-form :dark="dark" class="mb-2" ref="aetForm">
         <v-select
           :hint="value ? `${value.aet}, ${value.host}:${value.port}` : null"
           :items="modalities.results"
@@ -25,11 +31,13 @@
           return-object
           :rules="[v => !!v || 'Please select a remote PACS']"
           :value="value"
+          :dark="dark"
           @change="v => $emit('input', v)"
         ></v-select>
       </v-form>
 
       <ditto-form
+        :dark="dark"
         :fields="fields"
         :footer-style="{ display: 'none !important' }"
         v-model="form"
@@ -43,15 +51,20 @@
       </div>
     </div>
 
-    <v-dialog :value="step.status.error" max-width="300">
-      <v-card>
+    <v-dialog :dark="dark" :value="step.status.error" max-width="300">
+      <v-card :dark="dark">
         <v-card-title class="headline warning--text">
           Querying error
         </v-card-title>
         <v-card-text>{{ step.status.error }}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="warning" text @click="step.status.error = null">
+          <v-btn
+            :dark="dark"
+            color="warning"
+            text
+            @click="step.status.error = null"
+          >
             Ok
           </v-btn>
         </v-card-actions>
@@ -72,6 +85,7 @@ export default {
     headers: { required: true, type: Array },
     modalities: { required: false, type: Object },
     step: { required: true, type: Object },
+    dark: { default: false, type: Boolean },
     value: { required: false, type: Object } // selected AET
   },
   data() {

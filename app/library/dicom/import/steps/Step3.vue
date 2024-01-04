@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center">
+  <div class="text-center" :class="{ 'dark-bckg': dark }">
     <h3 class="text-uppercase ma-auto" :style="{ width: 'fit-content' }">
       <template v-if="step.status.loading">
         Uploading <b>{{ selectedSeries.length }}</b> exam{{
@@ -90,7 +90,7 @@
         <v-tooltip
           v-if="
             step.status.errors[i] ||
-            step.status.errors[s.larvitarSeriesInstanceUID]
+              step.status.errors[s.larvitarSeriesInstanceUID]
           "
           bottom
         >
@@ -140,6 +140,7 @@ export default {
   name: "DicomImportStep3",
   components: { DicomCanvas },
   props: {
+    dark: { default: false, type: Boolean },
     getProgressFn: { required: false, type: Function },
     getViewportFn: { required: false, type: Function },
     series: { required: true, type: Array },
@@ -194,3 +195,9 @@ export default {
   }
 };
 </script>
+<style>
+.dark-bckg {
+  background-color: #1e1e1e;
+  color: white;
+}
+</style>

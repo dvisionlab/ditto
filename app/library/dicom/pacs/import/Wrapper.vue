@@ -4,6 +4,7 @@
     persistent
     width="95wv"
     v-model="visible"
+    :dark="dark"
     :disabled="disabled"
     @click:outside="() => minimize()"
   >
@@ -57,6 +58,7 @@
       :icon="icon"
       :label="label"
       :options="options"
+      :dark="dark"
       ref="content"
       @cancel="isOpen = false"
       @minimize="minimize"
@@ -82,6 +84,7 @@ export default {
   name: "DicomImportModal",
   components: { ActivatorContent, DicomImportPacs },
   props: {
+    dark: { default: false, type: Boolean },
     disabled: { default: false, type: Boolean },
     activatorClass: { required: false, type: String },
     badgeColor: { default: "primary", type: String },
