@@ -32,6 +32,7 @@
           :rules="[v => !!v || 'Please select a remote PACS']"
           :value="value"
           :dark="dark"
+          :menuProps="{ dark: dark }"
           @change="v => $emit('input', v)"
         ></v-select>
       </v-form>
