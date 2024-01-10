@@ -46,8 +46,16 @@
     <slot
       v-if="showSlider"
       name="viewport-slider"
-      v-bind:i="(viewport.sliceId + 1) / (viewport.maxTimeId + 1)"
-      v-bind:n="(viewport.maxSliceId + 1) / (viewport.maxTimeId + 1) - 1"
+      v-bind:i="
+        viewport.maxTimeId > 0
+          ? viewport.sliceId / viewport.numberOfTemporalPositions
+          : viewport.sliceId
+      "
+      v-bind:n="
+        viewport.maxTimeId > 0
+          ? (viewport.maxSliceId + 1) / viewport.numberOfTemporalPositions - 1
+          : viewport.maxSliceId
+      "
     >
       <!-- default slider -->
       <div
@@ -68,7 +76,8 @@
           :min="viewport.minSliceId"
           :max="
             viewport.maxTimeId
-              ? (viewport.maxSliceId + 1) / (viewport.maxTimeId + 1) - 1
+              ? (viewport.maxSliceId + 1) / viewport.numberOfTemporalPositions -
+                1
               : viewport.maxSliceId
           "
           :processStyle="{
@@ -99,7 +108,6 @@
       v-bind:i="viewport.timeId"
       v-bind:n="viewport.maxTimeId"
     >
-      <!-- default slider -->
       <div
         :style="{
           height: '20px',
@@ -114,7 +122,7 @@
           :duration="0.25"
           height="5px"
           :min="viewport.minTimeId"
-          :max="viewport.maxTimeId"
+          :max="viewport.maxTimeId + 1"
           :processStyle="{
             backgroundColor: 'var(--v-accent-base)',
             borderRadius: '1px'
@@ -226,19 +234,22 @@ export default {
     sliderSliceId: {
       get() {
         if (this.viewport.maxTimeId > 0) {
+          console.log(this.viewport.sliceId);
+          console.log(this.viewport.timeId);
           return Math.floor(
-            this.viewport.sliceId / (this.viewport.maxTimeId + 1)
+            this.viewport.sliceId / this.viewport.numberOfTemporalPositions
           );
         }
         return this.viewport.sliceId;
       },
       set(index) {
         if (this.isReady) {
+          console.log("setting index");
           if (this.viewport.maxTimeId > 0) {
             const stackIndex = get4DSliceIndex(
               this.viewport.timeId,
               index,
-              this.viewport.maxTimeId + 1
+              this.viewport.numberOfTemporalPositions
             );
             updateSeriesSlice(this.validCanvasId, this.seriesId, stackIndex);
           } else {
@@ -249,7 +260,7 @@ export default {
     },
     sliderFrameId: {
       get() {
-        return this.viewport.timeId;
+        return this.viewport.timeId || this.viewport.timeIds[0];
       },
       set(index) {
         if (this.isReady) {
@@ -261,7 +272,7 @@ export default {
             sliceNumber,
             this.viewport.maxTimeId + 1
           );
-          // setTimeFrame(this.validCanvasId,index);
+          // setTimeFrame(this.validCanvasId, index);
           updateSeriesSlice(this.validCanvasId, this.seriesId, stackIndex);
         }
       }

@@ -35,7 +35,9 @@
         }}
       </div>
     </div>
-    <div v-if="data.isTimeserie">time: {{ data.timestamp }}</div>
+    <div v-if="data.isTimeserie">
+      time: {{ data.timestamp || data.timestamps[0] }}
+    </div>
   </div>
 </template>
 

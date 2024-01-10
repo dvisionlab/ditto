@@ -72,6 +72,9 @@ export const activateTool = (
 // Add mouse button tools
 export const addTools = (tools, elementId) => {
   tools.forEach(t => {
+    if (t.name === "CustomMouseWheelScroll") {
+      console.log(t.configuration);
+    }
     lt.addTool(t.name, t.configuration, elementId);
     if (t.defaultActive) {
       activateTool(t, [elementId], t.options);
