@@ -141,8 +141,8 @@
             <div :class="['custom-dot-h', { focus }]"></div>
           </template>
         </vue-slider>
-      </div>
-    </slot>
+      </div> </slot
+    >-->
   </div>
 </template>
 
@@ -169,6 +169,7 @@ import {
   watchViewportStore,
   unwatchViewportStore,
   // setTimeFrame,
+  switchWheelScrollModality,
   get4DSliceIndex
 } from "../utils";
 
@@ -199,8 +200,23 @@ export default {
     error: false,
     ltViewport: null,
     stackMetadata: null,
-    validCanvasId: null
+    validCanvasId: null,
+    scroolMode: "stack",
+    alternativeScrollActive: false
   }),
+  created() {
+    window.addEventListener("keydown", e => {
+      if (e.altKey) {
+        console.log("alt press");
+        this.alternativeScrollActive = !this.alternativeScrollActive;
+        if (this.viewport && this.viewport.maxTimeId > 0) {
+          this.scroolMode = "frame";
+          console.log(this.scroolMode);
+          switchWheelScrollModality();
+        }
+      }
+    });
+  },
   beforeDestroy() {
     if (!this.getViewportFn) {
       unwatchViewportStore(this.validCanvasId);
@@ -235,7 +251,6 @@ export default {
       get() {
         if (this.viewport.maxTimeId > 0) {
           console.log(this.viewport.sliceId);
-          console.log(this.viewport.timeId);
           return Math.floor(
             this.viewport.sliceId / this.viewport.numberOfTemporalPositions
           );
@@ -302,7 +317,10 @@ export default {
         }
 
         this.ltViewport = getViewport(viewportId);
-        watchViewportStore(viewportId, data => (this.ltViewport = data));
+        watchViewportStore(viewportId, data => {
+          this.ltViewport = data;
+          console.log(this.ltViewport.timeId);
+        });
       }
     },
     onResize() {
