@@ -112,16 +112,32 @@ export default {
 
           this.intervalId = setInterval(() => {
             // sliceId between min and max
-            viewport.sliceId =
-              viewport.sliceId == viewport.maxSliceId
-                ? viewport.minSliceId
-                : viewport.sliceId + 1;
+            if (viewport.maxTimeId > 0) {
+              const sliceNumber = Math.floor(
+                viewport.sliceId / viewport.numberOfTemporalPositions
+              );
+              viewport.sliceId =
+                viewport.sliceId ===
+                (sliceNumber + 1) * viewport.numberOfTemporalPositions - 1
+                  ? viewport.sliceId - (viewport.numberOfTemporalPositions - 1)
+                  : viewport.sliceId + 1;
+              this.$ditto.dicom.updateSeriesSlice(
+                this.canvasId,
+                this.seriesId,
+                viewport.sliceId
+              );
+            } else {
+              viewport.sliceId =
+                viewport.sliceId === viewport.maxSliceId
+                  ? viewport.minSliceId
+                  : viewport.sliceId + 1;
 
-            this.$ditto.dicom.updateSeriesSlice(
-              this.canvasId,
-              this.seriesId,
-              viewport.sliceId
-            );
+              this.$ditto.dicom.updateSeriesSlice(
+                this.canvasId,
+                this.seriesId,
+                viewport.sliceId
+              );
+            }
           }, this.frameTime);
           break;
         }
