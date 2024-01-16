@@ -52,10 +52,20 @@ export const stackTools = {
     },
     { name: "Pan", configuration: {}, mixins: ["enabledOrDisabledBinaryTool"] },
     {
-      name: "StackScrollMouseWheel",
-      configuration: {},
+      name: "CustomMouseWheelScroll",
       defaultActive: true,
-      mixins: ["enabledOrDisabledBinaryTool"]
+      // icon: "mdi-layers-triple",
+      mixins: ["enabledOrDisabledBinaryTool"],
+      configuration: {
+        currentMode: "stack"
+      },
+      options: {
+        configuration: {
+          currentMode: "stack"
+        },
+        currentMode: "stack"
+      },
+      visible: false
     }
   ],
   preview: [
@@ -66,10 +76,20 @@ export const stackTools = {
       mixins: ["enabledOrDisabledBinaryTool"]
     },
     {
-      name: "StackScrollMouseWheel",
-      configuration: {},
+      name: "CustomMouseWheelScroll",
       defaultActive: true,
-      mixins: ["enabledOrDisabledBinaryTool"]
+      // icon: "mdi-layers-triple",
+      mixins: ["enabledOrDisabledBinaryTool"],
+      configuration: {
+        currentMode: "stack"
+      },
+      options: {
+        configuration: {
+          currentMode: "stack"
+        },
+        currentMode: "stack"
+      },
+      visible: false
     }
   ]
 };
