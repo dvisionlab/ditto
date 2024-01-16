@@ -72,9 +72,6 @@ export const activateTool = (
 // Add mouse button tools
 export const addTools = (tools, elementId) => {
   tools.forEach(t => {
-    if (t.name === "CustomMouseWheelScroll") {
-      console.log(t.configuration);
-    }
     lt.addTool(t.name, t.configuration, elementId);
     if (t.defaultActive) {
       activateTool(t, [elementId], t.options);
@@ -421,4 +418,30 @@ export const get4DSliceIndex = (frameNumber, sliceNumber, totFrames) => {
 };
 export const setTimeFrame = (elementId, frameNumber) => {
   lt.store.set("timeId", [elementId, frameNumber]);
+};
+export const setToolConfiguration = (tool, parameter, value) => {
+  console.log(lt.DEFAULT_TOOLS[tool]);
+  if (parameter && value) {
+    lt.DEFAULT_TOOLS[tool][parameter] = value;
+  }
+};
+export const switchWheelScrollModality = () => {
+  console.log("asfgasf");
+  if (
+    lt.DEFAULT_TOOLS["CustomMouseWheelScroll"] &&
+    lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration &&
+    lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration.currentMode
+  ) {
+    const mode =
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration.currentMode;
+    if (mode === "slice") {
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration.currentMode =
+        "stack";
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].currentMode = "stack";
+    } else {
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration.currentMode =
+        "slice";
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].currentMode = "slice";
+    }
+  }
 };

@@ -40,7 +40,7 @@
     <slot
       name="multiframe"
       v-bind:canvas-id="validCanvasId"
-      v-bind:value="viewport.isMultiframe"
+      v-bind:value="viewport.isMultiframe || viewport.maxTimeId > 0"
     ></slot>
 
     <slot
@@ -319,7 +319,7 @@ export default {
         this.ltViewport = getViewport(viewportId);
         watchViewportStore(viewportId, data => {
           this.ltViewport = data;
-          console.log(this.ltViewport.timeId);
+          // console.log(this.ltViewport.timeId);
         });
       }
     },
