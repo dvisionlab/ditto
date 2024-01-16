@@ -420,7 +420,6 @@ export const setTimeFrame = (elementId, frameNumber) => {
   lt.store.set("timeId", [elementId, frameNumber]);
 };
 export const setToolConfiguration = (tool, parameter, value) => {
-  console.log(lt.DEFAULT_TOOLS[tool]);
   if (parameter && value) {
     lt.DEFAULT_TOOLS[tool][parameter] = value;
   }
