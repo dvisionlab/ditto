@@ -426,7 +426,6 @@ export const setToolConfiguration = (tool, parameter, value) => {
   }
 };
 export const switchWheelScrollModality = () => {
-  console.log("asfgasf");
   if (
     lt.DEFAULT_TOOLS["CustomMouseWheelScroll"] &&
     lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration &&

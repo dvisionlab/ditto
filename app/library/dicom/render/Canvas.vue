@@ -41,6 +41,7 @@
       name="multiframe"
       v-bind:canvas-id="validCanvasId"
       v-bind:value="viewport.isMultiframe || viewport.maxTimeId > 0"
+      v-bind:alternativeScrollActive="alternativeScrollActive"
     ></slot>
 
     <slot
@@ -141,8 +142,8 @@
             <div :class="['custom-dot-h', { focus }]"></div>
           </template>
         </vue-slider>
-      </div> </slot
-    >-->
+      </div>
+    </slot>
   </div>
 </template>
 
@@ -201,7 +202,6 @@ export default {
     ltViewport: null,
     stackMetadata: null,
     validCanvasId: null,
-    scroolMode: "stack",
     alternativeScrollActive: false
   }),
   created() {
@@ -210,8 +210,6 @@ export default {
         console.log("alt press");
         this.alternativeScrollActive = !this.alternativeScrollActive;
         if (this.viewport && this.viewport.maxTimeId > 0) {
-          this.scroolMode = "frame";
-          console.log(this.scroolMode);
           switchWheelScrollModality();
         }
       }
