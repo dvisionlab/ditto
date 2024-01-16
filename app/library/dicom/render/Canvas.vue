@@ -207,7 +207,6 @@ export default {
   created() {
     window.addEventListener("keydown", e => {
       if (e.altKey) {
-        console.log("alt press");
         this.alternativeScrollActive = !this.alternativeScrollActive;
         if (this.viewport && this.viewport.maxTimeId > 0) {
           switchWheelScrollModality();
@@ -248,7 +247,6 @@ export default {
     sliderSliceId: {
       get() {
         if (this.viewport.maxTimeId > 0) {
-          console.log(this.viewport.sliceId);
           return Math.floor(
             this.viewport.sliceId / this.viewport.numberOfTemporalPositions
           );
@@ -257,7 +255,6 @@ export default {
       },
       set(index) {
         if (this.isReady) {
-          console.log("setting index");
           if (this.viewport.maxTimeId > 0) {
             const stackIndex = get4DSliceIndex(
               this.viewport.timeId,
@@ -273,7 +270,10 @@ export default {
     },
     sliderFrameId: {
       get() {
-        return this.viewport.timeId || this.viewport.timeIds[0];
+        return (
+          this.viewport.timeId ||
+          (this.viewport.timeIds && this.viewport.timeIds[0])
+        );
       },
       set(index) {
         if (this.isReady) {
