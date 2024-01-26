@@ -397,10 +397,14 @@ export default {
           this.lastPercentageStep === 0 &&
           this.serieDownloadPercentage === 100
         ) {
+          console.log("stack final");
+          console.log(getSeriesStack(this.seriesId));
           return;
         }
         if (this.serieDownloadPercentage - this.lastPercentageStep >= 5) {
           this.lastPercentageStep = this.serieDownloadPercentage;
+          console.log("stack final");
+          console.log(getSeriesStack(this.seriesId));
         }
       }
     }

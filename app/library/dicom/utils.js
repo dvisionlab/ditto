@@ -271,12 +271,19 @@ export const parseFiles = (files, extractMetadata = []) => {
 };
 
 // Use Larvitar to parse a single file and get its dicom image object
-export const parseFile = (seriesId, file) => {
+export const parseFile = (seriesId, file, elementId) => {
   // Get DICOM image object
   return new Promise((resolve, reject) => {
     lt.readFile(file)
       .then(image => {
         let manager = lt.updateLarvitarManager(image, seriesId)[seriesId];
+        console.log("lt manager");
+        console.log(manager);
+        console.log(getSeriesStack(seriesId));
+        const series = getSeriesStack(seriesId);
+        if (series.is4D && elementId) {
+          updateTimeInLarvitarViewport(series, elementId);
+        }
         let imageIds = manager.imageIds;
         let imageUID = image.metadata.instanceUID;
         let imageId = manager.instanceUIDs[imageUID];
@@ -328,7 +335,10 @@ export const setup = (store, toolsStyle) => {
 
 // Call the Larvitar "populateLarvitarManager" function
 export const storeSeriesStack = (seriesId, stack, cache = false) => {
-  lt.populateLarvitarManager(seriesId, stack);
+  console.log("populate lt manager");
+  const manager = lt.populateLarvitarManager(seriesId, stack);
+  console.log(manager);
+  console.log(stack);
   if (cache) {
     lt.cacheImages(seriesId, stack);
   }
@@ -442,4 +452,7 @@ export const switchWheelScrollModality = () => {
       lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].currentMode = "slice";
     }
   }
+};
+export const updateTimeInLarvitarViewport = (seriesStack, elementId) => {
+  lt.updateViewportDataInLarvitarManager(seriesStack, elementId);
 };
