@@ -122,8 +122,8 @@
           contained
           :duration="0.25"
           height="5px"
-          :min="viewport.minTimeId"
-          :max="viewport.maxTimeId + 1"
+          :min="viewport.minTimeId || 0"
+          :max="viewport.maxTimeId ? viewport.maxTimeId : 1"
           :processStyle="{
             backgroundColor: 'var(--v-accent-base)',
             borderRadius: '1px'
@@ -394,14 +394,10 @@ export default {
           this.lastPercentageStep === 0 &&
           this.serieDownloadPercentage === 100
         ) {
-          console.log("stack final");
-          console.log(getSeriesStack(this.seriesId));
           return;
         }
         if (this.serieDownloadPercentage - this.lastPercentageStep >= 5) {
           this.lastPercentageStep = this.serieDownloadPercentage;
-          console.log("stack final");
-          console.log(getSeriesStack(this.seriesId));
         }
       }
     }
