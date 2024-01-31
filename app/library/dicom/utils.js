@@ -232,10 +232,8 @@ export const parseFiles = (files, extractMetadata = []) => {
   // Get DICOM series
   return lt.readFiles(files).then(series => {
     return Object.values(series || {}).map(s => {
-      console.log(s);
       if (s.isMultiframe) {
         lt.buildMultiFrameImage(s.larvitarSeriesInstanceUID, s);
-        console.log(s);
         const meta = s.instances[Object.keys(s.instances)[0]].metadata;
         const stack = {
           ...[].concat(extractMetadata).reduce((result, value) => {
@@ -277,9 +275,6 @@ export const parseFile = (seriesId, file, elementId) => {
     lt.readFile(file)
       .then(image => {
         let manager = lt.updateLarvitarManager(image, seriesId)[seriesId];
-        console.log("lt manager");
-        console.log(manager);
-        console.log(getSeriesStack(seriesId));
         const series = getSeriesStack(seriesId);
         if (series.is4D && elementId) {
           updateTimeInLarvitarViewport(series, elementId);
@@ -347,6 +342,7 @@ export const storeSeriesStack = (seriesId, stack, cache = false) => {
 // Use Larvitar to update a series slice
 export const updateSeriesSlice = (elementId, seriesId, sliceId, imageCache) => {
   // sliceId must be between 0 and n-1
+  console.log("update");
   const stack = getSeriesStack(seriesId);
   lt.store.setSliceId(elementId, sliceId);
   lt.updateImage(stack, elementId, sliceId, imageCache);

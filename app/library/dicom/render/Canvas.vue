@@ -206,7 +206,7 @@ export default {
   }),
   created() {
     window.addEventListener("keydown", e => {
-      if (e.altKey) {
+      if (e.code === "KeyS") {
         this.alternativeScrollActive = !this.alternativeScrollActive;
         if (this.viewport && this.viewport.maxTimeId > 0) {
           switchWheelScrollModality();
@@ -270,10 +270,7 @@ export default {
     },
     sliderFrameId: {
       get() {
-        return (
-          this.viewport.timeId ||
-          (this.viewport.timeIds && this.viewport.timeIds[0])
-        );
+        return this.viewport.timeId;
       },
       set(index) {
         if (this.isReady) {
@@ -317,7 +314,7 @@ export default {
         this.ltViewport = getViewport(viewportId);
         watchViewportStore(viewportId, data => {
           this.ltViewport = data;
-          // console.log(this.ltViewport.timeId);
+          //console.log(this.ltViewport.timeId);
         });
       }
     },
