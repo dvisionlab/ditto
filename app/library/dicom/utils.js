@@ -330,10 +330,7 @@ export const setup = (store, toolsStyle) => {
 
 // Call the Larvitar "populateLarvitarManager" function
 export const storeSeriesStack = (seriesId, stack, cache = false) => {
-  console.log("populate lt manager");
-  const manager = lt.populateLarvitarManager(seriesId, stack);
-  console.log(manager);
-  console.log(stack);
+  lt.populateLarvitarManager(seriesId, stack);
   if (cache) {
     lt.cacheImages(seriesId, stack);
   }
@@ -342,7 +339,6 @@ export const storeSeriesStack = (seriesId, stack, cache = false) => {
 // Use Larvitar to update a series slice
 export const updateSeriesSlice = (elementId, seriesId, sliceId, imageCache) => {
   // sliceId must be between 0 and n-1
-  console.log("update");
   const stack = getSeriesStack(seriesId);
   lt.store.setSliceId(elementId, sliceId);
   lt.updateImage(stack, elementId, sliceId, imageCache);
