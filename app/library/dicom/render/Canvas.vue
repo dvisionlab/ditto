@@ -135,6 +135,8 @@
         </vue-slider>
       </div>
     </slot>
+
+    <slot name="plot-container"></slot>
   </div>
 </template>
 
