@@ -469,5 +469,5 @@ export const switchWheelScrollModality = () => {
   }
 };
 export const updateTimeInLarvitarViewport = (seriesStack, elementId) => {
-  lt.updateViewportDataInLarvitarManager(seriesStack, elementId);
+  lt.updateTemporalViewportData(seriesStack, elementId);
 };
