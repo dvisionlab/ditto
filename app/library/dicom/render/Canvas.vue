@@ -2,6 +2,7 @@
   <div
     class="d-flex w-100 h-100 black"
     :style="{ position: 'relative' }"
+    @click.middle="onMidClick"
     @contextmenu.prevent
   >
     <v-icon v-if="error" class="ma-auto" dark> mdi-alert-decagram </v-icon>
@@ -170,7 +171,7 @@ import {
   watchViewportStore,
   unwatchViewportStore,
   // setTimeFrame,
-  switchWheelScrollModality,
+  setWheelScrollModality,
   get4DSliceIndex
 } from "../utils";
 
@@ -204,21 +205,10 @@ export default {
     validCanvasId: null,
     alternativeScrollActive: false
   }),
-  created() {
-    window.addEventListener("keydown", e => {
-      if (e.code === "KeyS") {
-        this.alternativeScrollActive = !this.alternativeScrollActive;
-        if (this.viewport && this.viewport.maxTimeId > 0) {
-          switchWheelScrollModality();
-        }
-      }
-    });
-  },
   beforeDestroy() {
     if (!this.getViewportFn) {
       unwatchViewportStore(this.validCanvasId);
     }
-
     this.destroy();
   },
   computed: {
@@ -293,7 +283,6 @@ export default {
       // disable larvitar canvas
       disableCanvas(this.$refs.canvas);
       deleteViewport(this.$refs.canvas);
-
       // clear cache (!!! NOTE: cornerstone should not cache images if not required)
       clearSeriesCache(this.seriesId);
 
@@ -302,6 +291,12 @@ export default {
       }
 
       this.isReady = false;
+    },
+    onMidClick() {
+      this.alternativeScrollActive = !this.alternativeScrollActive;
+      if (this.viewport && this.viewport.maxTimeId > 0) {
+        setWheelScrollModality(this.alternativeScrollActive);
+      }
     },
     initViewportData(viewportId, prevViewportId) {
       // init viewport data and start listening
@@ -314,7 +309,6 @@ export default {
         this.ltViewport = getViewport(viewportId);
         watchViewportStore(viewportId, data => {
           this.ltViewport = data;
-          //console.log(this.ltViewport.timeId);
         });
       }
     },
@@ -364,11 +358,12 @@ export default {
             renderSeries(this.validCanvasId, stack)
               .then(() => {
                 // series rendered
+                this.alternativeScrollActive = false;
                 addTools(this.tools, this.validCanvasId, this.toolsHandlers);
                 if (this.toolsHandlers) {
                   addMouseKeyHandlers(this.toolsHandlers);
                 }
-
+                setWheelScrollModality(this.alternativeScrollActive);
                 this.isReady = true;
                 this.$emit("ready");
               })

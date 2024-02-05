@@ -426,7 +426,30 @@ export const setToolConfiguration = (tool, parameter, value) => {
     lt.DEFAULT_TOOLS[tool][parameter] = value;
   }
 };
+export const setWheelScrollModality = is4DFrame => {
+  let mode = "slice";
+  if (is4DFrame) {
+    mode = "stack";
+  }
+  if (
+    lt.DEFAULT_TOOLS["CustomMouseWheelScroll"] &&
+    lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration &&
+    lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration.currentMode
+  ) {
+    if (mode === "stack") {
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration.currentMode =
+        "stack";
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].currentMode = "stack";
+    }
+    if (mode === "slice") {
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration.currentMode =
+        "slice";
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].currentMode = "slice";
+    }
+  }
+};
 export const switchWheelScrollModality = () => {
+  console.log("switching");
   if (
     lt.DEFAULT_TOOLS["CustomMouseWheelScroll"] &&
     lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration &&
