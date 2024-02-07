@@ -2,6 +2,7 @@
   <div
     class="d-flex w-100 h-100 black"
     :style="{ position: 'relative' }"
+    @click.middle="onMidClick"
     @contextmenu.prevent
   >
     <v-icon v-if="error" class="ma-auto" dark> mdi-alert-decagram </v-icon>
@@ -40,14 +41,23 @@
     <slot
       name="multiframe"
       v-bind:canvas-id="validCanvasId"
-      v-bind:value="viewport.isMultiframe"
+      v-bind:value="viewport.isMultiframe || viewport.maxTimeId > 0"
+      v-bind:alternativeScrollActive="alternativeScrollActive"
     ></slot>
 
     <slot
       v-if="showSlider"
       name="viewport-slider"
-      v-bind:i="(viewport.sliceId + 1) / (viewport.maxTimeId + 1)"
-      v-bind:n="(viewport.maxSliceId + 1) / (viewport.maxTimeId + 1) - 1"
+      v-bind:i="
+        viewport.maxTimeId > 0
+          ? viewport.sliceId / viewport.numberOfTemporalPositions
+          : viewport.sliceId
+      "
+      v-bind:n="
+        viewport.maxTimeId > 0
+          ? (viewport.maxSliceId + 1) / viewport.numberOfTemporalPositions - 1
+          : viewport.maxSliceId
+      "
     >
       <!-- default slider -->
       <div
@@ -68,7 +78,8 @@
           :min="viewport.minSliceId"
           :max="
             viewport.maxTimeId
-              ? (viewport.maxSliceId + 1) / (viewport.maxTimeId + 1) - 1
+              ? (viewport.maxSliceId + 1) / viewport.numberOfTemporalPositions -
+                1
               : viewport.maxSliceId
           "
           :processStyle="{
@@ -99,7 +110,6 @@
       v-bind:i="viewport.timeId"
       v-bind:n="viewport.maxTimeId"
     >
-      <!-- default slider -->
       <div
         :style="{
           height: '20px',
@@ -113,8 +123,8 @@
           contained
           :duration="0.25"
           height="5px"
-          :min="viewport.minTimeId"
-          :max="viewport.maxTimeId"
+          :min="viewport.minTimeId || 0"
+          :max="viewport.maxTimeId ? viewport.maxTimeId : 1"
           :processStyle="{
             backgroundColor: 'var(--v-accent-base)',
             borderRadius: '1px'
@@ -161,6 +171,7 @@ import {
   watchViewportStore,
   unwatchViewportStore,
   // setTimeFrame,
+  setWheelScrollModality,
   get4DSliceIndex
 } from "../utils";
 
@@ -191,13 +202,13 @@ export default {
     error: false,
     ltViewport: null,
     stackMetadata: null,
-    validCanvasId: null
+    validCanvasId: null,
+    alternativeScrollActive: false
   }),
   beforeDestroy() {
     if (!this.getViewportFn) {
       unwatchViewportStore(this.validCanvasId);
     }
-
     this.destroy();
   },
   computed: {
@@ -227,7 +238,7 @@ export default {
       get() {
         if (this.viewport.maxTimeId > 0) {
           return Math.floor(
-            this.viewport.sliceId / (this.viewport.maxTimeId + 1)
+            this.viewport.sliceId / this.viewport.numberOfTemporalPositions
           );
         }
         return this.viewport.sliceId;
@@ -238,7 +249,7 @@ export default {
             const stackIndex = get4DSliceIndex(
               this.viewport.timeId,
               index,
-              this.viewport.maxTimeId + 1
+              this.viewport.numberOfTemporalPositions
             );
             updateSeriesSlice(this.validCanvasId, this.seriesId, stackIndex);
           } else {
@@ -261,7 +272,7 @@ export default {
             sliceNumber,
             this.viewport.maxTimeId + 1
           );
-          // setTimeFrame(this.validCanvasId,index);
+          // setTimeFrame(this.validCanvasId, index);
           updateSeriesSlice(this.validCanvasId, this.seriesId, stackIndex);
         }
       }
@@ -272,7 +283,6 @@ export default {
       // disable larvitar canvas
       disableCanvas(this.$refs.canvas);
       deleteViewport(this.$refs.canvas);
-
       // clear cache (!!! NOTE: cornerstone should not cache images if not required)
       clearSeriesCache(this.seriesId);
 
@@ -281,6 +291,12 @@ export default {
       }
 
       this.isReady = false;
+    },
+    onMidClick() {
+      this.alternativeScrollActive = !this.alternativeScrollActive;
+      if (this.viewport && this.viewport.maxTimeId > 0) {
+        setWheelScrollModality(this.alternativeScrollActive);
+      }
     },
     initViewportData(viewportId, prevViewportId) {
       // init viewport data and start listening
@@ -291,7 +307,9 @@ export default {
         }
 
         this.ltViewport = getViewport(viewportId);
-        watchViewportStore(viewportId, data => (this.ltViewport = data));
+        watchViewportStore(viewportId, data => {
+          this.ltViewport = data;
+        });
       }
     },
     onResize() {
@@ -340,11 +358,12 @@ export default {
             renderSeries(this.validCanvasId, stack)
               .then(() => {
                 // series rendered
+                this.alternativeScrollActive = false;
                 addTools(this.tools, this.validCanvasId, this.toolsHandlers);
                 if (this.toolsHandlers) {
                   addMouseKeyHandlers(this.toolsHandlers);
                 }
-
+                setWheelScrollModality(this.alternativeScrollActive);
                 this.isReady = true;
                 this.$emit("ready");
               })

@@ -232,10 +232,8 @@ export const parseFiles = (files, extractMetadata = []) => {
   // Get DICOM series
   return lt.readFiles(files).then(series => {
     return Object.values(series || {}).map(s => {
-      console.log(s);
       if (s.isMultiframe) {
         lt.buildMultiFrameImage(s.larvitarSeriesInstanceUID, s);
-        console.log(s);
         const meta = s.instances[Object.keys(s.instances)[0]].metadata;
         const stack = {
           ...[].concat(extractMetadata).reduce((result, value) => {
@@ -271,12 +269,16 @@ export const parseFiles = (files, extractMetadata = []) => {
 };
 
 // Use Larvitar to parse a single file and get its dicom image object
-export const parseFile = (seriesId, file) => {
+export const parseFile = (seriesId, file, elementId) => {
   // Get DICOM image object
   return new Promise((resolve, reject) => {
     lt.readFile(file)
       .then(image => {
         let manager = lt.updateLarvitarManager(image, seriesId)[seriesId];
+        const series = getSeriesStack(seriesId);
+        if (series.is4D && elementId) {
+          updateTimeInLarvitarViewport(series, elementId);
+        }
         let imageIds = manager.imageIds;
         let imageUID = image.metadata.instanceUID;
         let imageId = manager.instanceUIDs[imageUID];
@@ -418,4 +420,54 @@ export const get4DSliceIndex = (frameNumber, sliceNumber, totFrames) => {
 };
 export const setTimeFrame = (elementId, frameNumber) => {
   lt.store.set("timeId", [elementId, frameNumber]);
+};
+export const setToolConfiguration = (tool, parameter, value) => {
+  if (parameter && value) {
+    lt.DEFAULT_TOOLS[tool][parameter] = value;
+  }
+};
+export const setWheelScrollModality = is4DFrame => {
+  let mode = "slice";
+  if (is4DFrame) {
+    mode = "stack";
+  }
+  if (
+    lt.DEFAULT_TOOLS["CustomMouseWheelScroll"] &&
+    lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration &&
+    lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration.currentMode
+  ) {
+    if (mode === "stack") {
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration.currentMode =
+        "stack";
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].currentMode = "stack";
+    }
+    if (mode === "slice") {
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration.currentMode =
+        "slice";
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].currentMode = "slice";
+    }
+  }
+};
+export const switchWheelScrollModality = () => {
+  console.log("switching");
+  if (
+    lt.DEFAULT_TOOLS["CustomMouseWheelScroll"] &&
+    lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration &&
+    lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration.currentMode
+  ) {
+    const mode =
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration.currentMode;
+    if (mode === "slice") {
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration.currentMode =
+        "stack";
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].currentMode = "stack";
+    } else {
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].configuration.currentMode =
+        "slice";
+      lt.DEFAULT_TOOLS["CustomMouseWheelScroll"].currentMode = "slice";
+    }
+  }
+};
+export const updateTimeInLarvitarViewport = (seriesStack, elementId) => {
+  lt.updateTemporalViewportData(seriesStack, elementId);
 };
