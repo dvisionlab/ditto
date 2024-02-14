@@ -174,9 +174,11 @@
         :step="steps[currentStep]"
         :tools="tools"
         @new-series="onNewSeries"
-        @restart="currentStep = 0"
+        @restart="onRestart"
         @select-action="onSelectAction"
         @select-series="onSelectSeries"
+        @cancel="onCancel"
+        @openViewer="openViewer"
       >
         <!-- Add a slot for each header item that requires it (component customization) -->
         <template
@@ -362,6 +364,22 @@ export default {
             v.larvitarSeriesInstanceUID !== event.item.larvitarSeriesInstanceUID
         );
       }
+    },
+    onRestart() {
+      clearSeriesStack(this.series);
+      this.series = [];
+      this.selectedSeries = [];
+      this.currentStep = 0;
+    },
+    openViewer() {
+      console.log(this.metadata);
+      /*
+      this.$store.commit("viewer/setServer", true);
+      this.$store.commit("viewer/initData", this.selectedSeries);
+      this.$store.commit("dashboard/resetAllFilters");
+      this.$router.push({ name: "viewer" });
+      this.$router.push({ name: "viewer" });
+      */
     }
   },
   watch: {

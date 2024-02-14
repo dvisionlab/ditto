@@ -128,6 +128,31 @@
       </div>
     </div>
 
+    <v-btn
+      :dark="dark"
+      color="primary"
+      class="mx-2"
+      :disabled="isUploading"
+      @click="$emit('restart')"
+    >
+      <v-icon :dark="dark">mdi-folder-multiple-plus</v-icon>
+      <span class="pl-2">new upload</span>
+    </v-btn>
+    <v-btn
+      :dark="dark"
+      color="primary"
+      class="mx-2"
+      :disabled="isUploading"
+      @click="$emit('openViewer')"
+    >
+      <v-icon :dark="dark">mdi-image-filter-black-white</v-icon>
+      <span class="pl-2">open viewer</span>
+    </v-btn>
+    <v-btn :dark="dark" color="primary" class="mx-2" @click="$emit('cancel')">
+      <v-icon :dark="dark">mdi-view-list-outline</v-icon>
+      <span class="pl-2">dashboard</span>
+    </v-btn>
+
     <slot name="step-3" />
   </div>
 </template>
@@ -135,6 +160,7 @@
 <script>
 const DicomCanvas = () => import("../../render/Canvas");
 import metadataDictionary from "../../metadata";
+import { mapGetters } from "vuex";
 
 export default {
   name: "DicomImportStep3",
@@ -152,6 +178,8 @@ export default {
     metadata: metadataDictionary
   }),
   computed: {
+    ...mapGetters("dashboard", ["isUploading"]),
+
     allErrors() {
       const p = this.step.status.progress;
       return Object.keys(p).filter(k => !p[k]).length == Object.keys(p).length;
