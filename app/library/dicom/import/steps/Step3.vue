@@ -128,30 +128,39 @@
       </div>
     </div>
 
-    <v-btn
-      :dark="dark"
-      color="primary"
-      class="mx-2"
-      :disabled="isUploading"
-      @click="$emit('restart')"
-    >
-      <v-icon :dark="dark">mdi-folder-multiple-plus</v-icon>
-      <span class="pl-2">new upload</span>
-    </v-btn>
-    <v-btn
-      :dark="dark"
-      color="primary"
-      class="mx-2"
-      :disabled="isUploading"
-      @click="$emit('openViewer')"
-    >
-      <v-icon :dark="dark">mdi-image-filter-black-white</v-icon>
-      <span class="pl-2">open viewer</span>
-    </v-btn>
-    <v-btn :dark="dark" color="primary" class="mx-2" @click="$emit('cancel')">
-      <v-icon :dark="dark">mdi-view-list-outline</v-icon>
-      <span class="pl-2">dashboard</span>
-    </v-btn>
+    <div class="mt-5">
+      <v-btn
+        :dark="dark"
+        color="primary"
+        class="mx-3"
+        :disabled="isUploading"
+        @click="$emit('restart')"
+      >
+        <v-icon :dark="dark">mdi-folder-multiple-plus</v-icon>
+        <span class="pl-2">new upload</span>
+      </v-btn>
+      <v-btn
+        :dark="dark"
+        color="primary"
+        class="mx-3"
+        :disabled="isUploading || isRefreshing"
+        @click="openViewer"
+      >
+        <v-progress-circular
+          v-if="isRefreshing"
+          :dark="darkMode"
+          indeterminate
+          :size="20"
+        />
+        <v-icon v-else :dark="dark">mdi-image-filter-black-white</v-icon>
+
+        <span class="pl-2">open viewer</span>
+      </v-btn>
+      <v-btn :dark="dark" color="primary" class="mx-3" @click="$emit('cancel')">
+        <v-icon :dark="dark">mdi-view-list-outline</v-icon>
+        <span class="pl-2">back to exams</span>
+      </v-btn>
+    </div>
 
     <slot name="step-3" />
   </div>
@@ -178,7 +187,7 @@ export default {
     metadata: metadataDictionary
   }),
   computed: {
-    ...mapGetters("dashboard", ["isUploading"]),
+    ...mapGetters("dashboard", ["isUploading", "isRefreshing"]),
 
     allErrors() {
       const p = this.step.status.progress;
@@ -219,6 +228,10 @@ export default {
         return "failure: No valid series found";
       }
       return null;
+    },
+    openViewer() {
+      this.$emit("dicom-import-open");
+      this.$emit("cancel");
     }
   }
 };

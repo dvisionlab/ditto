@@ -40,6 +40,7 @@
             }"
           >
             <v-btn
+              v-if="currentStep == 1"
               :dark="dark"
               class="d-none d-sm-flex"
               :disabled="!steps[currentStep].back()"
@@ -128,6 +129,7 @@
             </div>
 
             <v-btn
+              v-if="currentStep == 0"
               color="primary"
               :disabled="!steps[currentStep].next(series)"
               @click="currentStep++"
@@ -178,7 +180,7 @@
         @select-action="onSelectAction"
         @select-series="onSelectSeries"
         @cancel="onCancel"
-        @openViewer="openViewer"
+        @dicom-import-open="$emit('dicom-import-open', selectedSeries)"
       >
         <!-- Add a slot for each header item that requires it (component customization) -->
         <template
@@ -370,16 +372,6 @@ export default {
       this.series = [];
       this.selectedSeries = [];
       this.currentStep = 0;
-    },
-    openViewer() {
-      console.log(this.metadata);
-      /*
-      this.$store.commit("viewer/setServer", true);
-      this.$store.commit("viewer/initData", this.selectedSeries);
-      this.$store.commit("dashboard/resetAllFilters");
-      this.$router.push({ name: "viewer" });
-      this.$router.push({ name: "viewer" });
-      */
     }
   },
   watch: {
