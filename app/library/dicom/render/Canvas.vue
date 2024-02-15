@@ -295,8 +295,8 @@ export default {
       this.isReady = false;
     },
     onMidClick() {
-      this.alternativeScrollActive = !this.alternativeScrollActive;
       if (this.viewport && this.viewport.maxTimeId > 0) {
+        this.alternativeScrollActive = !this.alternativeScrollActive;
         setWheelScrollModality(this.alternativeScrollActive);
       }
     },
