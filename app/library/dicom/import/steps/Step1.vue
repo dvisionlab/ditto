@@ -59,7 +59,7 @@
       <div class="text-center">
         <v-btn
           :dark="dark"
-          class="flex-grow-1"
+          class="flex-grow-1 mt-5"
           x-large
           block
           color="primary"

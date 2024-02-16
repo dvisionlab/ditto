@@ -128,6 +128,35 @@
       </div>
     </div>
 
+    <div class="mt-5">
+      <v-btn
+        :dark="dark"
+        color="primary"
+        class="mx-3"
+        :disabled="isUploading"
+        @click="$emit('restart')"
+      >
+        <v-icon :dark="dark">mdi-folder-multiple-plus</v-icon>
+        <span class="pl-2">new upload</span>
+      </v-btn>
+      <v-btn
+        :dark="dark"
+        color="primary"
+        class="mx-3"
+        :disabled="isUploading || isRefreshing"
+        @click="openViewer"
+      >
+        <v-progress-circular v-if="isRefreshing" indeterminate :size="20" />
+        <v-icon v-else :dark="dark">mdi-image-filter-black-white</v-icon>
+
+        <span class="pl-2">open viewer</span>
+      </v-btn>
+      <v-btn :dark="dark" color="primary" class="mx-3" @click="$emit('cancel')">
+        <v-icon :dark="dark">mdi-view-list-outline</v-icon>
+        <span class="pl-2">back to exams</span>
+      </v-btn>
+    </div>
+
     <slot name="step-3" />
   </div>
 </template>
@@ -135,6 +164,7 @@
 <script>
 const DicomCanvas = () => import("../../render/Canvas");
 import metadataDictionary from "../../metadata";
+import { mapGetters } from "vuex";
 
 export default {
   name: "DicomImportStep3",
@@ -152,6 +182,8 @@ export default {
     metadata: metadataDictionary
   }),
   computed: {
+    ...mapGetters("dashboard", ["isUploading", "isRefreshing"]),
+
     allErrors() {
       const p = this.step.status.progress;
       return Object.keys(p).filter(k => !p[k]).length == Object.keys(p).length;
@@ -191,6 +223,10 @@ export default {
         return "failure: No valid series found";
       }
       return null;
+    },
+    openViewer() {
+      this.$emit("open-viewer-uploaded");
+      this.$emit("cancel");
     }
   }
 };

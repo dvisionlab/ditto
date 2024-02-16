@@ -40,6 +40,7 @@
             }"
           >
             <v-btn
+              v-if="currentStep == 1"
               :dark="dark"
               class="d-none d-sm-flex"
               :disabled="!steps[currentStep].back()"
@@ -128,6 +129,7 @@
             </div>
 
             <v-btn
+              v-if="currentStep == 0"
               color="primary"
               :disabled="!steps[currentStep].next(series)"
               @click="currentStep++"
@@ -174,9 +176,11 @@
         :step="steps[currentStep]"
         :tools="tools"
         @new-series="onNewSeries"
-        @restart="currentStep = 0"
+        @restart="onRestart"
         @select-action="onSelectAction"
         @select-series="onSelectSeries"
+        @cancel="onCancel"
+        @open-viewer-uploaded="$emit('open-viewer-uploaded', selectedSeries)"
       >
         <!-- Add a slot for each header item that requires it (component customization) -->
         <template
@@ -362,6 +366,12 @@ export default {
             v.larvitarSeriesInstanceUID !== event.item.larvitarSeriesInstanceUID
         );
       }
+    },
+    onRestart() {
+      clearSeriesStack(this.series);
+      this.series = [];
+      this.selectedSeries = [];
+      this.currentStep = 0;
     }
   },
   watch: {

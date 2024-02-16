@@ -68,6 +68,9 @@
         data => $emit('dicom-import-upload-and-open', data)
       "
       @minimize="minimize"
+      @open-viewer-uploaded="
+        selectedSeries => $emit('open-viewer-uploaded', selectedSeries)
+      "
     >
       <!-- Add a slot for each header item that requires it (component customization) -->
       <template
