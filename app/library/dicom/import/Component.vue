@@ -180,7 +180,7 @@
         @select-action="onSelectAction"
         @select-series="onSelectSeries"
         @cancel="onCancel"
-        @dicom-import-open="$emit('dicom-import-open', selectedSeries)"
+        @open-viewer-uploaded="$emit('open-viewer-uploaded', selectedSeries)"
       >
         <!-- Add a slot for each header item that requires it (component customization) -->
         <template

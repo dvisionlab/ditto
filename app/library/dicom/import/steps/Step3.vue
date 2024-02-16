@@ -146,12 +146,7 @@
         :disabled="isUploading || isRefreshing"
         @click="openViewer"
       >
-        <v-progress-circular
-          v-if="isRefreshing"
-          :dark="darkMode"
-          indeterminate
-          :size="20"
-        />
+        <v-progress-circular v-if="isRefreshing" indeterminate :size="20" />
         <v-icon v-else :dark="dark">mdi-image-filter-black-white</v-icon>
 
         <span class="pl-2">open viewer</span>
@@ -230,7 +225,7 @@ export default {
       return null;
     },
     openViewer() {
-      this.$emit("dicom-import-open");
+      this.$emit("open-viewer-uploaded");
       this.$emit("cancel");
     }
   }
