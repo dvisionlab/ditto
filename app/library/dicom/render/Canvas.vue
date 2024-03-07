@@ -357,7 +357,7 @@ export default {
               {}
             );
 
-            renderSeries(this.validCanvasId, stack)
+            renderSeries(this.validCanvasId, stack, { sliceNumber: 0 })
               .then(() => {
                 // series rendered
                 this.alternativeScrollActive = false;
