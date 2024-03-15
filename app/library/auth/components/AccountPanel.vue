@@ -69,6 +69,8 @@
       </v-card-title>
       <v-card-subtitle>{{ user.email }}</v-card-subtitle>
       <v-divider></v-divider>
+      <v-card-text>{{ buildId }}</v-card-text>
+      <v-divider></v-divider>
       <v-card-actions>
         <v-btn
           v-if="settingsRouteName"
@@ -127,6 +129,8 @@ const defaultLogoutFn = _this => {
   _this.$router.replace({ name: "login" });
 };
 
+import buildData from "@/../BUILD_ID.json";
+
 export default {
   name: "AccountPanel",
   props: {
@@ -144,7 +148,8 @@ export default {
   },
   data() {
     return {
-      user: this.getUserFn(this)
+      user: this.getUserFn(this),
+      buildId: buildData.build_id
     };
   },
   computed: {
