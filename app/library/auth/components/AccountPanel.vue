@@ -70,12 +70,9 @@
       <v-card-subtitle>{{ user.email }}</v-card-subtitle>
       <v-divider></v-divider>
       <v-card-text>
-        <!-- Check if buildId exists and is not 'None' -->
         <template v-if="buildId">
           {{ buildId }}
         </template>
-      
-        <!-- Display error message if buildId is missing or 'None' -->
         <template v-else>
           <span style="color: red;">Error: Build ID is missing.</span>
         </template>
