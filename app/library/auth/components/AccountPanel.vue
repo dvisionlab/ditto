@@ -156,7 +156,7 @@ export default {
   data() {
     return {
       user: this.getUserFn(this),
-      buildId: buildData.build_id
+      buildId: buildData ? buildData.build_id : null
     };
   },
   computed: {
