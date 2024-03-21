@@ -70,7 +70,10 @@ export default {
     };
 
     // Setup logrocket
-    if (options.logrocket && process.env.NODE_ENV == "production") {
+    if (
+      options.logrocket?.customString &&
+      process.env.NODE_ENV == "production"
+    ) {
       options.logrocket.module.init(options.logrocket.customString);
       options.oldOnLoginSuccess = options.onLoginSuccess;
       options.onLoginSuccess = user => {
