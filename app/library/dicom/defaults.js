@@ -52,6 +52,14 @@ export const stackTools = {
     },
     { name: "Pan", configuration: {}, mixins: ["enabledOrDisabledBinaryTool"] },
     {
+      name: "StackScroll",
+      viewports: "all",
+      configuration: {
+        loop: false, // default false
+        allowSkipping: true // default true
+      }
+    },
+    {
       name: "CustomMouseWheelScroll",
       defaultActive: true,
       // icon: "mdi-layers-triple",
