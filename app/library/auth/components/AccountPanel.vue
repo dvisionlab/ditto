@@ -39,7 +39,13 @@
   </v-list-item>
 
   <!-- desktop -->
-  <v-menu v-else-if="user" :open-on-hover="openOnHover" tile v-bind="options">
+  <v-menu
+    v-else-if="user"
+    :open-on-hover="openOnHover"
+    :close-on-content-click="false"
+    tile
+    v-bind="options"
+  >
     <template v-slot:activator="{ on, attrs }">
       <slot v-bind="{ on, attrs }">
         <!-- default slot content -->
@@ -69,9 +75,25 @@
       </v-card-title>
       <v-card-subtitle>{{ user.email }}</v-card-subtitle>
       <v-divider></v-divider>
-      <v-card-text>
+      <v-card-text style="user-select: text">
         <template v-if="buildId">
           {{ buildId }}
+
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                text
+                x-small
+                @click="copyToClipBoard"
+                color="primary"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon small>mdi-content-copy</v-icon>
+              </v-btn>
+            </template>
+            <span>Copy Build ID to clipboard</span>
+          </v-tooltip>
         </template>
         <template v-else>
           <span style="color: red;">Error: Build ID is missing.</span>
@@ -197,6 +219,14 @@ export default {
     },
     login() {
       this.loginFn(this);
+    },
+    async copyToClipBoard() {
+      await navigator.clipboard.writeText(this.buildId);
+      this.$store.commit("raiseSnackbar", {
+        text: "Build Id copied to clipboard",
+        color: "primary",
+        timeout: 2000
+      });
     }
   }
 };
