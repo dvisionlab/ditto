@@ -100,6 +100,22 @@
         </template>
       </v-card-text>
       <v-divider></v-divider>
+      <template v-if="user.is_admin">
+        <v-card-actions>
+          <v-btn
+            :href="'/media/dv-admin-manual.pdf'"
+            download
+            color="primary"
+            target="_blank"
+            :dark="dark"
+            text
+          >
+            <v-icon class="mr-2" small>mdi-book-arrow-down-outline</v-icon>
+            Download Admin Manual
+          </v-btn>
+        </v-card-actions>
+        <v-divider></v-divider>
+      </template>
       <v-card-actions>
         <v-btn
           v-if="settingsRouteName"
