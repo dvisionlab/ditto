@@ -103,7 +103,7 @@
       <template v-if="user.is_admin">
         <v-card-actions>
           <v-btn
-            :href="'/media/dv-admin-manual.pdf'"
+            :href="adminManualURL"
             download
             color="primary"
             target="_blank"
@@ -194,7 +194,8 @@ export default {
   data() {
     return {
       user: this.getUserFn(this),
-      buildId: buildData ? buildData.build_id : null
+      buildId: buildData ? buildData.build_id : null,
+      adminManualURL: process.env.APP_CUSTOMER.adminManualURL
     };
   },
   computed: {
