@@ -7,9 +7,7 @@
     </v-list-item-icon>
     <v-list-item-content>
       <v-list-item-title>
-        <b class="text-capitalize">{{ user.first_name }}</b>
-        <span>&nbsp;</span>
-        <b class="text-capitalize">{{ user.last_name }}</b>
+        <b class="text-capitalize">{{ user.name }}</b>
       </v-list-item-title>
 
       <v-list-item-subtitle>{{ user.email }}</v-list-item-subtitle>
@@ -69,9 +67,7 @@
 
     <v-card :dark="dark" flat tile>
       <v-card-title class="d-inline-block">
-        <span class="text-capitalize">{{ user.first_name }}</span>
-        <span>&nbsp;</span>
-        <span class="text-capitalize">{{ user.last_name }}</span>
+        <span class="text-capitalize">{{ user.name }}</span>
       </v-card-title>
       <v-card-subtitle>{{ user.email }}</v-card-subtitle>
       <v-divider></v-divider>
