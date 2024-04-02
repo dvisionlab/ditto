@@ -71,31 +71,6 @@
       </v-card-title>
       <v-card-subtitle>{{ user.email }}</v-card-subtitle>
       <v-divider></v-divider>
-      <v-card-text style="user-select: text">
-        <template v-if="buildId">
-          {{ buildId }}
-
-          <v-tooltip top>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                text
-                x-small
-                @click="copyToClipBoard"
-                color="primary"
-                v-bind="attrs"
-                v-on="on"
-              >
-                <v-icon small>mdi-content-copy</v-icon>
-              </v-btn>
-            </template>
-            <span>Copy Build ID to clipboard</span>
-          </v-tooltip>
-        </template>
-        <template v-else>
-          <span style="color: red;">Error: Build ID is missing.</span>
-        </template>
-      </v-card-text>
-      <v-divider></v-divider>
       <template v-if="user.is_admin">
         <v-card-actions>
           <v-btn
@@ -170,8 +145,6 @@ const defaultLogoutFn = _this => {
   _this.$router.replace({ name: "login" });
 };
 
-import buildData from "@/../BUILD_ID.json";
-
 export default {
   name: "AccountPanel",
   props: {
@@ -190,7 +163,6 @@ export default {
   data() {
     return {
       user: this.getUserFn(this),
-      buildId: buildData ? buildData.build_id : null,
       adminManualURL: process.env.APP_CUSTOMER.adminManualURL
     };
   },
@@ -232,14 +204,6 @@ export default {
     },
     login() {
       this.loginFn(this);
-    },
-    async copyToClipBoard() {
-      await navigator.clipboard.writeText(this.buildId);
-      this.$store.commit("raiseSnackbar", {
-        text: "Build Id copied to clipboard",
-        color: "primary",
-        timeout: 2000
-      });
     }
   }
 };
