@@ -18,12 +18,15 @@
           Some errors occured while parsing your DICOM files.
         </h3>
         <div v-if="importErrors.length">
-          <v-btn :dark="dark"
+          <v-btn
+            :dark="dark"
             color="red lighten-2"
             text
             @click="showErrorDetails = !showErrorDetails"
           >
-            <v-icon :dark="dark">mdi-chevron-{{ showErrorDetails ? "up" : "down" }}</v-icon>
+            <v-icon :dark="dark"
+              >mdi-chevron-{{ showErrorDetails ? "up" : "down" }}</v-icon
+            >
             {{ showErrorDetails ? "hide" : "show" }} errors details
           </v-btn>
 
@@ -34,6 +37,70 @@
       </v-alert>
     </div>
 
+    <div :class="{ 'dark-table-head': dark }" class=" d-flex flex-row pa-1">
+      <div class="ma-3">
+        <h3>Patient</h3>
+        <div class="pt-1 text-body-2">
+          <div :class="{ 'white--text': dark }">
+            <div>
+              <b class="text-uppercase">{{
+                patientItems(series).name || "[unknown patient]"
+              }}</b>
+              <span v-if="patientItems(series).gender"
+                >, {{ patientItems(series).gender }}</span
+              >
+              <template v-if="patientItems(series).birth_date">
+                <span>, </span>
+                <component
+                  :is="getComponentName(metadata.StudyDate)"
+                  :value="patientItems(series).birth_date"
+                  tag="span"
+                />
+              </template>
+            </div>
+          </div>
+          <component
+            :is="getComponentName(metadata.PatientID)"
+            tag="span"
+            :value="series[0][metadata.PatientID]"
+          />
+        </div>
+      </div>
+      <div class="ma-3 pl-3">
+        <h3>Study</h3>
+        <div class="pt-1 text-body-2">
+          <div>
+            <span>
+              AN <b>{{ series[0][metadata.AccessionNumber] }}</b> ,
+            </span>
+            <component
+              :is="getComponentName(metadata.StudyDate)"
+              :dicom="true"
+              tag="span"
+              :value="series[0][metadata.StudyDate]"
+            />
+            <component
+              class="ml-1"
+              :is="getComponentName(metadata.StudyTime)"
+              :dicom="true"
+              tag="span"
+              :value="series[0][metadata.StudyTime]"
+            />
+          </div>
+          <div>
+            {{ series[0][metadata.StudyDescription] || "&mdash;" }}
+          </div>
+          <div>
+            <span>
+              <b> [{{ getModalitiesInStudy(series) }}] </b>
+              <b class="primary--text">{{ series.length }}</b>
+              series in study
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- TODO show parsing warnings/errors related to parsed series -->
     <v-data-table
       :dark="dark"
@@ -41,7 +108,7 @@
       disable-pagination
       fixed-header
       :group-by="metadata.StudyInstanceUID"
-      :headers="headers"
+      :headers="headersInTable(headers)"
       height="100%"
       hide-default-footer
       :items="series"
@@ -53,49 +120,6 @@
       @item-selected="event => $emit('select-series', event)"
       @toggle-select-all="event => $emit('select-series', event)"
     >
-      <template v-slot:[`group.header`]="{ items }">
-        <!-- TODO make this slot customizable -->
-        <td></td>
-        <td>
-          <div>
-            <b class="primary--text">{{ items.length }}</b>
-            series in study
-          </div>
-          <component
-            :is="getComponentName(metadata.AccessionNumber)"
-            :value="items[0][metadata.AccessionNumber]"
-          />
-        </td>
-        <!-- patient col -->
-        <td></td>
-        <td :class="`cell-${metadata.StudyDescription}`">
-          <div>{{ items[0][metadata.StudyDescription] || "&mdash;" }}</div>
-        </td>
-        <td :class="`cell-${metadata.StudyDate}`">
-          <component
-            :is="getComponentName(metadata.StudyDate)"
-            :dicom="true"
-            tag="span"
-            :value="items[0][metadata.StudyDate]"
-          />
-          <component
-            class="ml-1"
-            :is="getComponentName(metadata.StudyTime)"
-            :dicom="true"
-            tag="span"
-            :value="items[0][metadata.StudyTime]"
-          />
-        </td>
-        <td></td>
-        <td></td>
-        <td>{{ items[0][metadata.ModalitiesInStudy] }}</td>
-        <!-- headers length + 1 selection col + 8 study cols -->
-        <td
-          v-if="headers.length + 1 - 8"
-          :colspan="headers.length + 1 - 8"
-        ></td>
-      </template>
-
       <template v-slot:[`item.preview`]="{ item }">
         <v-lazy>
           <dicom-canvas
@@ -160,7 +184,6 @@
 import RelativeHeight from "../../../relative-height";
 import dicomDataTypes from "../../../data-types/dicom";
 import metadataDictionary from "../../metadata";
-
 const DicomCanvas = () => import("../../render/Canvas");
 
 export default {
@@ -169,7 +192,7 @@ export default {
   directives: { RelativeHeight },
   props: {
     allowAnonymization: { default: false, type: Boolean },
-    dark: { default: false, type: Boolean},
+    dark: { default: false, type: Boolean },
     getProgressFn: { required: false, type: Function },
     getViewportFn: { required: false, type: Function },
     headers: { required: true, type: Array },
@@ -179,6 +202,10 @@ export default {
     step: { required: true, type: Object },
     tools: { required: false, type: Array }
   },
+  computed: {
+    // getmodalitiesinstudy
+    // headers for data table
+  },
   data() {
     return {
       metadata: metadataDictionary,
@@ -187,15 +214,55 @@ export default {
     };
   },
   methods: {
+    patientItems: series => {
+      if (series && series[0]) {
+        return {
+          name: series[0]["x00100010"],
+          birth_date: series[0]["x00100030"],
+          gender: series[0]["x00100040"]
+        };
+      }
+      return null;
+    },
     getComponentName(field) {
       const name = `${field}-string`;
       return this.$options.components[name] ? name : null;
+    },
+    headersInTable(headers) {
+      return headers.filter(item => item.value !== "patient");
+    },
+    getModalitiesInStudy: series => {
+      if (series && series.length) {
+        let modalities = [];
+        console.log(modalities);
+        series.forEach(item => {
+          if (modalities.length === 0) {
+            modalities.push(item.modality);
+          } else if (modalities.findIndex(m => m === item.modality) < 0) {
+            modalities.push(item.modality);
+          }
+        });
+        let modInStudies = "";
+        modalities.forEach((m, i) => {
+          if (i !== 0) {
+            modInStudies = modInStudies + "," + m;
+          } else {
+            modInStudies = modInStudies + m;
+          }
+        });
+        return modInStudies;
+      }
+      return "";
     }
   }
 };
 </script>
 
 <style scoped>
+.dark-table-head {
+  background-color: #484848;
+  color: white;
+}
 ::v-deep
   .v-data-table--fixed-header
   > .v-data-table__wrapper
@@ -206,7 +273,9 @@ export default {
 ::v-deep .v-data-table > .v-data-table__wrapper > table > tbody > tr > td {
   padding: 0.5em;
 }
-
+::v-deep .v-data-table > .v-data-table__wrapper {
+  overflow: hidden !important;
+}
 ::v-deep th {
   white-space: nowrap;
 }
