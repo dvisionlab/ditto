@@ -36,147 +36,134 @@
         </div>
       </v-alert>
     </div>
-
-    <div :class="{ 'dark-table-head': dark }" class=" d-flex flex-row pa-1">
-      <div class="ma-3">
-        <h3>Patient</h3>
-        <div class="pt-1 text-body-2">
-          <div :class="{ 'white--text': dark }">
+    <div v-for="groupedSeries in groupByStudyUid(series)">
+      <div :class="{ 'dark-table-head': dark }" class=" d-flex flex-row pa-1">
+        <div class="ma-3">
+          <h3>Patient</h3>
+          <div class="pt-1 text-body-2">
+            <div :class="{ 'white--text': dark }">
+              <div>
+                <b class="text-uppercase">{{
+                  patientItems(groupedSeries).name || "[unknown patient]"
+                }}</b>
+                <span v-if="patientItems(groupedSeries).gender"
+                  >, {{ patientItems(groupedSeries).gender }}</span
+                >
+                <template v-if="patientItems(groupedSeries).birth_date">
+                  <span>, </span>
+                  <component
+                    :is="getComponentName(metadata.StudyDate)"
+                    :value="patientItems(groupedSeries).birth_date"
+                    tag="span"
+                  />
+                </template>
+              </div>
+            </div>
+            <component
+              :is="getComponentName(metadata.PatientID)"
+              tag="span"
+              :value="groupedSeries[0][metadata.PatientID]"
+            />
+          </div>
+        </div>
+        <div class="ma-3 pl-3">
+          <h3>Study</h3>
+          <div class="pt-1 text-body-2">
             <div>
-              <b class="text-uppercase">{{
-                patientItems(series).name || "[unknown patient]"
-              }}</b>
-              <span v-if="patientItems(series).gender"
-                >, {{ patientItems(series).gender }}</span
-              >
-              <template v-if="patientItems(series).birth_date">
-                <span>, </span>
-                <component
-                  :is="getComponentName(metadata.StudyDate)"
-                  :value="patientItems(series).birth_date"
-                  tag="span"
-                />
-              </template>
+              <span>
+                AN <b>{{ groupedSeries[0][metadata.AccessionNumber] }}</b> ,
+              </span>
+              <component
+                :is="getComponentName(metadata.StudyDate)"
+                :dicom="true"
+                tag="span"
+                :value="groupedSeries[0][metadata.StudyDate]"
+              />
+              <component
+                class="ml-1"
+                :is="getComponentName(metadata.StudyTime)"
+                :dicom="true"
+                tag="span"
+                :value="groupedSeries[0][metadata.StudyTime]"
+              />
+            </div>
+            <div>
+              {{ groupedSeries[0][metadata.StudyDescription] || "&mdash;" }}
+            </div>
+            <div>
+              <span>
+                <b> [{{ getModalitiesInStudy(groupedSeries) }}] </b>
+                <b class="primary--text">{{ groupedSeries.length }}</b>
+                series in study
+              </span>
             </div>
           </div>
-          <component
-            :is="getComponentName(metadata.PatientID)"
-            tag="span"
-            :value="series[0][metadata.PatientID]"
-          />
         </div>
       </div>
-      <div class="ma-3 pl-3">
-        <h3>Study</h3>
-        <div class="pt-1 text-body-2">
-          <div>
-            <span>
-              AN <b>{{ series[0][metadata.AccessionNumber] }}</b> ,
-            </span>
-            <component
-              :is="getComponentName(metadata.StudyDate)"
-              :dicom="true"
-              tag="span"
-              :value="series[0][metadata.StudyDate]"
-            />
-            <component
-              class="ml-1"
-              :is="getComponentName(metadata.StudyTime)"
-              :dicom="true"
-              tag="span"
-              :value="series[0][metadata.StudyTime]"
-            />
-          </div>
-          <div>
-            {{ series[0][metadata.StudyDescription] || "&mdash;" }}
-          </div>
-          <div>
-            <span>
-              <b> [{{ getModalitiesInStudy(series) }}] </b>
-              <b class="primary--text">{{ series.length }}</b>
-              series in study
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- TODO show parsing warnings/errors related to parsed series -->
-    <v-data-table
-      :dark="dark"
-      dense
-      disable-pagination
-      fixed-header
-      :group-by="metadata.StudyInstanceUID"
-      :headers="headersInTable(headers)"
-      height="100%"
-      hide-default-footer
-      :items="series"
-      item-key="larvitarSeriesInstanceUID"
-      :mobile-breakpoint="0"
-      show-select
-      :style="{ height: tableHeight }"
-      :value="selectedSeries"
-      @item-selected="event => $emit('select-series', event)"
-      @toggle-select-all="event => $emit('select-series', event)"
-    >
-      <template v-slot:[`item.preview`]="{ item }">
-        <v-lazy>
-          <dicom-canvas
-            :canvas-id="item.larvitarSeriesInstanceUID"
-            :get-progress-fn="getProgressFn"
-            :get-viewport-fn="getViewportFn"
-            :series-id="item.larvitarSeriesInstanceUID"
-            show-multiframe-icon
-            :stack="item"
-            :style="{ width: '8em', height: '8em' }"
-            :tools="tools"
-          />
-        </v-lazy>
-      </template>
-
-      <template v-if="allowAnonymization" v-slot:[`item.anonymized`]="{ item }">
-        <v-simple-checkbox class="text-center" v-model="item.anonymized" />
-      </template>
-
-      <template
-        v-for="h in headers.filter(
-          ({ value }) => value !== 'preview' && value !== 'anonymized'
-        )"
-        v-slot:[`item.${h.value}`]="{ item }"
+      <!-- TODO show parsing warnings/errors related to parsed series -->
+      <v-data-table
+        :dark="dark"
+        dense
+        disable-pagination
+        fixed-header
+        :headers="headersInTable(headers)"
+        height="100%"
+        hide-default-footer
+        :items="groupedSeries"
+        item-key="larvitarSeriesInstanceUID"
+        :mobile-breakpoint="0"
+        show-select
+        :style="{ height: tableHeight }"
+        :value="selectedSeries"
+        @item-selected="event => $emit('select-series', event)"
+        @toggle-select-all="event => $emit('select-series', event)"
       >
-        <!-- Add a slot for each header item that requires it (component customization) -->
-        <slot v-if="h.slot" :name="h.value" v-bind:item="item" />
-
-        <!-- Default patient slot -->
-        <template v-else-if="h.keys">
-          <template v-for="key in h.keys">
-            <component
-              v-if="getComponentName(key)"
-              :class="h.keyClass"
-              :key="key"
-              :is="getComponentName(key)"
-              :dicom="true"
-              :tag="h.keyTag"
-              :value="item[key]"
+        <template v-slot:[`item.preview`]="{ item }">
+          <v-lazy>
+            <dicom-canvas
+              :canvas-id="item.larvitarSeriesInstanceUID"
+              :get-progress-fn="getProgressFn"
+              :get-viewport-fn="getViewportFn"
+              :series-id="item.larvitarSeriesInstanceUID"
+              show-multiframe-icon
+              :stack="item"
+              :style="{ width: '8em', height: '8em' }"
+              :tools="tools"
             />
-            <div v-else :key="key">{{ item[key] }}</div>
+          </v-lazy>
+        </template>
+
+        <template
+          v-if="allowAnonymization"
+          v-slot:[`item.anonymized`]="{ item }"
+        >
+          <v-simple-checkbox class="text-center" v-model="item.anonymized" />
+        </template>
+
+        <template
+          v-for="h in headers.filter(
+            ({ value }) => value !== 'preview' && value !== 'anonymized'
+          )"
+          v-slot:[`item.${h.value}`]="{ item }"
+        >
+          <!-- Add a slot for each header item that requires it (component customization) -->
+          <slot v-if="h.slot" :name="h.value" v-bind:item="item" />
+
+          <!-- Add default slots using data types for other headers fields -->
+          <template v-else>
+            <component
+              :key="h.value"
+              v-if="getComponentName(h.value)"
+              :is="getComponentName(h.value)"
+              :dicom="true"
+              :value="item[h.value]"
+            />
+            <div v-else :key="h.value">{{ item[h.value] }}</div>
           </template>
         </template>
-
-        <!-- Add default slots using data types for other headers fields -->
-        <template v-else>
-          <component
-            :key="h.value"
-            v-if="getComponentName(h.value)"
-            :is="getComponentName(h.value)"
-            :dicom="true"
-            :value="item[h.value]"
-          />
-          <div v-else :key="h.value">{{ item[h.value] }}</div>
-        </template>
-      </template>
-    </v-data-table>
+      </v-data-table>
+    </div>
   </div>
 </template>
 
@@ -253,6 +240,16 @@ export default {
         return modInStudies;
       }
       return "";
+    },
+    groupByStudyUid: series => {
+      const groupedSeries = Object.groupBy(series, ({ studyUID }) => studyUID);
+      console.log(groupedSeries);
+      // transform object in array
+      let groupedSeriesByStudyUID = [];
+      Object.keys(groupedSeries).forEach(k =>
+        groupedSeriesByStudyUID.push(groupedSeries[k])
+      );
+      return groupedSeriesByStudyUID;
     }
   }
 };
