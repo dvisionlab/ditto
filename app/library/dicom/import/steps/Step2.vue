@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{ 'dark-bg': dark }">
     <!-- previous step errors -->
     <div
       v-if="importErrors.length"
@@ -36,24 +36,31 @@
         </div>
       </v-alert>
     </div>
-    <div v-for="groupedSeries in groupByStudyUid(series)">
+    <div
+      class="data-group"
+      v-for="groupedSeries in groupedSeriesByStudyUID"
+      :key="groupedSeries.id"
+    >
       <div :class="{ 'dark-table-head': dark }" class=" d-flex flex-row pa-1">
         <div class="ma-3">
           <h3>Patient</h3>
-          <div class="pt-1 text-body-2">
+          <div
+            v-if="patientItems(groupedSeries.series)"
+            class="pt-1 text-body-2"
+          >
             <div :class="{ 'white--text': dark }">
               <div>
                 <b class="text-uppercase">{{
-                  patientItems(groupedSeries).name || "[unknown patient]"
+                  patientItems(groupedSeries.series).name || "[unknown patient]"
                 }}</b>
-                <span v-if="patientItems(groupedSeries).gender"
-                  >, {{ patientItems(groupedSeries).gender }}</span
+                <span v-if="patientItems(groupedSeries.series).gender"
+                  >, {{ patientItems(groupedSeries.series).gender }}</span
                 >
-                <template v-if="patientItems(groupedSeries).birth_date">
+                <template v-if="patientItems(groupedSeries.series).birth_date">
                   <span>, </span>
                   <component
                     :is="getComponentName(metadata.StudyDate)"
-                    :value="patientItems(groupedSeries).birth_date"
+                    :value="patientItems(groupedSeries.series).birth_date"
                     tag="span"
                   />
                 </template>
@@ -62,38 +69,41 @@
             <component
               :is="getComponentName(metadata.PatientID)"
               tag="span"
-              :value="groupedSeries[0][metadata.PatientID]"
+              :value="groupedSeries.series[0][metadata.PatientID]"
             />
           </div>
         </div>
-        <div class="ma-3 pl-3">
+        <div v-if="groupedSeries && groupedSeries.series[0]" class="ma-3 pl-3">
           <h3>Study</h3>
           <div class="pt-1 text-body-2">
             <div>
               <span>
-                AN <b>{{ groupedSeries[0][metadata.AccessionNumber] }}</b> ,
+                AN
+                <b>{{ groupedSeries.series[0][metadata.AccessionNumber] }}</b> ,
               </span>
               <component
                 :is="getComponentName(metadata.StudyDate)"
                 :dicom="true"
                 tag="span"
-                :value="groupedSeries[0][metadata.StudyDate]"
+                :value="groupedSeries.series[0][metadata.StudyDate]"
               />
               <component
                 class="ml-1"
                 :is="getComponentName(metadata.StudyTime)"
                 :dicom="true"
                 tag="span"
-                :value="groupedSeries[0][metadata.StudyTime]"
+                :value="groupedSeries.series[0][metadata.StudyTime]"
               />
             </div>
             <div>
-              {{ groupedSeries[0][metadata.StudyDescription] || "&mdash;" }}
+              {{
+                groupedSeries.series[0][metadata.StudyDescription] || "&mdash;"
+              }}
             </div>
             <div>
               <span>
-                <b> [{{ getModalitiesInStudy(groupedSeries) }}] </b>
-                <b class="primary--text">{{ groupedSeries.length }}</b>
+                <b> [{{ getModalitiesInStudy(groupedSeries.series) }}] </b>
+                <b class="primary--text">{{ groupedSeries.series.length }}</b>
                 series in study
               </span>
             </div>
@@ -110,14 +120,18 @@
         :headers="headersInTable(headers)"
         height="100%"
         hide-default-footer
-        :items="groupedSeries"
+        :items="groupedSeries.series"
         item-key="larvitarSeriesInstanceUID"
         :mobile-breakpoint="0"
         show-select
         :style="{ height: tableHeight }"
         :value="selectedSeries"
-        @item-selected="event => $emit('select-series', event)"
-        @toggle-select-all="event => $emit('select-series', event)"
+        @item-selected="
+          event => $emit('select-series', { ...event, study: groupedSeries })
+        "
+        @toggle-select-all="
+          event => $emit('select-series', { ...event, study: groupedSeries })
+        "
       >
         <template v-slot:[`item.preview`]="{ item }">
           <v-lazy>
@@ -133,12 +147,31 @@
             />
           </v-lazy>
         </template>
-
+        <template v-if="allowAnonymization" v-slot:[`header.anonymized`]>
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-checkbox
+                v-bind="attrs"
+                v-on="on"
+                v-model="groupedSeries.anonymizeAll"
+              >
+                <template v-slot:label>
+                  <span style="font-size: 10.5px;">Anonymize</span>
+                </template>
+              </v-checkbox>
+            </template>
+            <span> Anonymize All</span>
+          </v-tooltip>
+        </template>
         <template
           v-if="allowAnonymization"
           v-slot:[`item.anonymized`]="{ item }"
         >
-          <v-simple-checkbox class="text-center" v-model="item.anonymized" />
+          <v-checkbox
+            class="text-center"
+            v-model="item.anonymized"
+            :value="true"
+          />
         </template>
 
         <template
@@ -163,6 +196,7 @@
           </template>
         </template>
       </v-data-table>
+      <v-divider></v-divider>
     </div>
   </div>
 </template>
@@ -192,10 +226,34 @@ export default {
   computed: {
     // getmodalitiesinstudy
     // headers for data table
+    anonymize: {
+      get() {
+        return this.modelValue;
+      },
+      set(value) {
+        this.$emit("update:modelValue", value);
+      }
+    }
   },
   data() {
+    let groupedSeriesByStudyUID = [];
+    if (this.series && this.series.length > 0) {
+      const groupedSeries = Object.groupBy(
+        this.series,
+        ({ studyUID }) => studyUID
+      );
+      // transform object in array
+      Object.keys(groupedSeries).forEach(k => {
+        groupedSeriesByStudyUID.push({
+          id: k,
+          anonymizeAll: false,
+          series: groupedSeries[k]
+        });
+      });
+    }
     return {
       metadata: metadataDictionary,
+      groupedSeriesByStudyUID,
       showErrorDetails: false,
       tableHeight: "100%"
     };
@@ -217,6 +275,24 @@ export default {
     },
     headersInTable(headers) {
       return headers.filter(item => item.value !== "patient");
+    },
+    groupByStudyUid: series => {
+      if (series && series.length > 0 && this.groupedSeriesByStudyUID) {
+        const groupedSeries = Object.groupBy(
+          series,
+          ({ studyUID }) => studyUID
+        );
+        // transform object in array
+        Object.keys(groupedSeries).forEach(k => {
+          this.groupedSeriesByStudyUID.push({
+            id: k,
+            anonymizeAll: false,
+            series: groupedSeries[k]
+          });
+        });
+        console.log(this.groupedSeriesByStudyUID);
+      }
+      return this.groupedSeriesByStudyUID;
     },
     getModalitiesInStudy: series => {
       if (series && series.length) {
@@ -240,16 +316,6 @@ export default {
         return modInStudies;
       }
       return "";
-    },
-    groupByStudyUid: series => {
-      const groupedSeries = Object.groupBy(series, ({ studyUID }) => studyUID);
-      console.log(groupedSeries);
-      // transform object in array
-      let groupedSeriesByStudyUID = [];
-      Object.keys(groupedSeries).forEach(k =>
-        groupedSeriesByStudyUID.push(groupedSeries[k])
-      );
-      return groupedSeriesByStudyUID;
     }
   }
 };
@@ -259,6 +325,12 @@ export default {
 .dark-table-head {
   background-color: #484848;
   color: white;
+}
+.dark-bg {
+  background-color: #1e1e1e;
+}
+.data-group {
+  border-bottom: 1px solid var(--v-grey-base);
 }
 ::v-deep
   .v-data-table--fixed-header

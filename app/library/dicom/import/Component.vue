@@ -1,5 +1,5 @@
 <template>
-  <div class="step-wrapper">
+  <div class="step-wrapper" :class="{ 'dark-header': dark }">
     <div
       v-if="steps[currentStep].actions || modal"
       :class="{ 'dark-header': dark }"
@@ -343,6 +343,7 @@ export default {
       this.onAction();
     },
     onSelectSeries(event) {
+      console.log(event);
       if (event.items) {
         event.items.forEach(item =>
           this.onSelectSeries({ item, value: event.value })
