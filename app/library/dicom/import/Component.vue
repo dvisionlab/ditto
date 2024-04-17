@@ -179,6 +179,7 @@
         @restart="onRestart"
         @select-action="onSelectAction"
         @select-series="onSelectSeries"
+        @anonymize-all="onAnonimyzeAll"
         @cancel="onCancel"
         @open-viewer-uploaded="$emit('open-viewer-uploaded', selectedSeries)"
       >
@@ -343,7 +344,6 @@ export default {
       this.onAction();
     },
     onSelectSeries(event) {
-      console.log(event);
       if (event.items) {
         event.items.forEach(item =>
           this.onSelectSeries({ item, value: event.value })
@@ -373,6 +373,17 @@ export default {
       this.series = [];
       this.selectedSeries = [];
       this.currentStep = 0;
+    },
+    onAnonimyzeAll(studyUID) {
+      this.series = this.series.map(item => {
+        if (item.studyUID === studyUID) {
+          return {
+            ...item,
+            anonymized: true
+          };
+        }
+        return item;
+      });
     }
   },
   watch: {

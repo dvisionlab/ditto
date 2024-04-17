@@ -38,7 +38,7 @@
     </div>
     <div
       class="data-group"
-      v-for="groupedSeries in groupedSeriesByStudyUID"
+      v-for="groupedSeries in groupedSeriesByStudyUID(series)"
       :key="groupedSeries.id"
     >
       <div :class="{ 'dark-table-head': dark }" class=" d-flex flex-row pa-1">
@@ -126,12 +126,8 @@
         show-select
         :style="{ height: tableHeight }"
         :value="selectedSeries"
-        @item-selected="
-          event => $emit('select-series', { ...event, study: groupedSeries })
-        "
-        @toggle-select-all="
-          event => $emit('select-series', { ...event, study: groupedSeries })
-        "
+        @item-selected="event => $emit('select-series', event)"
+        @toggle-select-all="event => $emit('select-series', event)"
       >
         <template v-slot:[`item.preview`]="{ item }">
           <v-lazy>
@@ -154,6 +150,7 @@
                 v-bind="attrs"
                 v-on="on"
                 v-model="groupedSeries.anonymizeAll"
+                @change="event => onAnonymizeAllChecked(event, groupedSeries)"
               >
                 <template v-slot:label>
                   <span style="font-size: 10.5px;">Anonymize</span>
@@ -167,11 +164,7 @@
           v-if="allowAnonymization"
           v-slot:[`item.anonymized`]="{ item }"
         >
-          <v-checkbox
-            class="text-center"
-            v-model="item.anonymized"
-            :value="true"
-          />
+          <v-checkbox class="text-center" v-model="item.anonymized" />
         </template>
 
         <template
@@ -225,40 +218,34 @@ export default {
   },
   computed: {
     // getmodalitiesinstudy
-    // headers for data table
-    anonymize: {
-      get() {
-        return this.modelValue;
-      },
-      set(value) {
-        this.$emit("update:modelValue", value);
-      }
-    }
   },
   data() {
-    let groupedSeriesByStudyUID = [];
-    if (this.series && this.series.length > 0) {
-      const groupedSeries = Object.groupBy(
-        this.series,
-        ({ studyUID }) => studyUID
-      );
-      // transform object in array
-      Object.keys(groupedSeries).forEach(k => {
-        groupedSeriesByStudyUID.push({
-          id: k,
-          anonymizeAll: false,
-          series: groupedSeries[k]
-        });
-      });
-    }
     return {
       metadata: metadataDictionary,
-      groupedSeriesByStudyUID,
       showErrorDetails: false,
       tableHeight: "100%"
     };
   },
   methods: {
+    groupedSeriesByStudyUID(series) {
+      let groupedSeriesByStudyUID = [];
+      if (series && series.length > 0) {
+        const groupedSeries = Object.groupBy(
+          series,
+          ({ studyUID }) => studyUID
+        );
+        // transform object in array
+        Object.keys(groupedSeries).forEach(k => {
+          groupedSeriesByStudyUID.push({
+            id: k,
+            anonymizeAll: false,
+            series: groupedSeries[k]
+          });
+        });
+        return groupedSeriesByStudyUID;
+      }
+      return groupedSeriesByStudyUID;
+    },
     patientItems: series => {
       if (series && series[0]) {
         return {
@@ -276,28 +263,9 @@ export default {
     headersInTable(headers) {
       return headers.filter(item => item.value !== "patient");
     },
-    groupByStudyUid: series => {
-      if (series && series.length > 0 && this.groupedSeriesByStudyUID) {
-        const groupedSeries = Object.groupBy(
-          series,
-          ({ studyUID }) => studyUID
-        );
-        // transform object in array
-        Object.keys(groupedSeries).forEach(k => {
-          this.groupedSeriesByStudyUID.push({
-            id: k,
-            anonymizeAll: false,
-            series: groupedSeries[k]
-          });
-        });
-        console.log(this.groupedSeriesByStudyUID);
-      }
-      return this.groupedSeriesByStudyUID;
-    },
-    getModalitiesInStudy: series => {
+    getModalitiesInStudy(series) {
       if (series && series.length) {
         let modalities = [];
-        console.log(modalities);
         series.forEach(item => {
           if (modalities.length === 0) {
             modalities.push(item.modality);
@@ -316,6 +284,13 @@ export default {
         return modInStudies;
       }
       return "";
+    },
+    onAnonymizeAllChecked(event, groupedSeries, data) {
+      if (event) {
+        if (groupedSeries && groupedSeries.id) {
+          this.$emit("anonymize-all", groupedSeries.id);
+        }
+      }
     }
   }
 };
