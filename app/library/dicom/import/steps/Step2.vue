@@ -216,9 +216,6 @@ export default {
     step: { required: true, type: Object },
     tools: { required: false, type: Array }
   },
-  computed: {
-    // getmodalitiesinstudy
-  },
   data() {
     return {
       metadata: metadataDictionary,
