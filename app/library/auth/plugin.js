@@ -60,13 +60,15 @@ export default {
               : null
           });
         }
-      },
-      readAccessToken: persist.getAccessToken,
-      readRefreshToken: persist.getRefreshToken,
+      }
+      //readAccessToken: persist.getAccessToken,
+      //readRefreshToken: persist.getRefreshToken,
+      /*
       writeAccessToken: value => {
         persist.setAccessToken(value);
         options.store.commit("auth/update", { key: "accessToken", value });
       }
+      */
     };
 
     // Setup logrocket
@@ -111,6 +113,7 @@ export default {
     }
 
     // Sync accessToken localStorage value between tabs
+    /*
     window.addEventListener("storage", e => {
       if (e.key === "access-token") {
         if (!e.newValue) {
@@ -119,5 +122,6 @@ export default {
         }
       }
     });
+    */
   }
 };

@@ -1,6 +1,6 @@
 // Dependencies
 import Vue from "vue";
-import { skipAuthorizationInterceptorUrls } from "./utils";
+import { skipAuthorizationInterceptorUrls, getCookie } from "./utils";
 
 // Local variables
 
@@ -40,12 +40,30 @@ const getUser = () => {
   return Vue.$http.get("auth/users/me");
 };
 
-// Login and get json web tokens
-const login = (email, password) => {
+// Session login
+const login = (username, password) => {
   return new Promise((resolve, reject) => {
     Vue.$http
-      .post("auth/jwt/create", null, { email, password })
-      .then(({ body: tokens }) => resolve(tokens))
+      .post("auth/login-session", null, { username, password })
+      .then(response => {
+        resolve(response.data.message);
+      })
+      .catch(error => reject(error));
+  });
+};
+
+// Check BE session validity
+const checkSession = () => {
+  return Vue.$http.get("auth/check-session");
+};
+
+const logout = (username, password) => {
+  return new Promise((resolve, reject) => {
+    Vue.$http
+      .post("auth/logout-session")
+      .then(response => {
+        resolve(response.data.message);
+      })
       .catch(error => reject(error));
   });
 };
@@ -104,12 +122,14 @@ const resetPassword = (uid, token, new_password, re_new_password) =>
   });
 
 // Authorization interceptor
-const addAuthorizationInterceptor = ({
-  forceLogout,
-  readAccessToken,
-  readRefreshToken,
-  writeAccessToken
-}) => {
+const addAuthorizationInterceptor = (
+  {
+    //forceLogout,
+    //readAccessToken,
+    //readRefreshToken,
+    //writeAccessToken
+  }
+) => {
   // Register the refresh token interceptor (https://laracasts.com/discuss/channels/vue/jwt-auth-with-vue-resource-interceptor)
   Vue.http.interceptors.push((request, next) => {
     if (skipAuthorizationInterceptor(request.url)) {
@@ -117,8 +137,17 @@ const addAuthorizationInterceptor = ({
     }
 
     // Add jwt to all requests
-    request.headers.set("Authorization", "Bearer " + readAccessToken());
+    //request.headers.set("Authorization", "Bearer " + readAccessToken());
 
+    // Add CSRF Token to requests header
+    if (request.method !== "GET") {
+      const csrfToken = getCookie("csrftoken");
+      if (csrfToken) {
+        request.headers.set("X-CSRFToken", csrfToken);
+      }
+    }
+
+    /*
     next(response => {
       // Update token
       if (response.headers["Authorization"]) {
@@ -154,6 +183,7 @@ const addAuthorizationInterceptor = ({
         }
       }
     });
+    */
   });
 };
 
@@ -170,7 +200,9 @@ export default {
       login,
       requestPasswordReset,
       resetPassword,
-      verifyToken
+      verifyToken,
+      checkSession,
+      logout
     };
   }
 };

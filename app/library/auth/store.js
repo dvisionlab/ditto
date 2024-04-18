@@ -5,8 +5,9 @@ import persist from "./persist";
 // Local variables and methods
 const initialState = () => {
   return {
-    accessToken: null,
-    refreshToken: null,
+    //accessToken: null,
+    //refreshToken: null,
+    isValidSession: false,
     user: null
   };
 };
@@ -16,9 +17,10 @@ export default options => ({
   namespaced: true,
   state: () => initialState(),
   getters: {
-    isAuth: state => state.accessToken !== null
+    isAuth: state => state.isValidSession
   },
   actions: {
+    /*
     autoLogin({ commit, dispatch }) {
       const accessToken = persist.getAccessToken();
 
@@ -55,48 +57,60 @@ export default options => ({
         }
       });
     },
+    */
     login({ commit, dispatch }, { email, password }) {
       return new Promise((resolve, reject) => {
         Vue.$http.auth
           .login(email, password)
-          .then(tokens => {
-            persist.setAccessToken(tokens.access);
-            persist.setRefreshToken(tokens.refresh);
-
+          .then(message => {
+            //persist.setAccessToken(tokens.access);
+            //persist.setRefreshToken(tokens.refresh);
+            console.log(message);
             Vue.$http.auth
               .getUser()
               .then(user => {
-                commit("update", { key: "accessToken", value: tokens.access });
-                commit("update", {
+                //commit("update", { key: "accessToken", value: tokens.access });
+                /*commit("update", {
                   key: "refreshToken",
                   value: tokens.refresh
-                });
+                });*/
                 commit("update", { key: "user", value: user });
                 persist.setUser(user);
+
+                commit("update", { key: "isValidSession", value: true });
 
                 if (options.onLoginSuccess) {
                   options.onLoginSuccess(user);
                 }
 
                 resolve({
-                  ...tokens,
                   user
                 });
               })
               .catch(error => {
-                dispatch("logout");
+                //dispatch("logout");
                 reject(error);
               });
           })
           .catch(error => {
-            dispatch("logout");
+            //dispatch("logout");
             reject(error);
           });
       });
     },
     logout({ commit }) {
-      commit("reset");
-      persist.reset();
+      return new Promise((resolve, reject) => {
+        Vue.$http.auth
+          .logout()
+          .then(message => {
+            console.log(message);
+            persist.reset();
+            resolve();
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
     }
   },
   mutations: {

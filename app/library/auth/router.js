@@ -2,9 +2,10 @@
 import persist from "./persist";
 import LoginForm from "./components/LoginForm";
 import AuthWrapper from "./components/Wrapper";
+import Vue from "vue";
 
 // Local variables
-let alreadyAutoLoggedIn = false;
+//let alreadyAutoLoggedIn = false;
 
 // Auth plugin routes
 export const getRoutes = options => {
@@ -97,6 +98,7 @@ export const getBeforeEachGuard = options => {
   // meta.guest = true ==> solo utenti non autenticati
   // meta.auth = true ==> solo utenti autenticati
   return async function(to, from, next) {
+    /*
     if (
       alreadyAutoLoggedIn == false &&
       to.matched.some(record => record.meta.autoLogin)
@@ -104,10 +106,34 @@ export const getBeforeEachGuard = options => {
       alreadyAutoLoggedIn = true;
       await options.forceLogin();
     }
+    */
+
+    let isValidSession = options.store.getters["auth/isAuth"];
+    try {
+      const response = await Vue.$http.get("auth/check-session");
+      console.log(response.message);
+      if (response.status == "logged") isValidSession = true;
+      else isValidSession = false;
+    } catch (error) {
+      console.log(error);
+      isValidSession = false;
+    }
+
+    options.store.commit("auth/update", {
+      key: "isValidSession",
+      value: isValidSession
+    });
+
+    if (!options.store.state.auth.user && isValidSession) {
+      options.store.commit("auth/update", {
+        key: "user",
+        value: persist.getUser()
+      });
+    }
 
     // auth not needed
     if (to.matched.some(record => record.meta.guest)) {
-      if (persist.getAccessToken() == null) {
+      if (!isValidSession) {
         // and user not logged in
         next();
       } else {
@@ -117,7 +143,7 @@ export const getBeforeEachGuard = options => {
     }
     // auth needed
     else if (to.matched.some(record => record.meta.auth)) {
-      if (persist.getAccessToken() == null) {
+      if (!isValidSession) {
         // but user not logged in
         next(`${options.baseRoute}${options.redirectGuestUsers}`);
       } else {
