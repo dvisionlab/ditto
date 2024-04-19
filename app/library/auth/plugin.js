@@ -3,7 +3,6 @@ import { getBeforeEachGuard, getRoutes } from "./router";
 import getStore from "./store";
 import http from "../http/plugin";
 import authHttp from "./http";
-import persist from "./persist";
 
 // Local variables
 const defaultOptions = {

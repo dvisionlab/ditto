@@ -18,7 +18,7 @@ export default options => ({
     isAuth: state => state.isValidSession
   },
   actions: {
-    login({ commit, dispatch }, { email, password }) {
+    login({ commit }, { email, password }) {
       return new Promise((resolve, reject) => {
         Vue.$http.auth
           .login(email, password)
@@ -49,7 +49,7 @@ export default options => ({
           });
       });
     },
-    logout({ commit }) {
+    logout() {
       return new Promise((resolve, reject) => {
         Vue.$http.auth
           .logout()

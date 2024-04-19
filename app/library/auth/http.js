@@ -1,34 +1,5 @@
-// Dependencies
 import Vue from "vue";
 import { skipAuthorizationInterceptorUrls, getCookie } from "./utils";
-
-// Local variables
-
-// UNAUTHORIZED: Although the HTTP standard specifies "unauthorized",
-// semantically this response means "unauthenticated". That is, the client must
-// authenticate itself to get the requested response.
-const UNAUTHORIZED_STATUS = 401;
-
-// FORBIDDEN: The client does not have access rights to the content, i.e. they
-// are unauthorized, so server is rejecting to give proper response. Unlike
-// 401, the client's identity is known to the server.
-// const FORBIDDEN_STATUS = 403;
-
-// Utilities
-
-const getQueryStringParams = query => {
-  return query
-    ? (/^[?#]/.test(query) ? query.slice(1) : query)
-        .split("&")
-        .reduce((params, param) => {
-          let [key, value] = param.split("=");
-          params[key] = value
-            ? decodeURIComponent(value.replace(/\+/g, " "))
-            : "";
-          return params;
-        }, {})
-    : {};
-};
 
 const skipAuthorizationInterceptor = url =>
   skipAuthorizationInterceptorUrls.some(skipUrl =>
@@ -57,7 +28,7 @@ const checkSession = () => {
   return Vue.$http.get("auth/check-session");
 };
 
-const logout = (username, password) => {
+const logout = () => {
   return new Promise((resolve, reject) => {
     Vue.$http
       .post("auth/logout-session")
@@ -95,7 +66,7 @@ const resetPassword = (uid, token, new_password, re_new_password) =>
 
 // Authorization interceptor
 const addAuthorizationInterceptor = () => {
-  Vue.http.interceptors.push((request, next) => {
+  Vue.http.interceptors.push(request => {
     if (skipAuthorizationInterceptor(request.url)) {
       return;
     }
