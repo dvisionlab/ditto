@@ -41,73 +41,99 @@
       v-for="groupedSeries in groupedSeriesByStudyUID(series)"
       :key="groupedSeries.id"
     >
-      <div :class="{ 'dark-table-head': dark }" class=" d-flex flex-row pa-1">
-        <div class="ma-3">
-          <h3>Patient</h3>
+      <div :class="{ 'dark-table-head': dark }">
+        <div class=" d-flex flex-row pa-1">
+          <div class="ma-3">
+            <h3>Patient</h3>
+            <div
+              v-if="patientItems(groupedSeries.series)"
+              class="pt-1 text-body-2"
+            >
+              <div :class="{ 'white--text': dark }">
+                <div>
+                  <b class="text-uppercase">{{
+                    patientItems(groupedSeries.series).name ||
+                      "[unknown patient]"
+                  }}</b>
+                  <span v-if="patientItems(groupedSeries.series).gender"
+                    >, {{ patientItems(groupedSeries.series).gender }}</span
+                  >
+                  <template
+                    v-if="patientItems(groupedSeries.series).birth_date"
+                  >
+                    <span>, </span>
+                    <component
+                      :is="getComponentName(metadata.StudyDate)"
+                      :value="patientItems(groupedSeries.series).birth_date"
+                      tag="span"
+                    />
+                  </template>
+                </div>
+              </div>
+              <component
+                :is="getComponentName(metadata.PatientID)"
+                tag="span"
+                :value="groupedSeries.series[0][metadata.PatientID]"
+              />
+            </div>
+          </div>
           <div
-            v-if="patientItems(groupedSeries.series)"
-            class="pt-1 text-body-2"
+            v-if="groupedSeries && groupedSeries.series[0]"
+            class="ma-3 pl-3"
           >
-            <div :class="{ 'white--text': dark }">
+            <h3>Study</h3>
+            <div class="pt-1 text-body-2">
               <div>
-                <b class="text-uppercase">{{
-                  patientItems(groupedSeries.series).name || "[unknown patient]"
-                }}</b>
-                <span v-if="patientItems(groupedSeries.series).gender"
-                  >, {{ patientItems(groupedSeries.series).gender }}</span
-                >
-                <template v-if="patientItems(groupedSeries.series).birth_date">
-                  <span>, </span>
-                  <component
-                    :is="getComponentName(metadata.StudyDate)"
-                    :value="patientItems(groupedSeries.series).birth_date"
-                    tag="span"
-                  />
-                </template>
+                <span>
+                  AN
+                  <b>{{ groupedSeries.series[0][metadata.AccessionNumber] }}</b>
+                  ,
+                </span>
+                <component
+                  :is="getComponentName(metadata.StudyDate)"
+                  :dicom="true"
+                  tag="span"
+                  :value="groupedSeries.series[0][metadata.StudyDate]"
+                />
+                <component
+                  class="ml-1"
+                  :is="getComponentName(metadata.StudyTime)"
+                  :dicom="true"
+                  tag="span"
+                  :value="groupedSeries.series[0][metadata.StudyTime]"
+                />
+              </div>
+              <div>
+                {{
+                  groupedSeries.series[0][metadata.StudyDescription] ||
+                    "&mdash;"
+                }}
+              </div>
+              <div>
+                <span>
+                  <b> [{{ getModalitiesInStudy(groupedSeries.series) }}] </b>
+                  <b class="primary--text">{{ groupedSeries.series.length }}</b>
+                  series in study
+                </span>
               </div>
             </div>
-            <component
-              :is="getComponentName(metadata.PatientID)"
-              tag="span"
-              :value="groupedSeries.series[0][metadata.PatientID]"
-            />
           </div>
         </div>
-        <div v-if="groupedSeries && groupedSeries.series[0]" class="ma-3 pl-3">
-          <h3>Study</h3>
-          <div class="pt-1 text-body-2">
-            <div>
-              <span>
-                AN
-                <b>{{ groupedSeries.series[0][metadata.AccessionNumber] }}</b> ,
-              </span>
-              <component
-                :is="getComponentName(metadata.StudyDate)"
-                :dicom="true"
-                tag="span"
-                :value="groupedSeries.series[0][metadata.StudyDate]"
-              />
-              <component
-                class="ml-1"
-                :is="getComponentName(metadata.StudyTime)"
-                :dicom="true"
-                tag="span"
-                :value="groupedSeries.series[0][metadata.StudyTime]"
-              />
-            </div>
-            <div>
-              {{
-                groupedSeries.series[0][metadata.StudyDescription] || "&mdash;"
-              }}
-            </div>
-            <div>
-              <span>
-                <b> [{{ getModalitiesInStudy(groupedSeries.series) }}] </b>
-                <b class="primary--text">{{ groupedSeries.series.length }}</b>
-                series in study
-              </span>
-            </div>
-          </div>
+        <div
+          v-if="allowAnonymization"
+          style="margin-top: -20px;
+          margin-left: 12px;"
+        >
+          <v-checkbox
+            v-bind="attrs"
+            v-on="on"
+            v-model="groupedSeries.anonymizeAll"
+            @change="event => onAnonymizeAllChecked(event, groupedSeries)"
+          >
+            <template v-slot:label>
+              <span style="font-size: 14px;"><b>Anonymize</b></span>
+            </template>
+          </v-checkbox>
         </div>
       </div>
 
@@ -143,30 +169,6 @@
             />
           </v-lazy>
         </template>
-        <template v-if="allowAnonymization" v-slot:[`header.anonymized`]>
-          <v-tooltip top>
-            <template v-slot:activator="{ on, attrs }">
-              <v-checkbox
-                v-bind="attrs"
-                v-on="on"
-                v-model="groupedSeries.anonymizeAll"
-                @change="event => onAnonymizeAllChecked(event, groupedSeries)"
-              >
-                <template v-slot:label>
-                  <span style="font-size: 10.5px;">Anonymize</span>
-                </template>
-              </v-checkbox>
-            </template>
-            <span> Anonymize All</span>
-          </v-tooltip>
-        </template>
-        <template
-          v-if="allowAnonymization"
-          v-slot:[`item.anonymized`]="{ item }"
-        >
-          <v-checkbox class="text-center" v-model="item.anonymized" />
-        </template>
-
         <template
           v-for="h in headers.filter(
             ({ value }) => value !== 'preview' && value !== 'anonymized'
@@ -258,7 +260,9 @@ export default {
       return this.$options.components[name] ? name : null;
     },
     headersInTable(headers) {
-      return headers.filter(item => item.value !== "patient");
+      return headers.filter(
+        item => item.value !== "patient" && item.value !== "anonymized"
+      );
     },
     getModalitiesInStudy(series) {
       if (series && series.length) {
