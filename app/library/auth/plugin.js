@@ -61,14 +61,6 @@ export default {
           });
         }
       }
-      //readAccessToken: persist.getAccessToken,
-      //readRefreshToken: persist.getRefreshToken,
-      /*
-      writeAccessToken: value => {
-        persist.setAccessToken(value);
-        options.store.commit("auth/update", { key: "accessToken", value });
-      }
-      */
     };
 
     // Setup logrocket
@@ -111,17 +103,5 @@ export default {
         import("./components/AccountPanel")
       );
     }
-
-    // Sync accessToken localStorage value between tabs
-    /*
-    window.addEventListener("storage", e => {
-      if (e.key === "access-token") {
-        if (!e.newValue) {
-          // automatically log out
-          options.forceLogout();
-        }
-      }
-    });
-    */
   }
 };

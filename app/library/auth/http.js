@@ -68,34 +68,6 @@ const logout = (username, password) => {
   });
 };
 
-// Refresh access token using the refresh one
-const refreshToken = refresh => {
-  return new Promise((resolve, reject) => {
-    Vue.$http
-      .post("auth/jwt/refresh", null, { refresh })
-      .then(({ body }) => resolve(body.access))
-      .catch(error => reject(error));
-  });
-};
-
-// Verify access token
-const verifyToken = (access, refresh) => {
-  return new Promise((resolve, reject) => {
-    Vue.$http
-      .post("auth/jwt/verify", null, { token: access })
-      .then(() => resolve(access))
-      .catch(error => {
-        if (refresh) {
-          refreshToken(refresh)
-            .then(token => resolve(token))
-            .catch(error => reject(error));
-        } else {
-          reject(error);
-        }
-      });
-  });
-};
-
 // Create a user and send activation email
 const createUser = (firstname, lastname, email, password) => {
   let data = {
@@ -122,22 +94,11 @@ const resetPassword = (uid, token, new_password, re_new_password) =>
   });
 
 // Authorization interceptor
-const addAuthorizationInterceptor = (
-  {
-    //forceLogout,
-    //readAccessToken,
-    //readRefreshToken,
-    //writeAccessToken
-  }
-) => {
-  // Register the refresh token interceptor (https://laracasts.com/discuss/channels/vue/jwt-auth-with-vue-resource-interceptor)
+const addAuthorizationInterceptor = () => {
   Vue.http.interceptors.push((request, next) => {
     if (skipAuthorizationInterceptor(request.url)) {
       return;
     }
-
-    // Add jwt to all requests
-    //request.headers.set("Authorization", "Bearer " + readAccessToken());
 
     // Add CSRF Token to requests header
     if (request.method !== "GET") {
@@ -146,44 +107,6 @@ const addAuthorizationInterceptor = (
         request.headers.set("X-CSRFToken", csrfToken);
       }
     }
-
-    /*
-    next(response => {
-      // Update token
-      if (response.headers["Authorization"]) {
-        var token = response.headers["Authorization"];
-        writeAccessToken(token);
-      }
-
-      // Check for expired token response and if expired refresh token and resubmit original request,
-      // but allow refresh only once
-      const [requestUrl, requestParamsString] = request.url.split("?");
-      const requestParams = getQueryStringParams(requestParamsString);
-
-      if (response.status === UNAUTHORIZED_STATUS) {
-        if (requestParams.alreadyRefreshed) {
-          forceLogout(response.statusText);
-        } else {
-          return refreshToken(readRefreshToken())
-            .then(token => {
-              // Store refreshed token
-              writeAccessToken(token);
-
-              // Resubmit original request
-              request.url = Vue.$http.getUrl(requestUrl, {
-                ...requestParams,
-                alreadyRefreshed: true
-              });
-
-              return Vue.http(request); //.then(data => data);
-            })
-            .catch(error => {
-              forceLogout(error.statusText);
-            });
-        }
-      }
-    });
-    */
   });
 };
 
@@ -200,7 +123,6 @@ export default {
       login,
       requestPasswordReset,
       resetPassword,
-      verifyToken,
       checkSession,
       logout
     };

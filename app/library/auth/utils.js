@@ -1,5 +1,4 @@
 export const skipAuthorizationInterceptorUrls = [
-  "auth/jwt",
   "auth/users/activation",
   "auth/users/resend_activation",
   "auth/users/reset_email",
