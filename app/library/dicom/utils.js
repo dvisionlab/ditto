@@ -136,7 +136,8 @@ export const clearSeriesStack = seriesStack =>
 
 // Remove viewport data from larvitar stores
 export const clearSeriesData = (seriesId, clearCache = false) => {
-  lt.removeSeriesFromLarvitarManager(seriesId);
+  //Without the following seems that the series are kept in cache.
+  //lt.removeSeriesFromLarvitarManager(seriesId);
 
   if (clearCache) {
     lt.clearImageCache(seriesId);
@@ -294,10 +295,13 @@ export const parseFile = (seriesId, file, elementId) => {
 export const renderSeries = async (elementId, seriesStack, params = {}) => {
   lt.store.addViewport(elementId);
   // render returns a promise which will resolve when image is displayed
-  await lt.cacheImages(seriesStack);
+
+  //await lt.cacheImages(seriesStack);
   return seriesStack.isPDF
     ? await lt.renderDICOMPDF(seriesStack, elementId)
     : await lt.renderImage(seriesStack, elementId, params);
+  
+  //Without using loadAndCacheImageStack the series still seems cached.
 };
 
 // Reset Larvitar
