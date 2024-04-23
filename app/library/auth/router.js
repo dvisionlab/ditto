@@ -98,16 +98,6 @@ export const getBeforeEachGuard = options => {
   // meta.guest = true ==> solo utenti non autenticati
   // meta.auth = true ==> solo utenti autenticati
   return async function(to, from, next) {
-    /*
-    if (
-      alreadyAutoLoggedIn == false &&
-      to.matched.some(record => record.meta.autoLogin)
-    ) {
-      alreadyAutoLoggedIn = true;
-      await options.forceLogin();
-    }
-    */
-
     let isValidSession = options.store.getters["auth/isAuth"];
     try {
       const response = await Vue.$http.get("auth/check-session");

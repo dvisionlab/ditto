@@ -39,27 +39,7 @@ export default {
     // Options override
     options = {
       ...defaultOptions,
-      ...options,
-      forceLogin: () => {
-        return options.store
-          .dispatch("auth/autoLogin")
-          .then(user => console.log("Automatically logged in:", user))
-          .catch(error => {
-            options.store.dispatch("auth/logout");
-            console.warn("Automatic login failed:", error);
-          });
-      },
-      forceLogout: message => {
-        options.store.dispatch("auth/logout");
-        if (options.router.currentRoute.name !== "login") {
-          options.router.replace({
-            name: "login",
-            query: message
-              ? { alertType: "warning", alertMessage: message }
-              : null
-          });
-        }
-      }
+      ...options
     };
 
     // Setup logrocket
