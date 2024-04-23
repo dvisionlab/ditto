@@ -125,8 +125,6 @@
           margin-left: 12px;"
         >
           <v-checkbox
-            v-bind="attrs"
-            v-on="on"
             v-model="groupedSeries.anonymizeAll"
             @change="event => onAnonymizeAllChecked(event, groupedSeries)"
           >
