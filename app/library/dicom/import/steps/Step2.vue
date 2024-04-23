@@ -284,7 +284,7 @@ export default {
       }
       return "";
     },
-    onAnonymizeAllChecked(event, groupedSeries, data) {
+    onAnonymizeAllChecked(event, groupedSeries) {
       if (event) {
         if (groupedSeries && groupedSeries.id) {
           this.$emit("anonymize-all", groupedSeries.id);
