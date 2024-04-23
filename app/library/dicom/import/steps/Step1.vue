@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{ 'dark-header': dark && modal }">
     <input
       ref="inputFile"
       multiple

@@ -1,5 +1,5 @@
 <template>
-  <div class="step-wrapper">
+  <div class="step-wrapper" :class="{ 'dark-header': dark }">
     <div
       v-if="steps[currentStep].actions || modal"
       :class="{ 'dark-header': dark }"
@@ -179,6 +179,7 @@
         @restart="onRestart"
         @select-action="onSelectAction"
         @select-series="onSelectSeries"
+        @anonymize-all="onAnonimyzeAll"
         @cancel="onCancel"
         @open-viewer-uploaded="$emit('open-viewer-uploaded', selectedSeries)"
       >
@@ -372,6 +373,17 @@ export default {
       this.series = [];
       this.selectedSeries = [];
       this.currentStep = 0;
+    },
+    onAnonimyzeAll(studyUID) {
+      this.series = this.series.map(item => {
+        if (item.studyUID === studyUID) {
+          return {
+            ...item,
+            anonymized: true
+          };
+        }
+        return item;
+      });
     }
   },
   watch: {
