@@ -70,7 +70,7 @@ const addAuthorizationInterceptor = () => {
     if (skipAuthorizationInterceptor(request.url)) {
       return;
     }
-    /*
+
     // Add CSRF Token to requests header
     if (request.method !== "GET") {
       const csrfToken = getCookie("csrftoken");
@@ -78,7 +78,6 @@ const addAuthorizationInterceptor = () => {
         request.headers.set("X-CSRFToken", csrfToken);
       }
     }
-    */
   });
 };
 
