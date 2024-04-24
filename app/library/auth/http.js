@@ -35,7 +35,10 @@ const logout = () => {
       .then(response => {
         resolve(response.data.message);
       })
-      .catch(error => reject(error));
+      .catch(error => {
+        alert(error.body.detail);
+        reject(error);
+      });
   });
 };
 
