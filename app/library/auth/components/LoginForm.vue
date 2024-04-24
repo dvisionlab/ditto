@@ -127,9 +127,12 @@ export default {
     ],
     form: {}
   }),
-  created() {
+
+  mounted() {
+    this.$store.commit("auth/reset");
     this.form.email = this.$route.query.email || null;
   },
+
   methods: {
     dismissAlert() {
       // eslint-disable-next-line no-unused-vars
