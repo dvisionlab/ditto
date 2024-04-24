@@ -35,10 +35,7 @@ const logout = () => {
       .then(response => {
         resolve(response.data.message);
       })
-      .catch(error => {
-        alert(error.body.detail);
-        reject(error);
-      });
+      .catch(error => reject(error));
   });
 };
 
@@ -73,7 +70,7 @@ const addAuthorizationInterceptor = () => {
     if (skipAuthorizationInterceptor(request.url)) {
       return;
     }
-
+    /*
     // Add CSRF Token to requests header
     if (request.method !== "GET") {
       const csrfToken = getCookie("csrftoken");
@@ -81,6 +78,7 @@ const addAuthorizationInterceptor = () => {
         request.headers.set("X-CSRFToken", csrfToken);
       }
     }
+    */
   });
 };
 
