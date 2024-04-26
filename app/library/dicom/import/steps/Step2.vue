@@ -132,6 +132,14 @@
               <span style="font-size: 14px;"><b>Anonymize</b></span>
             </template>
           </v-checkbox>
+          <v-alert
+            dense
+            outlined
+            max-height="100px"
+            max-width="230px"
+            type="warning"
+            >Patient Data will be overwritten and original data wiil be lost
+          </v-alert>
         </div>
       </div>
 
