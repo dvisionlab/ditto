@@ -140,9 +140,13 @@
 <script>
 const defaultGetUserFn = _this => _this.$store.state.auth.user;
 const defaultLoginFn = _this => _this.$router.replace({ name: "login" });
-const defaultLogoutFn = _this => {
-  _this.$store.dispatch("auth/logout");
-  _this.$router.replace({ name: "login" });
+const defaultLogoutFn = async _this => {
+  try {
+    await _this.$store.dispatch("auth/logout");
+    _this.$router.replace({ name: "login" });
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
 };
 
 export default {

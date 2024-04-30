@@ -3,7 +3,6 @@ import { getBeforeEachGuard, getRoutes } from "./router";
 import getStore from "./store";
 import http from "../http/plugin";
 import authHttp from "./http";
-import persist from "./persist";
 
 // Local variables
 const defaultOptions = {
@@ -40,33 +39,7 @@ export default {
     // Options override
     options = {
       ...defaultOptions,
-      ...options,
-      forceLogin: () => {
-        return options.store
-          .dispatch("auth/autoLogin")
-          .then(user => console.log("Automatically logged in:", user))
-          .catch(error => {
-            options.store.dispatch("auth/logout");
-            console.warn("Automatic login failed:", error);
-          });
-      },
-      forceLogout: message => {
-        options.store.dispatch("auth/logout");
-        if (options.router.currentRoute.name !== "login") {
-          options.router.replace({
-            name: "login",
-            query: message
-              ? { alertType: "warning", alertMessage: message }
-              : null
-          });
-        }
-      },
-      readAccessToken: persist.getAccessToken,
-      readRefreshToken: persist.getRefreshToken,
-      writeAccessToken: value => {
-        persist.setAccessToken(value);
-        options.store.commit("auth/update", { key: "accessToken", value });
-      }
+      ...options
     };
 
     // Setup logrocket
@@ -109,15 +82,5 @@ export default {
         import("./components/AccountPanel")
       );
     }
-
-    // Sync accessToken localStorage value between tabs
-    window.addEventListener("storage", e => {
-      if (e.key === "access-token") {
-        if (!e.newValue) {
-          // automatically log out
-          options.forceLogout();
-        }
-      }
-    });
   }
 };
