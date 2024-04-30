@@ -71,22 +71,7 @@
       </v-card-title>
       <v-card-subtitle>{{ user.email }}</v-card-subtitle>
       <v-divider></v-divider>
-      <template v-if="user.is_admin">
-        <v-card-actions>
-          <v-btn
-            :href="adminManualURL"
-            download
-            color="primary"
-            target="_blank"
-            :dark="dark"
-            text
-          >
-            <v-icon class="mr-2" small>mdi-book-arrow-down-outline</v-icon>
-            Download Admin Manual
-          </v-btn>
-        </v-card-actions>
-        <v-divider></v-divider>
-      </template>
+
       <v-card-actions>
         <v-btn
           v-if="settingsRouteName"
@@ -166,8 +151,7 @@ export default {
   },
   data() {
     return {
-      user: this.getUserFn(this),
-      adminManualURL: process.env.APP_CUSTOMER.adminManualURL
+      user: this.getUserFn(this)
     };
   },
   computed: {
