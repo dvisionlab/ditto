@@ -125,7 +125,7 @@
           margin-left: 12px;"
         >
           <v-checkbox
-            v-model="groupedSeries.anonymizeAll"
+            v-model="anonymizedStudies[groupedSeries.id]"
             @change="event => onAnonymizeAllChecked(event, groupedSeries)"
           >
             <template v-slot:label>
@@ -133,11 +133,12 @@
             </template>
           </v-checkbox>
           <v-alert
+            v-if="anonymizedStudies[groupedSeries.id]"
             dense
             outlined
             max-height="100px"
-            max-width="230px"
             type="warning"
+            class="mr-3"
             >Patient Data will be overwritten and original data wiil be lost
           </v-alert>
         </div>
@@ -227,6 +228,7 @@ export default {
   data() {
     return {
       metadata: metadataDictionary,
+      anonymizedStudies: [],
       showErrorDetails: false,
       tableHeight: "100%"
     };
@@ -247,6 +249,7 @@ export default {
             series: groupedSeries[k]
           });
         });
+        this.anonymizedStudies[groupedSeriesByStudyUID.id] = false;
         return groupedSeriesByStudyUID;
       }
       return groupedSeriesByStudyUID;
