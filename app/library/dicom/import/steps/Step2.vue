@@ -37,7 +37,7 @@
       </v-alert>
     </div>
     <div
-      class="data-group"
+      :class="[dark ? 'data-group-dark' : '', 'data-group']"
       v-for="groupedSeries in groupedSeriesByStudyUID(series)"
       :key="groupedSeries.id"
     >
@@ -139,7 +139,8 @@
             max-height="100px"
             type="warning"
             class="mr-3"
-            >Patient Data will be overwritten and original data wiil be lost
+          >
+            Patient Data will be overwritten
           </v-alert>
         </div>
       </div>
@@ -315,6 +316,10 @@ export default {
   background-color: #1e1e1e;
 }
 .data-group {
+  border-bottom: 1px solid var(--v-grey-base);
+}
+.data-group-dark {
+  background-color: #484848;
   border-bottom: 1px solid var(--v-grey-base);
 }
 ::v-deep
