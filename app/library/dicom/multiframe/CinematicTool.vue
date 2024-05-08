@@ -36,7 +36,7 @@
           v-bind="attrs"
           v-on="on"
         >
-          {{ frameTime.toFixed(0) }} ms
+          {{ fps.toFixed(0) }} fps
         </v-btn>
       </template>
 
@@ -44,7 +44,7 @@
         <v-card-text>
           <cinematic-slider
             :options="sliderOptions"
-            :value="frameTime"
+            :value="fps"
             @change="value => updateFrameTime(value)"
             @restart="restart"
           />
@@ -58,7 +58,7 @@
 import CinematicSlider from "./CinematicSlider";
 import { getViewport } from "../utils";
 
-const DEFAULT_FRAME_TIME = 100;
+const DEFAULT_FPS = 20; // in fps
 
 const defaultGetViewportFn = (store, seriesId, canvasId) =>
   getViewport(canvasId) || {};
@@ -74,13 +74,27 @@ export default {
   data() {
     return {
       intervalId: null,
-      frameTime: DEFAULT_FRAME_TIME,
+      fps: DEFAULT_FPS,
       sliderOptions: {
-        min: 25,
-        max: 1000,
-        step: 5
+        min: 2,
+        max: 50,
+        step: 2
       }
     };
+  },
+  mounted() {
+    console.log("here");
+    if (this.seriesId && this.getViewportFn && this.canvasId) {
+      const viewport = this.getViewportFn(
+        this.$store,
+        this.seriesId,
+        this.canvasId
+      );
+      if (viewport && viewport.numberOfFrames && viewport.numberOfFrames > 0) {
+        // autoplay
+        this.onClick("play");
+      }
+    }
   },
   beforeDestroy() {
     clearInterval(this.intervalId);
@@ -95,6 +109,9 @@ export default {
     }
   },
   methods: {
+    fps(delta) {
+      return 1000 / delta;
+    },
     onClick(action) {
       switch (action) {
         case "pause": {
@@ -138,7 +155,7 @@ export default {
                 viewport.sliceId
               );
             }
-          }, this.frameTime);
+          }, 1000 / this.fps);
           break;
         }
       }
@@ -151,7 +168,7 @@ export default {
     },
     updateFrameTime(value, restart = true) {
       if (this.sliderOptions.min <= value && value <= this.sliderOptions.max) {
-        this.frameTime = value;
+        this.fps = value;
         this.$emit("frame-time-update", value);
         if (restart) {
           this.restart();
@@ -163,7 +180,7 @@ export default {
     seriesId: {
       handler(id) {
         const cinematic = this.$ditto.dicom.getCinematicData(id) || {};
-        this.updateFrameTime(cinematic.frameTime || DEFAULT_FRAME_TIME, false);
+        this.updateFrameTime(cinematic.fps || DEFAULT_FPS, false);
       },
       immediate: true
     }

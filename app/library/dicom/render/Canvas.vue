@@ -356,7 +356,6 @@ export default {
               },
               {}
             );
-
             renderSeries(this.validCanvasId, stack, { sliceNumber: 0 })
               .then(() => {
                 // series rendered
