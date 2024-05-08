@@ -288,6 +288,7 @@ export default {
       // clear cache (!!! NOTE: cornerstone should not cache images if not required)
       clearSeriesCache(this.seriesId);
 
+      // Seems a dead branch, clearSeriesData only called on dashbord deselect
       if (this.clearOnDestroy) {
         clearSeriesData(this.seriesId, this.clearCacheOnDestroy);
       }
