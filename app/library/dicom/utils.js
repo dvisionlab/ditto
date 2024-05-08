@@ -136,8 +136,7 @@ export const clearSeriesStack = seriesStack =>
 
 // Remove viewport data from larvitar stores
 export const clearSeriesData = (seriesId, clearCache = false) => {
-  //Without the following seems that the series are kept in cache.
-  //lt.removeSeriesFromLarvitarManager(seriesId);
+  lt.removeSeriesFromLarvitarManager(seriesId);
 
   if (clearCache) {
     lt.clearImageCache(seriesId);
