@@ -109,9 +109,6 @@ export default {
     }
   },
   methods: {
-    fps(delta) {
-      return 1000 / delta;
-    },
     onClick(action) {
       switch (action) {
         case "pause": {
