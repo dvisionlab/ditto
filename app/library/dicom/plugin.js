@@ -61,6 +61,9 @@ export default async (Vue, options) => {
     Vue.component("ditto-dicom-pacs-import-modal", () =>
       import("./pacs/import/Wrapper")
     );
+    Vue.component("ditto-input-study-date", () =>
+      import("./pacs/import/InputStudyDate.vue")
+    );
   }
 
   // series components
