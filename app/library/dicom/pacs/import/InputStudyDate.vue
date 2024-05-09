@@ -1,6 +1,7 @@
 <template>
   <div class="d-flex">
     <v-select
+      v-if="specificDateRange"
       :disabled="disabled"
       :items="options"
       :label="label"
@@ -64,7 +65,10 @@ const format = date => date.toISOString().split("T")[0];
 
 export default {
   name: "InputStudyDate",
-  props: fieldsProps,
+  props: {
+    ...fieldsProps,
+    specificDateRange: { default: true, type: Boolean }
+  },
   data() {
     return {
       selectedOption: this.value && this.value[0] ? this.value[0] : "custom",
