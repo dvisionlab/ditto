@@ -177,7 +177,8 @@ export default {
     seriesId: {
       handler(id) {
         const cinematic = this.$ditto.dicom.getCinematicData(id) || {};
-        this.updateFrameTime(cinematic.fps || DEFAULT_FPS, false);
+        const fps = 1000 / cinematic.frameTime;
+        this.updateFrameTime(fps || DEFAULT_FPS, false);
       },
       immediate: true
     }
