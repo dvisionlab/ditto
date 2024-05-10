@@ -340,7 +340,12 @@ export const storeSeriesStack = (seriesId, stack, cache = false) => {
 };
 
 // Use Larvitar to update a series slice
-export const updateSeriesSlice = (elementId, seriesId, sliceId, imageCache) => {
+export const updateSeriesSlice = (
+  elementId,
+  seriesId,
+  sliceId,
+  imageCache = true
+) => {
   // sliceId must be between 0 and n-1
   const stack = getSeriesStack(seriesId);
   lt.store.setSliceId(elementId, sliceId);

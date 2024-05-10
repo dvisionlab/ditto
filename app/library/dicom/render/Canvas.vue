@@ -285,8 +285,6 @@ export default {
       // disable larvitar canvas
       disableCanvas(this.$refs.canvas);
       deleteViewport(this.$refs.canvas);
-      // clear cache (!!! NOTE: cornerstone should not cache images if not required)
-      clearSeriesCache(this.seriesId);
 
       // Seems a dead branch, clearSeriesData only called on dashbord deselect
       if (this.clearOnDestroy) {
@@ -357,7 +355,6 @@ export default {
               },
               {}
             );
-
             renderSeries(this.validCanvasId, stack, { sliceNumber: 0 })
               .then(() => {
                 // series rendered
