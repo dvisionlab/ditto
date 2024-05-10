@@ -160,7 +160,6 @@ import {
   addMouseKeyHandlers,
   addTools,
   clearSeriesData,
-  clearSeriesCache,
   deleteViewport,
   disableCanvas,
   getSeries,
