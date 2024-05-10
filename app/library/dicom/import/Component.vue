@@ -264,7 +264,6 @@ export default {
           s => s.larvitarSeriesInstanceUID == v.larvitarSeriesInstanceUID
         )
       );
-
       // Store series stack in larvitar
       if (this.selectedAction.storeStacks) {
         stacks.forEach(stack =>

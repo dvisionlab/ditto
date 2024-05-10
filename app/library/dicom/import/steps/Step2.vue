@@ -37,7 +37,7 @@
       </v-alert>
     </div>
     <div
-      class="data-group"
+      :class="[dark ? 'data-group-dark' : '', 'data-group']"
       v-for="groupedSeries in groupedSeriesByStudyUID(series)"
       :key="groupedSeries.id"
     >
@@ -125,13 +125,23 @@
           margin-left: 12px;"
         >
           <v-checkbox
-            v-model="groupedSeries.anonymizeAll"
+            v-model="anonymizedStudies[groupedSeries.id]"
             @change="event => onAnonymizeAllChecked(event, groupedSeries)"
           >
             <template v-slot:label>
               <span style="font-size: 14px;"><b>Anonymize</b></span>
             </template>
           </v-checkbox>
+          <v-alert
+            v-if="anonymizedStudies[groupedSeries.id]"
+            dense
+            outlined
+            max-height="100px"
+            type="warning"
+            class="mr-3"
+          >
+            Patient Data will be overwritten
+          </v-alert>
         </div>
       </div>
 
@@ -219,6 +229,7 @@ export default {
   data() {
     return {
       metadata: metadataDictionary,
+      anonymizedStudies: [],
       showErrorDetails: false,
       tableHeight: "100%"
     };
@@ -239,6 +250,7 @@ export default {
             series: groupedSeries[k]
           });
         });
+        this.anonymizedStudies[groupedSeriesByStudyUID.id] = false;
         return groupedSeriesByStudyUID;
       }
       return groupedSeriesByStudyUID;
@@ -304,6 +316,10 @@ export default {
   background-color: #1e1e1e;
 }
 .data-group {
+  border-bottom: 1px solid var(--v-grey-base);
+}
+.data-group-dark {
+  background-color: #484848;
   border-bottom: 1px solid var(--v-grey-base);
 }
 ::v-deep

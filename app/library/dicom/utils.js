@@ -136,8 +136,7 @@ export const clearSeriesStack = seriesStack =>
 
 // Remove viewport data from larvitar stores
 export const clearSeriesData = (seriesId, clearCache = false) => {
-  //Without the following seems that the series are kept in cache.
-  //lt.removeSeriesFromLarvitarManager(seriesId);
+  lt.removeSeriesFromLarvitarManager(seriesId);
 
   if (clearCache) {
     lt.clearImageCache(seriesId);
@@ -300,7 +299,7 @@ export const renderSeries = async (elementId, seriesStack, params = {}) => {
   return seriesStack.isPDF
     ? await lt.renderDICOMPDF(seriesStack, elementId)
     : await lt.renderImage(seriesStack, elementId, params);
-  
+
   //Without using loadAndCacheImageStack the series still seems cached.
 };
 
@@ -341,7 +340,12 @@ export const storeSeriesStack = (seriesId, stack, cache = false) => {
 };
 
 // Use Larvitar to update a series slice
-export const updateSeriesSlice = (elementId, seriesId, sliceId, imageCache) => {
+export const updateSeriesSlice = (
+  elementId,
+  seriesId,
+  sliceId,
+  imageCache = true
+) => {
   // sliceId must be between 0 and n-1
   const stack = getSeriesStack(seriesId);
   lt.store.setSliceId(elementId, sliceId);
