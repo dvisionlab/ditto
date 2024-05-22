@@ -119,6 +119,8 @@ export const getBeforeEachGuard = options => {
         key: "user",
         value: persist.getUser()
       });
+      Vue.prototype.$isDemoUser = persist.getUser().is_demo;
+      Vue.prototype.$isAdminUser = persist.getUser().is_admin;
     }
 
     // auth not needed
