@@ -38,6 +38,7 @@
 
   <!-- desktop -->
   <v-menu
+    content-class="elevation-10"
     v-else-if="user"
     :open-on-hover="openOnHover"
     :close-on-content-click="false"
@@ -88,6 +89,7 @@
   </v-menu>
 
   <v-menu
+    content-class="elevation-20"
     v-else-if="!user && !mobile"
     :open-on-hover="openOnHover"
     tile

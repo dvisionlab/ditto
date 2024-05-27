@@ -83,7 +83,13 @@
       </div>
     </div>
 
-    <v-dialog :dark="dark" :value="parsingFailure" max-width="300">
+    <v-dialog
+      overlay-color="black"
+      overlay-opacity="0.7"
+      :dark="dark"
+      :value="parsingFailure"
+      max-width="300"
+    >
       <v-card :dark="dark">
         <v-card-title class="headline warning--text">
           Parsing error

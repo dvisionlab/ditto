@@ -1,5 +1,7 @@
 <template>
   <v-dialog
+    overlay-color="black"
+    overlay-opacity="0.7"
     max-width="1200px"
     persistent
     width="95wv"
