@@ -66,7 +66,13 @@
       </slot>
     </template>
 
-    <v-card :dark="dark" flat tile>
+    <v-card
+      :color="dark ? '#2c2c2c' : '#FFFFFF'"
+      elevation="24"
+      :dark="dark"
+      flat
+      tile
+    >
       <v-card-title class="d-inline-block">
         <span class="text-capitalize">{{ user.name }}</span>
       </v-card-title>
