@@ -39,6 +39,17 @@ const logout = () => {
   });
 };
 
+const tempSession = shareId => {
+  return new Promise((resolve, reject) => {
+    Vue.$http
+      .post("auth/temp-session", null, { share_id: shareId })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => reject(error));
+  });
+};
+
 // Create a user and send activation email
 const createUser = (firstname, lastname, email, password) => {
   let data = {
@@ -95,7 +106,8 @@ export default {
       requestPasswordReset,
       resetPassword,
       checkSession,
-      logout
+      logout,
+      tempSession
     };
   }
 };
