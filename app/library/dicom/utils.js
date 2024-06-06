@@ -6,6 +6,7 @@
 import * as lt from "larvitar/dist/larvitar";
 import { saveAs } from "file-saver";
 import print from "print-js";
+import DicomElements from "./dicomelement";
 
 // Private methods
 // ---------------
@@ -281,6 +282,8 @@ export const parseFile = (seriesId, file, elementId) => {
         }
         let imageIds = manager.imageIds;
         let imageUID = image.metadata.instanceUID;
+        console.log("image metadata ");
+        console.log(image.metadata);
         let imageId = manager.instanceUIDs[imageUID];
         return resolve({ imageIds, imageId });
       })
@@ -478,4 +481,9 @@ export const switchWheelScrollModality = () => {
 };
 export const updateTimeInLarvitarViewport = (seriesStack, elementId) => {
   lt.updateTemporalViewportData(seriesStack, elementId);
+};
+export const getNameFromDicomElements = tag => {
+  if (tag && tag !== "") {
+    return DicomElements[tag];
+  }
 };
