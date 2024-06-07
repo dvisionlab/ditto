@@ -282,8 +282,6 @@ export const parseFile = (seriesId, file, elementId) => {
         }
         let imageIds = manager.imageIds;
         let imageUID = image.metadata.instanceUID;
-        console.log("image metadata ");
-        console.log(image.metadata);
         let imageId = manager.instanceUIDs[imageUID];
         return resolve({ imageIds, imageId });
       })
