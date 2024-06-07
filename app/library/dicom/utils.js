@@ -484,6 +484,7 @@ export const updateTimeInLarvitarViewport = (seriesStack, elementId) => {
 };
 export const getNameFromDicomElements = tag => {
   if (tag && tag !== "") {
-    return DicomElements[tag];
+    if (DicomElements[tag] && DicomElements[tag].name)
+      return DicomElements[tag].name;
   }
 };
