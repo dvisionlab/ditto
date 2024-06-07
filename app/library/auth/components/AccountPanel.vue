@@ -38,6 +38,7 @@
 
   <!-- desktop -->
   <v-menu
+    content-class="elevation-10"
     v-else-if="user"
     :open-on-hover="openOnHover"
     :close-on-content-click="false"
@@ -65,7 +66,13 @@
       </slot>
     </template>
 
-    <v-card :dark="dark" flat tile>
+    <v-card
+      :color="dark ? '#2c2c2c' : '#FFFFFF'"
+      elevation="24"
+      :dark="dark"
+      flat
+      tile
+    >
       <v-card-title class="d-inline-block">
         <span class="text-capitalize">{{ user.name }}</span>
       </v-card-title>
@@ -88,6 +95,7 @@
   </v-menu>
 
   <v-menu
+    content-class="elevation-20"
     v-else-if="!user && !mobile"
     :open-on-hover="openOnHover"
     tile

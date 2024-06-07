@@ -83,7 +83,6 @@ export default {
     };
   },
   mounted() {
-    console.log("here");
     if (this.seriesId && this.getViewportFn && this.canvasId) {
       const viewport = this.getViewportFn(
         this.$store,
