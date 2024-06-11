@@ -62,6 +62,37 @@ export default options => ({
             reject(error);
           });
       });
+    },
+    tempSession({ commit }, { shareId }) {
+      return new Promise((resolve, reject) => {
+        Vue.$http.auth
+          .tempSession(shareId)
+          .then(response => {
+            console.log(response);
+            Vue.$http.auth
+              .getUser()
+              .then(user => {
+                commit("update", { key: "user", value: user });
+                persist.setUser(user);
+
+                commit("update", { key: "isValidSession", value: true });
+
+                if (options.onLoginSuccess) {
+                  options.onLoginSuccess(user);
+                }
+
+                resolve({
+                  user
+                });
+              })
+              .catch(error => {
+                reject(error);
+              });
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
     }
   },
   mutations: {
