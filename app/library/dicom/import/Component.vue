@@ -256,6 +256,9 @@ export default {
       return this.steps[this.currentStep].actions;
     }
   },
+  mounted() {
+    console.log("log options", this.options);
+  },
   methods: {
     onAction() {
       // List of selected stacks

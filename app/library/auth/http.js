@@ -39,10 +39,10 @@ const logout = () => {
   });
 };
 
-const tempSession = shareId => {
+const tempSession = data => {
   return new Promise((resolve, reject) => {
     Vue.$http
-      .post("auth/temp-session", null, { share_id: shareId })
+      .post("auth/temp-session", null, data)
       .then(response => {
         resolve(response.data);
       })
