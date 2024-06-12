@@ -128,7 +128,19 @@
       </div>
     </div>
 
-    <div class="mt-5">
+    <div v-if="$route.name === 'upload'">
+      <v-btn
+        :dark="dark"
+        color="primary"
+        class="mx-3"
+        :disabled="isUploading"
+        @click="$emit('restart')"
+      >
+        <v-icon :dark="dark">mdi-folder-multiple-plus</v-icon>
+        <span class="pl-2">new upload</span>
+      </v-btn>
+    </div>
+    <div v-else class="mt-5">
       <v-btn
         :dark="dark"
         color="primary"
