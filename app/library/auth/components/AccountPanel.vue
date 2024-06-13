@@ -7,7 +7,7 @@
     </v-list-item-icon>
     <v-list-item-content>
       <v-list-item-title>
-        <b class="text-capitalize">{{ user.first_name }}</b>
+        <b class="text-capitalize">{{ user.email }}</b>
       </v-list-item-title>
 
       <v-list-item-subtitle>{{ user.first_name }}</v-list-item-subtitle>
