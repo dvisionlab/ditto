@@ -154,6 +154,7 @@
         />
       </template>
     </div>
+    <div v-else dark v-relative-height="'contentHeight'"></div>
 
     <div
       :class="['step-content', `step-${currentStep + 1}`]"
@@ -256,6 +257,7 @@ export default {
       return this.steps[this.currentStep].actions;
     }
   },
+
   methods: {
     onAction() {
       // List of selected stacks

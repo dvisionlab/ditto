@@ -2,7 +2,7 @@
   <wireframe-wrapper>
     <!-- top menu -->
     <app-bar
-      v-if="$scopedSlots.bar"
+      v-if="$scopedSlots.bar && $route.name !== 'upload'"
       :color="bar.color"
       :dark="bar.dark || dark"
       :dense="bar.dense"
@@ -18,6 +18,7 @@
 
     <!-- mobile top menu -->
     <mobile-top-menu
+      v-if="$route.name !== 'upload'"
       :dark="bar.dark || dark"
       :mobile-breakpoint="mobileBreakpoint"
       :steteless="bar.stateless"
@@ -28,7 +29,7 @@
 
     <!-- left navigation drawer -->
     <app-navigation
-      v-if="$scopedSlots.navLeft"
+      v-if="$scopedSlots.navLeft && $route.name !== 'upload'"
       :clipped="false"
       :color="dark ? '' : navLeft.color"
       :collapsable="false"
@@ -44,7 +45,7 @@
 
     <!-- right navigation drawer -->
     <app-navigation
-      v-if="$scopedSlots.navRight"
+      v-if="$scopedSlots.navRight && $route.name !== 'upload'"
       :clipped="true"
       :color="navRight.color"
       :collapsable="navRight.collapsable"

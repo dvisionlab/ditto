@@ -121,6 +121,7 @@ export const getBeforeEachGuard = options => {
       });
       Vue.prototype.$isDemoUser = persist.getUser().is_demo;
       Vue.prototype.$isAdminUser = persist.getUser().is_admin;
+      Vue.prototype.$isAdminUser = persist.getUser().is_temp;
     }
 
     // auth not needed
@@ -140,7 +141,11 @@ export const getBeforeEachGuard = options => {
         next(`${options.baseRoute}${options.redirectGuestUsers}`);
       } else {
         // and user logged in
-        next();
+        if (options.store.state.auth.user.is_temp) {
+          next(false);
+        } else {
+          next();
+        }
       }
     }
     // free route
