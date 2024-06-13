@@ -140,7 +140,11 @@ export const getBeforeEachGuard = options => {
         next(`${options.baseRoute}${options.redirectGuestUsers}`);
       } else {
         // and user logged in
-        next();
+        if (options.store.state.auth.user.is_temp) {
+          next(false);
+        } else {
+          next();
+        }
       }
     }
     // free route
