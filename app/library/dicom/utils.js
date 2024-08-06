@@ -192,7 +192,13 @@ export const getSeriesStack = seriesId => {
   const stack = lt.getSeriesDataFromLarvitarManager(seriesId);
   return stack && Object.keys(stack).length !== 0 ? stack : null;
 };
-
+export const anonymizeSeries = seriesStack => {
+  if (seriesStack) {
+    const seriesAnonymized = lt.anonymize(seriesStack);
+    return seriesAnonymized;
+  }
+  return null;
+};
 // update larvitar stack tool state with imageIds
 export const csToolsUpdateImageIds = (elementId, imageIds, imageId) => {
   let imageIdIndex = imageIds.indexOf(imageId);
