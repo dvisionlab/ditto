@@ -194,10 +194,149 @@ export const getSeriesStack = seriesId => {
 };
 export const anonymizeSeries = seriesStack => {
   if (seriesStack) {
-    const seriesAnonymized = lt.anonymize(seriesStack);
+    const seriesAnonymized = anonymize(seriesStack);
     return seriesAnonymized;
   }
   return null;
+};
+
+/**
+ * Anonymize a series by replacing all metadata with random values
+ * @function anonymize
+ * @param {Series} series - series to anonymize
+ * @returns {Series} anonymized series
+ */
+export const anonymize = function(series, anonInputData) {
+  // anonymize series bytearray
+  const tagTonAnonymize = [
+    "x0020000e",
+    "x00080018",
+    "x0020000d",
+    "x00080050",
+    "x00081030",
+    "x00100010",
+    "x00100030",
+    "x0008103e"
+  ];
+  // create anonymized parameters for series,studies and patient parameters
+  const firstImageId = series.imageIds[0];
+  const firstImage = series.instances[firstImageId];
+  let anonymizedData = {};
+  tagTonAnonymize.forEach(tag => {
+    if (firstImage.dataSet) {
+      if (anonInputData && anonInputData[tag]) {
+        anonymizedData[tag] = anonInputData[tag];
+      }
+      const element = firstImage.dataSet.elements[tag];
+      let text = "";
+      const vr = element.vr;
+      let str = firstImage.dataSet.string(tag);
+      if (str !== undefined) {
+        text = str;
+      }
+      const deIdentifiedValue = makeDeIdentifiedValue(text.length, vr);
+      if (tag && deIdentifiedValue) {
+        anonymizedData[tag] = deIdentifiedValue;
+      }
+    }
+  });
+  // change the anonymized tag for all images
+  for (const id in series.imageIds) {
+    const imageId = series.imageIds[id];
+    let image = series.instances[imageId];
+    if (image.dataSet) {
+      for (const tag in image.dataSet.elements) {
+        let element = image.dataSet.elements[tag];
+        const vr = element.vr;
+        if (vr) {
+          const anonValue = anonymizedData[tag];
+          if (anonValue !== undefined) {
+            for (let i = 0; i < element.length; i++) {
+              const char = anonValue.length > i ? anonValue.charCodeAt(i) : 32;
+              image.dataSet.byteArray[element.dataOffset + i] = char;
+            }
+            // @ts-ignore always string
+            image.metadata[tag] = anonValue;
+          }
+        }
+      }
+      image.metadata.seriesUID = image.metadata["x0020000e"];
+      image.metadata.instanceUID = image.metadata["x00080018"];
+      image.metadata.studyUID = image.metadata["x0020000d"];
+      image.metadata.accessionNumber = image.metadata["x00080050"];
+      image.metadata.studyDescription = image.metadata["x00081030"];
+      image.metadata.patientName = image.metadata["x00100010"];
+      image.metadata.patientBirthdate = image.metadata["x00100030"];
+      image.metadata.seriesDescription = image.metadata["x0008103e"];
+      image.metadata.anonymized = true;
+    } else {
+      console.warn(`No dataset found for image ${imageId}`);
+    }
+  }
+
+  // update parsed metadata
+  series.anonymized = true;
+  series.seriesDescription =
+    series.instances[series.imageIds[0]].metadata["x0008103e"];
+
+  return series;
+};
+
+/**
+ * Generate a random string of a given length
+ * @function makeRandomString
+ * @param {number} length - length of the string to generate
+ * @returns {string} random string
+ */
+const makeRandomString = function(length) {
+  let text = "";
+  const possible =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (let i = 0; i < length; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+};
+/**
+ * Pad a number with 0s to a given size
+ * @function pad
+ * @param {number} num - number to pad
+ * @param {number} size - size of the padded number
+ * @returns {string} padded number
+ */
+const pad = function(num, size) {
+  var s = num + "";
+  while (s.length < size) s = "0" + s;
+  return s;
+};
+
+/**
+ * Make a de-identified value for a given length and VR
+ * @function makeDeIdentifiedValue
+ * @param {number} length - length of the value to generate
+ * @param {string} vr - VR of the value to generate
+ * @returns {string} de-identified value
+ */
+const makeDeIdentifiedValue = function(length, vr) {
+  if (vr === "LO" || vr === "SH" || vr === "PN") {
+    return makeRandomString(length);
+  } else if (vr === "DA") {
+    let oldDate = new Date(1900, 0, 1);
+    return (
+      oldDate.getFullYear() +
+      pad(oldDate.getMonth() + 1, 2) +
+      pad(oldDate.getDate(), 2)
+    );
+  } else if (vr === "TM") {
+    var now = new Date();
+    return (
+      pad(now.getHours(), 2) +
+      pad(now.getMinutes(), 2) +
+      pad(now.getSeconds(), 2)
+    );
+  } else {
+    return undefined;
+  }
 };
 // update larvitar stack tool state with imageIds
 export const csToolsUpdateImageIds = (elementId, imageIds, imageId) => {
