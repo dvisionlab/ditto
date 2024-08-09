@@ -234,7 +234,7 @@ export const anonymize = function(series, anonInputData) {
       if (str !== undefined) {
         text = str;
       }
-      const deIdentifiedValue = makeDeIdentifiedValue(text.length, vr);
+      const deIdentifiedValue = makeDeIdentifiedValue(text.length, vr, text);
       if (tag && deIdentifiedValue) {
         anonymizedData[tag] = deIdentifiedValue;
       }
@@ -286,12 +286,24 @@ export const anonymize = function(series, anonInputData) {
  * Generate a random string of a given length
  * @function makeRandomString
  * @param {number} length - length of the string to generate
+ * @param {number} seed - length of the string to generate
  * @returns {string} random string
  */
-const makeRandomString = function(length) {
+const makeRandomString = function(length, seed) {
   let text = "";
   const possible =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  // seeded random number generator https://decode.sh/seeded-random-number-generator-in-js/
+  // Linear Congruential Generator work by using a linear equation to generate a sequence of numbers that appears to be random.
+  const seededRandomNumber = seed => {
+    var m = 2 ** 35 - 31;
+    var a = 185852;
+    var s = seed % m;
+    return function() {
+      return (s = (s * a) % m) / m;
+    };
+  };
+  console.log(seededRandomNumber(seed));
   for (let i = 0; i < length; i++) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
@@ -315,11 +327,20 @@ const pad = function(num, size) {
  * @function makeDeIdentifiedValue
  * @param {number} length - length of the value to generate
  * @param {string} vr - VR of the value to generate
+ * @param {string} value - string value
  * @returns {string} de-identified value
  */
-const makeDeIdentifiedValue = function(length, vr) {
+const makeDeIdentifiedValue = function(length, vr, value) {
   if (vr === "LO" || vr === "SH" || vr === "PN") {
-    return makeRandomString(length);
+    // hashing the string to a number
+    const hashCode = function(s) {
+      return s.split("").reduce(function(a, b) {
+        a = (a << 5) - a + b.charCodeAt(0);
+        return a & a;
+      }, 0);
+    };
+    const hashValue = Math.abs(hashCode(value));
+    return makeRandomString(length, hashValue);
   } else if (vr === "DA") {
     let oldDate = new Date(1900, 0, 1);
     return (
