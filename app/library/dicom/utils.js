@@ -283,32 +283,30 @@ export const anonymize = function(series, anonInputData) {
 };
 
 /**
- * Generate a random string of a given length
- * @function makeRandomString
- * @param {number} length - length of the string to generate
- * @param {number} seed - length of the string to generate
+ * A simple but high quality 53-bit hash, that uses imul.
+ * https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
+ * @function cyrb53
+ * @param {number} string - the starting string to hash
+ * @param {number} seed - seed to create different hash
  * @returns {string} random string
  */
-const makeRandomString = function(length, seed) {
-  let text = "";
-  const possible =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  // seeded random number generator https://decode.sh/seeded-random-number-generator-in-js/
-  // Linear Congruential Generator work by using a linear equation to generate a sequence of numbers that appears to be random.
-  const seededRandomNumber = seed => {
-    var m = 2 ** 35 - 31;
-    var a = 185852;
-    var s = seed % m;
-    return function() {
-      return (s = (s * a) % m) / m;
-    };
-  };
-  console.log(seededRandomNumber(seed));
-  for (let i = 0; i < length; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+const cyrb53 = (str, seed = 0) => {
+  let h1 = 0xdeadbeef ^ seed,
+    h2 = 0x41c6ce57 ^ seed;
+  for (let i = 0, ch; i < str.length; i++) {
+    ch = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
   }
-  return text;
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
+  h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
+  h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+
+  return 4294967296 * (2097151 & h2) + (h1 >>> 0);
 };
+
 /**
  * Pad a number with 0s to a given size
  * @function pad
@@ -321,7 +319,18 @@ const pad = function(num, size) {
   while (s.length < size) s = "0" + s;
   return s;
 };
-
+/**
+ * Maka a crypted string using SHA 256
+ *
+ */
+export async function digestMessage(message) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(message);
+  const hashBuffer = await window.crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const digest = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+  return digest;
+}
 /**
  * Make a de-identified value for a given length and VR
  * @function makeDeIdentifiedValue
@@ -332,15 +341,9 @@ const pad = function(num, size) {
  */
 const makeDeIdentifiedValue = function(length, vr, value) {
   if (vr === "LO" || vr === "SH" || vr === "PN") {
-    // hashing the string to a number
-    const hashCode = function(s) {
-      return s.split("").reduce(function(a, b) {
-        a = (a << 5) - a + b.charCodeAt(0);
-        return a & a;
-      }, 0);
-    };
-    const hashValue = Math.abs(hashCode(value));
-    return makeRandomString(length, hashValue);
+    // hashing the string
+    const hash = cyrb53(value).toString(16);
+    return hash;
   } else if (vr === "DA") {
     let oldDate = new Date(1900, 0, 1);
     return (
