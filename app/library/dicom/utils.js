@@ -84,63 +84,15 @@ export const addMouseKeyHandlers = lt.addMouseKeyHandlers;
 
 // Anonymize series
 export const anonymizeSeriesStack = (stack, extractMetadata = []) => {
-  let anonymizedStack = lt.anonymize(stack);
-  let meta =
-    anonymizedStack.instances[Object.keys(anonymizedStack.instances)[0]]
-      .metadata;
+  let meta = stack.instances[Object.keys(stack.instances)[0]].metadata;
   if (extractMetadata) {
     for (const [key, value] in Object.entries(extractMetadata)) {
       meta[key] = value;
     }
-    // change every instances data
-    // change the anonymized tag for all imagesù
-    // TODO waiting for larvitar to accept tag already anonymized
-    for (const id in anonymizedStack.imageIds) {
-      const imageId = anonymizedStack.imageIds[id];
-      let image = anonymizedStack.instances[imageId]; // BY REF
-      if (image.dataSet) {
-        for (const tag in image.dataSet.elements) {
-          let element = image.dataSet.elements[tag];
-          const vr = element.vr;
-          if (vr) {
-            const anonValue = extractMetadata[tag];
-            if (anonValue !== undefined) {
-              for (let i = 0; i < element.length; i++) {
-                const char =
-                  anonValue.length > i ? anonValue.charCodeAt(i) : 32;
-                image.dataSet.byteArray[element.dataOffset + i] = char;
-              }
-              // @ts-ignore always string
-              image.metadata[tag] = anonValue;
-            }
-          }
-        }
-        image.metadata.seriesUID = image.metadata["x0020000e"];
-        image.metadata.instanceUID = image.metadata["x00080018"];
-        image.metadata.studyUID = image.metadata["x0020000d"];
-        image.metadata.accessionNumber = image.metadata["x00080050"];
-        image.metadata.studyDescription = image.metadata["x00081030"];
-        image.metadata.patientName = image.metadata["x00100010"];
-        image.metadata.patientBirthdate = image.metadata["x00100030"];
-        image.metadata.seriesDescription = image.metadata["x0008103e"];
-        image.metadata.anonymized = true;
-      } else {
-        console.warn(`No dataset found for image ${imageId}`);
-      }
-    }
-    // metadata
-    // bytedata
+    let customizedMetada = lt.customizeByteArray(stack, extractMetadata);
+    return customizedMetada;
   }
-  /*
-  const anonymizedStackMeta = extractMetadata.reduce((result, k) => {
-    if (ANONYMIZED_TAGS.find(t => t === k)) {
-      result[k] = meta[k];
-    }
-    return result;
-  }, {});
-  */
-  console.log(anonymizedStack);
-  return { ...anonymizedStack, ...meta };
+  return stack;
 };
 
 // Remove tools keyboard handlers
