@@ -10,7 +10,7 @@ import print from "print-js";
 // Private methods
 // ---------------
 
-const ANONYMIZED_TAGS = [
+export const ANONYMIZED_TAGS = [
   "x00080014", // Instance Creator UID
   "x00080050", // Accession Number
   "x00080080", // Institution Name
@@ -84,19 +84,16 @@ export const addMouseKeyHandlers = lt.addMouseKeyHandlers;
 
 // Anonymize series
 export const anonymizeSeriesStack = (stack, extractMetadata = []) => {
-  let anonymizedStack = lt.anonymize(stack);
-
-  const meta =
-    anonymizedStack.instances[Object.keys(anonymizedStack.instances)[0]]
-      .metadata;
-  const anonymizedStackMeta = extractMetadata.reduce((result, k) => {
-    if (ANONYMIZED_TAGS.find(t => t === k)) {
-      result[k] = meta[k];
+  let meta = stack.instances[Object.keys(stack.instances)[0]].metadata;
+  if (extractMetadata) {
+    for (const [key, value] in Object.entries(extractMetadata)) {
+      meta[key] = value;
     }
-    return result;
-  }, {});
-
-  return { ...anonymizedStack, ...anonymizedStackMeta };
+    let customizedMetada = lt.customizeByteArray(stack, extractMetadata);
+    return customizedMetada;
+  } else {
+    return lt.anonymize(stack);
+  }
 };
 
 // Remove tools keyboard handlers
@@ -191,6 +188,55 @@ export const getFrameMetadata = (seriesID, elementId, instance) => {
 export const getSeriesStack = seriesId => {
   const stack = lt.getSeriesDataFromLarvitarManager(seriesId);
   return stack && Object.keys(stack).length !== 0 ? stack : null;
+};
+
+/**
+ * A simple but high quality 53-bit hash, that uses imul.
+ * https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
+ * @function cyrb53
+ * @param {number} string - the starting string to hash
+ * @param {number} seed - seed to create different hash
+ * @returns {string} random string
+ */
+
+const cyrb53 = (str, seed = 0) => {
+  let h1 = 0xdeadbeef ^ seed,
+    h2 = 0x41c6ce57 ^ seed;
+  for (let i = 0, ch; i < str.length; i++) {
+    ch = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
+  h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
+  h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+
+  return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+};
+
+/**
+ * Maka a crypted string using SHA 256
+ *
+ */
+export async function digestMessage(message) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(message);
+  const hashBuffer = await window.crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const digest = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+  return digest;
+}
+/**
+ * Make a de-identified value for a given length and VR
+ * @function hashValue
+ * @param {string} value - string value
+ * @returns {string} de-identified value
+ */
+export const hashValue = function(value) {
+  // hashing the string
+  const hash = cyrb53(value).toString(16);
+  return hash;
 };
 
 // update larvitar stack tool state with imageIds
