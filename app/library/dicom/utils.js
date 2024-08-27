@@ -91,8 +91,9 @@ export const anonymizeSeriesStack = (stack, extractMetadata = []) => {
     }
     let customizedMetada = lt.customizeByteArray(stack, extractMetadata);
     return customizedMetada;
+  } else {
+    return lt.anonymize(stack);
   }
-  return stack;
 };
 
 // Remove tools keyboard handlers
