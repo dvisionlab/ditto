@@ -277,6 +277,12 @@ export const mergeSeries = (...series) => {
 export const parseFiles = (files, extractMetadata = []) => {
   // Get DICOM series
   return lt.readFiles(files).then(series => {
+    // Cleanup of the previously existing files in Larvitar Manager
+    // (e.g., files read but not uploaded, files already uploaded)
+    Object.values(series || {}).map(s => {
+      lt.removeSeriesFromLarvitarManager(s.larvitarSeriesInstanceUID);
+    });
+
     return Object.values(series || {}).map(s => {
       if (s.isMultiframe) {
         lt.buildMultiFrameImage(s.larvitarSeriesInstanceUID, s);
