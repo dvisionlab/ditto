@@ -12,7 +12,7 @@
       ref="canvas"
       :id="validCanvasId"
       v-resize:debounce="onResize"
-    />
+    ></div>
 
     <slot
       v-if="showProgress && progress !== 100"
@@ -105,7 +105,7 @@
     </slot>
     <!--time frame slider for 4D exam -->
     <slot
-      v-if="showSlider && stackMetadata?.series.is4D"
+      v-if="showSlider && stackMetadata && stackMetadata.series.is4D"
       name="viewport-frame-slider"
       v-bind:i="viewport.timeId"
       v-bind:n="viewport.maxTimeId"
