@@ -154,6 +154,7 @@
 import resize from "vue-resize-directive";
 import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
+import { mapGetters, mapState } from "vuex";
 
 import { stackMetadata as stackMetadataDict } from "../defaults";
 import {
@@ -174,7 +175,7 @@ import {
   setWheelScrollModality,
   get4DSliceIndex
 } from "../utils";
-import { addDefaultTools } from "larvitar";
+import { addDefaultTools, setToolActive } from "larvitar";
 
 const defaultGetProgressFn = (store, seriesId) =>
   (getSeries(seriesId) || {}).progress;
@@ -212,6 +213,14 @@ export default {
     this.destroy();
   },
   computed: {
+    ...mapGetters(["job", "jobs_study"]),
+    ...mapState(["jobId", "job_store_results", "printers"]),
+    isGrid() {
+      return this.job(this.jobId)?.grid;
+    },
+    isGridConfirmed() {
+      return this.job(this.jobId)?.status != 2;
+    },
     progress() {
       // TODO need store watcher
       return this.getProgressFn(this.$store, this.seriesId, this.validCanvasId);
@@ -315,6 +324,11 @@ export default {
       if (this.isReady) {
         resizeViewport(this.validCanvasId);
       }
+    },
+    checkAndActivateGrid() {
+      if (this.isGrid && !this.isGridConfirmed) {
+        setToolActive('Grid')
+      }
     }
   },
   watch: {
@@ -358,6 +372,7 @@ export default {
                 // series rendered
                 this.alternativeScrollActive = false;
                 addDefaultTools(this.validCanvasId)
+                this.checkAndActivateGrid();
                 if (this.toolsHandlers) {
                   addMouseKeyHandlers(this.toolsHandlers);
                 }
