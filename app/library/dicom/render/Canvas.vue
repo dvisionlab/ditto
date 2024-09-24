@@ -175,7 +175,7 @@ import {
   setWheelScrollModality,
   get4DSliceIndex
 } from "../utils";
-import { addDefaultTools, setToolActive } from "larvitar";
+import { DEFAULT_TOOLS, addDefaultTools, setToolActive } from "larvitar";
 
 const defaultGetProgressFn = (store, seriesId) =>
   (getSeries(seriesId) || {}).progress;
@@ -214,7 +214,7 @@ export default {
   },
   computed: {
     ...mapGetters(["job", "jobs_study"]),
-    ...mapState(["jobId", "job_store_results", "printers"]),
+    ...mapState(["jobId", "config"]),
     isGrid() {
       return this.job(this.jobId)?.grid;
     },
@@ -327,6 +327,7 @@ export default {
     },
     checkAndActivateGrid() {
       if (this.isGrid && !this.isGridConfirmed) {
+        DEFAULT_TOOLS["Grid"].configuration.setup = this.config.grid;
         setToolActive('Grid')
       }
     }
