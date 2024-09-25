@@ -34,10 +34,10 @@
 </template>
 
 <script>
+import { stackTools } from "../defaults";
 import metadataDictionary from "../metadata";
 import dicomDataTypes from "../../data-types/dicom";
 import DicomCanvas from "../render/Canvas";
-import { DEFAULT_TOOLS } from "larvitar";
 
 export default {
   name: "SeriesSummary",
@@ -54,7 +54,7 @@ export default {
     showMultiframeIcon: { default: true, type: Boolean },
     showProgress: { default: false, type: Boolean },
     showThumbnail: { default: false, type: Boolean },
-    tools: { default: DEFAULT_TOOLS, type: Array }
+    tools: { default: stackTools.preview, type: Array }
   },
   data() {
     return {

@@ -2,7 +2,6 @@
 // ----------------------
 
 import metadata from "./metadata";
-import { DEFAULT_TOOLS } from "larvitar";
 
 // Top level stacks metadata
 export const stackMetadata = {
@@ -38,4 +37,67 @@ export const stackMetadata = {
 };
 
 // Cornerstone tools
-export const stackTools = DEFAULT_TOOLS;
+export const stackTools = {
+  default: [
+    {
+      name: "Wwwc",
+      configuration: {},
+      defaultActive: true,
+      mixins: ["enabledOrDisabledBinaryTool"]
+    },
+    {
+      name: "Zoom",
+      configuration: {},
+      mixins: ["enabledOrDisabledBinaryTool"]
+    },
+    { name: "Pan", configuration: {}, mixins: ["enabledOrDisabledBinaryTool"] },
+    {
+      name: "StackScroll",
+      viewports: "all",
+      configuration: {
+        loop: false, // default false
+        allowSkipping: true // default true
+      }
+    },
+    {
+      name: "CustomMouseWheelScroll",
+      defaultActive: true,
+      // icon: "mdi-layers-triple",
+      mixins: ["enabledOrDisabledBinaryTool"],
+      configuration: {
+        currentMode: "stack"
+      },
+      options: {
+        configuration: {
+          currentMode: "stack"
+        },
+        currentMode: "stack"
+      },
+      visible: false
+    }
+  ],
+  preview: [
+    {
+      name: "Wwwc",
+      configuration: {},
+      defaultActive: true,
+      mixins: ["enabledOrDisabledBinaryTool"]
+    },
+    {
+      name: "CustomMouseWheelScroll",
+      defaultActive: true,
+      // icon: "mdi-layers-triple",
+      mixins: ["enabledOrDisabledBinaryTool"],
+      configuration: {
+        currentMode: "stack"
+      },
+      options: {
+        configuration: {
+          currentMode: "stack"
+        },
+        currentMode: "stack"
+      },
+      visible: false
+    }
+  ]
+};

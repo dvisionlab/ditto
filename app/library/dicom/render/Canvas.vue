@@ -155,9 +155,10 @@ import resize from "vue-resize-directive";
 import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
 
-import { stackMetadata as stackMetadataDict } from "../defaults";
+import { stackMetadata as stackMetadataDict, stackTools } from "../defaults";
 import {
   addMouseKeyHandlers,
+  addTools,
   clearSeriesData,
   deleteViewport,
   disableCanvas,
@@ -174,7 +175,6 @@ import {
   setWheelScrollModality,
   get4DSliceIndex
 } from "../utils";
-import { addDefaultTools } from "larvitar";
 
 const defaultGetProgressFn = (store, seriesId) =>
   (getSeries(seriesId) || {}).progress;
@@ -194,6 +194,7 @@ export default {
     showProgress: { default: false, type: Boolean },
     showSlider: { default: false, type: Boolean },
     stack: { required: false, type: Object },
+    tools: { default: () => stackTools.default, type: Array },
     toolsHandlers: { required: false, type: Object },
     timeFrame: { required: false, type: Number }
   },
@@ -357,7 +358,7 @@ export default {
               .then(() => {
                 // series rendered
                 this.alternativeScrollActive = false;
-                addDefaultTools(this.validCanvasId)
+                addTools(this.tools, this.validCanvasId, this.toolsHandlers);
                 if (this.toolsHandlers) {
                   addMouseKeyHandlers(this.toolsHandlers);
                 }
