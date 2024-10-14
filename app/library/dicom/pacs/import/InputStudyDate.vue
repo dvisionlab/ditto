@@ -4,6 +4,8 @@
       :disabled="disabled"
       :items="options"
       :label="label"
+      :dark="dark"
+      :menuProps="{ dark: dark }"
       :value="selectedOption"
       @change="onChangeOption"
     >
@@ -12,6 +14,7 @@
       :disabled="disabled || selectedOption !== 'custom'"
       :required="required"
       :rules="rules"
+      dark
       type="date"
       :value="
         selectedOption === 'custom' && value && value[1] ? value[1] : null
